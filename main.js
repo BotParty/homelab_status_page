@@ -5,7 +5,9 @@ const width = 640,
 
 const mousePosition = [0, 0];
 const data = {
-  mousePosition,
+  mouseX: mousePosition[0],
+  mouseY: mousePosition[1],
+
   angle: 0
 };
 
@@ -183,8 +185,8 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
     (async function updateUniforms() {
       uniformsArray.set([performance.now() / 1000], 3);
       uniformsArray.set(data.angle * Math.random(), 4); //angle
-      uniformsArray.set(data.mousePosition[0], 5); //mouseX
-      uniformsArray.set(data.mousePosition[1], 6); //mouseY
+      uniformsArray.set(data.mouseX, 5); //mouseX
+      uniformsArray.set(data.mouseY, 6); //mouseY
       uniformsBuffer = createBuffer(
         device,
         uniformsArray,

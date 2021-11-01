@@ -23,4 +23,5 @@ shader.uniform (
 would be cool if uniforms could be functions
 *** webgpu for 7 year olds
 todo listen ryan holiday
-make simple easy 
+make simple easy
+."A puppet that can no longer be used is mere garbage. This puppet's role has just ended..."
