@@ -10,12 +10,6 @@ const data = {
   angle: Math.random()
 };
 
-let test_data = {
-  angle: Math.random(),
-  mouseX: Math.random(),
-  mouseY: Math.random()
-};
-
 function updateUniforms(stuff) {
   let {
     uniformsArray,
@@ -28,9 +22,15 @@ function updateUniforms(stuff) {
     attribsBuffer
   } = stuff;
   uniformsArray.set([performance.now() / 1000], 3);
-  uniformsArray.set(1000 * Math.random(), 4); //angle
+  uniformsArray.set(Math.random(), 4); //angle
   uniformsArray.set(data.mouseX, 5); //mouseX
   uniformsArray.set(data.mouseY, 6); //mouseY
+
+  uniformsArray.set(
+    [performance.now() / 1000, Math.random(), data.mouseX, data.mouseY],
+    3,
+    6
+  );
   uniformsBuffer = createBuffer(
     device,
     uniformsArray,
@@ -189,6 +189,9 @@ async function init(stuff) {
     ...Object.values(uniforms),
     ...Array.from(Object.values(inputs), input => input.value)
   ]);
+  console.log(uniformsArray);
+
+  //width, height, pixelRatio, 1.1, 4, 5, 6
 
   // let uniformsBuffer = createBuffer(
   //   device,
@@ -260,7 +263,7 @@ async function init(stuff) {
 }
 async function dot() {
   let options = {
-    uniforms: test_data
+    uniforms: data
   };
   let draw = await init(options);
   setInterval(draw, 150);
