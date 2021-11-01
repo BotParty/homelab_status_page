@@ -233,7 +233,6 @@ async function init(stuff) {
   );
 
   async function draw(ctx) {
-    console.log("hi");
     updateUniforms(recordRenderPass, {
       uniformsArray,
       data,
