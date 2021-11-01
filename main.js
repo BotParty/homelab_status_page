@@ -36,15 +36,6 @@ function updateUniforms(recordRenderPass, stuff) {
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
-
-  recordRenderPass({
-    device,
-    ctx,
-    renderPassDescriptor,
-    pipeline,
-    uniformsBuffer,
-    attribsBuffer
-  });
 }
 
 const createBuffer = (device, arr, usage) => {
@@ -206,6 +197,7 @@ function init(stuff) {
     );
 
     async function recordRenderPass(stuff) {
+      console.log("asdfasdf");
       let {
         device,
         ctx,
@@ -241,23 +233,20 @@ function init(stuff) {
       Object.entries(Object.keys(uniforms)).map(([idx, key]) => [key, +idx])
     );
 
-    Object.assign(canvas, {
-      update(values = {}) {
-        //expose this as a thing maybe
-        console.log("not being called");
-        for (const [name, value] of Object.entries(values)) {
-          if (uniformIndex.get(name) == undefined)
-            throw new Error(`Could not find uniform ${name}`);
-          uniformsArray.set([value], 4 + uniformIndex.get(name));
-        }
-        uniformsBuffer = createBuffer(
-          device,
-          uniformsArray,
-          GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-        );
-        //requestAnimationFrame(recordRenderPass);
+    const updateStuff = function(stuff) {
+      console.log("not being called ");
+      for (const [name, value] of Object.entries(values)) {
+        if (uniformIndex.get(name) == undefined)
+          throw new Error(`Could not find uniform ${name}`);
+        uniformsArray.set([value], 4 + uniformIndex.get(name));
       }
-    });
+      uniformsBuffer = createBuffer(
+        device,
+        uniformsArray,
+        GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+      );
+      //requestAnimationFrame(recordRenderPass);
+    };
 
     const uniformLen = Object.keys(uniforms).length;
     for (const [i, input] of Object.entries(Object.values(inputs))) {
@@ -281,20 +270,48 @@ function init(stuff) {
       pipeline,
       attribsBuffer
     });
+    console.log("hi");
+    recordRenderPass({
+      device,
+      ctx,
+      renderPassDescriptor,
+      pipeline,
+      uniformsBuffer,
+      attribsBuffer
+    }).finally(() => {
+      console.log("drawn! ");
+    });
+  };
+
+  recordRenderPass({
+    device,
+    ctx,
+    renderPassDescriptor,
+    pipeline,
+    uniformsBuffer,
+    attribsBuffer
+  }).finally(() => {
+    console.log("drawn! ");
+  });
+
+  return {
+    updateUniforms,
+    recordRenderPass
   };
 }
 
 function setup() {
   //delete me
-  let draw = init({
+  let stuff = init({
     uniforms: test_data
-  })();
+  });
 
-  return draw;
+  return stuff;
 }
 //export here
 //userland
-let draw = setup();
+let stuff = setup();
+stuff();
 // setTimeout(function recur() {
 //   draw.finally(() => {
 //   });
