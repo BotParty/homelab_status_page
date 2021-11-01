@@ -73,13 +73,13 @@ return mat2x2<f32>(
 let size = 15.0;
 
 fn main(uv: vec2<f32>) -> vec4<f32> {
-var p = (uv - 0.5) * (u.resolution.xy) * rotate2d(u.angle);
-if (p.x < 0.0) {p.x = p.x - size;}
-if (p.y < 0.0) {p.y = p.y - size;}
-p = abs(p);
-let q = p.x % (size * 2.0) < size == p.y % (size * 2.0) < size;
-let o = f32(q);
-return vec4<f32>(o * u.mouseX, o * .5,o - u.mouseY - 1.5,1.0);
+  var p = (uv - 0.5) * (u.resolution.xy) * rotate2d(u.angle);
+  if (p.x < 0.0) {p.x = p.x - size;}
+  if (p.y < 0.0) {p.y = p.y - size;}
+  p = abs(p);
+  let q = p.x % (size * 2.0) < size == p.y % (size * 2.0) < size;
+  let o = f32(q);
+  return vec4<f32>(o, o, o, 1.0);
 }
 `;
 
@@ -112,7 +112,7 @@ fn main_vertex(input: VertexInput) -> VertexOutput {
 var output: VertexOutput;
 var pos: vec2<f32> = input.pos * 2.0 - 1.0;
 output.pos = vec4<f32>(pos, 0.0, 1.0);
-output.uv = input.pos * u.mouseX;
+output.uv = input.pos;
 return output;
 }
 
@@ -121,7 +121,7 @@ ${source}
 [[stage(fragment)]]
 fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
 let x = u.resolution; // need to use all inputs
-return main(in.uv);
+return main(in.uv) + vec4<f32>(0., u.mouseX, u.mouseY, 0.);
 }`
   });
   return shader;
@@ -262,7 +262,7 @@ async function dot() {
     uniforms: data
   };
   let draw = await init(options);
-  setInterval(draw, 600);
+  setInterval(draw, 50);
 }
 
 dot();
