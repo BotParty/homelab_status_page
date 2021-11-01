@@ -16,8 +16,6 @@ canvas.addEventListener("mousemove", function(e) {
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-let noOp = async () => {};
-
 function shader({
   devicePixelRatio = window.devicePixelRatio,
   invalidation = () => {
@@ -26,8 +24,7 @@ function shader({
   visibility,
   uniforms = {},
   inputs = {},
-  sources = [],
-  preserveDrawingBuffer = false
+  sources = []
 } = {}) {
   if (visibility !== undefined && typeof visibility !== "function")
     throw new Error("invalid visibility");
