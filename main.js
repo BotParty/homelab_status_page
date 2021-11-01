@@ -1,18 +1,24 @@
 import "./style.css";
 
+const width = 640,
+  height = 480;
+
 const mousePosition = [0, 0];
 const data = {
   mousePosition,
   angle: 0
 };
-let DOM = {
-  canvas: () => document.querySelector("canvas")
-};
+
+const canvas = document.querySelector("canvas");
+canvas.addEventListener("mousemove", function(e) {
+  mousePosition[0] = e.clientX / innerWidth;
+  mousePosition[1] = e.clientY / innerHeight;
+});
+canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
+
 let noOp = async () => {};
 
 function shader({
-  width = 640,
-  height = 480,
   devicePixelRatio = window.devicePixelRatio,
   invalidation = () => {
     return new Promise();
@@ -20,7 +26,6 @@ function shader({
   visibility,
   uniforms = {},
   inputs = {},
-  iTime = false,
   sources = [],
   preserveDrawingBuffer = false
 } = {}) {
@@ -28,11 +33,6 @@ function shader({
     throw new Error("invalid visibility");
   return async function() {
     const source = String.raw.apply(String, arguments);
-    const canvas = DOM.canvas(
-      width * devicePixelRatio,
-      height * devicePixelRatio
-    );
-    canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
     const ctx = canvas.getContext("webgpu");
     const adapter = await navigator.gpu.requestAdapter();
     const device = await adapter.requestDevice();
@@ -197,7 +197,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
       };
     }
     requestAnimationFrame(render);
-    if (iTime) {
+    if (true) {
       let timeframe;
       (async function tick() {
         if (visibility !== undefined) await visibility();
@@ -243,16 +243,9 @@ function init() {
     mouseX: Math.random(),
     mouseY: Math.random()
   };
-  document.querySelector("canvas").addEventListener("mousemove", function(e) {
-    mousePosition[0] = e.clientX / innerWidth;
-    mousePosition[1] = e.clientY / innerHeight;
-  });
 
   let draw = shader({
-    width: 640,
-    height: 100,
-    uniforms: test,
-    iTime: true
+    uniforms: test
   })`
 fn rotate2d(a: f32) -> mat2x2<f32> {
   let c = cos(a);
