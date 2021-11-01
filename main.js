@@ -114,7 +114,7 @@ return main(in.uv);
   });
   return shader;
 }
-function shader(stuff) {
+function init(stuff) {
   //top level
   let { uniforms = {}, inputs = {}, sources = [] } = stuff;
   return async function draw() {
@@ -272,8 +272,9 @@ function shader(stuff) {
   };
 }
 
-function init() {
-  let draw = shader({
+function setup() {
+  //delete me
+  let draw = init({
     uniforms: test_data
   })`
 fn rotate2d(a: f32) -> mat2x2<f32> {
@@ -298,16 +299,13 @@ fn main(uv: vec2<f32>) -> vec4<f32> {
 }
 `;
 
-  //userland
-  setTimeout(function recur() {
-    draw.finally(() => {
-      console.log("draw");
-      setTimeout(recur, 150 * 4);
-    });
-  }, 150 * 4);
+  return draw;
 }
-init(); //should returns a 1 shot draw
-
-export default {
-  init
-};
+//export here
+//userland
+let draw = setup();
+setTimeout(function recur() {
+  draw.finally(() => {
+    setTimeout(recur, 150 * 4);
+  });
+}, 150 * 4);
