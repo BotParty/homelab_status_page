@@ -36,48 +36,51 @@ function shader(stuff) {
       device,
       format: "bgra8unorm"
     });
-    function makeShaderModule() {}
-    const shader = device.createShaderModule({
-      code: `
-      [[block]] struct Uniforms {
-      resolution: vec3<f32>;
-       time: f32;
-  ${Object.keys(uniforms)
-    .map(name => `${name}: f32;`)
-    .join("\n")}
-  ${Object.keys(inputs)
-    .map(name => `${name}: f32;`)
-    .join("\n")}
-};
+    function makeShaderModule(device, uniforms, name, sources, source) {
+      const shader = device.createShaderModule({
+        code: `
+        [[block]] struct Uniforms {
+        resolution: vec3<f32>;
+         time: f32;
+    ${Object.keys(uniforms)
+      .map(name => `${name}: f32;`)
+      .join("\n")}
+    ${Object.keys(inputs)
+      .map(name => `${name}: f32;`)
+      .join("\n")}
+  };
 
-[[group(0), binding(0)]] var<uniform> u: Uniforms;
+  [[group(0), binding(0)]] var<uniform> u: Uniforms;
 
-struct VertexInput {
-  [[location(0)]] pos: vec2<f32>;
-};
+  struct VertexInput {
+    [[location(0)]] pos: vec2<f32>;
+  };
 
-struct VertexOutput {
-  [[builtin(position)]] pos: vec4<f32>;
-  [[location(0)]] uv: vec2<f32>;
-};
+  struct VertexOutput {
+    [[builtin(position)]] pos: vec4<f32>;
+    [[location(0)]] uv: vec2<f32>;
+  };
 
-[[stage(vertex)]]
-fn main_vertex(input: VertexInput) -> VertexOutput {
-  var output: VertexOutput;
-  var pos: vec2<f32> = input.pos * 2.0 - 1.0;
-  output.pos = vec4<f32>(pos, 0.0, 1.0);
-  output.uv = input.pos * u.mouseX;
-  return output;
-}
+  [[stage(vertex)]]
+  fn main_vertex(input: VertexInput) -> VertexOutput {
+    var output: VertexOutput;
+    var pos: vec2<f32> = input.pos * 2.0 - 1.0;
+    output.pos = vec4<f32>(pos, 0.0, 1.0);
+    output.uv = input.pos * u.mouseX;
+    return output;
+  }
 
-${[...sources].join("\n")}
-${source}
-[[stage(fragment)]]
-fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
-  let x = u.resolution; // need to use all inputs
-  return main(in.uv);
-}`
-    });
+  ${[...sources].join("\n")}
+  ${source}
+  [[stage(fragment)]]
+  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
+    let x = u.resolution; // need to use all inputs
+    return main(in.uv);
+  }`
+      });
+      return shader;
+    }
+    let shader = makeShaderModule(device, uniforms, name, sources, source);
 
     const pipeline = device.createRenderPipeline({
       vertex: {
