@@ -3,10 +3,10 @@ import "./style.css";
 const width = 640,
   height = 480;
 
-const mousePosition = [0, 0];
+const initialMousePosition = [0, 0];
 const data = {
-  mouseX: mousePosition[0],
-  mouseY: mousePosition[1],
+  mouseX: initialMousePosition[0],
+  mouseY: initialMousePosition[1],
   angle: Math.random()
 };
 
@@ -21,13 +21,9 @@ function updateUniforms(stuff) {
     pipeline,
     attribsBuffer
   } = stuff;
-  uniformsArray.set([performance.now() / 1000], 3);
-  uniformsArray.set(Math.random(), 4); //angle
-  uniformsArray.set(data.mouseX, 5); //mouseX
-  uniformsArray.set(data.mouseY, 6); //mouseY
 
   uniformsArray.set(
-    [performance.now() / 1000, Math.random(), data.mouseX, data.mouseY],
+    [performance.now() / 1000, data.angle, data.mouseX, data.mouseY],
     3,
     6
   );
@@ -57,8 +53,9 @@ const createBuffer = (device, arr, usage) => {
 
 const canvas = document.querySelector("canvas");
 canvas.addEventListener("mousemove", function(e) {
-  mousePosition[0] = e.clientX / innerWidth;
-  mousePosition[1] = e.clientY / innerHeight;
+  data.mouseX = e.clientX / innerWidth;
+  data.mouseY = e.clientY / innerHeight;
+  console.log("hi", data.mouseX, data.mouseY);
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
@@ -191,8 +188,7 @@ async function init(stuff) {
   ]);
   console.log(uniformsArray);
 
-  //width, height, pixelRatio, 1.1, 4, 5, 6
-
+  //  idth, height, pixelRatio, 1.1, 4, 5, 6
   // let uniformsBuffer = createBuffer(
   //   device,
   //   uniformsArray,
@@ -266,7 +262,7 @@ async function dot() {
     uniforms: data
   };
   let draw = await init(options);
-  setInterval(draw, 150);
+  setInterval(draw, 600);
 }
 
 dot();
