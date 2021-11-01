@@ -1,0 +1,17 @@
+{
+  "name": "simple-shader-demo",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.6.4"
+  },
+  "dependencies": {
+    "d3": "^7.1.1",
+    "h3": "^0.3.3",
+    "regl": "^2.1.0"
+  }
+}
