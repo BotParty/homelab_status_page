@@ -16,6 +16,53 @@ let test_data = {
   mouseY: Math.random()
 };
 
+function updateUniforms(recordRenderPass, stuff) {
+  let {
+    uniformsArray,
+    data,
+    device,
+    uniformsBuffer,
+    ctx,
+    renderPassDescriptor,
+    pipeline,
+    attribsBuffer
+  } = stuff;
+  uniformsArray.set([performance.now() / 1000], 3);
+  uniformsArray.set(data.angle * Math.random(), 4); //angle
+  uniformsArray.set(data.mouseX, 5); //mouseX
+  uniformsArray.set(data.mouseY, 6); //mouseY
+  uniformsBuffer = createBuffer(
+    device,
+    uniformsArray,
+    GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+  );
+
+  recordRenderPass({
+    device,
+    ctx,
+    renderPassDescriptor,
+    pipeline,
+    uniformsBuffer,
+    attribsBuffer
+  });
+}
+
+const createBuffer = (device, arr, usage) => {
+  let desc = {
+    size: (arr.byteLength + 3) & ~3,
+    usage,
+    mappedAtCreation: true
+  };
+  let buffer = device.createBuffer(desc);
+  const writeArray =
+    arr instanceof Uint16Array
+      ? new Uint16Array(buffer.getMappedRange())
+      : new Float32Array(buffer.getMappedRange());
+  writeArray.set(arr);
+  buffer.unmap();
+  return buffer;
+};
+
 const canvas = document.querySelector("canvas");
 canvas.addEventListener("mousemove", function(e) {
   mousePosition[0] = e.clientX / innerWidth;
@@ -23,9 +70,52 @@ canvas.addEventListener("mousemove", function(e) {
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-//addDynamicUniforms=>updateUniforms, recordRenderPass:draw
+function makeShaderModule(device, uniforms, name, sources, source, inputs) {
+  const shader = device.createShaderModule({
+    code: `
+    [[block]] struct Uniforms {
+    resolution: vec3<f32>;
+     time: f32;
+${Object.keys(uniforms)
+      .map(name => `${name}: f32;`)
+      .join("\n")}
+${Object.keys(inputs)
+      .map(name => `${name}: f32;`)
+      .join("\n")}
+};
 
+[[group(0), binding(0)]] var<uniform> u: Uniforms;
+
+struct VertexInput {
+[[location(0)]] pos: vec2<f32>;
+};
+
+struct VertexOutput {
+[[builtin(position)]] pos: vec4<f32>;
+[[location(0)]] uv: vec2<f32>;
+};
+
+[[stage(vertex)]]
+fn main_vertex(input: VertexInput) -> VertexOutput {
+var output: VertexOutput;
+var pos: vec2<f32> = input.pos * 2.0 - 1.0;
+output.pos = vec4<f32>(pos, 0.0, 1.0);
+output.uv = input.pos * u.mouseX;
+return output;
+}
+
+${[...sources].join("\n")}
+${source}
+[[stage(fragment)]]
+fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
+let x = u.resolution; // need to use all inputs
+return main(in.uv);
+}`
+  });
+  return shader;
+}
 function shader(stuff) {
+  //top level
   let { uniforms = {}, inputs = {}, sources = [] } = stuff;
   return async function init() {
     const source = String.raw.apply(String, arguments);
@@ -36,51 +126,15 @@ function shader(stuff) {
       device,
       format: "bgra8unorm"
     });
-    function makeShaderModule(device, uniforms, name, sources, source) {
-      const shader = device.createShaderModule({
-        code: `
-        [[block]] struct Uniforms {
-        resolution: vec3<f32>;
-         time: f32;
-    ${Object.keys(uniforms)
-      .map(name => `${name}: f32;`)
-      .join("\n")}
-    ${Object.keys(inputs)
-      .map(name => `${name}: f32;`)
-      .join("\n")}
-  };
 
-  [[group(0), binding(0)]] var<uniform> u: Uniforms;
-
-  struct VertexInput {
-    [[location(0)]] pos: vec2<f32>;
-  };
-
-  struct VertexOutput {
-    [[builtin(position)]] pos: vec4<f32>;
-    [[location(0)]] uv: vec2<f32>;
-  };
-
-  [[stage(vertex)]]
-  fn main_vertex(input: VertexInput) -> VertexOutput {
-    var output: VertexOutput;
-    var pos: vec2<f32> = input.pos * 2.0 - 1.0;
-    output.pos = vec4<f32>(pos, 0.0, 1.0);
-    output.uv = input.pos * u.mouseX;
-    return output;
-  }
-
-  ${[...sources].join("\n")}
-  ${source}
-  [[stage(fragment)]]
-  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
-    let x = u.resolution; // need to use all inputs
-    return main(in.uv);
-  }`
-      });
-      return shader;
-    }
-    let shader = makeShaderModule(device, uniforms, name, sources, source);
+    let shader = makeShaderModule(
+      device,
+      uniforms,
+      name,
+      sources,
+      source,
+      inputs
+    );
 
     const pipeline = device.createRenderPipeline({
       vertex: {
@@ -136,7 +190,16 @@ function shader(stuff) {
       GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
     );
 
-    async function recordRenderPass() {
+    async function recordRenderPass(stuff) {
+      let {
+        device,
+        ctx,
+        renderPassDescriptor,
+        pipeline,
+        uniformsBuffer,
+
+        attribsBuffer
+      } = stuff;
       const commandEncoder = device.createCommandEncoder();
       const textureView = ctx.getCurrentTexture().createView();
       renderPassDescriptor.colorAttachments[0].view = textureView;
@@ -157,7 +220,9 @@ function shader(stuff) {
       passEncoder.setVertexBuffer(0, attribsBuffer);
       passEncoder.draw(6, 1, 0, 0);
       passEncoder.endPass();
-      device.queue.submit([commandEncoder.finish()]);
+      //console.time("abc");
+      device.queue.submit([commandEncoder.finish()]); //async
+      //console.timeEnd("abc");
     }
 
     const uniformIndex = new Map(
@@ -166,6 +231,7 @@ function shader(stuff) {
 
     Object.assign(canvas, {
       update(values = {}) {
+        //expose this as a thing maybe
         console.log("not being called");
         for (const [name, value] of Object.entries(values)) {
           if (uniformIndex.get(name) == undefined)
@@ -177,7 +243,7 @@ function shader(stuff) {
           uniformsArray,
           GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
         );
-        requestAnimationFrame(recordRenderPass);
+        //requestAnimationFrame(recordRenderPass);
       }
     });
 
@@ -192,39 +258,19 @@ function shader(stuff) {
         );
       };
     }
-    requestAnimationFrame(recordRenderPass);
 
-    (async function updateUniforms() {
-      uniformsArray.set([performance.now() / 1000], 3);
-      uniformsArray.set(data.angle * Math.random(), 4); //angle
-      uniformsArray.set(data.mouseX, 5); //mouseX
-      uniformsArray.set(data.mouseY, 6); //mouseY
-      uniformsBuffer = createBuffer(
-        device,
-        uniformsArray,
-        GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-      );
-      setTimeout(updateUniforms, 500);
-      setTimeout(recordRenderPass, 500);
-    })();
+    updateUniforms(recordRenderPass, {
+      uniformsArray,
+      data,
+      device,
+      uniformsBuffer,
+      ctx,
+      renderPassDescriptor,
+      pipeline,
+      attribsBuffer
+    });
   };
 }
-
-const createBuffer = (device, arr, usage) => {
-  let desc = {
-    size: (arr.byteLength + 3) & ~3,
-    usage,
-    mappedAtCreation: true
-  };
-  let buffer = device.createBuffer(desc);
-  const writeArray =
-    arr instanceof Uint16Array
-      ? new Uint16Array(buffer.getMappedRange())
-      : new Float32Array(buffer.getMappedRange());
-  writeArray.set(arr);
-  buffer.unmap();
-  return buffer;
-};
 
 function init() {
   let draw = shader({
@@ -251,6 +297,8 @@ fn main(uv: vec2<f32>) -> vec4<f32> {
   return vec4<f32>(o * u.mouseX, o * .5,o - u.mouseY - 1.5,1.0);
 }
 `;
+
+  //userland
   setTimeout(function recur() {
     //this my compositor
     draw.finally(() => {
