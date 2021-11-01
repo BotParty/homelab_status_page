@@ -16,7 +16,7 @@ let test_data = {
   mouseY: Math.random()
 };
 
-function updateUniforms(recordRenderPass, stuff) {
+function updateUniforms(stuff) {
   let {
     uniformsArray,
     data,
@@ -232,7 +232,7 @@ async function init(stuff) {
   );
 
   function draw(ctx) {
-    updateUniforms(recordRenderPass, {
+    updateUniforms({
       uniformsArray,
       data,
       device,
