@@ -117,7 +117,7 @@ return main(in.uv);
 function shader(stuff) {
   //top level
   let { uniforms = {}, inputs = {}, sources = [] } = stuff;
-  return async function init() {
+  return async function draw() {
     const source = String.raw.apply(String, arguments);
     const ctx = canvas.getContext("webgpu");
     const adapter = await navigator.gpu.requestAdapter();
@@ -300,7 +300,6 @@ fn main(uv: vec2<f32>) -> vec4<f32> {
 
   //userland
   setTimeout(function recur() {
-    //this my compositor
     draw.finally(() => {
       console.log("draw");
       setTimeout(recur, 150 * 4);
