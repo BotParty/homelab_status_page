@@ -16,16 +16,7 @@ canvas.addEventListener("mousemove", function(e) {
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-function shader({
-  devicePixelRatio = window.devicePixelRatio,
-  invalidation = () => {
-    return new Promise();
-  },
-  visibility,
-  uniforms = {},
-  inputs = {},
-  sources = []
-} = {}) {
+function shader({ visibility, uniforms = {}, inputs = {}, sources = [] } = {}) {
   if (visibility !== undefined && typeof visibility !== "function")
     throw new Error("invalid visibility");
   return async function() {
@@ -37,9 +28,6 @@ function shader({
       device,
       format: "bgra8unorm"
     });
-    const ondispose = function() {};
-    let frame;
-    let disposed = false;
     const shader = device.createShaderModule({
       code: `
 [[block]] struct Uniforms {
@@ -124,7 +112,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
     let uniformsArray = new Float32Array([
       width, // res.x
       height, // res.y
-      devicePixelRatio, // res.z
+      window.devicePixelRatio, // res.z
       0, // time
       ...Object.values(uniforms),
       ...Array.from(Object.values(inputs), input => input.value)
@@ -166,7 +154,6 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
 
     Object.assign(canvas, {
       update(values = {}) {
-        if (disposed) return false;
         for (const [name, value] of Object.entries(values)) {
           if (uniformIndex.get(name) == undefined)
             throw new Error(`Could not find uniform ${name}`);
@@ -195,7 +182,6 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
     }
     requestAnimationFrame(render);
     if (true) {
-      let timeframe;
       (async function tick() {
         if (visibility !== undefined) await visibility();
         uniformsArray.set([performance.now() / 1000], 3);
@@ -207,13 +193,9 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
           uniformsArray,
           GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
         );
-        //render();
         setTimeout(tick, 500);
         setTimeout(render, 500);
-        //setTimeout(tick, 500);
-        //return (timeframe = requestAnimationFrame(tick));
       })();
-      //ondispose.then(() => cancelAnimationFrame(timeframe));
     } else {
       render();
     }

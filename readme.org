@@ -21,3 +21,4 @@ shader.uniform (
   angle: (d ) => d + Math.random()
 )
 would be cool if uniforms could be functions
+*** webgpu for 7 year olds!!
