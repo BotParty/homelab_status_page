@@ -196,7 +196,6 @@ async function init(stuff) {
   );
 
   async function recordRenderPass(stuff) {
-    console.log("asdfasdf");
     let {
       device,
       context,
@@ -232,7 +231,7 @@ async function init(stuff) {
     Object.entries(Object.keys(uniforms)).map(([idx, key]) => [key, +idx])
   );
 
-  async function draw(ctx) {
+  function draw(ctx) {
     updateUniforms(recordRenderPass, {
       uniformsArray,
       data,
@@ -258,14 +257,15 @@ async function init(stuff) {
   return draw;
 } //closes init
 
-let draw = await init({
+let makeDraw = init({
   uniforms: test_data
-});
+})
+  .then(draw => {
+    draw();
+  })
+  .finally(_ => {});
 //export here
 //userland
-
-draw()
-
 // setTimeout(function recur() {
 //   draw.finally(() => {
 //   });
