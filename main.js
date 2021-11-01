@@ -7,7 +7,7 @@ const mousePosition = [0, 0];
 const data = {
   mouseX: mousePosition[0],
   mouseY: mousePosition[1],
-  angle: 0
+  angle: Math.random()
 };
 
 let test_data = {
@@ -262,8 +262,7 @@ async function dot() {
     uniforms: test_data
   };
   let draw = await init(options);
-  draw();
-  draw();
+  setInterval(draw, 150);
 }
 
 dot();
