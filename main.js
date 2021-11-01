@@ -70,7 +70,30 @@ canvas.addEventListener("mousemove", function(e) {
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-function makeShaderModule(device, uniforms, name, sources, source, inputs) {
+function makeShaderModule(device, uniforms, name, sources, inputs) {
+  let source = `
+fn rotate2d(a: f32) -> mat2x2<f32> {
+let c = cos(a);
+let s = sin(a);
+return mat2x2<f32>(
+    vec2<f32>(c, -s),
+    vec2<f32>(s, c)
+);
+}
+
+let size = 15.0;
+
+fn main(uv: vec2<f32>) -> vec4<f32> {
+var p = (uv - 0.5) * (u.resolution.xy) * rotate2d(u.angle);
+if (p.x < 0.0) {p.x = p.x - size;}
+if (p.y < 0.0) {p.y = p.y - size;}
+p = abs(p);
+let q = p.x % (size * 2.0) < size == p.y % (size * 2.0) < size;
+let o = f32(q);
+return vec4<f32>(o * u.mouseX, o * .5,o - u.mouseY - 1.5,1.0);
+}
+`;
+
   const shader = device.createShaderModule({
     code: `
     [[block]] struct Uniforms {
@@ -118,7 +141,6 @@ function init(stuff) {
   //top level
   let { uniforms = {}, inputs = {}, sources = [] } = stuff;
   return async function draw() {
-    const source = String.raw.apply(String, arguments);
     const ctx = canvas.getContext("webgpu");
     const adapter = await navigator.gpu.requestAdapter();
     const device = await adapter.requestDevice();
@@ -127,14 +149,7 @@ function init(stuff) {
       format: "bgra8unorm"
     });
 
-    let shader = makeShaderModule(
-      device,
-      uniforms,
-      name,
-      sources,
-      source,
-      inputs
-    );
+    let shader = makeShaderModule(device, uniforms, name, sources, inputs);
 
     const pipeline = device.createRenderPipeline({
       vertex: {
@@ -197,7 +212,6 @@ function init(stuff) {
         renderPassDescriptor,
         pipeline,
         uniformsBuffer,
-
         attribsBuffer
       } = stuff;
       const commandEncoder = device.createCommandEncoder();
@@ -220,9 +234,7 @@ function init(stuff) {
       passEncoder.setVertexBuffer(0, attribsBuffer);
       passEncoder.draw(6, 1, 0, 0);
       passEncoder.endPass();
-      //console.time("abc");
       device.queue.submit([commandEncoder.finish()]); //async
-      //console.timeEnd("abc");
     }
 
     const uniformIndex = new Map(
@@ -276,36 +288,14 @@ function setup() {
   //delete me
   let draw = init({
     uniforms: test_data
-  })`
-fn rotate2d(a: f32) -> mat2x2<f32> {
-  let c = cos(a);
-  let s = sin(a);
-  return mat2x2<f32>(
-      vec2<f32>(c, -s),
-      vec2<f32>(s, c)
-  );
-}
-
-let size = 15.0;
-
-fn main(uv: vec2<f32>) -> vec4<f32> {
-  var p = (uv - 0.5) * (u.resolution.xy) * rotate2d(u.angle);
-  if (p.x < 0.0) {p.x = p.x - size;}
-  if (p.y < 0.0) {p.y = p.y - size;}
-  p = abs(p);
-  let q = p.x % (size * 2.0) < size == p.y % (size * 2.0) < size;
-  let o = f32(q);
-  return vec4<f32>(o * u.mouseX, o * .5,o - u.mouseY - 1.5,1.0);
-}
-`;
+  })();
 
   return draw;
 }
 //export here
 //userland
 let draw = setup();
-setTimeout(function recur() {
-  draw.finally(() => {
-    setTimeout(recur, 150 * 4);
-  });
-}, 150 * 4);
+// setTimeout(function recur() {
+//   draw.finally(() => {
+//   });
+// }, 150 * 4);
