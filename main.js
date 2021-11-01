@@ -7,8 +7,13 @@ const mousePosition = [0, 0];
 const data = {
   mouseX: mousePosition[0],
   mouseY: mousePosition[1],
-
   angle: 0
+};
+
+let test_data = {
+  angle: Math.random(),
+  mouseX: Math.random(),
+  mouseY: Math.random()
 };
 
 const canvas = document.querySelector("canvas");
@@ -18,8 +23,11 @@ canvas.addEventListener("mousemove", function(e) {
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-function shader({ uniforms = {}, inputs = {}, sources = [] } = {}) {
-  return async function() {
+//addDynamicUniforms=>updateUniforms, recordRenderPass:draw
+
+function shader(stuff) {
+  let { uniforms = {}, inputs = {}, sources = [] } = stuff;
+  return async function init() {
     const source = String.raw.apply(String, arguments);
     const ctx = canvas.getContext("webgpu");
     const adapter = await navigator.gpu.requestAdapter();
@@ -30,9 +38,9 @@ function shader({ uniforms = {}, inputs = {}, sources = [] } = {}) {
     });
     const shader = device.createShaderModule({
       code: `
-[[block]] struct Uniforms {
-  resolution: vec3<f32>;
-  time: f32;
+      [[block]] struct Uniforms {
+      resolution: vec3<f32>;
+       time: f32;
   ${Object.keys(uniforms)
     .map(name => `${name}: f32;`)
     .join("\n")}
@@ -154,6 +162,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
 
     Object.assign(canvas, {
       update(values = {}) {
+        console.log("not being called");
         for (const [name, value] of Object.entries(values)) {
           if (uniformIndex.get(name) == undefined)
             throw new Error(`Could not find uniform ${name}`);
@@ -165,7 +174,6 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
           GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
         );
         requestAnimationFrame(render);
-        return true;
       }
     });
 
@@ -216,14 +224,9 @@ const createBuffer = (device, arr, usage) => {
 
 function init() {
   const visibility = async () => true;
-  let test = {
-    angle: Math.random(),
-    mouseX: Math.random(),
-    mouseY: Math.random()
-  };
 
   let draw = shader({
-    uniforms: test
+    uniforms: test_data
   })`
 fn rotate2d(a: f32) -> mat2x2<f32> {
   let c = cos(a);
@@ -247,10 +250,15 @@ fn main(uv: vec2<f32>) -> vec4<f32> {
 }
 `;
   setTimeout(function recur() {
+    //this my compositor
     draw.finally(() => {
       console.log("draw");
       setTimeout(recur, 150 * 4);
     });
-  }, 150 * 40);
+  }, 150 * 4);
 }
-init();
+init(); //should returns a 1 shot draw
+
+export default {
+  init
+};
