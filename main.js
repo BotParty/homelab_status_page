@@ -36,6 +36,7 @@ function shader(stuff) {
       device,
       format: "bgra8unorm"
     });
+    function makeShaderModule() {}
     const shader = device.createShaderModule({
       code: `
       [[block]] struct Uniforms {
@@ -75,9 +76,9 @@ ${source}
 fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
   let x = u.resolution; // need to use all inputs
   return main(in.uv);
-}
-    `
+}`
     });
+
     const pipeline = device.createRenderPipeline({
       vertex: {
         module: shader,
@@ -132,7 +133,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
       GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
     );
 
-    async function render() {
+    async function recordRenderPass() {
       const commandEncoder = device.createCommandEncoder();
       const textureView = ctx.getCurrentTexture().createView();
       renderPassDescriptor.colorAttachments[0].view = textureView;
@@ -173,7 +174,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
           uniformsArray,
           GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
         );
-        requestAnimationFrame(render);
+        requestAnimationFrame(recordRenderPass);
       }
     });
 
@@ -188,7 +189,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
         );
       };
     }
-    requestAnimationFrame(render);
+    requestAnimationFrame(recordRenderPass);
 
     (async function updateUniforms() {
       uniformsArray.set([performance.now() / 1000], 3);
@@ -201,7 +202,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
         GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
       );
       setTimeout(updateUniforms, 500);
-      setTimeout(render, 500);
+      setTimeout(recordRenderPass, 500);
     })();
   };
 }
@@ -223,8 +224,6 @@ const createBuffer = (device, arr, usage) => {
 };
 
 function init() {
-  const visibility = async () => true;
-
   let draw = shader({
     uniforms: test_data
   })`
@@ -246,7 +245,7 @@ fn main(uv: vec2<f32>) -> vec4<f32> {
   p = abs(p);
   let q = p.x % (size * 2.0) < size == p.y % (size * 2.0) < size;
   let o = f32(q);
-  return vec4<f32>(o * u.mouseX ,o * .5,o - u.mouseY - 1.5,1.0);
+  return vec4<f32>(o * u.mouseX, o * .5,o - u.mouseY - 1.5,1.0);
 }
 `;
   setTimeout(function recur() {
