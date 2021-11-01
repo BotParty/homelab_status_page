@@ -28,7 +28,7 @@ function updateUniforms(stuff) {
     attribsBuffer
   } = stuff;
   uniformsArray.set([performance.now() / 1000], 3);
-  uniformsArray.set(data.angle * Math.random(), 4); //angle
+  uniformsArray.set(1000 * Math.random(), 4); //angle
   uniformsArray.set(data.mouseX, 5); //mouseX
   uniformsArray.set(data.mouseY, 6); //mouseY
   uniformsBuffer = createBuffer(
@@ -36,6 +36,7 @@ function updateUniforms(stuff) {
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
+  return uniformsBuffer;
 }
 
 const createBuffer = (device, arr, usage) => {
@@ -189,11 +190,11 @@ async function init(stuff) {
     ...Array.from(Object.values(inputs), input => input.value)
   ]);
 
-  let uniformsBuffer = createBuffer(
-    device,
-    uniformsArray,
-    GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-  );
+  // let uniformsBuffer = createBuffer(
+  //   device,
+  //   uniformsArray,
+  //   GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+  // );
 
   async function recordRenderPass(stuff) {
     let {
@@ -220,6 +221,7 @@ async function init(stuff) {
         }
       ]
     });
+
     passEncoder.setBindGroup(0, bindGroup);
     passEncoder.setVertexBuffer(0, attribsBuffer);
     passEncoder.draw(6, 1, 0, 0);
@@ -232,11 +234,11 @@ async function init(stuff) {
   );
 
   function draw(ctx) {
-    updateUniforms({
+    let uniformsBuffer = updateUniforms({
+      //needs an upload spot
       uniformsArray,
       data,
       device,
-      uniformsBuffer,
       context,
       renderPassDescriptor,
       pipeline,
@@ -255,8 +257,7 @@ async function init(stuff) {
     });
   }
   return draw; //one shot
-} //closes init
-//problem statement: how to call draw 2x
+}
 async function dot() {
   let options = {
     uniforms: test_data
@@ -266,25 +267,3 @@ async function dot() {
 }
 
 dot();
-
-// function startLoop(makeDraw) {
-//   let ctx = {}; // from userland
-//   makeDraw({
-//     uniforms: test_data
-//   })
-//     .then(draw => {
-//       draw();
-//     })
-//     .finally(_ => {});
-//
-//   setInterval(() => {}, 500);
-// }
-//
-// startLoop(init);
-
-//export here
-//userland
-// setTimeout(function recur() {
-//   draw.finally(() => {
-//   });
-// }, 150 * 4);
