@@ -16,9 +16,7 @@ canvas.addEventListener("mousemove", function(e) {
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-function shader({ visibility, uniforms = {}, inputs = {}, sources = [] } = {}) {
-  if (visibility !== undefined && typeof visibility !== "function")
-    throw new Error("invalid visibility");
+function shader({ uniforms = {}, inputs = {}, sources = [] } = {}) {
   return async function() {
     const source = String.raw.apply(String, arguments);
     const ctx = canvas.getContext("webgpu");
@@ -181,30 +179,29 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
       };
     }
     requestAnimationFrame(render);
-    if (true) {
-      (async function tick() {
-        if (visibility !== undefined) await visibility();
-        uniformsArray.set([performance.now() / 1000], 3);
-        uniformsArray.set(data.angle * Math.random(), 4); //angle
-        uniformsArray.set(data.mousePosition[0], 5); //mouseX
-        uniformsArray.set(data.mousePosition[1], 6); //mouseY
-        uniformsBuffer = createBuffer(
-          device,
-          uniformsArray,
-          GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-        );
-        setTimeout(tick, 500);
-        setTimeout(render, 500);
-      })();
-    } else {
-      render();
-    }
-    return canvas;
+
+    (async function updateUniforms() {
+      uniformsArray.set([performance.now() / 1000], 3);
+      uniformsArray.set(data.angle * Math.random(), 4); //angle
+      uniformsArray.set(data.mousePosition[0], 5); //mouseX
+      uniformsArray.set(data.mousePosition[1], 6); //mouseY
+      uniformsBuffer = createBuffer(
+        device,
+        uniformsArray,
+        GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+      );
+      setTimeout(updateUniforms, 500);
+      setTimeout(render, 500);
+    })();
   };
 }
 
 const createBuffer = (device, arr, usage) => {
-  let desc = { size: (arr.byteLength + 3) & ~3, usage, mappedAtCreation: true };
+  let desc = {
+    size: (arr.byteLength + 3) & ~3,
+    usage,
+    mappedAtCreation: true
+  };
   let buffer = device.createBuffer(desc);
   const writeArray =
     arr instanceof Uint16Array
