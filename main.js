@@ -1,15 +1,16 @@
 import "./style.css";
-
+//make it so simple a 7 year old can understand it.
 const width = 640,
   height = 480;
 
-const initialMousePosition = [0, 0];
 const data = {
-  mouseX: initialMousePosition[0],
-  mouseY: initialMousePosition[1],
-  angle: Math.random()
+  mouseX: 0,
+  mouseY: 0,
+  angle: 50
 };
-
+//uniformsArray
+//(dimensions.xyz), (time, angle), (mouseX, mouseY)
+//(0, 1, 2)         (2 , 3),  4 , (5, 6)
 function updateUniforms(stuff) {
   let {
     uniformsArray,
@@ -23,7 +24,12 @@ function updateUniforms(stuff) {
   } = stuff;
 
   uniformsArray.set(
-    [performance.now() / 1000, data.angle, data.mouseX, data.mouseY],
+    [
+      performance.now() / 1000,
+      data.angle + Math.random(),
+      data.mouseX,
+      data.mouseY
+    ],
     3,
     6
   );
@@ -55,7 +61,7 @@ const canvas = document.querySelector("canvas");
 canvas.addEventListener("mousemove", function(e) {
   data.mouseX = e.clientX / innerWidth;
   data.mouseY = e.clientY / innerHeight;
-  console.log("hi", data.mouseX, data.mouseY);
+  //console.log("hi", data.mouseX, data.mouseY);
 });
 canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
@@ -186,14 +192,6 @@ async function init(stuff) {
     ...Object.values(uniforms),
     ...Array.from(Object.values(inputs), input => input.value)
   ]);
-  console.log(uniformsArray);
-
-  //  idth, height, pixelRatio, 1.1, 4, 5, 6
-  // let uniformsBuffer = createBuffer(
-  //   device,
-  //   uniformsArray,
-  //   GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-  // );
 
   async function recordRenderPass(stuff) {
     let {
@@ -223,14 +221,10 @@ async function init(stuff) {
 
     passEncoder.setBindGroup(0, bindGroup);
     passEncoder.setVertexBuffer(0, attribsBuffer);
-    passEncoder.draw(6, 1, 0, 0);
+    passEncoder.draw(3 * 2, 1, 0, 0);
     passEncoder.endPass();
     device.queue.submit([commandEncoder.finish()]); //async
   }
-
-  const uniformIndex = new Map(
-    Object.entries(Object.keys(uniforms)).map(([idx, key]) => [key, +idx])
-  );
 
   function draw(ctx) {
     let uniformsBuffer = updateUniforms({
@@ -252,7 +246,7 @@ async function init(stuff) {
       uniformsBuffer,
       attribsBuffer
     }).finally(() => {
-      console.log("drawn!");
+      //console.log("drawn!");
     });
   }
   return draw; //one shot
@@ -262,7 +256,7 @@ async function dot() {
     uniforms: data
   };
   let draw = await init(options);
-  setInterval(draw, 50);
+  setInterval(draw, 150);
 }
 
 dot();
