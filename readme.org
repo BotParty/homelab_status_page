@@ -2,3 +2,19 @@
 ** this is a h2
 
 0 simplistic-afterthought.surge.sh
+
+
+//red blob illusions
+//breath
+
+//finish 3 layers
+//mouse - water
+// breathe - webgl
+// red blob shape transition - webgl
+//sky
+//frag coord
+//frag index what (row + col) it is
+//would be cool if uniforms could be functions
+//shader.uniform (
+//  angle: (d ) => d + Math.random()
+//)

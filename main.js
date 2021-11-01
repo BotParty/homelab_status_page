@@ -1,32 +1,22 @@
-import './style.css'
+import "./style.css";
 
-//mouse
-//frag coord
-//frag index what (row + col) it is
-//would be cool if uniforms could be functions
-//shader.uniform (
-//  angle: (d ) => d + Math.random()
-//)
-
-const mousePosition = [0,0]
+const mousePosition = [0, 0];
 const data = {
   mousePosition,
   angle: 0
-}
-
+};
 let DOM = {
-  canvas: () => document.querySelector('canvas')
-}
-
-// let noOp = () => {}
-let noOp = async () => {}
-
+  canvas: () => document.querySelector("canvas")
+};
+let noOp = async () => {};
 
 function shader({
   width = 640,
   height = 480,
   devicePixelRatio = window.devicePixelRatio,
-  invalidation=function () { return new Promise() },
+  invalidation = () => {
+    return new Promise();
+  },
   visibility,
   uniforms = {},
   inputs = {},
@@ -36,7 +26,7 @@ function shader({
 } = {}) {
   if (visibility !== undefined && typeof visibility !== "function")
     throw new Error("invalid visibility");
-  return async function () {
+  return async function() {
     const source = String.raw.apply(String, arguments);
     const canvas = DOM.canvas(
       width * devicePixelRatio,
@@ -50,21 +40,19 @@ function shader({
       device,
       format: "bgra8unorm"
     });
-    const ondispose = function () {}
-
+    const ondispose = function() {};
     let frame;
     let disposed = false;
-
     const shader = device.createShaderModule({
       code: `
 [[block]] struct Uniforms {
   resolution: vec3<f32>;
   time: f32;
   ${Object.keys(uniforms)
-    .map((name) => `${name}: f32;`)
+    .map(name => `${name}: f32;`)
     .join("\n")}
   ${Object.keys(inputs)
-    .map((name) => `${name}: f32;`)
+    .map(name => `${name}: f32;`)
     .join("\n")}
 };
 
@@ -90,7 +78,6 @@ fn main_vertex(input: VertexInput) -> VertexOutput {
 
 ${[...sources].join("\n")}
 ${source}
-
 [[stage(fragment)]]
 fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
   let x = u.resolution; // need to use all inputs
@@ -143,7 +130,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
       devicePixelRatio, // res.z
       0, // time
       ...Object.values(uniforms),
-      ...Array.from(Object.values(inputs), (input) => input.value)
+      ...Array.from(Object.values(inputs), input => input.value)
     ]);
 
     let uniformsBuffer = createBuffer(
@@ -169,7 +156,6 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
           }
         ]
       });
-
       passEncoder.setBindGroup(0, bindGroup);
       passEncoder.setVertexBuffer(0, attribsBuffer);
       passEncoder.draw(6, 1, 0, 0);
@@ -200,11 +186,9 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
     });
 
     const uniformLen = Object.keys(uniforms).length;
-
     for (const [i, input] of Object.entries(Object.values(inputs))) {
       const update = () => {
         uniformsArray.set([input.value], +i + uniformLen + 4);
-
         uniformsBuffer = createBuffer(
           device,
           uniformsArray,
@@ -213,30 +197,23 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
       };
     }
     requestAnimationFrame(render);
-
     if (iTime) {
-
       let timeframe;
       (async function tick() {
-
         if (visibility !== undefined) await visibility();
         uniformsArray.set([performance.now() / 1000], 3);
-        //console.log(uniformsArray)
-      //uniformsArray.set([Math.random()],4)
-      //uniformsArray.set([Math.random()],5)
-      uniformsArray.set(data.angle, 4); //angle
-      uniformsArray.set(data.mousePosition[0], 5); //mouseX
-      uniformsArray.set(data.mousePosition[1], 6); //mouseY
-
-
+        uniformsArray.set(data.angle * Math.random(), 4); //angle
+        uniformsArray.set(data.mousePosition[0], 5); //mouseX
+        uniformsArray.set(data.mousePosition[1], 6); //mouseY
         uniformsBuffer = createBuffer(
           device,
           uniformsArray,
           GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
         );
-        //console.log(uniformsArray)
-        render();
-        setTimeout(tick, 500)
+        //render();
+        setTimeout(tick, 500);
+        setTimeout(render, 500);
+        //setTimeout(tick, 500);
         //return (timeframe = requestAnimationFrame(tick));
       })();
       //ondispose.then(() => cancelAnimationFrame(timeframe));
@@ -250,7 +227,6 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
 const createBuffer = (device, arr, usage) => {
   let desc = { size: (arr.byteLength + 3) & ~3, usage, mappedAtCreation: true };
   let buffer = device.createBuffer(desc);
-  //arr[2] = Math.random() * 500
   const writeArray =
     arr instanceof Uint16Array
       ? new Uint16Array(buffer.getMappedRange())
@@ -258,31 +234,26 @@ const createBuffer = (device, arr, usage) => {
   writeArray.set(arr);
   buffer.unmap();
   return buffer;
-}
+};
 
-function init () {
+function init() {
   const visibility = async () => true;
-  let test = { angle: Math.random(), mouseX: Math.random(),
+  let test = {
+    angle: Math.random(),
+    mouseX: Math.random(),
     mouseY: Math.random()
-   }
+  };
+  document.querySelector("canvas").addEventListener("mousemove", function(e) {
+    mousePosition[0] = e.clientX / innerWidth;
+    mousePosition[1] = e.clientY / innerHeight;
+  });
 
-
-  document.querySelector('canvas')
-  .addEventListener('mousemove', function (e) {
-    mousePosition[0] = e.clientX / innerWidth
-    mousePosition[1] = e.clientY / innerHeight
-    //console.log('hello', mousePosition)
-    test.mouseX = Math.random();
-    test.mouseY = Math.random();
-    //console.log('123 + 444')
-  })
-
-let draw = shader({
-  width: 640,
-  height: 100,
-  uniforms: test,
-  iTime: true
-})`
+  let draw = shader({
+    width: 640,
+    height: 100,
+    uniforms: test,
+    iTime: true
+  })`
 fn rotate2d(a: f32) -> mat2x2<f32> {
   let c = cos(a);
   let s = sin(a);
@@ -303,15 +274,12 @@ fn main(uv: vec2<f32>) -> vec4<f32> {
   let o = f32(q);
   return vec4<f32>(o * u.mouseX ,o * .5,o - u.mouseY - 1.5,1.0);
 }
-`
-let count = 0
-setTimeout(function recur() {
-  count += 1
-  draw.finally(() => {
-    //test.angle = Math.random() * 123
-    setTimeout(recur, 150 * 4)
-  })
-  //console.log('drawing time ' + count)
-}, 150 * 40)
+`;
+  setTimeout(function recur() {
+    draw.finally(() => {
+      console.log("draw");
+      setTimeout(recur, 150 * 4);
+    });
+  }, 150 * 40);
 }
-init()
+init();
