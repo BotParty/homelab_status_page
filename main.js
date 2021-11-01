@@ -254,16 +254,35 @@ async function init(stuff) {
       console.log("drawn!");
     });
   }
-  return draw;
+  return draw; //one shot
 } //closes init
+//problem statement: how to call draw 2x
+async function dot() {
+  let options = {
+    uniforms: test_data
+  };
+  let draw = await init(options);
+  draw();
+  draw();
+}
 
-let makeDraw = init({
-  uniforms: test_data
-})
-  .then(draw => {
-    draw();
-  })
-  .finally(_ => {});
+dot();
+
+// function startLoop(makeDraw) {
+//   let ctx = {}; // from userland
+//   makeDraw({
+//     uniforms: test_data
+//   })
+//     .then(draw => {
+//       draw();
+//     })
+//     .finally(_ => {});
+//
+//   setInterval(() => {}, 500);
+// }
+//
+// startLoop(init);
+
 //export here
 //userland
 // setTimeout(function recur() {
