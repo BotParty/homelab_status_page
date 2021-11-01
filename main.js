@@ -233,33 +233,6 @@ function init(stuff) {
       Object.entries(Object.keys(uniforms)).map(([idx, key]) => [key, +idx])
     );
 
-    const updateStuff = function(stuff) {
-      console.log("not being called ");
-      for (const [name, value] of Object.entries(values)) {
-        if (uniformIndex.get(name) == undefined)
-          throw new Error(`Could not find uniform ${name}`);
-        uniformsArray.set([value], 4 + uniformIndex.get(name));
-      }
-      uniformsBuffer = createBuffer(
-        device,
-        uniformsArray,
-        GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-      );
-      //requestAnimationFrame(recordRenderPass);
-    };
-
-    const uniformLen = Object.keys(uniforms).length;
-    for (const [i, input] of Object.entries(Object.values(inputs))) {
-      const update = () => {
-        uniformsArray.set([input.value], +i + uniformLen + 4);
-        uniformsBuffer = createBuffer(
-          device,
-          uniformsArray,
-          GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-        );
-      };
-    }
-
     updateUniforms(recordRenderPass, {
       uniformsArray,
       data,
@@ -270,7 +243,7 @@ function init(stuff) {
       pipeline,
       attribsBuffer
     });
-    console.log("hi");
+
     recordRenderPass({
       device,
       ctx,
@@ -291,7 +264,7 @@ function init(stuff) {
     uniformsBuffer,
     attribsBuffer
   }).finally(() => {
-    console.log("drawn! ");
+    console.log("record render! ");
   });
 
   return {
