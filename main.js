@@ -128,117 +128,118 @@ return main(in.uv);
   });
   return shader;
 }
-function init(stuff) {
+async function init(stuff) {
   //top level
   let { uniforms = {}, inputs = {}, sources = [] } = stuff;
-  return async function draw() {
-    const ctx = canvas.getContext("webgpu");
-    const adapter = await navigator.gpu.requestAdapter();
-    const device = await adapter.requestDevice();
-    ctx.configure({
-      device,
-      format: "bgra8unorm"
-    });
+  const context = canvas.getContext("webgpu");
+  const adapter = await navigator.gpu.requestAdapter();
+  const device = await adapter.requestDevice();
+  context.configure({
+    device,
+    format: "bgra8unorm"
+  });
 
-    let shader = makeShaderModule(device, uniforms, name, sources, inputs);
+  let shader = makeShaderModule(device, uniforms, name, sources, inputs);
 
-    const pipeline = device.createRenderPipeline({
-      vertex: {
-        module: shader,
-        entryPoint: "main_vertex",
-        buffers: [
-          {
-            arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
-            attributes: [
-              {
-                offset: 0,
-                shaderLocation: 0,
-                format: "float32x2"
-              }
-            ]
-          }
-        ]
-      },
-      fragment: {
-        module: shader,
-        entryPoint: "main_fragment",
-        targets: [{ format: "bgra8unorm" }]
-      },
-      primitives: {
-        topology: "triangle-list"
-      }
-    });
-    const textureView = ctx.getCurrentTexture().createView();
-    const renderPassDescriptor = {
-      colorAttachments: [
+  const pipeline = device.createRenderPipeline({
+    vertex: {
+      module: shader,
+      entryPoint: "main_vertex",
+      buffers: [
         {
-          view: textureView,
-          loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-          storeOp: "store"
+          arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
+          attributes: [
+            {
+              offset: 0,
+              shaderLocation: 0,
+              format: "float32x2"
+            }
+          ]
         }
       ]
-    };
-    const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-    const attribsBuffer = createBuffer(device, attribs, GPUBufferUsage.VERTEX);
-
-    let uniformsArray = new Float32Array([
-      width, // res.x
-      height, // res.y
-      window.devicePixelRatio, // res.z
-      0, // time
-      ...Object.values(uniforms),
-      ...Array.from(Object.values(inputs), input => input.value)
-    ]);
-
-    let uniformsBuffer = createBuffer(
-      device,
-      uniformsArray,
-      GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-    );
-
-    async function recordRenderPass(stuff) {
-      console.log("asdfasdf");
-      let {
-        device,
-        ctx,
-        renderPassDescriptor,
-        pipeline,
-        uniformsBuffer,
-        attribsBuffer
-      } = stuff;
-      const commandEncoder = device.createCommandEncoder();
-      const textureView = ctx.getCurrentTexture().createView();
-      renderPassDescriptor.colorAttachments[0].view = textureView;
-      const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-      passEncoder.setPipeline(pipeline);
-      const bindGroup = device.createBindGroup({
-        layout: pipeline.getBindGroupLayout(0),
-        entries: [
-          {
-            binding: 0,
-            resource: {
-              buffer: uniformsBuffer
-            }
-          }
-        ]
-      });
-      passEncoder.setBindGroup(0, bindGroup);
-      passEncoder.setVertexBuffer(0, attribsBuffer);
-      passEncoder.draw(6, 1, 0, 0);
-      passEncoder.endPass();
-      device.queue.submit([commandEncoder.finish()]); //async
+    },
+    fragment: {
+      module: shader,
+      entryPoint: "main_fragment",
+      targets: [{ format: "bgra8unorm" }]
+    },
+    primitives: {
+      topology: "triangle-list"
     }
+  });
+  const textureView = context.getCurrentTexture().createView();
+  const renderPassDescriptor = {
+    colorAttachments: [
+      {
+        view: textureView,
+        loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        storeOp: "store"
+      }
+    ]
+  };
+  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
+  const attribsBuffer = createBuffer(device, attribs, GPUBufferUsage.VERTEX);
 
-    const uniformIndex = new Map(
-      Object.entries(Object.keys(uniforms)).map(([idx, key]) => [key, +idx])
-    );
+  let uniformsArray = new Float32Array([
+    width, // res.x
+    height, // res.y
+    window.devicePixelRatio, // res.z
+    0, // time
+    ...Object.values(uniforms),
+    ...Array.from(Object.values(inputs), input => input.value)
+  ]);
 
+  let uniformsBuffer = createBuffer(
+    device,
+    uniformsArray,
+    GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+  );
+
+  async function recordRenderPass(stuff) {
+    console.log("asdfasdf");
+    let {
+      device,
+      context,
+      renderPassDescriptor,
+      pipeline,
+      uniformsBuffer,
+      attribsBuffer
+    } = stuff;
+    const commandEncoder = device.createCommandEncoder();
+    const textureView = context.getCurrentTexture().createView();
+    renderPassDescriptor.colorAttachments[0].view = textureView;
+    const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipeline);
+    const bindGroup = device.createBindGroup({
+      layout: pipeline.getBindGroupLayout(0),
+      entries: [
+        {
+          binding: 0,
+          resource: {
+            buffer: uniformsBuffer
+          }
+        }
+      ]
+    });
+    passEncoder.setBindGroup(0, bindGroup);
+    passEncoder.setVertexBuffer(0, attribsBuffer);
+    passEncoder.draw(6, 1, 0, 0);
+    passEncoder.endPass();
+    device.queue.submit([commandEncoder.finish()]); //async
+  }
+
+  const uniformIndex = new Map(
+    Object.entries(Object.keys(uniforms)).map(([idx, key]) => [key, +idx])
+  );
+
+  async function draw(ctx) {
+    console.log("hi");
     updateUniforms(recordRenderPass, {
       uniformsArray,
       data,
       device,
       uniformsBuffer,
-      ctx,
+      context,
       renderPassDescriptor,
       pipeline,
       attribsBuffer
@@ -246,45 +247,26 @@ function init(stuff) {
 
     recordRenderPass({
       device,
-      ctx,
+      context,
       renderPassDescriptor,
       pipeline,
       uniformsBuffer,
       attribsBuffer
     }).finally(() => {
-      console.log("drawn! ");
+      console.log("drawn!");
     });
-  };
+  }
+  return draw;
+} //closes init
 
-  recordRenderPass({
-    device,
-    ctx,
-    renderPassDescriptor,
-    pipeline,
-    uniformsBuffer,
-    attribsBuffer
-  }).finally(() => {
-    console.log("record render! ");
-  });
-
-  return {
-    updateUniforms,
-    recordRenderPass
-  };
-}
-
-function setup() {
-  //delete me
-  let stuff = init({
-    uniforms: test_data
-  });
-
-  return stuff;
-}
+let draw = await init({
+  uniforms: test_data
+});
 //export here
 //userland
-let stuff = setup();
-stuff();
+
+draw()
+
 // setTimeout(function recur() {
 //   draw.finally(() => {
 //   });
