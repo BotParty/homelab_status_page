@@ -1,4 +1,4 @@
-import "./style.css";
+//import "./style.css";
 //want fragCoord to do stuff with mouse
 //otherwise fragment has no idea what it's distance to the cursor is at all.
 //fragCoord is a vertex attribute not uniform
@@ -38,6 +38,14 @@ import "./style.css";
 //1. more closed ,less open
 //2. slow down thought w/ i
 
+let gl = {};
+
+let canvas = document.createElement("canvas");
+
+let DOM = {
+  canvas: canvas,
+};
+
 const width = innerWidth,
   height = innerHeight;
 
@@ -57,7 +65,7 @@ function updateUniforms(stuff) {
   let {
     uniformsArray,
     data,
-    device,
+    gpuDevice,
     uniformsBuffer,
     ctx,
     renderPassDescriptor,
@@ -71,20 +79,20 @@ function updateUniforms(stuff) {
     6
   );
   uniformsBuffer = createBuffer(
-    device,
+    gpuDevice,
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
   return uniformsBuffer;
 }
 
-const createBuffer = (device, arr, usage) => {
+const createBuffer = (gpuDevice, arr, usage) => {
   let desc = {
     size: (arr.byteLength + 3) & ~3,
     usage,
     mappedAtCreation: true,
   };
-  let buffer = device.createBuffer(desc);
+  let buffer = gpuDevice.createBuffer(desc);
   const writeArray =
     arr instanceof Uint16Array
       ? new Uint16Array(buffer.getMappedRange())
@@ -94,14 +102,12 @@ const createBuffer = (device, arr, usage) => {
   return buffer;
 };
 
-const canvas = document.querySelector("canvas");
 canvas.addEventListener("mousemove", function (e) {
   data.mouseX = e.clientX / innerWidth;
   data.mouseY = e.clientY / innerHeight;
 });
-canvas.style = `max-width: 100%; width: ${width}px; height: auto;`;
 
-function makeShaderModule(device, uniforms, name, sources, inputs) {
+function makeShaderModule(gpuDevice, uniforms, name, sources, inputs) {
   let source = `
 let size = 3.0;
 
@@ -151,7 +157,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
     .map((name) => `${name}: f32;`)
     .join("\n");
 
-  const shader = device.createShaderModule({
+  const shader = gpuDevice.createShaderModule({
     code: `
     [[block]] struct Uniforms {
       resolution: vec3<f32>;
@@ -188,17 +194,26 @@ ${source}
 async function init(stuff) {
   //top level
   let { uniforms = {}, inputs = {}, sources = [] } = stuff;
-  const context = canvas.getContext("webgpu");
+  const context = canvas.value || canvas.getContext("webgpu");
+
   const adapter = await navigator.gpu.requestAdapter();
-  const device = await adapter.requestDevice();
+
+  const gpuDevice = await adapter.requestDevice();
+  const presentationFormat = context.getPreferredFormat(adapter);
+
+  const presentationSize = [
+    canvas.clientWidth * devicePixelRatio,
+    canvas.clientHeight * devicePixelRatio,
+  ];
   context.configure({
-    device,
-    format: "bgra8unorm",
+    device: gpuDevice,
+    format: presentationFormat,
+    size: presentationSize,
   });
 
-  let shader = makeShaderModule(device, uniforms, name, sources, inputs);
+  let shader = makeShaderModule(gpuDevice, uniforms, name, sources, inputs);
 
-  const pipeline = device.createRenderPipeline({
+  const pipeline = gpuDevice.createRenderPipeline({
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
@@ -235,7 +250,7 @@ async function init(stuff) {
     ],
   };
   const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-  const attribsBuffer = createBuffer(device, attribs, GPUBufferUsage.VERTEX);
+  const attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
 
   let uniformsArray = new Float32Array([
     width, // res.x
@@ -248,19 +263,19 @@ async function init(stuff) {
 
   async function recordRenderPass(stuff) {
     let {
-      device,
+      gpuDevice,
       context,
       renderPassDescriptor,
       pipeline,
       uniformsBuffer,
       attribsBuffer,
     } = stuff;
-    const commandEncoder = device.createCommandEncoder();
+    const commandEncoder = gpuDevice.createCommandEncoder();
     const textureView = context.getCurrentTexture().createView();
     renderPassDescriptor.colorAttachments[0].view = textureView;
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(pipeline);
-    const bindGroup = device.createBindGroup({
+    const bindGroup = gpuDevice.createBindGroup({
       layout: pipeline.getBindGroupLayout(0),
       entries: [
         {
@@ -276,14 +291,14 @@ async function init(stuff) {
     passEncoder.setVertexBuffer(0, attribsBuffer);
     passEncoder.draw(3 * 2, 1, 0, 0);
     passEncoder.endPass();
-    device.queue.submit([commandEncoder.finish()]); //async
+    gpuDevice.queue.submit([commandEncoder.finish()]); //async
   }
 
   function draw(ctx) {
     let uniformsBuffer = updateUniforms({
       uniformsArray,
       data,
-      device,
+      gpuDevice,
       context,
       renderPassDescriptor,
       pipeline,
@@ -291,7 +306,7 @@ async function init(stuff) {
     });
 
     recordRenderPass({
-      device,
+      gpuDevice,
       context,
       renderPassDescriptor,
       pipeline,
@@ -301,12 +316,21 @@ async function init(stuff) {
   }
   return draw;
 }
-async function dot() {
+async function run() {
   let options = {
     uniforms: data,
   };
   let draw = await init(options);
-  setInterval(draw, 19);
+  setInterval(draw, 100);
 }
 
-dot();
+//
+//if observable  return canvas;
+//if vite
+requestAnimationFrame(async function () {
+  let div = document.body;
+  console.log(div);
+  console.log(document.body.innerHTML);
+  div.insertBefore(canvas, document.querySelector("img"));
+  await run();
+});
