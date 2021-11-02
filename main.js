@@ -149,35 +149,17 @@
     return shader;
   }
   //generic functions above
-  //userland code
-  let canvas = document.createElement("canvas");
-  let DOM = { canvas: canvas };
-  const width = innerWidth,
-    height = innerHeight;
-  let data = {
-    width: 900,
-    height: 500,
-    pixelRatio: 2,
-    time: 0,
-    mouseX: 0,
-    mouseY: 0,
-    angle: 0,
-  };
-  canvas.addEventListener("mousemove", function (e) {
-    data.mouseX = e.clientX / innerWidth;
-    data.mouseY = e.clientY / innerHeight;
-  });
+  //userland code.. move
   //end userland
-
   async function init(stuff) {
     //bplate
-    const context = canvas.value || canvas.getContext("webgpu");
+    const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
     const adapter = await navigator.gpu.requestAdapter();
     const gpuDevice = await adapter.requestDevice();
     const presentationFormat = context.getPreferredFormat(adapter);
     const presentationSize = [
-      canvas.clientWidth * devicePixelRatio,
-      canvas.clientHeight * devicePixelRatio,
+      stuff.width * devicePixelRatio,
+      stuff.height * devicePixelRatio,
     ];
     context.configure({
       device: gpuDevice,
@@ -228,24 +210,44 @@
     }
     return draw;
   }
-  async function run() {
+
+  //userland
+  let data = {
+    width: 900,
+    height: 500,
+    pixelRatio: 2,
+    time: 0,
+    mouseX: 0,
+    mouseY: 0,
+    angle: 0,
+    //texture: video
+  };
+  function run() {
+    const canvas = document.createElement("canvas");
+    console.log(canvas);
+    const width = 960,
+      height = 500;
+    canvas.addEventListener("mousemove", function (e) {
+      data.mouseX = e.clientX / width;
+      data.mouseY = e.clientY / height;
+    });
     let copiedData = Object.assign({}, data);
     copiedData.time = performance.now();
-    let options = { data: copiedData };
-    let draw = await init(options);
-    draw(options);
+    let stuff = { data: copiedData, canvas: canvas, width, height };
+    init(stuff).then((draw) => draw(stuff));
+    //inbetween these two placxrqes ... do things that mutate the stuff
     //setInterval(draw, 100);
+    return canvas;
   }
+
   let isWithinWorkerScope = true;
   let host = window.location.host;
   if (host !== "localhost:3000") {
-    run();
-    return canvas;
+    return run();
   } else {
     requestAnimationFrame(async function () {
-      let div = document.body;
-      div.insertBefore(canvas, document.querySelector("img"));
-      run();
+      let canvas = run();
+      document.body.insertBefore(canvas, document.querySelector("img"));
     });
   }
 }.call(this));
