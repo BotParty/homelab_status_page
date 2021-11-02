@@ -25,3 +25,60 @@ would be cool if uniforms could be functions
 todo listen ryan holiday
 make simple easy
 ."A puppet that can no longer be used is mere garbage. This puppet's role has just ended..."
+
+
+** data cubes
+//gant chart for data cubes
+//0. simple shader w/ dynamic uniforms
+//1. 2d textures - sprites
+//
+//2. packing of data into 2d images for scatter plot
+//   convert 15gb of 311 service requests into texture
+//   first take a subset of 10% and then render onto map
+//   then transform 15gb into column-based structure
+//      then read columns as one texture, and rows as another
+//      each pixel gets 2 texture samples
+//      which should say "this service request" happened here
+//         (geolocation) , (time), (classification), (id)
+//      id = reference to all features/columns in dataset for hover ux
+//    3d morph targets texture -> tween 3d-model of ball into cup
+//    convert 3d model => 2d texture with pixels = xyz point in space
+
+//then lidar scan = points which go into texture
+//then columns to dedupe data
+//then ....
+
+//before implementing
+//estimate how much loading time would be saved
+//by converting 15gb - 27M rows w/ 41 columns
+//into a map that loads asap.
+
+//https://explorer.morphocode.com/map
+
+Every day, 4.4 million vehicles  drive through nyc
+
+//simulate 4 million points driving around nyc using traffic flow models
+
+//https://wagner.nyu.edu/files/rudincenter/dynamic_pop_manhattan.pdf
+
+
+//layers for webgpu map of nyc
+
+//cars - 4.4 million dots
+// 27million service requests - h3 hex? heatmap, scatterplot(first)
+
+//start with dots
+//then heatmap
+//then try hexes later
+
+
+//use hexes to do route planning
+//pick two points and show a heatmap of how far the car can travel ?
+
+//im in south brooklyn, show color heatmap of
+//based on time of day, and whatever
+
+next year, weather, sanitation, any public data sets that would be useful for cars
+
+//500 layers needed according to carmera
+//
