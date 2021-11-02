@@ -86,3 +86,44 @@ next year, weather, sanitation, any public data sets that would be useful for ca
 
 //500 layers needed according to carmera
 //
+
+
+//import "./style.css";
+//want fragCoord to do stuff with mouse
+//otherwise fragment has no idea what it's distance to the cursor is at all.
+//fragCoord is a vertex attribute not uniform
+//could just add an array from 0-size of list
+//and the vertex shader will naturally interpolate the data
+
+//with 1 more thing, anyone can add anything in shadertoy
+//mousePosition, fragPosition and
+
+//(insert whatever uniforms desired here) (numbers only for now )
+//texture data next (still numbers but more flexible than vertices because compute shaders can do stuff )
+
+//scatter plot on map =
+
+// complaint = (long / lat) :
+
+//convert to NDC(-1,1) by using d3.geo to transform a
+//quadrant of nyc to
+//01          11
+//  ...311...
+//00          10
+
+//make js script to
+//convert 1e6 311 complaints to
+//observable in a manner that it can be downloaded and repackaged on npm/hub for all
+
+//
+//quad of nyc = 4 (long lat)
+//take sample of 1million complaints and
+//tail -n=1e6 file_name
+
+//accept the slight hindrance(mostly embaressment and slight shame cus choices),
+//but mostly the awe-inspiring - power of the cosmos
+
+//g rated thoughts
+//either
+//1. more closed ,less open
+//2. slow down thought w/ i
