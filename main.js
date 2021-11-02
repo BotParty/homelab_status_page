@@ -10,16 +10,44 @@ import "./style.css";
 
 //(insert whatever uniforms desired here) (numbers only for now )
 //texture data next (still numbers but more flexible than vertices because compute shaders can do stuff )
+
+//scatter plot on map =
+
+// complaint = (long / lat) :
+
+//convert to NDC(-1,1) by using d3.geo to transform a
+//quadrant of nyc to
+//01          11
+//  ...311...
+//00          10
+
+//make js script to
+//convert 1e6 311 complaints to
+//observable in a manner that it can be downloaded and repackaged on npm/hub for all
+
+//
+//quad of nyc = 4 (long lat)
+//take sample of 1million complaints and
+//tail -n=1e6 file_name
+
+//accept the slight hindrance(mostly embaressment and slight shame cus choices),
+//but mostly the awe-inspiring - power of the cosmos
+
+//g rated thoughts
+//either
+//1. more closed ,less open
+//2. slow down thought w/ i
+
 const width = innerWidth,
   height = innerHeight;
 
 const data = {
   mouseX: 0,
   mouseY: 0,
-  angle: 0
+  angle: 0,
 };
 //
-setInterval(function() {
+setInterval(function () {
   data.angle = (data.angle + 5) % 360;
 }, 16);
 //uniformsArray
@@ -34,7 +62,7 @@ function updateUniforms(stuff) {
     ctx,
     renderPassDescriptor,
     pipeline,
-    attribsBuffer
+    attribsBuffer,
   } = stuff;
 
   uniformsArray.set(
@@ -54,7 +82,7 @@ const createBuffer = (device, arr, usage) => {
   let desc = {
     size: (arr.byteLength + 3) & ~3,
     usage,
-    mappedAtCreation: true
+    mappedAtCreation: true,
   };
   let buffer = device.createBuffer(desc);
   const writeArray =
@@ -67,7 +95,7 @@ const createBuffer = (device, arr, usage) => {
 };
 
 const canvas = document.querySelector("canvas");
-canvas.addEventListener("mousemove", function(e) {
+canvas.addEventListener("mousemove", function (e) {
   data.mouseX = e.clientX / innerWidth;
   data.mouseY = e.clientY / innerHeight;
 });
@@ -77,17 +105,35 @@ function makeShaderModule(device, uniforms, name, sources, inputs) {
   let source = `
 let size = 3.0;
 
+// fn mandelbrot(p: vec2<f32>) -> vec2<f32> {
+//   let a: i32 = 2;
+//   let b: f32 = 2.0;
+// 	var z = vec4<f32>(0.0, 0.0);
+// 	var c = vec4<f32>(p.xy * 2.0);
+//   let MAX_ITERATIONS = 100;
+//   let epsilon = 10.0;
+// 	for (int i = 0; i < MAX_ITERATIONS; i++) {
+// 		if (length(z) > epsilon) {
+// 			return (float(i) / 50.0) + vec2<f32>(0.25);
+// 		}
+// 		z = vec2<f32>(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
+// 	}
+// 	return vec3<f32>(0.0, 0.0, 0.0);
+// }
+
 fn main(uv: vec2<f32>) -> vec4<f32> {
   var base = vec4<f32>(.5, .5, .9, 1.);
-  let dist = distance(vec2<f32>(u.mouseX, u.mouseY), uv);
-  // var p = (uv - 0.3) * (u.resolution.xy) * rotate2d(u.angle);
-  // if (p.x < 10.0) {p.x = p.x - size;}
-  // if (p.y < 5.0) {p.y = p.y - size;}
-  // let q = p.x % (size * 2.0) < size == p.y % (size * 2.0) < size;
-  // var o = f32(q);
-  if (dist < .5) { return vec4<f32>(.0, .4, .9, 1.); }
-  //
+  let dist = distance( uv, vec2<f32>(u.mouseX, u.mouseY));
+  if (uv.x < .1 ) { base.y = .1; }
+  if (uv.x > .2 ) { base.y = .5; }
 
+  if (uv.x > .3 ) { base.x = .5; }
+
+  if (uv.x > .4 ) { base.z = .7; }
+
+  if (uv.x > .5 ) { base.z = .9; }
+
+  if (dist < .1) { base.x = .1; }
   return base;
 }
 
@@ -98,11 +144,11 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
 }
 `;
   const userland_Uniforms = Object.keys(uniforms)
-    .map(name => `${name}: f32;`)
+    .map((name) => `${name}: f32;`)
     .join("\n");
 
   const input = Object.keys(inputs)
-    .map(name => `${name}: f32;`)
+    .map((name) => `${name}: f32;`)
     .join("\n");
 
   const shader = device.createShaderModule({
@@ -119,7 +165,7 @@ fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
 struct VertexInput {
 [[location(0)]] pos: vec2<f32>;
 };
-
+//uv coordinates seem to be off...
 struct VertexOutput {
 [[builtin(position)]] pos: vec4<f32>;
 [[location(0)]] uv: vec2<f32>;
@@ -135,7 +181,7 @@ fn main_vertex(input: VertexInput) -> VertexOutput {
 }
 ${[...sources].join("\n")}
 ${source}
-`
+`,
   });
   return shader;
 }
@@ -147,7 +193,7 @@ async function init(stuff) {
   const device = await adapter.requestDevice();
   context.configure({
     device,
-    format: "bgra8unorm"
+    format: "bgra8unorm",
   });
 
   let shader = makeShaderModule(device, uniforms, name, sources, inputs);
@@ -163,20 +209,20 @@ async function init(stuff) {
             {
               offset: 0,
               shaderLocation: 0,
-              format: "float32x2"
-            }
-          ]
-        }
-      ]
+              format: "float32x2",
+            },
+          ],
+        },
+      ],
     },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
-      targets: [{ format: "bgra8unorm" }]
+      targets: [{ format: "bgra8unorm" }],
     },
     primitives: {
-      topology: "triangle-list"
-    }
+      topology: "triangle-list",
+    },
   });
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
@@ -184,9 +230,9 @@ async function init(stuff) {
       {
         view: textureView,
         loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        storeOp: "store"
-      }
-    ]
+        storeOp: "store",
+      },
+    ],
   };
   const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
   const attribsBuffer = createBuffer(device, attribs, GPUBufferUsage.VERTEX);
@@ -197,7 +243,7 @@ async function init(stuff) {
     window.devicePixelRatio, // res.z
     0, // time
     ...Object.values(uniforms),
-    ...Array.from(Object.values(inputs), input => input.value)
+    ...Array.from(Object.values(inputs), (input) => input.value),
   ]);
 
   async function recordRenderPass(stuff) {
@@ -207,7 +253,7 @@ async function init(stuff) {
       renderPassDescriptor,
       pipeline,
       uniformsBuffer,
-      attribsBuffer
+      attribsBuffer,
     } = stuff;
     const commandEncoder = device.createCommandEncoder();
     const textureView = context.getCurrentTexture().createView();
@@ -220,10 +266,10 @@ async function init(stuff) {
         {
           binding: 0,
           resource: {
-            buffer: uniformsBuffer
-          }
-        }
-      ]
+            buffer: uniformsBuffer,
+          },
+        },
+      ],
     });
 
     passEncoder.setBindGroup(0, bindGroup);
@@ -241,7 +287,7 @@ async function init(stuff) {
       context,
       renderPassDescriptor,
       pipeline,
-      attribsBuffer
+      attribsBuffer,
     });
 
     recordRenderPass({
@@ -250,16 +296,14 @@ async function init(stuff) {
       renderPassDescriptor,
       pipeline,
       uniformsBuffer,
-      attribsBuffer
-    }).finally(() => {
-      //console.log("drawn!");
-    });
+      attribsBuffer,
+    }).finally(() => {});
   }
-  return draw; //one shot
+  return draw;
 }
 async function dot() {
   let options = {
-    uniforms: data
+    uniforms: data,
   };
   let draw = await init(options);
   setInterval(draw, 19);
