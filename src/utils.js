@@ -52,15 +52,15 @@ const recordRenderPass = async function (stuff) {
     uniformsBuffer,
     renderPassDescriptor,
   } = stuff;
-  console.log(
-    "stuff",
-    attribsBuffer,
-    context,
-    gpuDevice,
-    pipeline,
-    uniformsBuffer,
-    renderPassDescriptor
-  );
+  // console.log(
+  //   "stuff",
+  //   attribsBuffer,
+  //   context,
+  //   gpuDevice,
+  //   pipeline,
+  //   uniformsBuffer,
+  //   renderPassDescriptor
+  // );
   const commandEncoder = gpuDevice.createCommandEncoder();
   const textureView = context.getCurrentTexture().createView();
   renderPassDescriptor.colorAttachments[0].view = textureView;
@@ -316,35 +316,16 @@ async function init(options) {
     let uniformsBuffer = updateUniforms(stuff);
     stuff.uniformsBuffer = uniformsBuffer;
     recordRenderPass(stuff).finally(() => {});
-    //do soemthing to state if needed
+    //do something to state if needed
     return state;
   }
 
   return { draw, canvas: options.canvas };
 }
 //userland
-
 //run takes in a stuff object
 //which has data and a canvas
-
-function createVideo() {
-  const video = document.createElement("video");
-  video.loop = true;
-  video.autoplay = true;
-  video.muted = true;
-  video.width = "480";
-  video.height = "270";
-  video.currentTime = 15;
-  video.loop = true;
-  video.crossorigin = "anonymous";
-  video.controls = "true";
-  video.src = video_src;
-  //await video.play();
-  document.body.appendChild(video);
-  return video;
-}
 //user passes in options which contain
-
 // let utils = {
 //   makeVideoBindGroupDescriptor,
 //   webGPUTextureFromImageUrl,
@@ -355,8 +336,6 @@ function createVideo() {
 //   init,
 //   start_loop,
 //   createVideo,
-// };
-
+// }
 //export default utils;
-
 export default { init };

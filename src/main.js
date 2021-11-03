@@ -10,7 +10,28 @@
 //   start_loop,
 //   createVideo,
 // } from "./utils";
+//import createVideo from "./utils";
+function createVideo() {
+  const video = document.createElement("video");
+  video.loop = true;
+  video.autoplay = true;
+  video.muted = true;
+  video.width = "480";
+  video.height = "270";
+  video.currentTime = 25;
+  video.loop = true;
+  video.crossorigin = "anonymous";
+  video.controls = "true";
+  video.src = "./data/test-video.webm";
+  video.style.zIndex = -1002;
+  video.style.position = "absolute";
 
+  console.log(video);
+  //await video.play();
+
+  document.body.appendChild(video);
+  return video;
+}
 import init from "./utils";
 
 let data = {
@@ -26,7 +47,7 @@ let data = {
 
 const width = 960,
   height = 500;
-
+//user land below
 async function start_loop_nb() {
   const canvas = document.createElement("canvas");
 
@@ -34,45 +55,28 @@ async function start_loop_nb() {
     data.mouseX = e.clientX / width;
     data.mouseY = e.clientY / height;
   });
+
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.time = Date.now() % 1000; //le clock
   let options = { data: copiedData, canvas: canvas, width, height };
-  //stuff.video = createVideo();
-  //let video = stuff.video; oops
-  //await video.play();
-  //init returns a draw call with a canvas on it.... for chrome extension
-  //init could just return an object with draw, canvas, and state
-  //i would mutate state inbetween draw calls
-  //and append / hide canvas to whatever framekwork (vue, obs, react, etc)
   let state = await init.init(options);
   let next_state = state.draw(state); //this should have all the inner stuff
   return next_state;
-  //console.log("o-land");
-  //this block should get compiled  out by vite so still fast like regl
 }
 
-console.log("hi");
 async function start_loop_static() {
   const canvas = document.createElement("canvas");
   canvas.addEventListener("mousemove", function (e) {
     data.mouseX = e.clientX / width;
     data.mouseY = e.clientY / height;
   });
+  let video = createVideo();
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.time = Date.now() % 1000; //le clock
   let options = { data: copiedData, canvas: canvas, width, height };
-  console.log("test");
-  //stuff.video = createVideo();
-  //let video = stuff.video; oops
-  //await video.play();
-  //init returns a draw call with a canvas on it.... for chrome extension
-  //init could just return an object with draw, canvas, and state
-  //i would mutate state inbetween draw calls
-  //and append / hide canvas to whatever framekwork (vue, obs, react, etc)
 
   let state = await init.init(options);
   document.querySelector("#container").appendChild(state.canvas);
-  console.log(init);
   let next_state = state.draw(state); //this should have all the inner stuff
   return next_state;
   // requestAnimationFrame(async function () {
@@ -85,6 +89,6 @@ async function start_loop_static() {
 
 let main =
   window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
-
+console.log("test", window.location.host);
 if (window.location.host === "localhost:3000") main();
 export default main;

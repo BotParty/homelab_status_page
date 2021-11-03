@@ -151,3 +151,21 @@ next year, weather, sanitation, any public data sets that would be useful for ca
 //either
 //1. more closed ,less open
 //2. slow down thought w/ i
+
+
+//stuff.video = createVideo();
+//let video = stuff.video; oops
+//await video.play();
+//init returns a draw call with a canvas on it.... for chrome extension
+//init could just return an object with draw, canvas, and state
+//i would mutate state inbetween draw calls
+//and append / hide canvas to whatever framekwork (vue, obs, react, etc)
+
+
+//stuff.video = createVideo();
+//let video = stuff.video; oops
+//await video.play();
+//init returns a draw call with a canvas on it.... for chrome extension
+//init could just return an object with draw, canvas, and state
+//i would mutate state inbetween draw calls
+//and append / hide canvas to whatever framekwork (vue, obs, react, etc)
