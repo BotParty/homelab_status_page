@@ -68,8 +68,9 @@ async function start_loop_static() {
   //init could just return an object with draw, canvas, and state
   //i would mutate state inbetween draw calls
   //and append / hide canvas to whatever framekwork (vue, obs, react, etc)
-  let state = await init.init(options);
 
+  let state = await init.init(options);
+  document.body.appendChild(state.canvas);
   console.log(init);
   let next_state = state.draw(state); //this should have all the inner stuff
   return next_state;
