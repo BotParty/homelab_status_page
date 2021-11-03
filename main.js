@@ -1,6 +1,6 @@
 (function main() {
-  function missingStuff(stuff) {
-    //come back here and save it to stuff
+  //add utils file for the top level fns
+  function makeVideoBindGroupDescriptor(stuff) {
     let { gpuDevice, pipeline, video } = stuff;
     const sampler = gpuDevice.createSampler({
       magFilter: "linear",
@@ -19,7 +19,10 @@
         }),
       },
     ];
-    return videoBindGroupEntries;
+    return {
+      videoBindGroupEntries,
+      sampler,
+    };
   }
 
   const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
@@ -29,44 +32,31 @@
 
     return webGPUTextureFromImageBitmapOrCanvas(gpuDevice, imgBitmap);
   };
+
   const recordRenderPass = async function (stuff) {
     let {
-      gpuDevice,
+      attribsBuffer,
       context,
-      renderPassDescriptor,
+      gpuDevice,
       pipeline,
       uniformsBuffer,
-      attribsBuffer,
+      renderPassDescriptor,
     } = stuff;
+    console.log(
+      "stuff",
+      attribsBuffer,
+      context,
+      gpuDevice,
+      pipeline,
+      uniformsBuffer,
+      renderPassDescriptor
+    );
     const commandEncoder = gpuDevice.createCommandEncoder();
     const textureView = context.getCurrentTexture().createView();
     renderPassDescriptor.colorAttachments[0].view = textureView;
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(pipeline);
-    // let videoBindGroupEntries = missingStuff(stuff);
-    const sampler = gpuDevice.createSampler({
-      magFilter: "linear",
-      minFilter: "linear",
-    });
 
-    const dataTexturesBindGroupLayout = gpuDevice.createBindGroupLayout({
-      entries: [
-        {
-          binding: 0,
-          visibility: GPUShaderStage.FRAGMENT,
-          buffer: {
-            type: "uniform",
-          },
-        },
-        {
-          binding: 1,
-          visibility: GPUShaderStage.FRAGMENT,
-          buffer: {
-            type: "storage",
-          },
-        },
-      ],
-    });
     //slots 0 = uniform
     //1 = texture sampler
 
@@ -92,7 +82,6 @@
     // typedef [EnforceRange] long GPUSignedOffset32;
     //
     // typedef unsigned long GPUFlagsConstant;
-
     const bindGroup = gpuDevice.createBindGroup({
       layout: pipeline.getBindGroupLayout(0),
       entries: [
@@ -102,16 +91,16 @@
             buffer: uniformsBuffer,
           },
         },
-        {
-          binding: 1,
-          resource: sampler,
-        },
-        {
-          binding: 2,
-          resource: gpuDevice.importExternalTexture({
-            source: document.querySelector("video"),
-          }),
-        },
+        // {
+        //   binding: 1,
+        //   resource: stuff.sampler,
+        // },
+        // {
+        //   binding: 2,
+        //   resource: gpuDevice.importExternalTexture({
+        //     source: document.querySelector("video"),
+        //   }),
+        // },
       ],
     });
     //concat was right, off by one index
@@ -127,7 +116,7 @@
       data,
       gpuDevice,
       uniformsBuffer,
-      ctx,
+      state,
       renderPassDescriptor,
       pipeline,
       attribsBuffer,
@@ -142,16 +131,12 @@
     );
   }
   function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
-    try {
-      let pipeLineLayout = gpuDevice.createPipelineLayout({
-        bindGroupLayouts: [dataTexturesBindGroupLayout],
-      });
-    } catch (e) {
-      throw new Error(e);
-    }
+    // let pipeLineLayout = gpuDevice.createPipelineLayout({
+    //   bindGroupLayouts: [dataTexturesBindGroupLayout],
+    // });
 
     let pipelineDesc = {
-      layout: pipeLineLayout,
+      //layout: pipeLineLayout,
       vertex: {
         module: shader,
         entryPoint: "main_vertex",
@@ -226,8 +211,8 @@
     ${userland_Uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;
-  [[group(0), binding(1)]] var mySampler: sampler;
-  [[group(0), binding(2)]] var myTexture: texture_external;
+  // [[group(0), binding(1)]] var mySampler: sampler;
+  // [[group(0), binding(2)]] var myTexture: texture_external;
   struct VertexInput {
     [[location(0)]] pos: vec2<f32>;
   };
@@ -249,23 +234,52 @@
     return shader;
   }
   //generic functions above
-  async function init(stuff) {
-    //bplate
+  async function init(options) {
+    const stuff = {
+      ...options,
+      canvas: options.canvas,
+      state: {}, //passed from frame to frame
+    };
     const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
     const adapter = await navigator.gpu.requestAdapter();
     const gpuDevice = await adapter.requestDevice();
     const presentationFormat = context.getPreferredFormat(adapter);
     const presentationSize = [
-      stuff.width * devicePixelRatio,
-      stuff.height * devicePixelRatio,
+      options.width * devicePixelRatio,
+      options.height * devicePixelRatio,
     ];
+    Object.assign(stuff, {
+      gpuDevice,
+      context,
+      adapter, //gpuAdapter
+    });
+
     context.configure({
       device: gpuDevice,
       format: presentationFormat,
       size: presentationSize,
     });
     let shader = makeShaderModule(gpuDevice, data, name);
-    const pipeline = makePipeline(shader, gpuDevice);
+
+    // Object.assign(stuff, {
+    //   renderPassDescriptor,
+    //   pipeline,
+    //   uniformsBuffer,
+    //   attribsBuffer,
+    // });
+    //let videoBindGroupDescriptor = makeVideoBindGroupDescriptor(stuff);
+
+    // Object.assign(stuff, {
+    //   videoBindGroupDescriptor: videoBindGroupDescriptor.videoBindGroupEntries,
+    //   videoBindGroupDescriptor: videoBindGroupDescriptor.sampler,
+    // });
+
+    const pipeline = makePipeline(
+      shader,
+      gpuDevice
+      //dataTexturesBindGroupLayout
+    );
+
     const textureView = context.getCurrentTexture().createView();
     const renderPassDescriptor = {
       colorAttachments: [
@@ -276,45 +290,40 @@
         },
       ],
     };
+    stuff.renderPassDescriptor = renderPassDescriptor;
+
+    Object.assign(stuff, {
+      textureView,
+      renderPassDescriptor,
+      pipeline,
+      // uniformsBuffer,
+      // attribsBuffer,
+    });
     //before calling createBindgroup
     //bindgroupaylout must be configured to have 3 entries
     const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-    const attribsBuffer = createBuffer(
+
+    stuff.attribsBuffer = createBuffer(
       gpuDevice,
       attribs,
       GPUBufferUsage.VERTEX
     );
-    //wrap make attributes
-    function draw(stuff) {
-      let uniformsBuffer = updateUniforms({
-        data: stuff.data,
-        gpuDevice,
-        context,
-        renderPassDescriptor,
-        pipeline,
-        attribsBuffer,
-      });
-
-      recordRenderPass({
-        gpuDevice,
-        context,
-        renderPassDescriptor,
-        pipeline,
-        uniformsBuffer,
-        attribsBuffer,
-        video: stuff.video,
-      }).finally(() => {});
-
-      return stuff;
+    function draw(state) {
+      let uniformsBuffer = updateUniforms(stuff);
+      stuff.uniformsBuffer = uniformsBuffer;
+      recordRenderPass(stuff).finally(() => {});
+      //do soemthing to state if needed
+      return state;
     }
-    return draw;
+
+    return { draw, canvas: options.canvas };
   }
   //userland
   let data = {
     width: 900, //based on canvas
     height: 500, //based on canvas
     pixelRatio: 2, //based on canvas
-    time: 0, //...time travel... open question = how clock should interact with gpu.
+    time: 0,
     mouseX: 0,
     mouseY: 0,
     angle: 0,
@@ -340,26 +349,32 @@
     });
     let copiedData = Object.assign({}, data); //should come from args
     copiedData.time = Date.now() % 1000; //le clock
-    let stuff = { data: copiedData, canvas: canvas, width, height };
-    stuff.video = createVideo();
-    let video = stuff.video;
-    await video.play();
+    let options = { data: copiedData, canvas: canvas, width, height };
+    //stuff.video = createVideo();
+    //let video = stuff.video; oops
+    //await video.play();
 
-    let draw = await init(stuff);
-    let transformedStuff = draw(stuff);
-    return transformedStuff;
+    //init returns a draw call with a canvas on it.... for chrome extension
+    //init could just return an object with draw, canvas, and state
+    //i would mutate state inbetween draw calls
+    //and append / hide canvas to whatever framekwork (vue, obs, react, etc)
+    let state = await init(options);
+    //do stuff here
+    let next_state = state.draw(state); //this should have all the inner stuff
+    return next_state;
   }
 
   let host = window.location.host;
   if (host !== "localhost:3000") {
-    console.log("obs-land");
+    //console.log("o-land");
     start_loop().then((stuff) => {
-      console.log(stuff);
+      //stuff has to have a canvas to yield to a generator-cell thing
     });
   } else {
-    console.log("atom-land");
+    //console.log("atom-land"); add (if debug)
     requestAnimationFrame(async function () {
       let canvas = start_loop().then((stuff) => {
+        //stuff has to have a canvas to add to vue / anything
         document.body.append(stuff.canvas);
       });
     });
@@ -385,3 +400,5 @@ function createVideo() {
   document.body.appendChild(video);
   return video;
 }
+
+//user passes in options which contain
