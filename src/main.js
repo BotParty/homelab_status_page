@@ -341,6 +341,7 @@
   const width = 960,
     height = 500;
   //above = regl
+
   async function start_loop() {
     const canvas = document.createElement("canvas");
     canvas.addEventListener("mousemove", function (e) {
@@ -367,9 +368,17 @@
   let host = window.location.host;
   if (host !== "localhost:3000") {
     //console.log("o-land");
-    start_loop().then((stuff) => {
-      //stuff has to have a canvas to yield to a generator-cell thing
-    });
+    //this block should get compiled  out by vite so still fast like regl
+    const runtime = new Runtime(Object.assign(new Library(), { color: "red" }));
+
+    return start_loop();
+    // Load the Observable runtime and inspector.
+
+    // Your notebook, compiled as an ES module.
+    // Load the notebook, observing its cells with a default Inspector
+    // that simply renders the value of each cell into the provided DOM node.
+    /// each cell does this i think
+    //so just return start_loop and make it yield a canvas if obs
   } else {
     //console.log("atom-land"); add (if debug)
     requestAnimationFrame(async function () {

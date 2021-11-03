@@ -1,7 +1,31 @@
+* simple-data-texture
+
+* src
+just utils
+
+
+* /Demos
+|file.name        |    GL  | webGPU| both  | dataTexture |
+|    ---          |   ---  | ---  |  ---   |    ---      |
+|map-311          |        |      |        |             |
+|map-trees        |        |      |        |             |
+|map-traffic      |        |      |        |             |
+|video-spectrogram|        |      |        |             |
+|breathe          | regl   |      |        |             |
+|Shape-transition | regl   |      |        |             |
+|Lidar            | 3.js   |      |        |             |
+
+
+
+
+
+
+
+
+
+
+
 https://explorer.morphocode.com/map
-
-
-
 * nyc-map.com
 0 simplistic-afterthought.surge.sh
 *** red blob illusions
