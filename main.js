@@ -1,5 +1,6 @@
 (function main() {
   function missingStuff(stuff) {
+    //come back here and save it to stuff
     let { gpuDevice, pipeline, video } = stuff;
     const sampler = gpuDevice.createSampler({
       magFilter: "linear",
@@ -42,8 +43,55 @@
     renderPassDescriptor.colorAttachments[0].view = textureView;
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(pipeline);
-    let videoBindGroupEntries = missingStuff(stuff);
-    console.log(videoBindGroupEntries);
+    // let videoBindGroupEntries = missingStuff(stuff);
+    const sampler = gpuDevice.createSampler({
+      magFilter: "linear",
+      minFilter: "linear",
+    });
+
+    const dataTexturesBindGroupLayout = gpuDevice.createBindGroupLayout({
+      entries: [
+        {
+          binding: 0,
+          visibility: GPUShaderStage.FRAGMENT,
+          buffer: {
+            type: "uniform",
+          },
+        },
+        {
+          binding: 1,
+          visibility: GPUShaderStage.FRAGMENT,
+          buffer: {
+            type: "storage",
+          },
+        },
+      ],
+    });
+    //slots 0 = uniform
+    //1 = texture sampler
+
+    //required GPUIndex32 binding;
+    // required GPUShaderStageFlags visibility;
+    //
+    // GPUBufferBindingLayout buffer;
+    // GPUSamplerBindingLayout sampler;
+    // GPUTextureBindingLayout texture;
+    // GPUStorageTextureBindingLayout storageTexture;
+    // GPUExternalTextureBindingLayout externalTexture;
+
+    //
+    // ypedef [EnforceRange] unsigned long GPUBufferDynamicOffset;
+    // typedef [EnforceRange] unsigned long GPUStencilValue;
+    // typedef [EnforceRange] unsigned long GPUSampleMask;
+    // typedef [EnforceRange] long GPUDepthBias;
+    //
+    // typedef [EnforceRange] unsigned long long GPUSize64;
+    // typedef [EnforceRange] unsigned long GPUIntegerCoordinate;
+    // typedef [EnforceRange] unsigned long GPUIndex32;
+    // typedef [EnforceRange] unsigned long GPUSize32;
+    // typedef [EnforceRange] long GPUSignedOffset32;
+    //
+    // typedef unsigned long GPUFlagsConstant;
 
     const bindGroup = gpuDevice.createBindGroup({
       layout: pipeline.getBindGroupLayout(0),
@@ -54,11 +102,20 @@
             buffer: uniformsBuffer,
           },
         },
-        videoBindGroupEntries[1],
-        videoBindGroupEntries[2],
+        {
+          binding: 1,
+          resource: sampler,
+        },
+        {
+          binding: 2,
+          resource: gpuDevice.importExternalTexture({
+            source: document.querySelector("video"),
+          }),
+        },
       ],
     });
-
+    //concat was right, off by one index
+    //same error as previously, how to
     passEncoder.setBindGroup(0, bindGroup);
     passEncoder.setVertexBuffer(0, attribsBuffer);
     passEncoder.draw(3 * 2, 1, 0, 0);
@@ -84,8 +141,17 @@
       GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
     );
   }
-  function makePipeline(shader, gpuDevice) {
+  function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
+    try {
+      let pipeLineLayout = gpuDevice.createPipelineLayout({
+        bindGroupLayouts: [dataTexturesBindGroupLayout],
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
+
     let pipelineDesc = {
+      layout: pipeLineLayout,
       vertex: {
         module: shader,
         entryPoint: "main_vertex",
