@@ -1,28 +1,24 @@
 (function main() {
   function missingStuff(stuff) {
     let { gpuDevice, pipeline, video } = stuff;
-    console.log(stuff);
     const sampler = gpuDevice.createSampler({
       magFilter: "linear",
       minFilter: "linear",
     });
-    console.log(video);
-    const uniformBindGroup = gpuDevice.createBindGroup({
-      layout: pipeline.getBindGroupLayout(1),
-      entries: [
-        {
-          binding: 0,
-          resource: sampler,
-        },
-        {
-          binding: 1,
-          resource: gpuDevice.importExternalTexture({
-            source: video,
-          }),
-        },
-      ],
-    });
-    return uniformBindGroup;
+
+    const videoBindGroupEntries = [
+      {
+        binding: 1,
+        resource: sampler,
+      },
+      {
+        binding: 2,
+        resource: gpuDevice.importExternalTexture({
+          source: video,
+        }),
+      },
+    ];
+    return videoBindGroupEntries;
   }
 
   const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
@@ -46,7 +42,9 @@
     renderPassDescriptor.colorAttachments[0].view = textureView;
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(pipeline);
-    gpuDevice.createB;
+    let videoBindGroupEntries = missingStuff(stuff);
+    console.log(videoBindGroupEntries);
+
     const bindGroup = gpuDevice.createBindGroup({
       layout: pipeline.getBindGroupLayout(0),
       entries: [
@@ -56,12 +54,12 @@
             buffer: uniformsBuffer,
           },
         },
+        videoBindGroupEntries[1],
+        videoBindGroupEntries[2],
       ],
     });
 
-    let videoBindGroup = missingStuff(stuff);
     passEncoder.setBindGroup(0, bindGroup);
-    passEncoder.setBindGroup(1, videoBindGroup);
     passEncoder.setVertexBuffer(0, attribsBuffer);
     passEncoder.draw(3 * 2, 1, 0, 0);
     passEncoder.endPass();
@@ -162,8 +160,8 @@
     ${userland_Uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;
-  [[group(1), binding(0)]] var mySampler: sampler;
-  [[group(1), binding(1)]] var myTexture: texture_external;
+  [[group(0), binding(1)]] var mySampler: sampler;
+  [[group(0), binding(2)]] var myTexture: texture_external;
   struct VertexInput {
     [[location(0)]] pos: vec2<f32>;
   };
@@ -212,6 +210,8 @@
         },
       ],
     };
+    //before calling createBindgroup
+    //bindgroupaylout must be configured to have 3 entries
     const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
     const attribsBuffer = createBuffer(
       gpuDevice,
@@ -220,8 +220,6 @@
     );
     //wrap make attributes
     function draw(stuff) {
-      console.log(stuff);
-
       let uniformsBuffer = updateUniforms({
         data: stuff.data,
         gpuDevice,
@@ -305,7 +303,6 @@
 import video_src from "./data/big-buck-bunny_trailer.webm";
 
 function createVideo() {
-  console.log("123");
   const video = document.createElement("video");
   video.loop = true;
   video.autoplay = true;
@@ -317,7 +314,6 @@ function createVideo() {
   video.crossorigin = "anonymous";
   video.controls = "true";
   video.src = video_src;
-  console.log(video_src);
   //http://jplayer.org/video/webm/Big_Buck_Bunny_Trailer.webm
   //await video.play();
   document.body.appendChild(video);
