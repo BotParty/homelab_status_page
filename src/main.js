@@ -29,6 +29,7 @@ const width = 960,
 
 async function start_loop_nb() {
   const canvas = document.createElement("canvas");
+
   canvas.addEventListener("mousemove", function (e) {
     data.mouseX = e.clientX / width;
     data.mouseY = e.clientY / height;
@@ -70,7 +71,7 @@ async function start_loop_static() {
   //and append / hide canvas to whatever framekwork (vue, obs, react, etc)
 
   let state = await init.init(options);
-  document.body.appendChild(state.canvas);
+  document.querySelector("#container").appendChild(state.canvas);
   console.log(init);
   let next_state = state.draw(state); //this should have all the inner stuff
   return next_state;
@@ -82,10 +83,8 @@ async function start_loop_static() {
   // });
 }
 
-console.log("123");
-
 let main =
   window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
 
-main();
+if (window.location.host === "localhost:3000") main();
 export default main;
