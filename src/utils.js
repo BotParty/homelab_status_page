@@ -1,15 +1,3 @@
-//add utils file for the top level fns
-let data = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
-  time: 0,
-  mouseX: 0,
-  mouseY: 0,
-  angle: 0,
-  //texture: (video)
-};
-
 function makeVideoBindGroupDescriptor(stuff) {
   let { gpuDevice, pipeline, video } = stuff;
   const sampler = gpuDevice.createSampler({
@@ -68,28 +56,22 @@ const recordRenderPass = async function (stuff) {
   passEncoder.setPipeline(pipeline);
   //slots 0 = uniform
   //1 = texture sampler
-
-  //required GPUIndex32 binding;
+  // required GPUIndex32 binding;
   // required GPUShaderStageFlags visibility;
-  //
   // GPUBufferBindingLayout buffer;
   // GPUSamplerBindingLayout sampler;
   // GPUTextureBindingLayout texture;
   // GPUStorageTextureBindingLayout storageTexture;
   // GPUExternalTextureBindingLayout externalTexture;
-
-  //
-  // ypedef [EnforceRange] unsigned long GPUBufferDynamicOffset;
+  // typedef [EnforceRange] unsigned long GPUBufferDynamicOffset;
   // typedef [EnforceRange] unsigned long GPUStencilValue;
   // typedef [EnforceRange] unsigned long GPUSampleMask;
   // typedef [EnforceRange] long GPUDepthBias;
-  //
   // typedef [EnforceRange] unsigned long long GPUSize64;
   // typedef [EnforceRange] unsigned long GPUIntegerCoordinate;
   // typedef [EnforceRange] unsigned long GPUIndex32;
   // typedef [EnforceRange] unsigned long GPUSize32;
   // typedef [EnforceRange] long GPUSignedOffset32;
-  //
   // typedef unsigned long GPUFlagsConstant;
   const bindGroup = gpuDevice.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
@@ -260,7 +242,7 @@ async function init(options) {
   Object.assign(stuff, {
     gpuDevice,
     context,
-    adapter, //gpuAdapter
+    adapter,
   });
 
   context.configure({
@@ -268,7 +250,7 @@ async function init(options) {
     format: presentationFormat,
     size: presentationSize,
   });
-  let shader = makeShaderModule(gpuDevice, data, name);
+  let shader = makeShaderModule(gpuDevice, stuff.data, name);
 
   // Object.assign(stuff, {
   //   renderPassDescriptor,

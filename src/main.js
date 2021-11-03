@@ -25,10 +25,7 @@ function createVideo() {
   video.src = "./data/test-video.webm";
   video.style.zIndex = -1002;
   video.style.position = "absolute";
-
-  console.log(video);
   //await video.play();
-
   document.body.appendChild(video);
   return video;
 }
@@ -73,6 +70,7 @@ async function start_loop_static() {
   let video = createVideo();
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.time = Date.now() % 1000; //le clock
+  copiedData.texture = video;
   let options = { data: copiedData, canvas: canvas, width, height };
 
   let state = await init.init(options);
@@ -89,6 +87,6 @@ async function start_loop_static() {
 
 let main =
   window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
-console.log("test", window.location.host);
+
 if (window.location.host === "localhost:3000") main();
 export default main;
