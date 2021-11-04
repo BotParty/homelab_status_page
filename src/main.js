@@ -11,7 +11,7 @@
 //   createVideo,
 // } from "./utils";
 //import createVideo from "./utils";
-function createVideo() {
+async function createVideo() {
   const video = document.createElement("video");
   video.loop = true;
   video.autoplay = true;
@@ -25,7 +25,7 @@ function createVideo() {
   video.src = "./data/test-video.webm";
   video.style.zIndex = -1002;
   video.style.position = "absolute";
-  //await video.play();
+  await video.play();
   document.body.appendChild(video);
   return video;
 }
@@ -67,7 +67,7 @@ async function start_loop_static() {
     data.mouseX = e.clientX / width;
     data.mouseY = e.clientY / height;
   });
-  let video = createVideo();
+  let video = await createVideo();
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.time = Date.now() % 1000; //le clock
   copiedData.texture = video;

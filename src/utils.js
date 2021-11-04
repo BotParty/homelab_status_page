@@ -1,133 +1,73 @@
-function makeVideoBindGroupDescriptor(stuff) {
-  let { gpuDevice, pipeline, video } = stuff;
+function makeDataTextureBindGroupDescriptor(stuff) {
+  let { gpuDevice, pipeline, data } = stuff;
   const sampler = gpuDevice.createSampler({
     magFilter: "linear",
     minFilter: "linear",
   });
 
-  const videoBindGroupEntries = [
-    {
-      binding: 1,
-      resource: sampler,
-    },
-    {
-      binding: 2,
-      resource: gpuDevice.importExternalTexture({
-        source: video,
-      }),
-    },
-  ];
+  //buffer layout = 0
+  //sampler layout = 1
+  //texture layout = 2
+  //storageTexture for compute - not needed
+  //what 1-2 things should change? hm i wonder
+  //what could change
+  //GPUExternalTextureDescriptor
+  //console.log(data.texture);
+
+  let uniformsBuffer = updateUniforms(stuff);
+
+  let firstEntry = {
+    binding: 0,
+    visibility: GPUShaderStage.FRAGMENT,
+    type: "uniform",
+    //buffer: uniformsBuffer,
+  };
+
+  const dataTexturesBindGroupLayoutDescriptor = {
+    entries: [
+      //GPUBindGroupLayoutEntry
+      firstEntry,
+      {
+        binding: 1,
+        visibility: GPUShaderStage.FRAGMENT,
+        type: "filtering",
+        resource: sampler,
+      },
+      {
+        binding: 2,
+        visibility: GPUShaderStage.FRAGMENT,
+        type: "float",
+        resource: gpuDevice.importExternalTexture({
+          source: data.texture,
+        }),
+      },
+    ],
+  };
   return {
-    videoBindGroupEntries,
+    dataTexturesBindGroupLayoutDescriptor,
     sampler,
   };
 }
 
-const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  const imgBitmap = await createImageBitmap(blob);
+function makePipeline(stuff) {
+  let { shader, gpuDevice, dataTexturesBindGroupLayout } = stuff;
 
-  return webGPUTextureFromImageBitmapOrCanvas(gpuDevice, imgBitmap);
-};
+  let {
+    sampler,
+    dataTexturesBindGroupLayoutDescriptor,
+  } = makeDataTextureBindGroupDescriptor(stuff);
+  stuff.sampler = sampler;
 
-const recordRenderPass = async function (stuff) {
-  let {
-    attribsBuffer,
-    context,
-    gpuDevice,
-    pipeline,
-    uniformsBuffer,
-    renderPassDescriptor,
-  } = stuff;
-  // console.log(
-  //   "stuff",
-  //   attribsBuffer,
-  //   context,
-  //   gpuDevice,
-  //   pipeline,
-  //   uniformsBuffer,
-  //   renderPassDescriptor
-  // );
-  const commandEncoder = gpuDevice.createCommandEncoder();
-  const textureView = context.getCurrentTexture().createView();
-  renderPassDescriptor.colorAttachments[0].view = textureView;
-  const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-  passEncoder.setPipeline(pipeline);
-  //slots 0 = uniform
-  //1 = texture sampler
-  // required GPUIndex32 binding;
-  // required GPUShaderStageFlags visibility;
-  // GPUBufferBindingLayout buffer;
-  // GPUSamplerBindingLayout sampler;
-  // GPUTextureBindingLayout texture;
-  // GPUStorageTextureBindingLayout storageTexture;
-  // GPUExternalTextureBindingLayout externalTexture;
-  // typedef [EnforceRange] unsigned long GPUBufferDynamicOffset;
-  // typedef [EnforceRange] unsigned long GPUStencilValue;
-  // typedef [EnforceRange] unsigned long GPUSampleMask;
-  // typedef [EnforceRange] long GPUDepthBias;
-  // typedef [EnforceRange] unsigned long long GPUSize64;
-  // typedef [EnforceRange] unsigned long GPUIntegerCoordinate;
-  // typedef [EnforceRange] unsigned long GPUIndex32;
-  // typedef [EnforceRange] unsigned long GPUSize32;
-  // typedef [EnforceRange] long GPUSignedOffset32;
-  // typedef unsigned long GPUFlagsConstant;
-  const bindGroup = gpuDevice.createBindGroup({
-    layout: pipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: {
-          buffer: uniformsBuffer,
-        },
-      },
-      // {
-      //   binding: 1,
-      //   resource: stuff.sampler,
-      // },
-      // {
-      //   binding: 2,
-      //   resource: gpuDevice.importExternalTexture({
-      //     source: document.querySelector("video"),
-      //   }),
-      // },
-    ],
-  });
-  //concat was right, off by one index
-  //same error as previously, how to
-  passEncoder.setBindGroup(0, bindGroup);
-  passEncoder.setVertexBuffer(0, attribsBuffer);
-  passEncoder.draw(3 * 2, 1, 0, 0);
-  passEncoder.endPass();
-  gpuDevice.queue.submit([commandEncoder.finish()]); //async
-};
-function updateUniforms(stuff) {
-  let {
-    data,
-    gpuDevice,
-    uniformsBuffer,
-    state,
-    renderPassDescriptor,
-    pipeline,
-    attribsBuffer,
-  } = stuff;
-  let values = Object.values(data);
-  let uniformsArray = new Float32Array(values.length);
-  uniformsArray.set(values, 0, values.length);
-  return createBuffer(
-    gpuDevice,
-    uniformsArray,
-    GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-  );
-}
-function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
-  // let pipeLineLayout = gpuDevice.createPipelineLayout({
-  //   bindGroupLayouts: [dataTexturesBindGroupLayout],
-  // });
+  try {
+    let pipeLineLayout = gpuDevice.createPipelineLayout({
+      bindGroupLayouts: dataTexturesBindGroupLayoutDescriptor.entries,
+    });
+  } catch (e) {
+    throw new Error(e);
+  }
 
   let pipelineDesc = {
-    //layout: pipeLineLayout,
+    layout: pipeLineLayout,
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
@@ -153,7 +93,96 @@ function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
       topology: "triangle-list",
     },
   };
-  return gpuDevice.createRenderPipeline(pipelineDesc);
+  let renderPipeline = gpuDevice.createRenderPipeline(pipelineDesc);
+
+  return renderPipeline;
+}
+
+const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const imgBitmap = await createImageBitmap(blob);
+
+  return webGPUTextureFromImageBitmapOrCanvas(gpuDevice, imgBitmap);
+};
+
+const recordRenderPass = async function (stuff, callback) {
+  let {
+    attribsBuffer,
+    context,
+    gpuDevice,
+    pipeline,
+    uniformsBuffer,
+    renderPassDescriptor,
+  } = stuff;
+
+  const commandEncoder = gpuDevice.createCommandEncoder();
+  const textureView = context.getCurrentTexture().createView();
+  renderPassDescriptor.colorAttachments[0].view = textureView;
+  const renderPassEncoder = commandEncoder.beginRenderPass(
+    renderPassDescriptor
+  );
+  renderPassEncoder.setPipeline(pipeline);
+
+  //concat was right, off by one index
+  //same error as previously, how to
+
+  callback();
+
+  if (stuff.renderBundleEncoder) {
+    console.log(stuff.renderBundleEncoder);
+    //before i can use renderbundleencoder, i must get the
+    //GPUBindGroupLayout to pass validation
+    //stuff.renderBundleEncoder.exec();
+  } else {
+    const bindGroup = gpuDevice.createBindGroup({
+      //consolidate w/ upper
+      layout: pipeline.getBindGroupLayout(0),
+      entries: [
+        {
+          binding: 0,
+          resource: {
+            buffer: uniformsBuffer,
+          },
+        },
+        {
+          binding: 1,
+          resource: stuff.sampler,
+        },
+        {
+          binding: 2,
+          resource: gpuDevice.importExternalTexture({
+            source: document.querySelector("video"),
+          }),
+        },
+      ],
+    });
+    renderPassEncoder.setBindGroup(0, bindGroup);
+    renderPassEncoder.setVertexBuffer(0, attribsBuffer);
+    renderPassEncoder.draw(3 * 2, 1, 0, 0);
+    renderPassEncoder.endPass();
+  }
+
+  gpuDevice.queue.submit([commandEncoder.finish()]); //async
+};
+function updateUniforms(stuff) {
+  let {
+    data,
+    gpuDevice,
+    uniformsBuffer,
+    state,
+    renderPassDescriptor,
+    pipeline,
+    attribsBuffer,
+  } = stuff;
+  let values = Object.values(data);
+  let uniformsArray = new Float32Array(values.length);
+  uniformsArray.set(values, 0, values.length);
+  return createBuffer(
+    gpuDevice,
+    uniformsArray,
+    GPUBufferUsage.UNIFORM //| GPUBufferUsage.COPY_DST
+  );
 }
 
 const createBuffer = (gpuDevice, arr, usage) => {
@@ -202,8 +231,8 @@ function makeShaderModule(gpuDevice, data, name, sources) {
     ${userland_Uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;
-  // [[group(0), binding(1)]] var mySampler: sampler;
-  // [[group(0), binding(2)]] var myTexture: texture_external;
+  [[group(0), binding(1)]] var mySampler: sampler;
+  [[group(0), binding(2)]] var myTexture: texture_external;
   struct VertexInput {
     [[location(0)]] pos: vec2<f32>;
   };
@@ -252,25 +281,6 @@ async function init(options) {
   });
   let shader = makeShaderModule(gpuDevice, stuff.data, name);
 
-  // Object.assign(stuff, {
-  //   renderPassDescriptor,
-  //   pipeline,
-  //   uniformsBuffer,
-  //   attribsBuffer,
-  // });
-  //let videoBindGroupDescriptor = makeVideoBindGroupDescriptor(stuff);
-
-  // Object.assign(stuff, {
-  //   videoBindGroupDescriptor: videoBindGroupDescriptor.videoBindGroupEntries,
-  //   videoBindGroupDescriptor: videoBindGroupDescriptor.sampler,
-  // });
-
-  const pipeline = makePipeline(
-    shader,
-    gpuDevice
-    //dataTexturesBindGroupLayout
-  );
-
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
     colorAttachments: [
@@ -281,19 +291,29 @@ async function init(options) {
       },
     ],
   };
-  stuff.renderPassDescriptor = renderPassDescriptor;
-  Object.assign(stuff, {
-    textureView,
-    renderPassDescriptor,
-    pipeline,
-    // uniformsBuffer,
-    // attribsBuffer,
-  });
-  //before calling createBindgroup
-  //bindgroupaylout must be configured to have 3 entries
-  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
+  stuff.renderPassDescriptor = renderPassDescriptor;
+  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
   stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+
+  const pipeline = makePipeline(stuff);
+  // Object.assign(stuff, {
+  //   textureView,
+  //   renderPassDescriptor,
+  //   pipeline,
+  // });
+
+  let renderBundleEncoder = pipeline.createRenderBundleEncoder({
+    colorFormats: ["rgba8unorm"],
+  });
+  recordRenderPass(stuff, () => {
+    encoder.setBindGroup(0, bindGroup, dynamicOffsets);
+    encoder.finish();
+  });
+
+  stuff.renderBundleEncoder = renderBundleEncoder;
+
+  //TODO: add renderBundle for 10x speedup and state-safety
   function draw(state) {
     let uniformsBuffer = updateUniforms(stuff);
     stuff.uniformsBuffer = uniformsBuffer;
@@ -304,20 +324,5 @@ async function init(options) {
 
   return { draw, canvas: options.canvas };
 }
-//userland
-//run takes in a stuff object
-//which has data and a canvas
-//user passes in options which contain
-// let utils = {
-//   makeVideoBindGroupDescriptor,
-//   webGPUTextureFromImageUrl,
-//   recordRenderPass,
-//   updateUniforms,
-//   makePipeline,
-//   makeShaderModule,
-//   init,
-//   start_loop,
-//   createVideo,
-// }
-//export default utils;
+
 export default { init };
