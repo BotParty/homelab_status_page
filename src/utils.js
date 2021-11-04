@@ -6,12 +6,6 @@ function makeDataTextureBindGroupDescriptor(stuff) {
   });
 
   let uniformsBuffer = updateUniforms(stuff);
-  let firstEntry = {
-    binding: 0,
-    visibility: GPUShaderStage.FRAGMENT,
-    type: "uniform",
-    //buffer: uniformsBuffer,
-  };
 
   const dataTexturesBindGroupLayoutDescriptor = {
     entries: [
@@ -26,10 +20,9 @@ function makeDataTextureBindGroupDescriptor(stuff) {
       {
         binding: 2,
         visibility: GPUShaderStage.FRAGMENT,
-        type: "float",
-        resource: gpuDevice.importExternalTexture({
-          source: data.texture,
-        }),
+        texture: {
+          type: "float",
+        },
       },
     ],
   };
@@ -133,22 +126,22 @@ async function makePipeline(stuff) {
         binding: 0,
         visibility: GPUShaderStage.FRAGMENT,
         buffer: {
-          type: "uniforms",
+          type: "uniform",
         },
-        //buffer: uniformsBuffer,
+        //buffer: uniformsBuffer - missing link
       },
       {
         binding: 1,
         visibility: GPUShaderStage.FRAGMENT,
-        texture: {
-          type: "uint",
+        sampler: {
+          type: "filtering",
         },
       },
       {
         binding: 2,
         visibility: GPUShaderStage.FRAGMENT,
-        sampler: {
-          type: "filtering",
+        texture: {
+          type: "uint",
         },
       },
     ],
