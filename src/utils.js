@@ -49,22 +49,57 @@ function makeDataTextureBindGroupDescriptor(stuff) {
   };
 }
 
-function makePipeline(stuff) {
-  let { shader, gpuDevice, dataTexturesBindGroupLayout } = stuff;
+async function makePipeline(stuff) {
+  const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
+  const adapter = await navigator.gpu.requestAdapter();
+  const gpuDevice = await adapter.requestDevice();
+  const presentationFormat = context.getPreferredFormat(adapter);
+  const presentationSize = [
+    stuff.width * devicePixelRatio,
+    stuff.height * devicePixelRatio,
+  ];
+  Object.assign(stuff, {
+    gpuDevice,
+    context,
+    adapter,
+  });
+
+  context.configure({
+    device: gpuDevice,
+    format: presentationFormat,
+    size: presentationSize,
+  });
+
+  let shader = makeShaderModule(gpuDevice, stuff.data);
+
+  const textureView = context.getCurrentTexture().createView();
+  const renderPassDescriptor = {
+    colorAttachments: [
+      {
+        view: textureView,
+        loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        storeOp: "store",
+      },
+    ],
+  };
+
+  stuff.renderPassDescriptor = renderPassDescriptor;
+  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
+  stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
 
   let {
     sampler,
     dataTexturesBindGroupLayoutDescriptor,
   } = makeDataTextureBindGroupDescriptor(stuff);
+
   stuff.sampler = sampler;
 
-  try {
-    let pipeLineLayout = gpuDevice.createPipelineLayout({
-      bindGroupLayouts: dataTexturesBindGroupLayoutDescriptor.entries,
-    });
-  } catch (e) {
-    throw new Error(e);
-  }
+  let pipeLineLayout = gpuDevice.createPipelineLayout({
+    bindGroupLayouts: dataTexturesBindGroupLayoutDescriptor.entries,
+  });
+
+  //between these two
+  //1 step missing
 
   let pipelineDesc = {
     layout: pipeLineLayout,
@@ -128,7 +163,6 @@ const recordRenderPass = async function (stuff, callback) {
   //same error as previously, how to
 
   callback();
-
   if (stuff.renderBundleEncoder) {
     console.log(stuff.renderBundleEncoder);
     //before i can use renderbundleencoder, i must get the
@@ -201,7 +235,7 @@ const createBuffer = (gpuDevice, arr, usage) => {
   return buffer;
 };
 
-function makeShaderModule(gpuDevice, data, name, sources) {
+function makeShaderModule(gpuDevice, data, sources) {
   let source = `
     let size = 3.0;
   fn main(uv: vec2<f32>) -> vec4<f32> {
@@ -260,43 +294,12 @@ async function init(options) {
     canvas: options.canvas,
     state: {}, //passed from frame to frame
   };
-  const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
-  const adapter = await navigator.gpu.requestAdapter();
-  const gpuDevice = await adapter.requestDevice();
-  const presentationFormat = context.getPreferredFormat(adapter);
-  const presentationSize = [
-    options.width * devicePixelRatio,
-    options.height * devicePixelRatio,
-  ];
-  Object.assign(stuff, {
-    gpuDevice,
-    context,
-    adapter,
-  });
 
-  context.configure({
-    device: gpuDevice,
-    format: presentationFormat,
-    size: presentationSize,
-  });
-  let shader = makeShaderModule(gpuDevice, stuff.data, name);
+  //
 
-  const textureView = context.getCurrentTexture().createView();
-  const renderPassDescriptor = {
-    colorAttachments: [
-      {
-        view: textureView,
-        loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        storeOp: "store",
-      },
-    ],
-  };
+  //before makePipeline
 
-  stuff.renderPassDescriptor = renderPassDescriptor;
-  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-  stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-
-  const pipeline = makePipeline(stuff);
+  const pipeline = await makePipeline(stuff);
   // Object.assign(stuff, {
   //   textureView,
   //   renderPassDescriptor,
