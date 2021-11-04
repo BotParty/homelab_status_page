@@ -5,17 +5,7 @@ function makeDataTextureBindGroupDescriptor(stuff) {
     minFilter: "linear",
   });
 
-  //buffer layout = 0
-  //sampler layout = 1
-  //texture layout = 2
-  //storageTexture for compute - not needed
-  //what 1-2 things should change? hm i wonder
-  //what could change
-  //GPUExternalTextureDescriptor
-  //console.log(data.texture);
-
   let uniformsBuffer = updateUniforms(stuff);
-
   let firstEntry = {
     binding: 0,
     visibility: GPUShaderStage.FRAGMENT,
@@ -50,6 +40,7 @@ function makeDataTextureBindGroupDescriptor(stuff) {
 }
 
 async function makePipeline(stuff) {
+  let data = stuff.data;
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
@@ -58,20 +49,68 @@ async function makePipeline(stuff) {
     stuff.width * devicePixelRatio,
     stuff.height * devicePixelRatio,
   ];
-  Object.assign(stuff, {
-    gpuDevice,
-    context,
-    adapter,
-  });
-
+  // Object.assign(stuff, {
+  //   gpuDevice,
+  //   context,
+  //   adapter,
+  // });
   context.configure({
     device: gpuDevice,
     format: presentationFormat,
     size: presentationSize,
+    usage: GPUTextureUsage.OUTPUT_ATTACHMENT | GPUTextureUsage.COPY_SRC,
   });
 
-  let shader = makeShaderModule(gpuDevice, stuff.data);
+  //let shader = makeShaderModule(gpuDevice, stuff.data);
+  let source = `
+    let size = 3.0;
+  fn main(uv: vec2<f32>) -> vec4<f32> {
+    var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
+    let dist = distance( uv, vec2<f32>(u.mouseX, u.mouseY));
+    if (uv.x < .1 ) { base.y = .1; }
+    if (uv.x > .2 ) { base.y = .5; }
+    if (uv.x > .3 ) { base.x = .5; }
+    //if (uv.x > .4 ) { base.z = .7; }
+    //if (uv.x > .5 ) { base.z = .9; }
+    //if (dist < .1) { base.x = .1; }
+    return base;
+  }
 
+  [[stage(fragment)]]
+  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
+    return main(in.uv);
+  }
+  `;
+  const userland_Uniforms = Object.keys(data)
+    .map((name) => `${name}: f32;`)
+    .join("\n");
+
+  const shader = gpuDevice.createShaderModule({
+    code: `
+  [[block]] struct Uniforms {
+    ${userland_Uniforms}
+  };
+  [[group(0), binding(0)]] var<uniform> u: Uniforms;
+  [[group(0), binding(1)]] var mySampler: sampler;
+  [[group(0), binding(2)]] var myTexture: texture_external;
+  struct VertexInput {
+    [[location(0)]] pos: vec2<f32>;
+  };
+  struct VertexOutput {
+    [[builtin(position)]] pos: vec4<f32>;
+    [[location(0)]] uv: vec2<f32>;
+  };
+
+  [[stage(vertex)]]
+  fn main_vertex(input: VertexInput) -> VertexOutput {
+    var output: VertexOutput;
+    var pos: vec2<f32> = input.pos * 3.0 - 1.0;
+    output.pos = vec4<f32>(pos, 0.0, 1.0);
+    output.uv = input.pos;
+    return output;
+  }
+  ${source}`,
+  });
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
     colorAttachments: [
@@ -82,24 +121,45 @@ async function makePipeline(stuff) {
       },
     ],
   };
-
-  stuff.renderPassDescriptor = renderPassDescriptor;
-  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-  stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-
-  let {
-    sampler,
-    dataTexturesBindGroupLayoutDescriptor,
-  } = makeDataTextureBindGroupDescriptor(stuff);
-
-  stuff.sampler = sampler;
-
-  let pipeLineLayout = gpuDevice.createPipelineLayout({
-    bindGroupLayouts: dataTexturesBindGroupLayoutDescriptor.entries,
+  const sampler = gpuDevice.createSampler({
+    magFilter: "linear",
+    minFilter: "linear",
   });
 
-  //between these two
-  //1 step missing
+  const dataTexturesBindGroupLayoutDescriptor = {
+    entries: [
+      //GPUBindGroupLayoutEntry
+      {
+        binding: 0,
+        visibility: GPUShaderStage.FRAGMENT,
+        buffer: {
+          type: "uniforms",
+        },
+        //buffer: uniformsBuffer,
+      },
+      {
+        binding: 1,
+        visibility: GPUShaderStage.FRAGMENT,
+        texture: {
+          type: "uint",
+        },
+      },
+      {
+        binding: 2,
+        visibility: GPUShaderStage.FRAGMENT,
+        sampler: {
+          type: "filtering",
+        },
+      },
+    ],
+  };
+  //why does this throw....
+  console.log(dataTexturesBindGroupLayoutDescriptor);
+  //error happens here.
+  let pipeLineLayout = gpuDevice.createPipelineLayout({
+    //bindGroupLayouts: [],
+    bindGroupLayouts: dataTexturesBindGroupLayoutDescriptor.entries,
+  });
 
   let pipelineDesc = {
     layout: pipeLineLayout,
@@ -130,7 +190,55 @@ async function makePipeline(stuff) {
   };
   let renderPipeline = gpuDevice.createRenderPipeline(pipelineDesc);
 
-  return renderPipeline;
+  //return renderPipeline;
+
+  //create renderPipeline
+
+  stuff.renderPassDescriptor = renderPassDescriptor;
+  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
+  //stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+  let values = Object.values(data);
+  let uniformsArray = new Float32Array(values.length);
+  uniformsArray.set(values, 0, values.length);
+  let arr = uniformsArray;
+  let usage = GPUBufferUsage.UNIFORM;
+  let desc = {
+    size: (arr.byteLength + 3) & ~3,
+    usage,
+    mappedAtCreation: true,
+  };
+  let buffer = gpuDevice.createBuffer(desc);
+  const writeArray =
+    arr instanceof Uint16Array
+      ? new Uint16Array(buffer.getMappedRange())
+      : new Float32Array(buffer.getMappedRange());
+  writeArray.set(arr);
+  buffer.unmap();
+  ///return buffer;
+  stuff.attribsBuffer = buffer;
+  //let { gpuDevice, pipeline, data } = stuff;
+
+  stuff.gpuDevice = gpuDevice;
+  //unroll update unforms
+  //let uniformsBuffer = updateUniforms(stuff);
+
+  //let values = Object.values(data);
+  //let uniformsArray = new Float32Array(values.length);
+  uniformsArray.set(values, 0, values.length);
+  //let arr = uniformsArray;
+  // //let usage = GPUBufferUsage.UNIFORM;
+  // let desc = {
+  //   size: (arr.byteLength + 3) & ~3,
+  //   usage,
+  //   mappedAtCreation: true,
+  // };
+  // let buffer = gpuDevice.createBuffer(desc);
+  // const writeArray =
+  //   arr instanceof Uint16Array
+  //     ? new Uint16Array(buffer.getMappedRange())
+  //     : new Float32Array(buffer.getMappedRange());
+  // writeArray.set(arr);
+  // buffer.unmap();
 }
 
 const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
@@ -158,19 +266,10 @@ const recordRenderPass = async function (stuff, callback) {
     renderPassDescriptor
   );
   renderPassEncoder.setPipeline(pipeline);
-
-  //concat was right, off by one index
-  //same error as previously, how to
-
-  callback();
-  if (stuff.renderBundleEncoder) {
-    console.log(stuff.renderBundleEncoder);
-    //before i can use renderbundleencoder, i must get the
-    //GPUBindGroupLayout to pass validation
-    //stuff.renderBundleEncoder.exec();
+  //callback();
+  if (false && stuff.renderBundleEncoder) {
   } else {
     const bindGroup = gpuDevice.createBindGroup({
-      //consolidate w/ upper
       layout: pipeline.getBindGroupLayout(0),
       entries: [
         {
@@ -209,14 +308,26 @@ function updateUniforms(stuff) {
     pipeline,
     attribsBuffer,
   } = stuff;
+  return console.log("dont call this function");
   let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
-  return createBuffer(
-    gpuDevice,
-    uniformsArray,
-    GPUBufferUsage.UNIFORM //| GPUBufferUsage.COPY_DST
-  );
+  let arr = uniformsArray;
+  let usage = GPUBufferUsage.UNIFORM;
+  let desc = {
+    size: (arr.byteLength + 3) & ~3,
+    usage,
+    mappedAtCreation: true,
+  };
+  let buffer = gpuDevice.createBuffer(desc);
+  const writeArray =
+    arr instanceof Uint16Array
+      ? new Uint16Array(buffer.getMappedRange())
+      : new Float32Array(buffer.getMappedRange());
+  writeArray.set(arr);
+  buffer.unmap();
+
+  return buffer;
 }
 
 const createBuffer = (gpuDevice, arr, usage) => {
@@ -235,7 +346,7 @@ const createBuffer = (gpuDevice, arr, usage) => {
   return buffer;
 };
 
-function makeShaderModule(gpuDevice, data, sources) {
+function makeShaderModule(gpuDevice, data) {
   let source = `
     let size = 3.0;
   fn main(uv: vec2<f32>) -> vec4<f32> {
@@ -294,9 +405,6 @@ async function init(options) {
     canvas: options.canvas,
     state: {}, //passed from frame to frame
   };
-
-  //
-
   //before makePipeline
 
   const pipeline = await makePipeline(stuff);
@@ -315,7 +423,6 @@ async function init(options) {
   });
 
   stuff.renderBundleEncoder = renderBundleEncoder;
-
   //TODO: add renderBundle for 10x speedup and state-safety
   function draw(state) {
     let uniformsBuffer = updateUniforms(stuff);
@@ -329,3 +436,15 @@ async function init(options) {
 }
 
 export default { init };
+// ⚗️ Graphics Pipeline
+
+// 🔣 Input Assembly
+
+//prettier-ignore
+// 🦄 Uniform Data
+
+const colors = new Float32Array([
+    1.0, 0.0, 0.0, // 🔴
+    0.0, 1.0, 0.0, // 🟢
+    0.0, 0.0, 1.0  // 🔵
+]);
