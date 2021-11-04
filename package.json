@@ -7,11 +7,14 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "vite": "^2.6.4",
+    "d3": "^7.1.1",
     "regl": "^2.1.0",
-    "d3": "^7.1.1"
+    "vite": "^2.6.4"
   },
   "dependencies": {
-    "h3": "^0.3.3"
+    "gl-mat4": "^1.2.0",
+    "gl-matrix": "^3.4.3",
+    "h3": "^0.3.3",
+    "resl": "^1.0.3"
   }
 }

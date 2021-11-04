@@ -62,7 +62,7 @@ async function start_loop_nb() {
 }
 
 async function start_loop_static() {
-  const canvas = document.createElement("canvas");
+  const canvas = document.querySelector("canvas");
   canvas.addEventListener("mousemove", function (e) {
     data.mouseX = e.clientX / width;
     data.mouseY = e.clientY / height;
@@ -72,11 +72,9 @@ async function start_loop_static() {
   copiedData.time = Date.now() % 1000; //le clock
   copiedData.texture = video;
   let options = { data: copiedData, canvas: canvas, width, height };
-
   let state = await init.init(options);
-  document.querySelector("#container").appendChild(state.canvas);
-  let next_state = state.draw(state); //this should have all the inner stuff
-  return next_state;
+  //let next_state = state.draw(state); //this should have all the inner stuff
+  //return next_state;
   // requestAnimationFrame(async function () {
   //   let canvas = start_loop().then((stuff) => {
   //     //stuff has to have a canvas to add to vue / anything
@@ -84,7 +82,6 @@ async function start_loop_static() {
   //   });
   // });
 }
-
 let main =
   window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
 

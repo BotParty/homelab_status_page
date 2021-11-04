@@ -1,7 +1,38 @@
 * simple-data-texture
-
+for stack-gpu (someone else name and create it pls i just anon IC)
 * src
 just utils
+
+wegl.texture()|
+options() <___|
+
+wegl = we the people = all IC on npm together yay
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 * /Demos
