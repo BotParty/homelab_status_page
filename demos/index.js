@@ -1,19 +1,23 @@
 import start from "./webgl/shape-transition";
 import breath from "./webgl/breath";
-import main from "../src/main";
+import { start_loop_static, start_loop_nb } from "../src/main";
 
-//
 function map() {
   //document.querySelector('#embed').classList +=
 }
+
+let video =
+  window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
+video();
 document.querySelectorAll("input").forEach((e) => {
+
+  return void 0
   e.addEventListener("click", (e) => {
     console.log(e.target.name);
     e.target.classList.toggle("dot");
-
     if ("breath" === e.target.name) breath();
     if ("shape-transition" === e.target.name) start();
-    if ("webgpu-video" === e.target.name) main();
+    if ("webgpu-video" === e.target.name) video();
     if ("map" === e.target.name) map();
   });
 });

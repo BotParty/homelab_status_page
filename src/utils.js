@@ -37,7 +37,6 @@ async function makePipeline(stuff) {
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
-  return console.log(context);
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
     stuff.width * devicePixelRatio,
@@ -47,8 +46,10 @@ async function makePipeline(stuff) {
     device: gpuDevice,
     format: presentationFormat,
     size: presentationSize,
-    //usage: GPUTextureUsage.OUTPUT_ATTACHMENT | GPUTextureUsage.COPY_SRC,
+    //render attachment
+    usage: GPUTextureUsage.RENDER_ATTACHMENT,
   });
+  console.log("123");
   stuff.context = context;
   let source = `
     let size = 3.0;
@@ -58,9 +59,6 @@ async function makePipeline(stuff) {
     if (uv.x < .1 ) { base.y = .1; }
     if (uv.x > .2 ) { base.y = .5; }
     if (uv.x > .3 ) { base.x = .5; }
-    //if (uv.x > .4 ) { base.z = .7; }
-    //if (uv.x > .5 ) { base.z = .9; }
-    //if (dist < .1) { base.x = .1; }
     return base;
   }
 
@@ -196,10 +194,6 @@ const recordRenderPass = async function (stuff, callback) {
     uniformsBuffer,
     renderPassDescriptor,
   } = stuff;
-  return console.log("fixme");
-
-  //what are all permutations of this object and options and how can i
-  //automatically gnerate that with GPT?
   const bindGroupLayout = gpuDevice.createBindGroupLayout({
     entries: [
       {
@@ -287,6 +281,7 @@ const recordRenderPass = async function (stuff, callback) {
       magFilter: "linear",
       minFilter: "linear",
     });
+
   if (false && stuff.renderBundleEncoder) {
   } else {
     const bindGroup = gpuDevice.createBindGroup({
@@ -317,6 +312,7 @@ const recordRenderPass = async function (stuff, callback) {
     renderPassEncoder.draw(3 * 2, 1, 0, 0);
     renderPassEncoder.endPass();
   }
+
   gpuDevice.queue.submit([commandEncoder.finish()]); //async
 };
 function updateUniforms(stuff) {
@@ -430,13 +426,15 @@ async function init(options) {
   // let renderBundleEncoder = pipeline.createRenderBundleEncoder({
   //   colorFormats: ["rgba8unorm"],
   // });
-  recordRenderPass(stuff, () => {
-    // encoder.setBindGroup(0, bindGroup, dynamicOffsets);
-    // encoder.finish();
-  });
+  // recordRenderPass(stuff, () => {
+  //   // encoder.setBindGroup(0, bindGroup, dynamicOffsets);
+  //   // encoder.finish();
+  // });
   function draw(state) {
     // let uniformsBuffer = updateUniforms(stuff);
     // stuff.uniformsBuffer = uniformsBuffer;
+    stuff.gpuDevice = gpuDevice;
+    console.log(gpuDevice);
     recordRenderPass(stuff).finally(() => {});
     return state;
   }

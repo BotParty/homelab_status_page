@@ -82,8 +82,5 @@ async function start_loop_static() {
   //   });
   // });
 }
-let main =
-  window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
 
-if (window.location.host === "localhost:3000") main();
-export default main;
+export { start_loop_static, start_loop_nb };

@@ -5,6 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>simple shader demo</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
     <style>
       body {
         background: grey;
@@ -32,6 +37,8 @@
 
       video {
         opacity: 0.1;
+        width: 300px;
+        height: 300px;
       }
 
       #embed {
@@ -55,6 +62,13 @@
         position: absolute;
         border: 1px dotted aliceblue;
       }
+
+      .three.dot {
+        border: 1px dotted blue;
+        width: 960px;
+        height: 500px;
+        opacity: 1;
+      }
     </style>
     <script defer type="module" src="/src/index.js"></script>
     <script defer type="module" src="/demos/index.js"></script>
@@ -62,7 +76,7 @@
   <body>
     <div id="swap" class="mt-4">
       <!-- <span class="text-gray-700">Account Type</span> -->
-      <div id="control-panel" class="mt-2">
+      <div id="control-panel" class="mt-2 hidden">
         <label class="inline-flex items-center">
           <input
             type="checkbox"
@@ -103,13 +117,13 @@
         frameborder="0"
         src="https://observablehq.com/embed/a8fab472095683d0?cell=*"
       ></iframe> -->
-      <iframe
+      <!-- <iframe
         id="embed"
         width="50%"
         height="50%"
         frameborder="0"
         src="https://observablehq.com/embed/1ccccab15904bba0@322?cells=map"
-      ></iframe>
+      ></iframe> -->
       <!-- <img
         height="250"
         width="250"
