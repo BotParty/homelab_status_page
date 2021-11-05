@@ -62,7 +62,7 @@ async function start_loop_nb() {
 }
 
 async function start_loop_static() {
-  const canvas = document.querySelector("canvas");
+  const canvas = document.querySelector(".three");
   canvas.addEventListener("mousemove", function (e) {
     data.mouseX = e.clientX / width;
     data.mouseY = e.clientY / height;

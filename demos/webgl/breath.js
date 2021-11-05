@@ -1,6 +1,6 @@
 //from regl.examples
 import createREGL from "regl";
-let regl = createREGL();
+let regl = createREGL({ canvas: document.querySelector(".one") });
 
 let successFunction = (stream) => {
   console.log("after get user media");

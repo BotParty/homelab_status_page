@@ -38,7 +38,7 @@ let shaderConfig = {
 };
 
 // See http://regl.party/ -- regl makes low level gl programming more convenient!
-const regl = createREGL({ canvas: document.querySelector("canvas") });
+const regl = createREGL({ canvas: document.querySelector(".two") });
 let shape1 = regl.buffer(NUM_POINTS),
   shape2 = regl.buffer(NUM_POINTS);
 let angles = Array.from({ length: NUM_POINTS }, (_) => TAU * Math.random());
@@ -144,7 +144,7 @@ const draw = regl({
 
 /** create sliders for each parameter */
 function constructUi(config, min, max, step, needsRedraw) {
-  let configDom = document.getElementById("config");
+  let configDom = document.getElementById("control-panel");
   for (let param of Object.keys(config)) {
     let label = document.createElement("label");
     let slider = document.createElement("input");
@@ -186,8 +186,8 @@ function redraw() {
 
 function start() {
   console.log("hi");
-  //constructUi(shaderConfig, 0, 1, 0.01, false);
-  //constructUi(attrConfig, 1, 20, 1, true);
+  constructUi(shaderConfig, 0, 1, 0.01, false);
+  constructUi(attrConfig, 1, 20, 1, true);
 
   createBothShapes();
   regl.frame(redraw);

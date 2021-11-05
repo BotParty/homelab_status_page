@@ -37,6 +37,7 @@ async function makePipeline(stuff) {
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
+  return console.log(context);
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
     stuff.width * devicePixelRatio,
@@ -195,6 +196,8 @@ const recordRenderPass = async function (stuff, callback) {
     uniformsBuffer,
     renderPassDescriptor,
   } = stuff;
+  return console.log("fixme");
+
   //what are all permutations of this object and options and how can i
   //automatically gnerate that with GPT?
   const bindGroupLayout = gpuDevice.createBindGroupLayout({
@@ -292,17 +295,17 @@ const recordRenderPass = async function (stuff, callback) {
         //  { binding: 0, resource: attribsBuffer },
 
         {
-          binding: 1,
+          binding: 0,
           resource: {
             buffer: uniformsBuffer,
           },
         },
         {
-          binding: 2,
+          binding: 1,
           resource: stuff.sampler,
         },
         {
-          binding: 3,
+          binding: 2,
           resource: gpuDevice.importExternalTexture({
             source: document.querySelector("video"),
           }),

@@ -21,14 +21,95 @@
 
         width: 100%;
         height: 100%;
+        padding: 25px;
+      }
+
+      canvas {
+        pointer-events: none;
+        opacity: 0.5;
+        /* padding: 10px; */
+      }
+
+      video {
+        opacity: 0.1;
+      }
+
+      #embed {
+        opacity: 0.1;
+        height: 200px;
+        width: 200px;
+        padding-top: 50px;
+      }
+
+      .dot {
+        opacity: 1;
+        z-index: 123;
+      }
+
+      canvas {
+        opacity: 0.1;
+      }
+
+      #control-panel {
+        z-index: 124;
+        position: absolute;
+        border: 1px dotted aliceblue;
       }
     </style>
     <script defer type="module" src="/src/index.js"></script>
-    <!-- <script defer type="module" src="/demos/index.js"></script> -->
+    <script defer type="module" src="/demos/index.js"></script>
   </head>
   <body>
+    <div id="swap" class="mt-4">
+      <!-- <span class="text-gray-700">Account Type</span> -->
+      <div id="control-panel" class="mt-2">
+        <label class="inline-flex items-center">
+          <input
+            type="checkbox"
+            class="form-radio"
+            name="breath"
+            value="personal"
+          />
+          <span class="ml-2">breath</span>
+        </label>
+        <label class="inline-flex items-center ml-6">
+          <input
+            type="checkbox"
+            class="form-radio"
+            name="shape-transition"
+            value="busines"
+          />
+          <span class="ml-2">shape-transition</span>
+        </label>
+        <label class="inline-flex items-center ml-6">
+          <input
+            type="checkbox"
+            class="form-radio"
+            name="webgpu-video"
+            value="busines"
+          />
+          <span class="ml-2">webgpu-video</span>
+        </label>
+      </div>
+    </div>
+
     <div id="container">
-      <canvas></canvas>
+      <canvas class="one dot"></canvas>
+      <canvas class="two dot"></canvas>
+      <canvas class="three dot"></canvas>
+      <!-- <iframe
+        width="100%"
+        height="500"
+        frameborder="0"
+        src="https://observablehq.com/embed/a8fab472095683d0?cell=*"
+      ></iframe> -->
+      <iframe
+        id="embed"
+        width="50%"
+        height="50%"
+        frameborder="0"
+        src="https://observablehq.com/embed/1ccccab15904bba0@322?cells=map"
+      ></iframe>
       <!-- <img
         height="250"
         width="250"

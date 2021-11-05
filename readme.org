@@ -8,7 +8,25 @@ options() <___|
 
 wegl = we the people = all IC on npm together yay
 
+http://vis.stanford.edu/files/2013-imMens-EuroVis.pdf
+(what is the right name for data-cubes/megatextures/virtual-streaming-textures/etc??)
+https://observablehq.com/@observablehq/downloading-and-embedding-notebooks
 
+
+
+
+techniques for faster load time
+(start with lossy to load instantly, fill in with accurate data as user gets closer adjusting level of detail )
+png/jpeg
+https://developers.google.com/protocol-buffers
+column-based data-stores like arrow/cassandra
+mega-textures from id-engine-5 (virtual-streaming textures )
+immens / nanocubes
+
+# data attribution
+https://scale.com/resources/download/pandaset
+https://nanocubes.net/
+https://www1.nyc.gov/site/doitt/initiatives/3d-building.page
 
 
 
