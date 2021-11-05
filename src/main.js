@@ -73,7 +73,7 @@ async function start_loop_static() {
   copiedData.texture = video;
   let options = { data: copiedData, canvas: canvas, width, height };
   let state = await init.init(options);
-  //let next_state = state.draw(state); //this should have all the inner stuff
+  let next_state = state.draw(state); //this should have all the inner stuff
   //return next_state;
   // requestAnimationFrame(async function () {
   //   let canvas = start_loop().then((stuff) => {

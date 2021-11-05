@@ -37,6 +37,8 @@ async function makePipeline(stuff) {
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
+  stuff.gpuDevice = gpuDevice;
+  console.log(stuff);
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
     stuff.width * devicePixelRatio,
@@ -49,7 +51,7 @@ async function makePipeline(stuff) {
     //render attachment
     usage: GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  console.log("123");
+
   stuff.context = context;
   let source = `
     let size = 3.0;
@@ -194,6 +196,7 @@ const recordRenderPass = async function (stuff, callback) {
     uniformsBuffer,
     renderPassDescriptor,
   } = stuff;
+
   const bindGroupLayout = gpuDevice.createBindGroupLayout({
     entries: [
       {
@@ -307,6 +310,7 @@ const recordRenderPass = async function (stuff, callback) {
         },
       ],
     });
+
     renderPassEncoder.setBindGroup(0, bindGroup);
     renderPassEncoder.setVertexBuffer(0, attribsBuffer);
     renderPassEncoder.draw(3 * 2, 1, 0, 0);
@@ -433,8 +437,7 @@ async function init(options) {
   function draw(state) {
     // let uniformsBuffer = updateUniforms(stuff);
     // stuff.uniformsBuffer = uniformsBuffer;
-    stuff.gpuDevice = gpuDevice;
-    console.log(gpuDevice);
+
     recordRenderPass(stuff).finally(() => {});
     return state;
   }
