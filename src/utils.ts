@@ -103,6 +103,7 @@ function updateUniforms(stuff) {
   let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
+  //console.log('check')
   return createBuffer(
     gpuDevice,
     uniformsArray,
@@ -186,16 +187,11 @@ function makeShaderModule(gpuDevice, data, name, sources) {
   };
 
 
-
-
-
-
   fn main(uv: vec2<f32>) -> vec4<f32> {
     let fragCoord = vec2<f32>(uv.x, uv.y);
     var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-    //return vec4<f32>(.3, .3, .6, 1.);
-    return mainImage(fragCoord, vec2<f32>(u.width, u.height));
+    return vec4<f32>(.3, .3, sin(u.time), 1.) + mainImage(fragCoord, vec2<f32>(u.width, u.height));
   }
 
   [[stage(fragment)]]
@@ -338,6 +334,8 @@ async function init(options) {
     draw,
     canvas: options.canvas,
     updateUniforms: function (data) {
+      //console.log('hi');
+      //console.log(data)
       stuff.data = data;
       updateUniforms(stuff);
     },

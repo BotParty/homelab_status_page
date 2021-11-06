@@ -100,20 +100,26 @@ async function start_loop_static() {
 
   let video = await createVideo();
   let copiedData = Object.assign({}, data); //should come from args
-  copiedData.time = Date.now() % 1000; //le clock
   copiedData.texture = video;
   let options = { data: copiedData, canvas: canvas, width, height };
   let state = await init.init(options);
-  setInterval(function () {
+  requestAnimationFrame(function test() {
+    data.time = Date.now() / 1000 % 1000;
+    //console.log('test')
+    //console.log('oo')
+    state.updateUniforms(data);
     let next_state = state.draw(state);
-  }, 150);
+
+    requestAnimationFrame(test)
+  });
   let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
 
   let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
   canvas.addEventListener("mousemove", function (e) {
-    //console.log(e);
+    console.log('updating uniforms');
     data.mouseX = scaleX(e.clientX / e.target.clientWidth);
     data.mouseY = scaleY(e.clientY / e.target.clientHeight);
+    console.log(data.time)
     //console.log(data.mouseX, data.mouseY);
     state.updateUniforms(data);
   });

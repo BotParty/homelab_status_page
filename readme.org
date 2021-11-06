@@ -1,5 +1,6 @@
 * simple-data-texture
-for stack-gpu (someone else name and create it pls i just anon IC)
+for stack-gpu 
+interop with 3js (webgl + webgpu )+ vue + anything.
 * src
 just utils
 
