@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.17e50649.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simple shader demo</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background: grey;
+      }
+
+      img {
+        opacity: 0.3;
+      }
+
+      #container * {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+
+        width: 100%;
+        height: 100%;
+        padding: 25px;
+      }
+
+      canvas {
+        /* pointer-events: none; */
+        opacity: 0.5;
+        /* padding: 10px; */
+      }
+
+      video {
+        opacity: 0.1;
+        width: 300px;
+        height: 300px;
+      }
+
+      #embed {
+        opacity: 0.1;
+        height: 200px;
+        width: 200px;
+        padding-top: 50px;
+      }
+
+      .dot {
+        opacity: 1;
+        z-index: 123;
+      }
+
+      canvas {
+        opacity: 0.1;
+      }
+
+      #control-panel {
+        z-index: 124;
+        position: absolute;
+        border: 1px dotted aliceblue;
+      }
+
+      .three.dot {
+        border: 1px dotted blue;
+        width: 960px;
+        height: 500px;
+        opacity: 1;
+      }
+    </style>
+    
+    
+    <!-- <script type="module" src="/src/main.ts"></script> -->
+    <script type="module" crossorigin src="/assets/index.b74e05a6.js"></script>
+    <link rel="modulepreload" href="/assets/vendor.6dc65a70.js">
+  </head>
+  <body>
+    <div id="swap" class="mt-4">
+      <!-- <span class="text-gray-700">Account Type</span> -->
+      <div id="control-panel" class="mt-2 hidden">
+        <label class="inline-flex items-center">
+          <input
+            type="checkbox"
+            class="form-radio"
+            name="breath"
+            value="personal"
+          />
+          <span class="ml-2">breath</span>
+        </label>
+        <label class="inline-flex items-center ml-6">
+          <input
+            type="checkbox"
+            class="form-radio"
+            name="shape-transition"
+            value="busines"
+          />
+          <span class="ml-2">shape-transition</span>
+        </label>
+        <label class="inline-flex items-center ml-6">
+          <input
+            type="checkbox"
+            class="form-radio"
+            name="webgpu-video"
+            value="busines"
+          />
+          <span class="ml-2">webgpu-video</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="container">
+      <canvas class="one dot"></canvas>
+      <canvas class="two dot"></canvas>
+      <canvas class="three dot"></canvas>
+      <!-- <iframe
+        width="100%"
+        height="500"
+        frameborder="0"
+        src="https://observablehq.com/embed/a8fab472095683d0?cell=*"
+      ></iframe> -->
+      <!-- <iframe
+        id="embed"
+        width="50%"
+        height="50%"
+        frameborder="0"
+        src="https://observablehq.com/embed/1ccccab15904bba0@322?cells=map"
+      ></iframe> -->
+      <!-- <img
+        height="250"
+        width="250"
+        src="https://geology.com/world/europe-map.gif"
+      /> -->
+    </div>
+  </body>
+</html>
