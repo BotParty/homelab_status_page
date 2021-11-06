@@ -178,11 +178,11 @@ function makeShaderModule(gpuDevice, data, name, sources) {
       let ringr=floor(v);
       //let color=smoothstep(-b, b, abs(dist- (ringr+float(fract(v)>0.5)+offset)/conv));
       //let color=smoothstep(-b, b, abs(dist- (ringr+((v)>0.5)+offset)/conv));
-      let color = b;
-      //if(mod(ringr,2.)==1.)
-       //color=1.-color;
-      //fragColor = vec4(.3, color, color, 1.);
-    return vec4<f32>(b);
+      var color = b;
+      if (ringr % 2. ==1.) {
+       color=2.-color;
+      }
+    return vec4<f32>(.5, color, color, 1.);
   };
 
 
@@ -194,8 +194,8 @@ function makeShaderModule(gpuDevice, data, name, sources) {
     let fragCoord = vec2<f32>(uv.x, uv.y);
     var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-    return vec4<f32>(.3, .5, .6, 1.);
-    //return mainImage(fragCoord, vec2<f32>(u.width, u.height));
+    //return vec4<f32>(.3, .3, .6, 1.);
+    return mainImage(fragCoord, vec2<f32>(u.width, u.height));
   }
 
   [[stage(fragment)]]
