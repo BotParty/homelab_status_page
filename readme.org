@@ -1,14 +1,23 @@
 * simple-data-texture
-for stack-gpu 
-interop with 3js (webgl + webgpu )+ vue + anything.
-* src
-just utils
+module for using webgpu for data visualization
 
-wegl.texture()|
-options() <___|
 
-wegl = we the people = all IC on npm together yay
 
+* Features
+interop w/ regl, 3js, vue, d3 and more
+
+
+
+todo 
+import readme into nb 
+import library into nb 
+import data into nb 
+import demos into nb
+docs = in repo 
+nb = demos / usage
+
+
+* References
 http://vis.stanford.edu/files/2013-imMens-EuroVis.pdf
 (what is the right name for data-cubes/megatextures/virtual-streaming-textures/etc??)
 https://observablehq.com/@observablehq/downloading-and-embedding-notebooks
