@@ -104,7 +104,7 @@ async function start_loop_static(options) {
   let stuff = { data: copiedData, canvas: canvas, width, height, ...options}
   let state = await init.init(stuff);
   requestAnimationFrame(function test() {
-    data.time = Date.now() / 1000 % 1000;
+    data.time = performance.now();
     //console.log('test')
     //console.log('oo')
     state.updateUniforms(data);
