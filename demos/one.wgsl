@@ -4,7 +4,7 @@ let size = 3.0;
 
     fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
       let aspect = iResolution.x/iResolution.y;
-      let position = (fragCoord.xy/iResolution.xy) * aspect;
+      let position = (fragCoord.xy) * aspect;
       let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
       let offset=u.time;
       let conv=4.;

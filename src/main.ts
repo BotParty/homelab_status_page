@@ -101,7 +101,11 @@ async function start_loop_static(options) {
   let video = await createVideo();
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.texture = video;
+
   let stuff = { data: copiedData, canvas: canvas, width, height, ...options}
+  stuff.width = canvas.clientWidth
+  stuff.height = canvas.clientHeight
+  
   let state = await init.init(stuff);
   requestAnimationFrame(function test() {
     data.time = performance.now();
