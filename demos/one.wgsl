@@ -1,12 +1,12 @@
 let size = 3.0;
 
-    let b = 0.003;		//size of the smoothed border
+    let b = 0.3;		//size of the smoothed border
 
     fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
       let aspect = iResolution.x/iResolution.y;
       let position = (fragCoord.xy) * aspect;
       let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
-      let offset=u.time;
+      let offset=u.time * .001;
       let conv=4.;
       let v=dist*4.-offset;
       let ringr=floor(v);
@@ -31,7 +31,7 @@ let size = 3.0;
     let fragCoord = vec2<f32>(uv.x, uv.y);
     var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-    return vec4<f32>(.3, .3, sin(u.time * .001), 1.) + mainImage(fragCoord, vec2<f32>(u.width, u.height));
+    return mainImage(fragCoord, vec2<f32>(u.width, u.height));
   }
 
   [[stage(fragment)]]
