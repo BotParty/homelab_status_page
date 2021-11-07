@@ -1,6 +1,8 @@
 import start from "./webgl/shape-transition";
 import breath from "./webgl/breath";
 import { start_loop_static, start_loop_nb } from "../src/main";
+import shader from './one.wgsl?raw';
+//stripes = 0
 
 function map() {
   //document.querySelector('#embed').classList +=
@@ -8,7 +10,10 @@ function map() {
 
 let video =
   window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
-video();
+video({
+  shader: shader,
+
+});
 document.querySelectorAll("input").forEach((e) => {
 
   return void 0
@@ -21,6 +26,11 @@ document.querySelectorAll("input").forEach((e) => {
     if ("map" === e.target.name) map();
   });
 });
+
+
+
+
+
 //checkbox to hide and show layer
 //checkbox = hide / show
 //each checked layer adds its config to the control-panel

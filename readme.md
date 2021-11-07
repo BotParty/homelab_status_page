@@ -1,6 +1,6 @@
 * simple-data-texture
 module for using webgpu for data visualization
-
+just a minimalist runtime for using shaders in nb/static website
 
 
 * Features
