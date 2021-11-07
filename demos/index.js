@@ -1,7 +1,7 @@
 import start from "./webgl/shape-transition";
 import breath from "./webgl/breath";
 import { start_loop_static, start_loop_nb } from "../src/main";
-import shader from './one.wgsl?raw';
+import shader from './two.wgsl?raw';
 //stripes = 0
 
 function map() {
