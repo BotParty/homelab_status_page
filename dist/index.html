@@ -28,11 +28,18 @@
         padding: 25px;
       }
 
+      canvas {
+        position: absolute;
+        left: 350px;
+        bottom: 0px;
+      }
 
       video {
-        opacity: 0.3;
+        opacity: 0.1;
         width: 300px;
         height: 300px;
+        position: absolute;
+        right: 0px;
       }
 
       #embed {
@@ -42,61 +49,56 @@
         padding-top: 50px;
       }
 
-      .dot {
-        opacity: 1;
-        z-index: 123;
-      }
 
       #control-panel {
         z-index: 124;
         position: absolute;
         border: 1px dotted aliceblue;
       }
+
+
+
+
+      #control-panel {
+        background: teal;
+        position: absolute;
+        top: 0px;
+        color: lightgray;
+      }
+      
     </style>
     
     
     <!-- <script type="module" src="/src/main.ts"></script> -->
-    <script type="module" crossorigin src="/assets/index.b74e05a6.js"></script>
+    <script type="module" crossorigin src="/assets/index.85fa9389.js"></script>
     <link rel="modulepreload" href="/assets/vendor.6dc65a70.js">
   </head>
   <body>
+
+    <template>
+      <label class="inline-flex items-center">
+        <input
+          type="radio"
+          class="form-radio"
+          name="season"
+          value={replace_me}
+          for="stuff"
+        />
+        <span class="ml-2">{replace_me}</span>
+      </label>
+    </template>
+
     <div id="swap" class="mt-4">
-      <!-- <span class="text-gray-700">Account Type</span> -->
-      <div id="control-panel" class="mt-2 hidden">
-        <label class="inline-flex items-center">
-          <input
-            type="checkbox"
-            class="form-radio"
-            name="breath"
-            value="personal"
-          />
-          <span class="ml-2">breath</span>
-        </label>
-        <label class="inline-flex items-center ml-6">
-          <input
-            type="checkbox"
-            class="form-radio"
-            name="shape-transition"
-            value="busines"
-          />
-          <span class="ml-2">shape-transition</span>
-        </label>
-        <label class="inline-flex items-center ml-6">
-          <input
-            type="checkbox"
-            class="form-radio"
-            name="webgpu-video"
-            value="busines"
-          />
-          <span class="ml-2">webgpu-video</span>
-        </label>
+      <form name="stuff">
+      <div id="control-panel" class="mt-2">
       </div>
+      </form>
     </div>
 
-    <div id="container">
-      <canvas class="one dot"></canvas>
+  
+      <!-- <canvas class="one dot"></canvas>
       <canvas class="two dot"></canvas>
-      <canvas class="three dot"></canvas>
+      <canvas class="three dot"></canvas> -->
       <!-- <iframe
         width="100%"
         height="500"
@@ -115,6 +117,6 @@
         width="250"
         src="https://geology.com/world/europe-map.gif"
       /> -->
-    </div>
+    
   </body>
 </html>

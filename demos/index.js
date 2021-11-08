@@ -16,6 +16,7 @@ function stripes()  {
 }
 
 function rings() {
+  console.log('asdfasfd')
   customShader({
     shader: ringShader,
   });
@@ -77,7 +78,6 @@ document.querySelectorAll("input").forEach((e) => {
 });
 
 function cleanup () {
-  console.log('hello')
   let video = document.querySelector('video')
   if (video) document.body.removeChild(video)
   let canvas = document.querySelector('canvas')
