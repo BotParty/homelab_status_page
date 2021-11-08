@@ -96,7 +96,6 @@ async function start_loop_nb() {
 }
 
 async function start_loop_static(options) {
-
   let video = await createVideo();
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.texture = video;

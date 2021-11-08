@@ -64,19 +64,14 @@ function video() {
     data: [video]
   })
 }
-
 //todo make this swap between demos in a elegant but not too abstract way. 
 //or just glue it together
-
-
 document.querySelectorAll("input").forEach((e) => {
   e.addEventListener("click", (e) => {
     console.log('name', e.target.value);
-    e.target.classList.toggle("dot");
-    demos[e.target.value]()
-
-
     cleanup()
+    demos[e.target.value]()
+    
   });
 });
 
@@ -84,9 +79,9 @@ function cleanup () {
   console.log('hello')
   let video = document.querySelector('video')
   if (video) document.body.removeChild(video)
-  document.body.removeChild(
-    document.querySelector('canvas')
-  )
+  let canvas = document.querySelector('canvas')
+
+  document.body.removeChild(canvas)
 }
 //checkbox to hide and show layer
 //checkbox = hide / show
@@ -96,12 +91,6 @@ function cleanup () {
 //but for demo-driven-development, could use 5 canvas's and pass the data back to js-land so its easy to read/debug
 //then convert to all one canvas after
 //prettier-ignore
-//
-//
-//
-//
-//
-//
 //
 //future planning - end in mind
 //1. audio visualizer of microphone

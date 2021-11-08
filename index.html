@@ -30,15 +30,17 @@
       }
 
       canvas {
-        /* pointer-events: none; */
-        opacity: 0.5;
-        /* padding: 10px; */
+        position: absolute;
+        left: 350px;
+        bottom: 0px;
       }
 
       video {
         opacity: 0.1;
         width: 300px;
         height: 300px;
+        position: absolute;
+        right: 0px;
       }
 
       #embed {
@@ -48,14 +50,6 @@
         padding-top: 50px;
       }
 
-      .dot {
-        opacity: 1;
-        z-index: 123;
-      }
-
-      canvas {
-        opacity: 0.1;
-      }
 
       #control-panel {
         z-index: 124;
@@ -63,12 +57,6 @@
         border: 1px dotted aliceblue;
       }
 
-      .three.dot {
-        border: 1px dotted blue;
-        width: 960px;
-        height: 500px;
-        opacity: 1;
-      }
 
 
 
@@ -98,7 +86,7 @@
         <span class="ml-2">{replace_me}</span>
       </label>
     </template>
-    
+
     <div id="swap" class="mt-4">
       <form name="stuff">
       <div id="control-panel" class="mt-2">

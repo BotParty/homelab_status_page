@@ -257,8 +257,6 @@ function createCanvas (width=960, height=500, options={}) {
   return canvas;
 }
 
-
-
 async function init(options) {
   //how to align width and hegiht from create canva
   const stuff = {

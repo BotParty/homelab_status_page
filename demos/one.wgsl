@@ -18,7 +18,7 @@ let size = 3.0;
 
 	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));
       //let color=smoothstep(-b, b, abs(dist- (ringr+((v)>0.5)+offset)/conv));
-   //   var color = b;
+      //var color = b;
       if (ringr % 2. ==1.) {
        color=2.-color;
       }
@@ -41,7 +41,6 @@ let size = 3.0;
       1.
       );
   };
-
 
   fn main(uv: vec2<f32>) -> vec4<f32> {
     let fragCoord = vec2<f32>(uv.x, uv.y);
