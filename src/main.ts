@@ -96,37 +96,26 @@ async function start_loop_nb() {
 }
 
 async function start_loop_static(options) {
-  const canvas = document.querySelector(".three");
 
   let video = await createVideo();
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.texture = video;
-
-  let stuff = { data: copiedData, canvas: canvas, width, height, ...options}
-  stuff.width = canvas.clientWidth
-  stuff.height = canvas.clientHeight
-  
+  //only stuff about whats being rendered should be required.
+  let stuff = { data: copiedData, ...options}
+ 
   let state = await init.init(stuff);
+  addMouseEvents(state);
+
   requestAnimationFrame(function test() {
     data.time = performance.now();
     //console.log('test')
     //console.log('oo')
     state.updateUniforms(data);
     let next_state = state.draw(state);
-
     requestAnimationFrame(test)
   });
-  let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
-
-  let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
-  canvas.addEventListener("mousemove", function (e) {
-    //console.log('updating uniforms');
-    data.mouseX = scaleX(e.clientX / e.target.clientWidth);
-    data.mouseY = scaleY(e.clientY / e.target.clientHeight);
-    ///console.log(data.time)
-    //console.log(data.mouseX, data.mouseY);
-    state.updateUniforms(data);
-  });
+  
+  
 
   //return next_state;
   // requestAnimationFrame(async function () {
@@ -135,6 +124,22 @@ async function start_loop_static(options) {
   //     document.body.append(stuff.canvas);
   //   });
   // });
+}
+
+
+function addMouseEvents(state) {
+  console.log(state)
+  let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
+
+  let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
+  state.canvas.addEventListener("mousemove", function (e) {
+    //console.log('updating uniforms');
+    data.mouseX = scaleX(e.clientX / e.target.clientWidth);
+    data.mouseY = scaleY(e.clientY / e.target.clientHeight);
+    ///console.log(data.time)
+    //console.log(data.mouseX, data.mouseY);
+    state.updateUniforms(data);
+  });
 }
 
 export { start_loop_static, start_loop_nb };

@@ -1,12 +1,8 @@
-//add utils file for the top level fns
+const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
 let default_source = `
     let size = 3.0;
-
-
-
     let b = 0.003;		//size of the smoothed border
-
     fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
       let aspect = iResolution.x/iResolution.y;
       let position = (fragCoord.xy/iResolution.xy) * aspect;
@@ -38,9 +34,8 @@ let default_source = `
   }
   `;
 let data = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
+  width: innerWidth, //based on canvas
+  height: innerHeight, //based on canvas
   time: 0,
   mouseX: 0,
   mouseY: 0,
@@ -96,9 +91,6 @@ const recordRenderPass = async function (stuff) {
   renderPassDescriptor.colorAttachments[0].view = textureView;
   const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
   passEncoder.setPipeline(pipeline);
-  //slots 0 = uniform
-  //1 = texture sampler
-
   const bindGroup = gpuDevice.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -120,8 +112,6 @@ const recordRenderPass = async function (stuff) {
       // },
     ],
   });
-  //concat was right, off by one index
-  //same error as previously, how to
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
@@ -141,7 +131,6 @@ function updateUniforms(stuff) {
   let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
-  //console.log('check')
   return createBuffer(
     gpuDevice,
     uniformsArray,
@@ -167,6 +156,11 @@ function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
               shaderLocation: 0,
               format: "float32x2",
             },
+            // {
+            //   shaderLocation: 1,
+            //   offset: 12,
+            //   format: 'float32x2',
+            // }
           ],
         },
       ],
@@ -202,7 +196,6 @@ const createBuffer = (gpuDevice, arr, usage) => {
 function makeShaderModule(gpuDevice, data,shaderCode) {
 
   let source = shaderCode || default_source;
-  //console.log(shaderCode)
   const userland_Uniforms = Object.keys(data)
     .map((name) => `${name}: f32;`)
     .join("\n");
@@ -248,15 +241,26 @@ function makeShaderModule(gpuDevice, data,shaderCode) {
 //canvas
 //}
 // draw returns 223-226
-
 //state contains any interstitial datums between gpgpu compute-layers
 //may want to read texture-data back into js-land for ray-casting or saving or
 //sending via http or w/e
-function createCanvas() {
-  return console.log("todo");
+
+function createCanvas (width=960, height=500, options={}) {
+  let dpi = devicePixelRatio;
+  var canvas = document.createElement("canvas");
+  canvas.width = dpi * width;
+  canvas.height = dpi * height;
+  canvas.style.width = width + "px";
+  document.body.appendChild(canvas)
+  // canvas.value = regl;
+  // canvas.__reglConfig = {dpi, reglOptions}
+  return canvas;
 }
 
+
+
 async function init(options) {
+  //how to align width and hegiht from create canva
   const stuff = {
     data: options.data,
     canvas: options.canvas || createCanvas(),
@@ -265,11 +269,10 @@ async function init(options) {
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
-  //const;
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
-    options.width * devicePixelRatio,
-    options.height * devicePixelRatio,
+    stuff.canvas.width * devicePixelRatio,
+    stuff.canvas.height * devicePixelRatio,
   ];
   Object.assign(stuff, {
     gpuDevice,
@@ -320,65 +323,24 @@ async function init(options) {
     // uniformsBuffer,
     // attribsBuffer,
   });
-  //before calling createBindgroup
-  //bindgroupaylout must be configured to have 3 entries
-  const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
+
 
   stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(state) {
     let uniformsBuffer = updateUniforms(stuff);
     stuff.uniformsBuffer = uniformsBuffer;
     recordRenderPass(stuff).finally(() => {});
-    //do soemthing to state if needed
     return state;
   }
 
   return {
     draw,
-    canvas: options.canvas,
+    canvas: stuff.canvas,
     updateUniforms: function (data) {
-      //console.log('hi');
-      //console.log(data)
       stuff.data = data;
       updateUniforms(stuff);
     },
   };
 }
-//userland
-
-//run takes in a stuff object
-//which has data and a canvas
-
-function createVideo() {
-  const video = document.createElement("video");
-  video.loop = true;
-  video.autoplay = true;
-  video.muted = true;
-  video.width = "480";
-  video.height = "270";
-  video.currentTime = 15;
-  video.loop = true;
-  video.crossorigin = "anonymous";
-  video.controls = "true";
-  video.src = video_src;
-  //await video.play();
-  document.body.appendChild(video);
-  return video;
-}
-//user passes in options which contain
-
-// let utils = {
-//   makeVideoBindGroupDescriptor,
-//   webGPUTextureFromImageUrl,
-//   recordRenderPass,
-//   updateUniforms,
-//   makePipeline,
-//   makeShaderModule,
-//   init,
-//   start_loop,
-//   createVideo,
-// };
-
-//export default utils;
 
 export default { init };

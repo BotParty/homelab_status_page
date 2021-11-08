@@ -38,7 +38,7 @@ async function makePipeline(stuff) {
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
   stuff.gpuDevice = gpuDevice;
-  console.log(stuff);
+
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
     stuff.width * devicePixelRatio,

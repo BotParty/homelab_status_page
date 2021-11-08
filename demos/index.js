@@ -1,16 +1,15 @@
 import shapeTransition from "./webgl/shape-transition";
 import breath from "./webgl/breath";
 import { start_loop_static, start_loop_nb } from "../src/main";
-import ringShader from './one.wgsl?raw';
-import stripesShader from './one.wgsl?raw';
-import chessboardShader from './one.wgsl?raw';
+import ringShader from './rings.wgsl?raw';
+import stripesShader from './stripes.wgsl?raw';
+import checkerboardShader from './checkerboard.wgsl?raw';
 //todo add video and more 
 let demos = {
-  shapeTransition, breath, stripes, rings, chessboard
+  shapeTransition, breath, stripes, rings, checkerboard, video
 }
 
 function stripes()  {
-  console.log(stripesShader)
   video({
     shader: stripesShader,
   });
@@ -22,9 +21,9 @@ function rings() {
   });
 }
 
-function chessboard() {
+function checkerboard() {
   customShader({
-    shader: chessboardShader,
+    shader: checkerboardShader,
   });
 }
 
@@ -33,7 +32,8 @@ let template = document.querySelector('template').innerHTML
 let controlpanel  =  document.querySelector('#control-panel');
 
 controlpanel.innerHTML += Object.keys(demos).map(
-  title => template.replace(/{replace_me}/g, title))
+  title => template
+  .replace(/{replace_me}/g, title))
   .join('\n')
 
 
@@ -43,8 +43,25 @@ function customShader(options) {
 }
 
 function video() {
+  function createVideo() {
+    const video = document.createElement("video");
+    video.loop = true;
+    video.autoplay = true;
+    video.muted = true;
+    video.width = "480";
+    video.height = "270";
+    video.currentTime = 15;
+    video.loop = true;
+    video.crossorigin = "anonymous";
+    video.controls = "true";
+    video.src = './data/ue5-short.webm'
+    //await video.play();
+    document.body.appendChild(video);
+    return video;
+  }
+  createVideo()
   customShader({
-    data: ['video-tag']
+    data: [video]
   })
 }
 
@@ -54,16 +71,23 @@ function video() {
 
 document.querySelectorAll("input").forEach((e) => {
   e.addEventListener("click", (e) => {
-    console.log('name', e.target.name);
+    console.log('name', e.target.value);
     e.target.classList.toggle("dot");
-    demos[e.target.name]()
+    demos[e.target.value]()
+
+
+    cleanup()
   });
 });
 
-
-
-
-
+function cleanup () {
+  console.log('hello')
+  let video = document.querySelector('video')
+  if (video) document.body.removeChild(video)
+  document.body.removeChild(
+    document.querySelector('canvas')
+  )
+}
 //checkbox to hide and show layer
 //checkbox = hide / show
 //each checked layer adds its config to the control-panel

@@ -89,26 +89,27 @@
     <template>
       <label class="inline-flex items-center">
         <input
-          type="checkbox"
+          type="radio"
           class="form-radio"
-          name={replace_me}
-          value="personal"
+          name="season"
+          value={replace_me}
+          for="stuff"
         />
         <span class="ml-2">{replace_me}</span>
       </label>
     </template>
+    
     <div id="swap" class="mt-4">
-      <!-- <span class="text-gray-700">Account Type</span> -->
+      <form name="stuff">
       <div id="control-panel" class="mt-2">
-         
-        
       </div>
+      </form>
     </div>
 
-    <div id="container">
-      <canvas class="one dot"></canvas>
+  
+      <!-- <canvas class="one dot"></canvas>
       <canvas class="two dot"></canvas>
-      <canvas class="three dot"></canvas>
+      <canvas class="three dot"></canvas> -->
       <!-- <iframe
         width="100%"
         height="500"
@@ -127,6 +128,6 @@
         width="250"
         src="https://geology.com/world/europe-map.gif"
       /> -->
-    </div>
+    
   </body>
 </html>

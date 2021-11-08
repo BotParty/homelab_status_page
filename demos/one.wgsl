@@ -6,7 +6,7 @@ let size = 3.0;
       let aspect = iResolution.x/iResolution.y;
       let position = (fragCoord.xy) * aspect;
       let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
-      let offset=u.time * .0001;
+      let offset=u.time * .00000001;
       let conv=4.;
       let v=dist*4.-offset;
       let ringr=floor(v);
@@ -36,7 +36,7 @@ let size = 3.0;
     //if (fragCoord.x > .5) {color = 1.; }
     return vec4<f32>(
       distToMouseX, 
-      distToMouseY  , 
+      distToMouseY, 
       color, 
       1.
       );
@@ -45,7 +45,7 @@ let size = 3.0;
 
   fn main(uv: vec2<f32>) -> vec4<f32> {
     let fragCoord = vec2<f32>(uv.x, uv.y);
-    var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
+    var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);
     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
     return mainImage(fragCoord, vec2<f32>(u.width, u.height));
   }

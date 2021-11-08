@@ -28,7 +28,7 @@ let size = 3.0;
     let fragCoord = vec2<f32>(uv.x, uv.y);
     var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-    return vec4<f32>(.3, .3, sin(u.time), 1.) + mainImage(fragCoord, vec2<f32>(u.width, u.height));
+    return vec4<f32>(.3, .3, sin(u.time * .001), 1.) + mainImage(fragCoord, vec2<f32>(u.width, u.height));
   }
 
   [[stage(fragment)]]
