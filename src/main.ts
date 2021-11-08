@@ -82,12 +82,15 @@ async function start_loop_static(options) {
   options.data = copiedData;
   let state = await init.init(options);
   addMouseEvents(state);
-
+console.log(options.data)
   requestAnimationFrame(function test() {
+    //console.log(data.time)
     data.time = performance.now();
-    state.updateUniforms(data);
+    //state.updateUniforms(data);
     let next_state = state.draw(state);
     //requestAnimationFrame(test)
+    setInterval(test, 250)
+//    console.log('cool', data.time)
   });
   
   //return next_state;

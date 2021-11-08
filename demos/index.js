@@ -21,6 +21,7 @@ function rings() {
     shader: ringShader,
   });
 }
+// rings()
 
 function checkerboard() {
   customShader({
@@ -65,7 +66,7 @@ async function video() {
     video: vid
   })
 }
-video()
+//video()
 //todo make this swap between demos in a elegant but not too abstract way. 
 //or just glue it together
 document.querySelectorAll("input").forEach((e) => {
