@@ -1,91 +1,5 @@
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
-async function init(options) {
-  const stuff = {
-    data: options.data,
-    canvas: options.canvas || createCanvas(),
-    state: {}, //passed from frame to frame-comment line 229
-  };
-  stuff.video = options.video;
-  console.log(options)
-  const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
-  const adapter = await navigator.gpu.requestAdapter();
-  const gpuDevice = await adapter.requestDevice();
-  const presentationFormat = context.getPreferredFormat(adapter);
-  const presentationSize = [
-    stuff.canvas.width * devicePixelRatio,
-    stuff.canvas.height * devicePixelRatio,
-  ];
-  Object.assign(stuff, {
-    gpuDevice,
-    context,
-    adapter, //gpuAdapter
-  });
-
-  context.configure({
-    device: gpuDevice,
-    format: presentationFormat,
-    size: presentationSize,
-  });
-  let shader = makeShaderModule(gpuDevice, data, options.shader);
-  // Object.assign(stuff, {
-  //   renderPassDescriptor,
-  //   pipeline,
-  //   uniformsBuffer,
-  //   attribsBuffer,
-  // });
-  //let videoBindGroupDescriptor = makeVideoBindGroupDescriptor(stuff);
-
-  // Object.assign(stuff, {
-  //   videoBindGroupDescriptor: videoBindGroupDescriptor.videoBindGroupEntries,
-  //   videoBindGroupDescriptor: videoBindGroupDescriptor.sampler,
-  // });
-
-  const pipeline = makePipeline(
-    shader,
-    gpuDevice
-    //dataTexturesBindGroupLayout
-  );
-
-  const textureView = context.getCurrentTexture().createView();
-  const renderPassDescriptor = {
-    colorAttachments: [
-      {
-        view: textureView,
-        loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        storeOp: "store",
-      },
-    ],
-  };
-  stuff.renderPassDescriptor = renderPassDescriptor;
-  Object.assign(stuff, {
-    textureView,
-    renderPassDescriptor,
-    pipeline,
-    // uniformsBuffer,
-    // attribsBuffer,
-  });
-
-
-  stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw(state) {
-    let uniformsBuffer = updateUniforms(stuff);
-    stuff.uniformsBuffer = uniformsBuffer;
-    recordRenderPass(stuff).finally(() => {});
-    return state;
-  }
-
-  return {
-    draw,
-    canvas: stuff.canvas,
-    updateUniforms: function (data) {
-      stuff.data = data;
-      updateUniforms(stuff);
-    },
-  };
-}
-
-
 let default_source = `
     let size = 3.0;
     let b = 0.003;		//size of the smoothed border
@@ -128,6 +42,32 @@ let data = {
   angle: 0,
   //texture: (video)
 };
+
+function makeVideoBindGroupDescriptor(stuff) {
+  let { gpuDevice, pipeline, video } = stuff;
+  const sampler = gpuDevice.createSampler({
+    magFilter: "linear",
+    minFilter: "linear",
+  });
+
+  const videoBindGroupEntries = [
+    {
+      binding: 1,
+      resource: sampler,
+    },
+    {
+      binding: 2,
+      resource: gpuDevice.importExternalTexture({
+        source: video,
+      }),
+    },
+  ];
+  return {
+    videoBindGroupEntries,
+    sampler,
+  };
+}
+
 const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
   const response = await fetch(url);
   const blob = await response.blob();
@@ -146,28 +86,32 @@ const recordRenderPass = async function (stuff) {
     renderPassDescriptor,
   } = stuff;
 
-  let videoResource = gpuDevice.importExternalTexture({
-    source: stuff.video, //stuff.data.
-  });
-  
-  const bindGroup = gpuDevice.createBindGroup({
-    layout: pipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: stuff.sampler,
-      },
-      {
-        binding: 1,
-        resource: videoResource,
-      },
-    ],
-  });
   const commandEncoder = gpuDevice.createCommandEncoder();
   const textureView = context.getCurrentTexture().createView();
   renderPassDescriptor.colorAttachments[0].view = textureView;
   const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
   passEncoder.setPipeline(pipeline);
+  const bindGroup = gpuDevice.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: {
+          buffer: uniformsBuffer,
+        },
+      },
+      // {
+      //   binding: 1,
+      //   resource: stuff.sampler,
+      // },
+      // {
+      //   binding: 2,
+      //   resource: gpuDevice.importExternalTexture({
+      //     source: document.querySelector("video"),
+      //   }),
+      // },
+    ],
+  });
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
@@ -314,5 +258,89 @@ function createCanvas (width=960, height=500, options={}) {
 }
 
 
+
+async function init(options) {
+  //how to align width and hegiht from create canva
+  const stuff = {
+    data: options.data,
+    canvas: options.canvas || createCanvas(),
+    state: {}, //passed from frame to frame-comment line 229
+  };
+  const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
+  const adapter = await navigator.gpu.requestAdapter();
+  const gpuDevice = await adapter.requestDevice();
+  const presentationFormat = context.getPreferredFormat(adapter);
+  const presentationSize = [
+    stuff.canvas.width * devicePixelRatio,
+    stuff.canvas.height * devicePixelRatio,
+  ];
+  Object.assign(stuff, {
+    gpuDevice,
+    context,
+    adapter, //gpuAdapter
+  });
+
+  context.configure({
+    device: gpuDevice,
+    format: presentationFormat,
+    size: presentationSize,
+  });
+  let shader = makeShaderModule(gpuDevice, data, options.shader);
+  // Object.assign(stuff, {
+  //   renderPassDescriptor,
+  //   pipeline,
+  //   uniformsBuffer,
+  //   attribsBuffer,
+  // });
+  //let videoBindGroupDescriptor = makeVideoBindGroupDescriptor(stuff);
+
+  // Object.assign(stuff, {
+  //   videoBindGroupDescriptor: videoBindGroupDescriptor.videoBindGroupEntries,
+  //   videoBindGroupDescriptor: videoBindGroupDescriptor.sampler,
+  // });
+
+  const pipeline = makePipeline(
+    shader,
+    gpuDevice
+    //dataTexturesBindGroupLayout
+  );
+
+  const textureView = context.getCurrentTexture().createView();
+  const renderPassDescriptor = {
+    colorAttachments: [
+      {
+        view: textureView,
+        loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        storeOp: "store",
+      },
+    ],
+  };
+  stuff.renderPassDescriptor = renderPassDescriptor;
+  Object.assign(stuff, {
+    textureView,
+    renderPassDescriptor,
+    pipeline,
+    // uniformsBuffer,
+    // attribsBuffer,
+  });
+
+
+  stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+  function draw(state) {
+    let uniformsBuffer = updateUniforms(stuff);
+    stuff.uniformsBuffer = uniformsBuffer;
+    recordRenderPass(stuff).finally(() => {});
+    return state;
+  }
+
+  return {
+    draw,
+    canvas: stuff.canvas,
+    updateUniforms: function (data) {
+      stuff.data = data;
+      updateUniforms(stuff);
+    },
+  };
+}
 
 export default { init };
