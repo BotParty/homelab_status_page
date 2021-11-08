@@ -69,42 +69,39 @@
         height: 500px;
         opacity: 1;
       }
+
+
+
+      #control-panel {
+        background: teal;
+        position: absolute;
+        top: 0px;
+        color: lightgray;
+      }
+      
     </style>
     <script defer type="module" src="/src/index.ts"></script>
     <script defer type="module" src="/demos/index.js"></script>
     <!-- <script type="module" src="/src/main.ts"></script> -->
   </head>
   <body>
+
+    <template>
+      <label class="inline-flex items-center">
+        <input
+          type="checkbox"
+          class="form-radio"
+          name={replace_me}
+          value="personal"
+        />
+        <span class="ml-2">{replace_me}</span>
+      </label>
+    </template>
     <div id="swap" class="mt-4">
       <!-- <span class="text-gray-700">Account Type</span> -->
-      <div id="control-panel" class="mt-2 hidden">
-        <label class="inline-flex items-center">
-          <input
-            type="checkbox"
-            class="form-radio"
-            name="breath"
-            value="personal"
-          />
-          <span class="ml-2">breath</span>
-        </label>
-        <label class="inline-flex items-center ml-6">
-          <input
-            type="checkbox"
-            class="form-radio"
-            name="shape-transition"
-            value="busines"
-          />
-          <span class="ml-2">shape-transition</span>
-        </label>
-        <label class="inline-flex items-center ml-6">
-          <input
-            type="checkbox"
-            class="form-radio"
-            name="webgpu-video"
-            value="busines"
-          />
-          <span class="ml-2">webgpu-video</span>
-        </label>
+      <div id="control-panel" class="mt-2">
+         
+        
       </div>
     </div>
 

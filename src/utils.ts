@@ -202,7 +202,7 @@ const createBuffer = (gpuDevice, arr, usage) => {
 function makeShaderModule(gpuDevice, data,shaderCode) {
 
   let source = shaderCode || default_source;
-  console.log(shaderCode)
+  //console.log(shaderCode)
   const userland_Uniforms = Object.keys(data)
     .map((name) => `${name}: f32;`)
     .join("\n");
@@ -266,7 +266,6 @@ async function init(options) {
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter.requestDevice();
   //const;
-  console.log('rrr')
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
     options.width * devicePixelRatio,
@@ -283,9 +282,7 @@ async function init(options) {
     format: presentationFormat,
     size: presentationSize,
   });
-  console.log(options)
   let shader = makeShaderModule(gpuDevice, data, options.shader);
-
   // Object.assign(stuff, {
   //   renderPassDescriptor,
   //   pipeline,

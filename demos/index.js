@@ -1,29 +1,62 @@
-import start from "./webgl/shape-transition";
+import shapeTransition from "./webgl/shape-transition";
 import breath from "./webgl/breath";
 import { start_loop_static, start_loop_nb } from "../src/main";
-import shader from './two.wgsl?raw';
-//stripes = 0
-
-function map() {
-  //document.querySelector('#embed').classList +=
+import ringShader from './one.wgsl?raw';
+import stripesShader from './one.wgsl?raw';
+import chessboardShader from './one.wgsl?raw';
+//todo add video and more 
+let demos = {
+  shapeTransition, breath, stripes, rings, chessboard
 }
 
-let video =
-  window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
-video({
-  shader: shader,
+function stripes()  {
+  console.log(stripesShader)
+  video({
+    shader: stripesShader,
+  });
+}
 
-});
+function rings() {
+  customShader({
+    shader: ringShader,
+  });
+}
+
+function chessboard() {
+  customShader({
+    shader: chessboardShader,
+  });
+}
+
+let template = document.querySelector('template').innerHTML
+
+let controlpanel  =  document.querySelector('#control-panel');
+
+controlpanel.innerHTML += Object.keys(demos).map(
+  title => template.replace(/{replace_me}/g, title))
+  .join('\n')
+
+
+function customShader(options) {
+  let start = window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
+  start(options);
+}
+
+function video() {
+  customShader({
+    data: ['video-tag']
+  })
+}
+
+//todo make this swap between demos in a elegant but not too abstract way. 
+//or just glue it together
+
+
 document.querySelectorAll("input").forEach((e) => {
-
-  return void 0
   e.addEventListener("click", (e) => {
-    console.log(e.target.name);
+    console.log('name', e.target.name);
     e.target.classList.toggle("dot");
-    if ("breath" === e.target.name) breath();
-    if ("shape-transition" === e.target.name) start();
-    if ("webgpu-video" === e.target.name) video();
-    if ("map" === e.target.name) map();
+    demos[e.target.name]()
   });
 });
 

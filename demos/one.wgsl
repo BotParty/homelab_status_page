@@ -6,10 +6,11 @@ let size = 3.0;
       let aspect = iResolution.x/iResolution.y;
       let position = (fragCoord.xy) * aspect;
       let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
-      let offset=u.time * .001;
+      let offset=u.time * .0001;
       let conv=4.;
       let v=dist*4.-offset;
       let ringr=floor(v);
+      
       var stuff = 0.;
       if (v % 3. > .5) {
         stuff = 0.;
@@ -22,8 +23,23 @@ let size = 3.0;
        color=2.-color;
       }
 
+    let distToMouseX = distance(u.mouseX, fragCoord.x);
+    let distToMouseY = distance(u.mouseY, fragCoord.y);
+
+    if ( 
+     distance(u.mouseX, fragCoord.x) > .1 || 
+     distance(u.mouseY, fragCoord.y) > 2.
+      ) {
+        return vec4<f32>(.5);
+      }
+
     //if (fragCoord.x > .5) {color = 1.; }
-    return vec4<f32>(.5, color, color, 1.);
+    return vec4<f32>(
+      distToMouseX, 
+      distToMouseY  , 
+      color, 
+      1.
+      );
   };
 
 
