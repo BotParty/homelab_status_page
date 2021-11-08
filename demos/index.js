@@ -6,7 +6,7 @@ import stripesShader from './stripes.wgsl?raw';
 import checkerboardShader from './checkerboard.wgsl?raw';
 //todo add video and more 
 let demos = {
-  shapeTransition, breath, stripes, rings, checkerboard, video
+  shapeTransition, breath, stripes, rings, checkerboard//, video
 }
 
 function stripes()  {
