@@ -44,41 +44,14 @@ let b = {
   float32: 5126,
 };
 
-async function createVideo() {
-  const video = document.createElement("video");
-  video.loop = true;
-  video.autoplay = true;
-  video.muted = true;
-  video.width = "480";
-  video.height = "270";
-  video.currentTime = 25;
-  video.loop = true;
-  video.crossorigin = "anonymous";
-  video.controls = "true";
-  video.src = "./data/ue5-short.webm";
-  video.style.zIndex = -1002;
-  video.style.position = "absolute";
-  await video.play();
-  document.body.appendChild(video);
-  return video;
-}
+
 import init from "./utils";
 
-let data = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
-  time: 0,
-  mouseX: 0,
-  mouseY: 0,
-  angle: 0,
-  //texture: (video)
-};
+
 let helloWorld: string = "hello";
-console.log("a");
-const width = 960,
-  height = 500;
+
 //user land below
+let width = 960, height = 500;
 async function start_loop_nb() {
   const canvas = document.createElement("canvas");
 
@@ -94,28 +67,29 @@ async function start_loop_nb() {
   let next_state = state.draw(state); //this should have all the inner stuff
   return next_state;
 }
-
+let data = {
+  width: 900, //based on canvas
+  height: 500, //based on canvas
+  pixelRatio: 2, //based on canvas
+  time: 0,
+  mouseX: 0,
+  mouseY: 0,
+  angle: 0,
+};
 async function start_loop_static(options) {
-  let video = await createVideo();
   let copiedData = Object.assign({}, data); //should come from args
-  copiedData.texture = video;
   //only stuff about whats being rendered should be required.
-  let stuff = { data: copiedData, ...options}
- 
-  let state = await init.init(stuff);
+  options.data = copiedData;
+  let state = await init.init(options);
   addMouseEvents(state);
 
   requestAnimationFrame(function test() {
     data.time = performance.now();
-    //console.log('test')
-    //console.log('oo')
     state.updateUniforms(data);
     let next_state = state.draw(state);
-    requestAnimationFrame(test)
+    //requestAnimationFrame(test)
   });
   
-  
-
   //return next_state;
   // requestAnimationFrame(async function () {
   //   let canvas = start_loop().then((stuff) => {
@@ -127,12 +101,10 @@ async function start_loop_static(options) {
 
 
 function addMouseEvents(state) {
-  console.log(state)
   let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
 
   let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
   state.canvas.addEventListener("mousemove", function (e) {
-    //console.log('updating uniforms');
     data.mouseX = scaleX(e.clientX / e.target.clientWidth);
     data.mouseY = scaleY(e.clientY / e.target.clientHeight);
     ///console.log(data.time)

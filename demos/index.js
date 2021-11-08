@@ -42,8 +42,8 @@ function customShader(options) {
   start(options);
 }
 
-function video() {
-  function createVideo() {
+async function video() {
+  async function createVideo() {
     const video = document.createElement("video");
     video.loop = true;
     video.autoplay = true;
@@ -55,15 +55,16 @@ function video() {
     video.crossorigin = "anonymous";
     video.controls = "true";
     video.src = './data/ue5-short.webm'
-    //await video.play();
+    await video.play();
     document.body.appendChild(video);
     return video;
   }
-  createVideo()
+  let vid = await createVideo()
   customShader({
-    data: [video]
+    video: vid
   })
 }
+video()
 //todo make this swap between demos in a elegant but not too abstract way. 
 //or just glue it together
 document.querySelectorAll("input").forEach((e) => {
