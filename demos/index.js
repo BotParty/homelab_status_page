@@ -17,7 +17,6 @@ let demos = [
 
 function choose(name) {
   let idx = demoTitles.indexOf(name);
-  console.log(idx, name)
   let demo = demos[idx];
 
   if (idx < 2) {
@@ -31,9 +30,6 @@ function choose(name) {
   }
 }
 
-
-
-
 let template = document.querySelector('template').innerHTML
 let controlpanel  =  document.querySelector('#control-panel');
 
@@ -42,9 +38,6 @@ let controlpanel  =  document.querySelector('#control-panel');
 // .data(demos)
 // .join('input')
 // .attr('type', 'radio')
-
-
-
 
 controlpanel.innerHTML += Object.keys(demos).map(
   title => template
@@ -101,4 +94,4 @@ function cleanup () {
   d3.selectAll('canvas').remove()
 }
 
-choose('checkerboard')
+choose('rings')

@@ -95,10 +95,14 @@ const recordRenderPass = async function (stuff, bundleEncoder) {
   if (! bundleEncoder) {
     passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
   } else {
-    passEncoder = bundleEncoder
-  }
+    passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    //passEncoder = bundleEncoder
+    bundleEncoder.isRenderBundle = true
 
-   
+  }
+ 
+  //first set up render bundle   
+  //every subsequent frame, passEncoder use renderBundle to do stuff
   passEncoder.setPipeline(pipeline);
 
 
@@ -127,6 +131,7 @@ const recordRenderPass = async function (stuff, bundleEncoder) {
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
+  //if (! bundleEncoder.isRenderBundle) 
   passEncoder.endPass();
   gpuDevice.queue.submit([commandEncoder.finish()]); //async
 };
@@ -312,11 +317,13 @@ async function init(options) {
     let uniformsBuffer = updateUniforms(stuff);
     stuff.uniformsBuffer = uniformsBuffer;
     
-    //
     //create render bundle encoder and first  draw
     //next time pass in encoder from first state which chaptured the thing
-
-    recordRenderPass(stuff)
+    
+    let renderBundleEncoder = stuff.gpuDevice.createRenderBundleEncoder({
+      colorFormats: ['rgb10a2unorm']
+    })
+    recordRenderPass(stuff, renderBundleEncoder)
 
     return state;
   }

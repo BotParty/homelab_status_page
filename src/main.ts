@@ -1,54 +1,7 @@
-// import {
-//   makeVideoBindGroupDescriptor,
-//   webGPUTextureFromImageUrl,
-//   recordRenderPass,
-//   bindGroup,
-//   updateUniforms,
-//   makePipeline,
-//   makeShaderModule,
-//   init,
-//   start_loop,
-//   createVideo,
-// } from "./utils";
-//import createVideo from "./utils";
-
 import { scaleLinear } from "d3-scale";
-
-let a = {
-  static: 35044,
-  dynamic: 35048,
-  stream: 35040,
-};
-
-let c = {
-  "[object Int8Array]": 5120,
-  "[object Int16Array]": 5122,
-  "[object Int32Array]": 5124,
-  "[object Uint8Array]": 5121,
-  "[object Uint8ClampedArray]": 5121,
-  "[object Uint16Array]": 5123,
-  "[object Uint32Array]": 5125,
-  "[object Float32Array]": 5126,
-  "[object Float64Array]": 5121,
-  "[object ArrayBuffer]": 5121,
-};
-
-let b = {
-  int8: 5120,
-  int16: 5122,
-  int32: 5124,
-  uint8: 5121,
-  uint16: 5123,
-  uint32: 5125,
-  float: 5126,
-  float32: 5126,
-};
-
 
 import init from "./utils";
 
-
-let helloWorld: string = "hello";
 
 //user land below
 let width = 960, height = 500;
@@ -103,13 +56,10 @@ async function start_loop_static(options) {
 
 function addMouseEvents(state) {
   let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
-
   let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
   state.canvas.addEventListener("mousemove", function (e) {
     data.mouseX = scaleX(e.clientX / e.target.clientWidth);
     data.mouseY = scaleY(e.clientY / e.target.clientHeight);
-    ///console.log(data.time)
-    //console.log(data.mouseX, data.mouseY);
     state.updateUniforms(data);
   });
 }

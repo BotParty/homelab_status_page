@@ -42,7 +42,7 @@ let size = 4.0;
 
   [[stage(fragment)]]
   fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
-    return main(in.uv);
+    return main(in.uv) - vec4<f32>(.8);
   }
   
   

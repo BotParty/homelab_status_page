@@ -1,7 +1,4 @@
 let size = 3.0;
-
-
-
     let b = 0.003;		//size of the smoothed border
 
     fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
