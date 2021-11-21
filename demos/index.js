@@ -5,6 +5,8 @@ import ringShader from './rings.wgsl?raw';
 import stripesShader from './stripes.wgsl?raw';
 import checkerboardShader from './checkerboard.wgsl?raw';
 //todo add video and more 
+import * as d3 from "https://cdn.skypack.dev/d3@7";
+
 let demos = {
   shapeTransition, breath, stripes, rings, checkerboard//, video
 }
@@ -42,9 +44,6 @@ controlpanel.innerHTML += Object.keys(demos).map(
   document.querySelectorAll('input').forEach(
     input => input.addEventListener('mouseenter', () => input.checked=true)
   )
-
-
-
 
 function customShader(options) {
   let start = window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
@@ -89,8 +88,9 @@ function cleanup () {
   let video = document.querySelector('video')
   if (video) document.body.removeChild(video)
   let canvas = document.querySelector('canvas')
+  
 
-  document.body.removeChild(canvas)
+  d3.selectAll('canvas').remove()
 }
 //checkbox to hide and show layer
 //checkbox = hide / show

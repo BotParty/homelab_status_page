@@ -76,7 +76,7 @@ const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
   return webGPUTextureFromImageBitmapOrCanvas(gpuDevice, imgBitmap);
 };
 
-const recordRenderPass = async function (stuff) {
+const recordRenderPass = async function (stuff, bundleEncoder) {
   let {
     attribsBuffer,
     context,
@@ -89,8 +89,19 @@ const recordRenderPass = async function (stuff) {
   const commandEncoder = gpuDevice.createCommandEncoder();
   const textureView = context.getCurrentTexture().createView();
   renderPassDescriptor.colorAttachments[0].view = textureView;
-  const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+
+  let passEncoder
+
+  if (! bundleEncoder) {
+    passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+  } else {
+    passEncoder = bundleEncoder
+  }
+
+   
   passEncoder.setPipeline(pipeline);
+
+
   const bindGroup = gpuDevice.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -112,6 +123,7 @@ const recordRenderPass = async function (stuff) {
       // },
     ],
   });
+
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
@@ -185,6 +197,8 @@ const createBuffer = (gpuDevice, arr, usage) => {
     mappedAtCreation: true,
   };
   let buffer = gpuDevice.createBuffer(desc);
+  arr[5] = Date.now();
+
   const writeArray =
     arr instanceof Uint16Array
       ? new Uint16Array(buffer.getMappedRange())
@@ -241,7 +255,6 @@ function createCanvas (width=960, height=500, options={}) {
 }
 
 async function init(options) {
-  //how to align width and hegiht from create canva
   const stuff = {
     data: options.data,
     canvas: options.canvas || createCanvas(),
@@ -267,18 +280,6 @@ async function init(options) {
     size: presentationSize,
   });
   let shader = makeShaderModule(gpuDevice, data, options.shader);
-  // Object.assign(stuff, {
-  //   renderPassDescriptor,
-  //   pipeline,
-  //   uniformsBuffer,
-  //   attribsBuffer,
-  // });
-  //let videoBindGroupDescriptor = makeVideoBindGroupDescriptor(stuff);
-
-  // Object.assign(stuff, {
-  //   videoBindGroupDescriptor: videoBindGroupDescriptor.videoBindGroupEntries,
-  //   videoBindGroupDescriptor: videoBindGroupDescriptor.sampler,
-  // });
 
   const pipeline = makePipeline(
     shader,
@@ -310,7 +311,13 @@ async function init(options) {
   function draw(state) {
     let uniformsBuffer = updateUniforms(stuff);
     stuff.uniformsBuffer = uniformsBuffer;
-    recordRenderPass(stuff).finally(() => {});
+    
+    //
+    //create render bundle encoder and first  draw
+    //next time pass in encoder from first state which chaptured the thing
+
+    recordRenderPass(stuff)
+
     return state;
   }
 
