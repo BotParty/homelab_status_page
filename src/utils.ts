@@ -210,7 +210,7 @@ const createBuffer = (gpuDevice, arr, usage) => {
 
 function makeShaderModule(gpuDevice, data,shaderCode) {
 
-  let source = shaderCode || default_source;
+  let source = shaderCode;
   const userland_Uniforms = Object.keys(data)
     .map((name) => `${name}: f32;`)
     .join("\n");

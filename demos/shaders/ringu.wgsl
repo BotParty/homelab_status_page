@@ -1,3 +1,4 @@
+//This is rings
 let size = 4.0;
 
     let b = 0.3;		//size of the smoothed border
@@ -17,7 +18,6 @@ let size = 4.0;
       }
 
 	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));
-
       if (ringr % 2. ==1.) {
        color=2.-color;
       }
@@ -44,4 +44,5 @@ let size = 4.0;
   fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
     return main(in.uv);
   }
+  
   
