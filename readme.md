@@ -8,7 +8,6 @@ this library currently just draws a quad and allows
   custom uniforms and textures 
   [dec] compute shaders ez 
 
-
 * Features
 helpful error messages and lots of demos :)
 interop w/ regl, 3js, vue, d3 and more

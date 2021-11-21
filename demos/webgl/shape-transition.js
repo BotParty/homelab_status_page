@@ -47,6 +47,7 @@ function circleCenters(radius, N) {
   if (N === 1) {
     return [[0, 0]];
   }
+ 
   let centers = [];
   for (let i = 0; i < N; i++) {
     let angle = ((i % N) * TAU) / N;
@@ -89,52 +90,56 @@ function createBothShapes() {
   );
 }
 
-let descriptor = {
-  frag: `
-        precision highp float;
-        uniform vec3 u_color;
-        uniform float u_alpha;
-        void main () {
-            gl_FragColor = vec4(u_color * u_alpha, u_alpha);
-        }`,
-  vert: `
-        precision highp float;
-        uniform float u_time, u_chromaticblur, u_spread, u_speed;
-        attribute float a_jitter;
-        attribute vec2 a_position1, a_position2;
-        void main () {
-            float phase = 0.5 * (1.0 + cos(u_speed * (u_time + u_chromaticblur) + a_jitter * u_spread));
-            phase = smoothstep(0.1, 0.9, phase);
-            // TODO: make this a parameter, as the range seems like it's interesting to play with
-            // phase = smoothstep(-0.9, 0.9, phase);
-            // phase = smoothstep(0.1, 1.5, phase);
-            gl_PointSize = 2.0; // TODO: should this be a parameter too?
-            gl_Position = vec4(mix(a_position1, a_position2, phase), 0, 1);
-        }`,
-  // additive — we want to draw many points in the same place and have them add together
-  depth: { enable: false },
-  blend: { enable: true, func: { src: "one", dst: "one" } },
-  attributes: {
-    a_jitter: jitter,
-    a_position1: shape1,
-    a_position2: shape2,
-  },
+function makeDescriptor(shape1, shape2) {
+  
+  let descriptor = {
+    frag: `
+          precision highp float;
+          uniform vec3 u_color;
+          uniform float u_alpha;
+          void main () {
+              gl_FragColor = vec4(u_color * u_alpha, u_alpha);
+          }`,
+    vert: `
+          precision highp float;
+          uniform float u_time, u_chromaticblur, u_spread, u_speed;
+          attribute float a_jitter;
+          attribute vec2 a_position1, a_position2;
+          void main () {
+              float phase = 0.5 * (1.0 + cos(u_speed * (u_time + u_chromaticblur) + a_jitter * u_spread));
+              phase = smoothstep(0.1, 0.9, phase);
+              // TODO: make this a parameter, as the range seems like it's interesting to play with
+              // phase = smoothstep(-0.9, 0.9, phase);
+              // phase = smoothstep(0.1, 1.5, phase);
+              gl_PointSize = 2.0; // TODO: should this be a parameter too?
+              gl_Position = vec4(mix(a_position1, a_position2, phase), 0, 1);
+          }`,
+    // additive — we want to draw many points in the same place and have them add together
+    depth: { enable: false },
+    blend: { enable: true, func: { src: "one", dst: "one" } },
+    attributes: {
+      a_jitter: jitter,
+      a_position1: shape1,
+      a_position2: shape2,
+    },
 
-  uniforms: {
-    // TODO: instead of multiplying these by some value, it'd probably be better to
-    // have a min and max value for each parameter, but right now they're all hard-coded
-    // to be 0-1 or 1-20
-    u_alpha: () => shaderConfig.alpha,
-    u_speed: () => 4 * shaderConfig.speed,
-    u_spread: () => TAU * shaderConfig.spread,
-    u_color: () => [1,1,1,1],
-    u_chromaticblur: () => .3,
-    u_time: (context) => context.time,
-  },
-  //reads the type signature and auto adjusts the thingy..
-  //how to steal for ts??? probably idk
-  count: NUM_POINTS,
-  primitive: "points",
+    uniforms: {
+      // TODO: instead of multiplying these by some value, it'd probably be better to
+      // have a min and max value for each parameter, but right now they're all hard-coded
+      // to be 0-1 or 1-20
+      u_alpha: () => shaderConfig.alpha,
+      u_speed: () => 4 * shaderConfig.speed,
+      u_spread: () => TAU * shaderConfig.spread,
+      u_color: () => [1,1,1],
+      u_chromaticblur: () => .3,
+      u_time: (context) => context.time,
+    },
+    //reads the type signature and auto adjusts the thingy..
+    //how to steal for ts??? probably idk
+    count: NUM_POINTS,
+    primitive: "points",
+  }
+  return descriptor;
 }
 
 /* Here's the GLSL shader magic — it's just a linear interpolation between the two positions */
@@ -185,14 +190,18 @@ function redraw() {
 function start() {
   console.log("hi 2");
   regl = createREGL()
-  draw = regl(descriptor);
   shape1 = regl.buffer(NUM_POINTS)
   shape2 = regl.buffer(NUM_POINTS)
-
-  constructUi(shaderConfig, 0, 1, 0.01, false);
-  constructUi(attrConfig, 1, 20, 1, true);
+  console.log('no worky')
+  let thingy = makeDescriptor(shape1, shape2)
+  console.log(thingy)
+  draw = regl(thingy);
+  console.log('why no worky')
+  //constructUi(shaderConfig, 0, 1, 0.01, false);
+  //constructUi(attrConfig, 1, 20, 1, true);
 
   createBothShapes();
   regl.frame(redraw);
 }
+
 export default start;
