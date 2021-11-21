@@ -10,7 +10,6 @@ const TAU = 2 * Math.PI;
 const NUM_POINTS = 100000; // 100k-200k seems reasonable
 const RADIUS1 = 0.9,
   RADIUS2 = 0.4;
-
 /* Overview
 
    1. Generate (x1,y1) and (x2,y2) for each point. The point will move in a straight line
@@ -38,9 +37,8 @@ let shaderConfig = {
 };
 
 // See http://regl.party/ -- regl makes low level gl programming more convenient!
-const regl = createREGL({ canvas: document.querySelector(".two") });
-let shape1 = regl.buffer(NUM_POINTS),
-  shape2 = regl.buffer(NUM_POINTS);
+let regl;
+let shape1, shape2; 
 let angles = Array.from({ length: NUM_POINTS }, (_) => TAU * Math.random());
 let jitter = Array.from({ length: NUM_POINTS }, (_) => Math.random());
 
@@ -91,8 +89,7 @@ function createBothShapes() {
   );
 }
 
-/* Here's the GLSL shader magic — it's just a linear interpolation between the two positions */
-const draw = regl({
+let descriptor = {
   frag: `
         precision highp float;
         uniform vec3 u_color;
@@ -100,7 +97,6 @@ const draw = regl({
         void main () {
             gl_FragColor = vec4(u_color * u_alpha, u_alpha);
         }`,
-
   vert: `
         precision highp float;
         uniform float u_time, u_chromaticblur, u_spread, u_speed;
@@ -115,11 +111,9 @@ const draw = regl({
             gl_PointSize = 2.0; // TODO: should this be a parameter too?
             gl_Position = vec4(mix(a_position1, a_position2, phase), 0, 1);
         }`,
-
   // additive — we want to draw many points in the same place and have them add together
   depth: { enable: false },
   blend: { enable: true, func: { src: "one", dst: "one" } },
-
   attributes: {
     a_jitter: jitter,
     a_position1: shape1,
@@ -133,15 +127,19 @@ const draw = regl({
     u_alpha: () => shaderConfig.alpha,
     u_speed: () => 4 * shaderConfig.speed,
     u_spread: () => TAU * shaderConfig.spread,
-    u_color: regl.prop("u_color"),
-    u_chromaticblur: regl.prop("u_chromaticblur"),
+    u_color: () => [1,1,1,1],
+    u_chromaticblur: () => .3,
     u_time: (context) => context.time,
   },
-
+  //reads the type signature and auto adjusts the thingy..
+  //how to steal for ts??? probably idk
   count: NUM_POINTS,
   primitive: "points",
-});
+}
 
+/* Here's the GLSL shader magic — it's just a linear interpolation between the two positions */
+let draw
+//regl.prop("u_chromaticblur")
 /** create sliders for each parameter */
 function constructUi(config, min, max, step, needsRedraw) {
   let configDom = document.getElementById("control-panel");
@@ -185,7 +183,12 @@ function redraw() {
 }
 
 function start() {
-  console.log("hi");
+  console.log("hi 2");
+  regl = createREGL()
+  draw = regl(descriptor);
+  shape1 = regl.buffer(NUM_POINTS)
+  shape2 = regl.buffer(NUM_POINTS)
+
   constructUi(shaderConfig, 0, 1, 0.01, false);
   constructUi(attrConfig, 1, 20, 1, true);
 

@@ -3,9 +3,16 @@ module for using webgpu for data visualization
 just a minimalist runtime for using shaders in nb/static website
 
 
-* Features
-interop w/ regl, 3js, vue, d3 and more
+this library currently just draws a quad and allows
+  custom shaders with minimal boilerplate
+  custom uniforms and textures 
+  [dec] compute shaders ez 
 
+
+* Features
+helpful error messages and lots of demos :)
+interop w/ regl, 3js, vue, d3 and more
+[extension](https://github.com/nyc-map/observable-to-light-table)
 
 
 todo 
