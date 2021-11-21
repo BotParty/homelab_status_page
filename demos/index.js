@@ -16,12 +16,11 @@ function stripes()  {
 }
 
 function rings() {
-  console.log('asdfasfd')
   customShader({
     shader: ringShader,
   });
 }
-// rings()
+rings()
 
 function checkerboard() {
   customShader({
@@ -37,6 +36,14 @@ controlpanel.innerHTML += Object.keys(demos).map(
   title => template
   .replace(/{replace_me}/g, title))
   .join('\n')
+
+  document.querySelector('input[value="rings"]').checked = true
+
+  document.querySelectorAll('input').forEach(
+    input => input.addEventListener('mouseenter', () => input.checked=true)
+  )
+
+
 
 
 function customShader(options) {

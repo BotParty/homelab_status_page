@@ -184,7 +184,6 @@ const createBuffer = (gpuDevice, arr, usage) => {
     usage,
     mappedAtCreation: true,
   };
-  console.log('createBuffer')
   let buffer = gpuDevice.createBuffer(desc);
   const writeArray =
     arr instanceof Uint16Array
@@ -230,22 +229,6 @@ function makeShaderModule(gpuDevice, data,shaderCode) {
   });
   return shader;
 }
-//generic functions above
-//options type sig =
-//{ canvas: optional,
-//  data: [num | video | audio | 'trees.csv' | protocol.buffer | binary data |
-//  canvasTag(2d/webgl) | promise
-//]
-//}
-//copy regl's api w/o the inner stuff
-//returns a {
-//draw
-//canvas
-//}
-// draw returns 223-226
-//state contains any interstitial datums between gpgpu compute-layers
-//may want to read texture-data back into js-land for ray-casting or saving or
-//sending via http or w/e
 
 function createCanvas (width=960, height=500, options={}) {
   let dpi = devicePixelRatio;
@@ -254,12 +237,8 @@ function createCanvas (width=960, height=500, options={}) {
   canvas.height = dpi * height;
   canvas.style.width = width + "px";
   document.body.appendChild(canvas)
-  // canvas.value = regl;
-  // canvas.__reglConfig = {dpi, reglOptions}
   return canvas;
 }
-
-
 
 async function init(options) {
   //how to align width and hegiht from create canva

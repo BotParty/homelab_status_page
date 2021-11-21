@@ -77,19 +77,17 @@ let data = {
   angle: 0,
 };
 async function start_loop_static(options) {
-  let copiedData = Object.assign({}, data); //should come from args
   //only stuff about whats being rendered should be required.
-  options.data = copiedData;
+  options.data = data;
   let state = await init.init(options);
   addMouseEvents(state);
-console.log(options.data)
   requestAnimationFrame(function test() {
-    //console.log(data.time)
-    data.time = performance.now();
+    data.time = Date.now() % 1000 / 1000
+    
     //state.updateUniforms(data);
     let next_state = state.draw(state);
     //requestAnimationFrame(test)
-    setInterval(test, 250)
+    setTimeout(test, 250)
 //    console.log('cool', data.time)
   });
   
