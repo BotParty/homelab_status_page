@@ -50,9 +50,7 @@ function updateUniforms(stuff) {
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
   stuff.uniformsBuffer = utils.createBuffer(
-    gpuDevice,
-    uniformsArray,
-    GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+    gpuDevice, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
 }
 function makePipeline(shader, gpuDevice) {
@@ -73,9 +71,7 @@ function makePipeline(shader, gpuDevice) {
 }
 
 function makeShaderModule(gpuDevice, data, source) {
-  const uniforms = Object.keys(data)
-  .map((name) => `${name}: f32;`)
-  .join("\n");
+  const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
   [[block]] struct Uniforms {
     ${uniforms}
@@ -102,8 +98,6 @@ function makeShaderModule(gpuDevice, data, source) {
   ${source}`
   return gpuDevice.createShaderModule({ code });
 }
-
-
 
 async function init(options) {
   const stuff = {
@@ -154,25 +148,20 @@ async function init(options) {
     recordRenderPass(stuff) 
     return state;
   }
-  return {
-    draw,
-    canvas: stuff.canvas
-  };
+  return { draw, canvas: stuff.canvas};
 }
 
-//user land below
-let width = 960, height = 500;
-async function start_loop_nb() {
+async function start_loop_nb(data) {
   const canvas = document.createElement("canvas");
 
   canvas.addEventListener("mousemove", function (e) {
-    data.mouseX = e.clientX / width;
-    data.mouseY = e.clientY / height;
+    data.mouseX = e.clientX / data.width;
+    data.mouseY = e.clientY / data.height;
   });
 
   let copiedData = Object.assign({}, data); //should come from args
   copiedData.time = Date.now() % 1000; //le clock
-  let options = { data: copiedData, canvas: canvas, width, height };
+  let options = { data: copiedData, canvas: canvas, width: data.width, height: data.height };
   let state = await init(options);
   let next_state = state.draw(state); //this should have all the inner stuff
   return next_state;
@@ -205,8 +194,17 @@ function addMouseEvents(state) {
   state.canvas.addEventListener("mousemove", function (e) {
     data.mouseX = scaleX(e.clientX / e.target.clientWidth);
     data.mouseY = scaleY(e.clientY / e.target.clientHeight);
-    state.updateUniforms(data);
   });
 }
 
 export { start_loop_static, start_loop_nb };
+
+
+//import init
+//init (shader,uniforms) == returns a draw call
+//draw({time: 2}) === draw() => draw()
+//draw returns a applicative functor 
+//has props like destroy(), canvas, etc
+
+//update uniforms when controls do stuff 
+//maybe have a signal / pubsub api :) 
