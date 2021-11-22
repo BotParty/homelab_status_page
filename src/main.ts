@@ -52,22 +52,17 @@ function updateUniforms(stuff) {
   let {
     data,
     gpuDevice,
-    uniformsBuffer,
-    state,
-    renderPassDescriptor,
-    pipeline,
-    attribsBuffer,
   } = stuff;
   let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
-  return createBuffer(
+  stuff.uniformsBuffer = createBuffer(
     gpuDevice,
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
 }
-function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
+function makePipeline(shader, gpuDevice) {
   let pipelineDesc = {
     vertex: {
       module: shader,
@@ -209,8 +204,8 @@ async function init(options) {
   });
   stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(state) {
-    let uniformsBuffer = updateUniforms(stuff);
-    stuff.uniformsBuffer = uniformsBuffer;
+    updateUniforms(stuff);
+  
     // if (! stuff.renderBundle)
     //   stuff.renderBundle = recordRenderPass(stuff) //first pass
     //   else 
@@ -260,12 +255,9 @@ async function start_loop_static(options) {
   addMouseEvents(state);
   requestAnimationFrame(function test() {
     data.time = performance.now()
-    
     //state.updateUniforms(data);
     let next_state = state.draw(state);
     requestAnimationFrame(test)
-    //setTimeout(test, 250)
-//    console.log('cool', data.time)
   });
   
   //return next_state;
