@@ -76,7 +76,7 @@ const webGPUTextureFromImageUrl = async function (gpuDevice, url) {
   return webGPUTextureFromImageBitmapOrCanvas(gpuDevice, imgBitmap);
 };
 
-const recordRenderPass = async function (stuff, bundleEncoder) {
+const recordRenderPass = async function (stuff) {
   let {
     attribsBuffer,
     context,
@@ -90,22 +90,16 @@ const recordRenderPass = async function (stuff, bundleEncoder) {
   const textureView = context.getCurrentTexture().createView();
   renderPassDescriptor.colorAttachments[0].view = textureView;
 
-  let passEncoder
+  let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
-  if (! bundleEncoder) {
-    passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-  } else {
-    passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-    //passEncoder = bundleEncoder
-    bundleEncoder.isRenderBundle = true
 
-  }
- 
-  //first set up render bundle   
-  //every subsequent frame, passEncoder use renderBundle to do stuff
+  if (! stuff.renderBundle)
+    passEncoder = stuff.gpuDevice.createRenderBundleEncoder({
+      colorFormats: ['rgb10a2unorm']
+    })
+
+
   passEncoder.setPipeline(pipeline);
-
-
   const bindGroup = gpuDevice.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -128,12 +122,23 @@ const recordRenderPass = async function (stuff, bundleEncoder) {
     ],
   });
 
+
+  //first pass
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
-  //if (! bundleEncoder.isRenderBundle) 
   passEncoder.endPass();
+  const renderBundle = passEncoder.finish();
+
+
+
+  //2nd pass
+  passEncoder.executeBundles([renderBundle]);
+  passEncoder.endPass();
+
+
   gpuDevice.queue.submit([commandEncoder.finish()]); //async
+  return renderBundle
 };
 function updateUniforms(stuff) {
   let {
@@ -310,21 +315,16 @@ async function init(options) {
     // uniformsBuffer,
     // attribsBuffer,
   });
-
-
   stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(state) {
     let uniformsBuffer = updateUniforms(stuff);
     stuff.uniformsBuffer = uniformsBuffer;
-    
     //create render bundle encoder and first  draw
     //next time pass in encoder from first state which chaptured the thing
-    
-    let renderBundleEncoder = stuff.gpuDevice.createRenderBundleEncoder({
-      colorFormats: ['rgb10a2unorm']
-    })
-    recordRenderPass(stuff, renderBundleEncoder)
-
+    if (! stuff.renderBundle)
+      stuff.renderBundle = recordRenderPass(stuff) //first pass
+      else 
+      recordRenderPass(stuff) //pass 2..8
     return state;
   }
 

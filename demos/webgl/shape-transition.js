@@ -33,7 +33,7 @@ let shaderConfig = {
   alpha: 0.3,
   speed: 0.2,
   spread: 0.1,
-  chromaticblur: 0.1,
+  chromaticblur: 0.9,
 };
 
 // See http://regl.party/ -- regl makes low level gl programming more convenient!
@@ -106,12 +106,12 @@ function makeDescriptor(shape1, shape2) {
           attribute float a_jitter;
           attribute vec2 a_position1, a_position2;
           void main () {
-              float phase = 0.5 * (1.0 + cos(u_speed * (u_time + u_chromaticblur) + a_jitter * u_spread));
+              float phase = 0.3 * (1.0 + cos(u_speed * (u_time + u_chromaticblur) + a_jitter * u_spread));
               phase = smoothstep(0.1, 0.9, phase);
               // TODO: make this a parameter, as the range seems like it's interesting to play with
               // phase = smoothstep(-0.9, 0.9, phase);
               // phase = smoothstep(0.1, 1.5, phase);
-              gl_PointSize = 2.0; // TODO: should this be a parameter too?
+              gl_PointSize = 1.5; // TODO: should this be a parameter too?
               gl_Position = vec4(mix(a_position1, a_position2, phase), 0, 1);
           }`,
     // additive — we want to draw many points in the same place and have them add together
@@ -128,10 +128,10 @@ function makeDescriptor(shape1, shape2) {
       // have a min and max value for each parameter, but right now they're all hard-coded
       // to be 0-1 or 1-20
       u_alpha: () => shaderConfig.alpha,
-      u_speed: () => 4 * shaderConfig.speed,
+      u_speed: () => 2 * shaderConfig.speed,
       u_spread: () => TAU * shaderConfig.spread,
       u_color: () => [1,1,1],
-      u_chromaticblur: () => .3,
+      u_chromaticblur: () => .5,
       u_time: (context) => context.time,
     },
     //reads the type signature and auto adjusts the thingy..
