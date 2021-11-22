@@ -59,10 +59,10 @@ const recordRenderPass = async function (stuff) {
 
   let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
-  if (! stuff.renderBundle)
-    passEncoder = stuff.gpuDevice.createRenderBundleEncoder({
-      colorFormats: ['rgb10a2unorm']
-    })
+  // if (! stuff.renderBundle)
+  //   passEncoder = stuff.gpuDevice.createRenderBundleEncoder({
+  //     colorFormats: ['rgb10a2unorm']
+  //   })
 
   passEncoder.setPipeline(pipeline);
   const bindGroup = gpuDevice.createBindGroup({
@@ -93,17 +93,17 @@ const recordRenderPass = async function (stuff) {
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
   passEncoder.endPass();
-  const renderBundle = passEncoder.finish();
+//  const renderBundle = passEncoder.finish();
 
 
 
   //2nd pass
-  passEncoder.executeBundles([renderBundle]);
-  passEncoder.endPass();
+  // passEncoder.executeBundles([renderBundle]);
+  // passEncoder.endPass();
 
 
   gpuDevice.queue.submit([commandEncoder.finish()]); //async
-  return renderBundle
+  //return renderBundle
 };
 function updateUniforms(stuff) {
   let {
@@ -118,7 +118,6 @@ function updateUniforms(stuff) {
   let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
-  //console.log(uniformsArray)
   return createBuffer(
     gpuDevice,
     uniformsArray,
@@ -126,12 +125,7 @@ function updateUniforms(stuff) {
   );
 }
 function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
-  // let pipeLineLayout = gpuDevice.createPipelineLayout({
-  //   bindGroupLayouts: [dataTexturesBindGroupLayout],
-  // });
-
   let pipelineDesc = {
-    //layout: pipeLineLayout,
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
@@ -144,11 +138,6 @@ function makePipeline(shader, gpuDevice, dataTexturesBindGroupLayout) {
               shaderLocation: 0,
               format: "float32x2",
             },
-            // {
-            //   shaderLocation: 1,
-            //   offset: 12,
-            //   format: 'float32x2',
-            // }
           ],
         },
       ],
