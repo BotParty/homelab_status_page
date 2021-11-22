@@ -1,5 +1,5 @@
 import { scaleLinear } from "d3-scale";
-
+import createBuffer from './utils';
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
 const recordRenderPass = async function (stuff) {
@@ -92,23 +92,7 @@ function makePipeline(shader, gpuDevice) {
   return gpuDevice.createRenderPipeline(pipelineDesc);
 }
 
-const createBuffer = (gpuDevice, arr, usage) => {
-  let desc = {
-    size: (arr.byteLength + 3) & ~3,
-    usage,
-    mappedAtCreation: true,
-  };
-  let buffer = gpuDevice.createBuffer(desc);
-  arr[5] = Date.now();
 
-  const writeArray =
-    arr instanceof Uint16Array
-      ? new Uint16Array(buffer.getMappedRange())
-      : new Float32Array(buffer.getMappedRange());
-  writeArray.set(arr);
-  buffer.unmap();
-  return buffer;
-};
 
 function makeShaderModule(gpuDevice, data, source) {
   const uniforms = Object.keys(data)
@@ -144,7 +128,7 @@ function makeShaderModule(gpuDevice, data, source) {
   return shader;
 }
 
-function createCanvas (width=960, height=500, options={}) {
+function createCanvas (width=960, height=500) {
   let dpi = devicePixelRatio;
   var canvas = document.createElement("canvas");
   canvas.width = dpi * width;
@@ -205,10 +189,6 @@ async function init(options) {
   stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(state) {
     updateUniforms(stuff);
-  
-    // if (! stuff.renderBundle)
-    //   stuff.renderBundle = recordRenderPass(stuff) //first pass
-    //   else 
     recordRenderPass(stuff) 
     return state;
   }
@@ -248,25 +228,17 @@ let data = {
   mouseY: 0,
   angle: 0,
 };
+//user land
 async function start_loop_static(options) {
-  //only stuff about whats being rendered should be required.
-  options.data = data;
+  options.data = options.data || data; //extend 
   let state = await init(options);
   addMouseEvents(state);
   requestAnimationFrame(function test() {
     data.time = performance.now()
-    //state.updateUniforms(data);
-    let next_state = state.draw(state);
+    state = state.draw(state);
+    //todo only pass in data that changed and update in place based on names
     requestAnimationFrame(test)
   });
-  
-  //return next_state;
-  // requestAnimationFrame(async function () {
-  //   let canvas = start_loop().then((stuff) => {
-  //     //stuff has to have a canvas to add to vue / anything
-  //     document.body.append(stuff.canvas);
-  //   });
-  // });
 }
 
 function addMouseEvents(state) {
