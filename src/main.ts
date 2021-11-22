@@ -1,5 +1,5 @@
 import { scaleLinear } from "d3-scale";
-import createBuffer from './utils';
+import utils from './utils';
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
 const recordRenderPass = async function (stuff) {
@@ -26,14 +26,7 @@ const recordRenderPass = async function (stuff) {
   passEncoder.setPipeline(pipeline);
   const bindGroup = gpuDevice.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: {
-          buffer: uniformsBuffer,
-        },
-      },
-    ],
+    entries: [{ binding: 0, resource: { buffer: uniformsBuffer } } ],
   });
 
   //first pass
@@ -56,7 +49,7 @@ function updateUniforms(stuff) {
   let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0, values.length);
-  stuff.uniformsBuffer = createBuffer(
+  stuff.uniformsBuffer = utils.createBuffer(
     gpuDevice,
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
@@ -67,40 +60,23 @@ function makePipeline(shader, gpuDevice) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-      buffers: [
-        {
-          arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
-          attributes: [
-            {
-              offset: 0,
-              shaderLocation: 0,
-              format: "float32x2",
-            },
-          ],
-        },
-      ],
-    },
+      buffers: [{ arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
+                attributes: [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
       targets: [{ format: "bgra8unorm" }],
     },
-    primitives: {
-      topology: "triangle-list",
-    },
+    primitives: { topology: "triangle-list" },
   };
   return gpuDevice.createRenderPipeline(pipelineDesc);
 }
 
-
-
 function makeShaderModule(gpuDevice, data, source) {
   const uniforms = Object.keys(data)
-    .map((name) => `${name}: f32;`)
-    .join("\n");
-
-  const shader = gpuDevice.createShaderModule({
-    code: `
+  .map((name) => `${name}: f32;`)
+  .join("\n");
+  const code = `
   [[block]] struct Uniforms {
     ${uniforms}
   };
@@ -123,25 +99,16 @@ function makeShaderModule(gpuDevice, data, source) {
     output.uv = input.pos;
     return output;
   }
-  ${source}`,
-  });
-  return shader;
+  ${source}`
+  return gpuDevice.createShaderModule({ code });
 }
 
-function createCanvas (width=960, height=500) {
-  let dpi = devicePixelRatio;
-  var canvas = document.createElement("canvas");
-  canvas.width = dpi * width;
-  canvas.height = dpi * height;
-  canvas.style.width = width + "px";
-  document.body.appendChild(canvas)
-  return canvas;
-}
+
 
 async function init(options) {
   const stuff = {
     data: options.data,
-    canvas: options.canvas || createCanvas(),
+    canvas: options.canvas || utils.createCanvas(),
     state: {}, //passed from frame to frame-comment line 229
   };
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
@@ -165,16 +132,11 @@ async function init(options) {
   });
   let shader = makeShaderModule(gpuDevice, data, options.shader);
 
-  const pipeline = makePipeline(
-    shader,
-    gpuDevice
-  );
+  const pipeline = makePipeline(shader, gpuDevice);
 
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
-    colorAttachments: [
-      {
-        view: textureView,
+    colorAttachments: [{ view: textureView,
         loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
         storeOp: "store",
       },
@@ -186,7 +148,7 @@ async function init(options) {
     renderPassDescriptor,
     pipeline,
   });
-  stuff.attribsBuffer = createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+  stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(state) {
     updateUniforms(stuff);
     recordRenderPass(stuff) 
@@ -194,11 +156,7 @@ async function init(options) {
   }
   return {
     draw,
-    canvas: stuff.canvas,
-    updateUniforms: function (data) {
-      stuff.data = data;
-      updateUniforms(stuff);
-    },
+    canvas: stuff.canvas
   };
 }
 

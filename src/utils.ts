@@ -16,4 +16,16 @@ const createBuffer = (gpuDevice, arr, usage) => {
   buffer.unmap();
   return buffer;
 };
-export default createBuffer;
+
+function createCanvas (width=960, height=500) {
+  let dpi = devicePixelRatio;
+  var canvas = document.createElement("canvas");
+  canvas.width = dpi * width;
+  canvas.height = dpi * height;
+  canvas.style.width = width + "px";
+  document.body.appendChild(canvas)
+  return canvas;
+}
+export default {createBuffer, createCanvas};
+
+//TODO: multiple exports
