@@ -188,15 +188,11 @@ function redraw() {
 }
 
 function start() {
-  console.log("hi 2");
   regl = createREGL()
   shape1 = regl.buffer(NUM_POINTS)
   shape2 = regl.buffer(NUM_POINTS)
-  console.log('no worky')
   let thingy = makeDescriptor(shape1, shape2)
-  console.log(thingy)
   draw = regl(thingy);
-  console.log('why no worky')
   //constructUi(shaderConfig, 0, 1, 0.01, false);
   //constructUi(attrConfig, 1, 20, 1, true);
 

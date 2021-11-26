@@ -4,15 +4,17 @@ import { start_loop_static, start_loop_nb } from "../src/main";
 import rings from './shaders/ringu.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
-//todo add video and more 
 import * as d3 from "d3";
+import one from './shaders/one.wgsl?raw';
+import four from './shaders/four.wgsl?raw';
+
 
 let demoTitles = [
-  'shapeTransition', 'breath', 'stripes', 'rings', 'checkerboard'
+  'shapeTransition', 'breath', 'stripes', 'rings', 'checkerboard', 'one', 'four'
 ]
 
 let demos = [
-  shapeTransition, breath, stripes, rings, checkerboard
+  shapeTransition, breath, stripes, rings, checkerboard, one, 'four'
 ]
 
 function choose(name) {
@@ -24,9 +26,10 @@ function choose(name) {
   }
   if (typeof demo === 'function') demo()
   else {
+    cleanup() 
     customShader({
       shader: demo,
-    });
+    }); 
   }
 }
 
@@ -94,4 +97,4 @@ function cleanup () {
   d3.selectAll('canvas').remove()
 }
 
-choose('rings')
+choose('checkerboard')

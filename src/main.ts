@@ -1,5 +1,7 @@
 import { scaleLinear } from "d3-scale";
 import utils from './utils';
+
+
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
 const recordRenderPass = async function (stuff) {

@@ -7,6 +7,8 @@
     if (fragPosition.x % 2. == 1.) {color.x = 0.;}
     if (fragPosition.x % 2. == 1.) {color.y = 0.;}
 
-    return color;
+    var p = in.uv * fragPosition;
+    var q = p.x % 25. * 2.0 < 25. == p.y % 25. * 2.0 < 25.;
+    var o = f32(q);
+    return vec4<f32>(o,o, .5, 1.0) * .5;
 }
-
