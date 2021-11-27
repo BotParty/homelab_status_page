@@ -1,10 +1,88 @@
-import { scaleLinear } from "d3-scale";
-import utils from './utils';
+// import { scaleLinear } from "d3-scale";
+//import utils from './utils';
+let defaultShader = `//This is rings
+let size = 4.0;
 
+    let b = 0.3;		//size of the smoothed border
+
+    fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
+      let aspect = iResolution.x/iResolution.y;
+      let position = (fragCoord.xy) * aspect;
+      let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
+      let offset=u.time * 000.0001;
+      let conv=4.;
+      let v=dist*4.-offset;
+      let ringr=floor(v);
+      
+      var stuff = 0.;
+      if (v % 3. > .5) {
+        stuff = 0.;
+      }
+
+	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));
+      if (ringr % 2. ==1.) {
+       color=2.-color;
+      }
+
+    let distToMouseX = distance(u.mouseX, fragCoord.x);
+    let distToMouseY = distance(u.mouseY, fragCoord.y);
+
+    return vec4<f32>(
+      distToMouseX, 
+      color, 
+      color, 
+      1.
+      );
+  };
+
+  fn main(uv: vec2<f32>) -> vec4<f32> {
+    let fragCoord = vec2<f32>(uv.x, uv.y);
+    var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);
+    let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
+    return mainImage(fragCoord, vec2<f32>(u.width, u.height));
+  }
+
+  [[stage(fragment)]]
+  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
+    return main(in.uv) - vec4<f32>(.8);
+  }
+  
+  `
+
+
+
+const createBuffer = (gpuDevice:any, arr:any, usage:any,) => {
+  let desc = {
+    size: (arr.byteLength + 3) & ~3,
+    usage,
+    mappedAtCreation: true,
+  };
+  let buffer = gpuDevice.createBuffer(desc);
+  arr[5] = Date.now();
+
+  const writeArray =
+    arr instanceof Uint16Array
+      ? new Uint16Array(buffer.getMappedRange())
+      : new Float32Array(buffer.getMappedRange());
+  writeArray.set(arr);
+  buffer.unmap();
+  return buffer;
+};
+
+function createCanvas (width=960, height=500) {
+  let dpi = devicePixelRatio;
+  var canvas = document.createElement("canvas");
+  canvas.width = dpi * width;
+  canvas.height = dpi * height;
+  canvas.style.width = width + "px";
+  document.body.appendChild(canvas)
+  return canvas;
+}
+let utils = {createBuffer, createCanvas}
 
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
-const recordRenderPass = async function (stuff) {
+const recordRenderPass = async function (stuff:any,) {
   let {
     attribsBuffer,
     context,
@@ -43,19 +121,21 @@ const recordRenderPass = async function (stuff) {
   gpuDevice.queue.submit([commandEncoder.finish()]); //async
   //return renderBundle
 };
-function updateUniforms(stuff) {
+
+
+function updateUniforms(stuff:any) {
   let {
     data,
     gpuDevice,
   } = stuff;
-  let values = Object.values(data);
+  let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
-  uniformsArray.set(values, 0, values.length);
+  uniformsArray.set(values, 0);
   stuff.uniformsBuffer = utils.createBuffer(
     gpuDevice, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
 }
-function makePipeline(shader, gpuDevice) {
+function makePipeline(shader:any, gpuDevice:any,) {
   let pipelineDesc = {
     vertex: {
       module: shader,
@@ -72,7 +152,8 @@ function makePipeline(shader, gpuDevice) {
   return gpuDevice.createRenderPipeline(pipelineDesc);
 }
 
-function makeShaderModule(gpuDevice, data, source) {
+function makeShaderModule(gpuDevice:any, data:any, source:any,) {
+  if (! source) source = defaultShader;
   const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
   [[block]] struct Uniforms {
@@ -101,15 +182,17 @@ function makeShaderModule(gpuDevice, data, source) {
   return gpuDevice.createShaderModule({ code });
 }
 
-async function init(options) {
+async function init(options:any) {
   const stuff = {
+    renderPassDescriptor: {},
+    attribsBuffer: {},
     data: options.data,
     canvas: options.canvas || utils.createCanvas(),
     state: {}, //passed from frame to frame-comment line 229
   };
   const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
-  const gpuDevice = await adapter.requestDevice();
+  const gpuDevice = await adapter?.requestDevice();
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
     stuff.canvas.width * devicePixelRatio,
@@ -145,7 +228,7 @@ async function init(options) {
     pipeline,
   });
   stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw(state) {
+  function draw(state:any) {
     updateUniforms(stuff);
     recordRenderPass(stuff) 
     return state;
@@ -153,7 +236,7 @@ async function init(options) {
   return { draw, canvas: stuff.canvas};
 }
 
-async function start_loop_nb(data) {
+async function start_loop_nb(data:any) {
   const canvas = document.createElement("canvas");
 
   canvas.addEventListener("mousemove", function (e) {
@@ -178,10 +261,10 @@ let data = {
   angle: 0,
 };
 //user land
-async function start_loop_static(options) {
+async function start_loop_static(options:any,) {
   options.data = options.data || data; //extend 
   let state = await init(options);
-  addMouseEvents(state);
+  //addMouseEvents(state);
   requestAnimationFrame(function test() {
     data.time = performance.now()
     state = state.draw(state);
@@ -190,23 +273,14 @@ async function start_loop_static(options) {
   });
 }
 
-function addMouseEvents(state) {
-  let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
-  let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
-  state.canvas.addEventListener("mousemove", function (e) {
-    data.mouseX = scaleX(e.clientX / e.target.clientWidth);
-    data.mouseY = scaleY(e.clientY / e.target.clientHeight);
-  });
-}
+// function addMouseEvents() {
+//   console.log('hi')
+//   // let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
+//   // let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
+//   // state.canvas.addEventListener("mousemove", function (e) {
+//   //   data.mouseX = scaleX(e.clientX / e.target.clientWidth);
+//   //   data.mouseY = scaleY(e.clientY / e.target.clientHeight);
+//   // });
+// }
 
 export { start_loop_static, start_loop_nb };
-
-
-//import init
-//init (shader,uniforms) == returns a draw call
-//draw({time: 2}) === draw() => draw()
-//draw returns a applicative functor 
-//has props like destroy(), canvas, etc
-
-//update uniforms when controls do stuff 
-//maybe have a signal / pubsub api :) 

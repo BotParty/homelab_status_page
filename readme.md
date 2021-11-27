@@ -1,24 +1,11 @@
 * simple-webgpu-compute
 module for using webgpu for data visualization and more
 intention: make compute shaders as simple as possible
-minimalist runtime for using shaders in nb/static website
-
+minimalist runtime for using webgpu shaders in nb/static website
 
 this library currently just draws a quad and allows
   custom shaders with minimal boilerplate
   custom uniforms and textures 
-
-* Features
-helpful error messages and lots of demos :)
-[extension](https://github.com/nyc-map/observable-to-light-table)
-
-todo 
-import readme into nb 
-import library into nb 
-import data into nb 
-import demos into nb
-docs = in repo 
-nb = demos / usage
 
 
 * References

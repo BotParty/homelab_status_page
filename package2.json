@@ -1,0 +1,30 @@
+{
+  "name": "simple-data-texture",
+  "version": "0.0.3",
+
+  "files": [
+    "dist/**/*.js",
+    "src/**/*.js"
+  ],
+  "module": "src/index.js",
+  "main": "src/index.js",
+  "jsdelivr": "dist/main.js",
+  "unpkg": "dist/main.js",
+  "exports": {
+    "umd": "./dist/main.js",
+    "default": "./src/index.js"
+  },
+  "devDependencies": {
+    "d3": "^7.1.1",
+    "gl-mat4": "^1.2.0",
+    "gl-matrix": "^3.4.3",
+    "h3": "^0.3.3",
+    "regl": "^2.1.0",
+    "resl": "^1.0.3",
+    "vite": "^2.6.4",
+    "vite-plugin-string": "^1.0.1"
+  },
+  "dependencies": {
+    "typescript": "^4.3.2"
+  }
+}

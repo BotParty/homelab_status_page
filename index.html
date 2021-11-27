@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>simple shader demo</title>
     <link
-      href="./demos/tailwind.min.css"
+      href="/tailwind.min.css"
       rel="stylesheet"
     />
     <style>
@@ -36,15 +36,11 @@
         padding-top: 50px;
       }
 
-
       #control-panel {
         z-index: 124;
         position: absolute;
         border: 1px dotted aliceblue;
       }
-
-  
-
       #control-panel {
         background: teal;
         position: absolute;
@@ -53,10 +49,9 @@
         padding: 5px;
         color: lightgray;
       }
-      
     </style>
-    <script defer type="module" src="/src/index.ts"></script>
-    <script defer type="module" src="/demos/index.js"></script>
+    <script type="module" src="/lib/main.ts"></script>
+    <script type="module" src="./demos/index.js"></script>
   </head>
   <body>
 

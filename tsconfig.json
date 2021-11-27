@@ -12,7 +12,9 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types"]
+
   },
-  "include": ["./src"]
+  "include": ["lib"],
 }
