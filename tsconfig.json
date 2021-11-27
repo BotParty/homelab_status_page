@@ -16,5 +16,6 @@
     "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types"]
 
   },
-  "include": ["lib"],
+  "include": ["src"],
+  "files": ["src/main.ts"],
 }
