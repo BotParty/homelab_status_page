@@ -1,6 +1,6 @@
 import shapeTransition from "./webgl/shape-transition";
 import breath from "./webgl/breath";
-import { start_loop_static, start_loop_nb } from "../src/main";
+import { start_loop_static, start_loop_nb } from "../lib/main";
 import rings from './shaders/ringu.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
