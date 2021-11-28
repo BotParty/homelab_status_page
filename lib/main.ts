@@ -1,82 +1,6 @@
 // import { scaleLinear } from "d3-scale";
-//import utils from './utils';
-let defaultShader = `//This is rings
-let size = 4.0;
-
-    let b = 0.3;		//size of the smoothed border
-
-    fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
-      let aspect = iResolution.x/iResolution.y;
-      let position = (fragCoord.xy) * aspect;
-      let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
-      let offset=u.time * 000.0001;
-      let conv=4.;
-      let v=dist*4.-offset;
-      let ringr=floor(v);
-      
-      var stuff = 0.;
-      if (v % 3. > .5) {
-        stuff = 0.;
-      }
-
-	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));
-      if (ringr % 2. ==1.) {
-       color=2.-color;
-      }
-
-    let distToMouseX = distance(u.mouseX, fragCoord.x);
-    let distToMouseY = distance(u.mouseY, fragCoord.y);
-
-    return vec4<f32>(
-      distToMouseX, 
-      color, 
-      color, 
-      1.
-      );
-  };
-
-  fn main(uv: vec2<f32>) -> vec4<f32> {
-    let fragCoord = vec2<f32>(uv.x, uv.y);
-    var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);
-    let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-    return mainImage(fragCoord, vec2<f32>(u.width, u.height));
-  }
-
-  [[stage(fragment)]]
-  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
-    return main(in.uv) - vec4<f32>(.8);
-  }
-  
-  `
-
-const createBuffer = (gpuDevice:any, arr:any, usage:any,) => {
-  let desc = {
-    size: (arr.byteLength + 3) & ~3,
-    usage,
-    mappedAtCreation: true,
-  };
-  let buffer = gpuDevice.createBuffer(desc);
-  arr[5] = Date.now();
-
-  const writeArray =
-    arr instanceof Uint16Array
-      ? new Uint16Array(buffer.getMappedRange())
-      : new Float32Array(buffer.getMappedRange());
-  writeArray.set(arr);
-  buffer.unmap();
-  return buffer;
-};
-
-function createCanvas (width=960, height=500) {
-  let dpi = devicePixelRatio;
-  var canvas = document.createElement("canvas");
-  canvas.width = dpi * width;
-  canvas.height = dpi * height;
-  canvas.style.width = width + "px";
-  document.body.appendChild(canvas)
-  return canvas;
-}
-let utils = {createBuffer, createCanvas}
+import utils from './utils';
+import defaultShader from './default.wgsl?raw';
 
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
@@ -180,15 +104,28 @@ function makeShaderModule(gpuDevice:any, data:any, source:any,) {
   return gpuDevice.createShaderModule({ code });
 }
 
+let defaultData =  {
+  width: 900, //based on canvas
+  height: 500, //based on canvas
+  pixelRatio: 2, //based on canvas
+  time: 0,
+  mouseX: 0,
+  mouseY: 0,
+  angle: 0,
+};
+
+function validateData (data) {
+  if (typeof data.width !== 'number') throw new Error('bad data!!')
+}
+
 async function init(options:any) {
   let canvas = options.canvas || utils.createCanvas();
-
+  let data = Object.assign(defaultData, options.data);
 
   const state = {
     renderPassDescriptor: {},
     attribsBuffer: {},
-    data: options.data || {},
-
+    data
   };
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
@@ -228,9 +165,9 @@ async function init(options:any) {
     pipeline,
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw(data:any) {
-    //todo diff data for reupload uniform/texture
-    Object.assign(state.data, data)
+  function draw(newData:any) {
+    Object.assign(data, newData)//todo diff data for reupload uniform/texture
+    state.data = data
     updateUniforms(state);
     recordRenderPass(state) 
     return draw
@@ -240,15 +177,6 @@ async function init(options:any) {
   return draw
 }
 
-// function addMouseEvents() {
-//   console.log('hi')
-//   // let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
-//   // let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
-//   // state.canvas.addEventListener("mousemove", function (e) {
-//   //   data.mouseX = scaleX(e.clientX / e.target.clientWidth);
-//   //   data.mouseY = scaleY(e.clientY / e.target.clientHeight);
-//   // });
-// }
 
 export { 
   init,
