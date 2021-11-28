@@ -181,22 +181,24 @@ function makeShaderModule(gpuDevice:any, data:any, source:any,) {
 }
 
 async function init(options:any) {
-  const stuff = {
+  let canvas = options.canvas || utils.createCanvas();
+
+
+  const state = {
     renderPassDescriptor: {},
     attribsBuffer: {},
     data: options.data || {},
-    canvas: options.canvas || utils.createCanvas(),
-    state: {}, //passed from frame to frame-comment line 229
+
   };
-  const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
+  const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter?.requestDevice();
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
-    stuff.canvas.width * devicePixelRatio,
-    stuff.canvas.height * devicePixelRatio,
+    canvas.width * devicePixelRatio,
+    canvas.height * devicePixelRatio,
   ];
-  Object.assign(stuff, {
+  Object.assign(state, {
     gpuDevice,
     context,
     adapter, 
@@ -207,7 +209,7 @@ async function init(options:any) {
     format: presentationFormat,
     size: presentationSize,
   });
-  let shader = makeShaderModule(gpuDevice, stuff.data, options.shader);
+  let shader = makeShaderModule(gpuDevice, state.data, options.shader);
 
   const pipeline = makePipeline(shader, gpuDevice);
 
@@ -219,22 +221,22 @@ async function init(options:any) {
       },
     ],
   };
-  stuff.renderPassDescriptor = renderPassDescriptor;
-  Object.assign(stuff, {
+  state.renderPassDescriptor = renderPassDescriptor;
+  Object.assign(state, {
     textureView,
     renderPassDescriptor,
     pipeline,
   });
-  stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+  state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(data:any) {
     //todo diff data for reupload uniform/texture
-    Object.assign(stuff.data, data)
-    updateUniforms(stuff);
-    recordRenderPass(stuff) 
+    Object.assign(state.data, data)
+    updateUniforms(state);
+    recordRenderPass(state) 
     return draw
   }
 
-  draw.canvas = stuff.canvas
+  draw.canvas = canvas
   return draw
 }
 
@@ -250,5 +252,4 @@ async function init(options:any) {
 
 export { 
   init,
-  
   };

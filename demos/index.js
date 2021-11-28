@@ -75,6 +75,7 @@ controlpanel.innerHTML += Object.keys(demos).map(
     choose(event.target.value)
   })
 
+  console.log('hi')
 function customShader(options) {
   let start = window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
   start(options);
