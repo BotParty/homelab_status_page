@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "publish": "npm version increment && npm run build && git commit -am 'save state' && npm publish "
+    "publish": "git commit -am 'save state'  && npm run build &&  npm publish "
   },
   "files": [
     "dist"
