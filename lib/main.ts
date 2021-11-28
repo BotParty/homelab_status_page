@@ -2,6 +2,14 @@
 import utils from './utils';
 // @ts-ignore
 import defaultShader from './default.wgsl?raw';
+import blurWGSL from './blur.wgsl?raw';
+import fullscreenTexturedQuadWGSL from './fullscreenTexturedQuad.wgsl?raw';
+
+
+
+
+
+
 
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
@@ -78,9 +86,7 @@ function makeShaderModule(gpuDevice:any, data:any, source:any,) {
     ${uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;
-  // [[group(0), binding(1)]] var mySampler: sampler;
-  // [[group(0), binding(2)]] var myTexture: texture_external;
-  struct VertexInput {
+ struct VertexInput {
     [[location(0)]] pos: vec2<f32>;
   };
   struct VertexOutput {
@@ -114,7 +120,7 @@ function validateData (data:any) {
   if (typeof data.width !== 'number') throw new Error('bad data!!')
 }
 
-async function init(options:any) {
+async function init2(options:any) {
   let canvas = options.canvas || utils.createCanvas();
   const state = { 
     renderPassDescriptor: {},
@@ -170,6 +176,300 @@ async function init(options:any) {
   draw.canvas = canvas
   return draw
 }
+
+
+const tileDim = 128;
+const batch = [4, 4];
+const init = async (options:any) => {
+  let canvasRef = options.canvas || utils.createCanvas();
+  const state = { 
+    renderPassDescriptor: {},
+    attribsBuffer: {},
+    data: Object.assign(defaultData, options.data)
+  };
+ 
+
+
+
+  const adapter = await navigator.gpu?.requestAdapter();
+  const device = await adapter.requestDevice();
+
+  const context = canvasRef.getContext('webgpu');
+
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const presentationSize = [
+    canvasRef.clientWidth * devicePixelRatio,
+    canvasRef.clientHeight * devicePixelRatio,
+  ];
+  const presentationFormat = context.getPreferredFormat(adapter);
+
+  context.configure({
+    device,
+    format: presentationFormat,
+    size: presentationSize,
+  });
+
+  const blurPipeline = device.createComputePipeline({
+    compute: {
+      module: device.createShaderModule({
+        code: blurWGSL,
+      }),
+      entryPoint: 'main',
+    },
+  });
+
+  const fullscreenQuadPipeline = device.createRenderPipeline({
+    vertex: {
+      module: device.createShaderModule({
+        code: fullscreenTexturedQuadWGSL,
+      }),
+      entryPoint: 'vert_main',
+    },
+    fragment: {
+      module: device.createShaderModule({
+        code: fullscreenTexturedQuadWGSL,
+      }),
+      entryPoint: 'frag_main',
+      targets: [
+        {
+          format: presentationFormat,
+        },
+      ],
+    },
+    primitive: {
+      topology: 'triangle-list',
+    },
+  });
+
+  const sampler = device.createSampler({
+    magFilter: 'linear',
+    minFilter: 'linear',
+  });
+
+  const img = document.createElement('img');
+  img.src = './late.png';
+  await img.decode();
+  const imageBitmap = await createImageBitmap(img);
+
+  const [srcWidth, srcHeight] = [imageBitmap.width, imageBitmap.height];
+  const cubeTexture = device.createTexture({
+    size: [srcWidth, srcHeight, 1],
+    format: 'rgba8unorm',
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+  device.queue.copyExternalImageToTexture(
+    { source: imageBitmap },
+    { texture: cubeTexture },
+    [imageBitmap.width, imageBitmap.height]
+  );
+
+  const textures = [0, 1].map(() => {
+    return device.createTexture({
+      size: {
+        width: srcWidth,
+        height: srcHeight,
+      },
+      format: 'rgba8unorm',
+      usage:
+        GPUTextureUsage.COPY_DST |
+        GPUTextureUsage.STORAGE_BINDING |
+        GPUTextureUsage.TEXTURE_BINDING,
+    });
+  });
+
+  const buffer0 = (() => {
+    const buffer = device.createBuffer({
+      size: 4,
+      mappedAtCreation: true,
+      usage: GPUBufferUsage.UNIFORM,
+    });
+    new Uint32Array(buffer.getMappedRange())[0] = 0;
+    buffer.unmap();
+    return buffer;
+  })();
+
+  const buffer1 = (() => {
+    const buffer = device.createBuffer({
+      size: 4,
+      mappedAtCreation: true,
+      usage: GPUBufferUsage.UNIFORM,
+    });
+    new Uint32Array(buffer.getMappedRange())[0] = 1;
+    buffer.unmap();
+    return buffer;
+  })();
+
+  const blurParamsBuffer = device.createBuffer({
+    size: 8,
+    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.UNIFORM,
+  });
+
+  const computeConstants = device.createBindGroup({
+    layout: blurPipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: sampler,
+      },
+      {
+        binding: 1,
+        resource: {
+          buffer: blurParamsBuffer,
+        },
+      },
+    ],
+  });
+
+  const computeBindGroup0 = device.createBindGroup({
+    layout: blurPipeline.getBindGroupLayout(1),
+    entries: [
+      {
+        binding: 1,
+        resource: cubeTexture.createView(),
+      },
+      {
+        binding: 2,
+        resource: textures[0].createView(),
+      },
+      {
+        binding: 3,
+        resource: {
+          buffer: buffer0,
+        },
+      },
+    ],
+  });
+
+  const computeBindGroup1 = device.createBindGroup({
+    layout: blurPipeline.getBindGroupLayout(1),
+    entries: [
+      {
+        binding: 1,
+        resource: textures[0].createView(),
+      },
+      {
+        binding: 2,
+        resource: textures[1].createView(),
+      },
+      {
+        binding: 3,
+        resource: {
+          buffer: buffer1,
+        },
+      },
+    ],
+  });
+
+  const computeBindGroup2 = device.createBindGroup({
+    layout: blurPipeline.getBindGroupLayout(1),
+    entries: [
+      {
+        binding: 1,
+        resource: textures[1].createView(),
+      },
+      {
+        binding: 2,
+        resource: textures[0].createView(),
+      },
+      {
+        binding: 3,
+        resource: {
+          buffer: buffer0,
+        },
+      },
+    ],
+  });
+
+  const showResultBindGroup = device.createBindGroup({
+    layout: fullscreenQuadPipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: sampler,
+      },
+      {
+        binding: 1,
+        resource: textures[1].createView(),
+      },
+    ],
+  });
+
+  const settings = {
+    filterSize: 15,
+    iterations: 2,
+  };
+
+  let blockDim: number;
+  const updateSettings = () => {
+    blockDim = tileDim - (settings.filterSize - 1);
+    device.queue.writeBuffer(
+      blurParamsBuffer,
+      0,
+      new Uint32Array([settings.filterSize, blockDim])
+    );
+  };
+
+
+  updateSettings();
+
+  function draw() {
+
+    const commandEncoder = device.createCommandEncoder();
+
+    const computePass = commandEncoder.beginComputePass();
+    computePass.setPipeline(blurPipeline);
+    computePass.setBindGroup(0, computeConstants);
+
+    computePass.setBindGroup(1, computeBindGroup0);
+    computePass.dispatch(
+      Math.ceil(srcWidth / blockDim),
+      Math.ceil(srcHeight / batch[1])
+    );
+
+    computePass.setBindGroup(1, computeBindGroup1);
+    computePass.dispatch(
+      Math.ceil(srcHeight / blockDim),
+      Math.ceil(srcWidth / batch[1])
+    );
+
+    for (let i = 0; i < settings.iterations - 1; ++i) {
+      computePass.setBindGroup(1, computeBindGroup2);
+      computePass.dispatch(
+        Math.ceil(srcWidth / blockDim),
+        Math.ceil(srcHeight / batch[1])
+      );
+
+      computePass.setBindGroup(1, computeBindGroup1);
+      computePass.dispatch(
+        Math.ceil(srcHeight / blockDim),
+        Math.ceil(srcWidth / batch[1])
+      );
+    }
+
+    computePass.endPass();
+
+    const passEncoder = commandEncoder.beginRenderPass({
+      colorAttachments: [
+        {
+          view: context.getCurrentTexture().createView(),
+          loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+          storeOp: 'store',
+        },
+      ],
+    });
+
+    passEncoder.setPipeline(fullscreenQuadPipeline);
+    passEncoder.setBindGroup(0, showResultBindGroup);
+    passEncoder.draw(6, 1, 0, 0);
+    passEncoder.endPass();
+    device.queue.submit([commandEncoder.finish()]);
+
+  }
+  return draw
+};
 
 export { 
   init,
