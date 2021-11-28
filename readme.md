@@ -1,4 +1,4 @@
-* simple-webgpu-compute
+# simple-webgpu-compute
 ...
 ---
 module for using webgpu for data visualization and more
