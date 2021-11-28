@@ -1,5 +1,5 @@
 import shapeTransition from "./webgl/shape-transition";
-import breath from "./webgl/breath";
+import audioTexture from "./webgl/breath";
 import { init } from "../lib/main";
 import rings from './shaders/ringu.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
@@ -29,11 +29,11 @@ async function start_loop_static(options) {
 }
 
 let demoTitles = [
-  'shapeTransition', 'breath', 'stripes', 'rings', 'checkerboard', 'one', 'four'
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'four'
 ]
 
 let demos = [
-  shapeTransition, breath, stripes, rings, checkerboard, one, 'four'
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, four
 ]
 
 //make 1 draw call per thing
