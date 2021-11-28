@@ -37,8 +37,11 @@ cat.subImage({
 }, 1,1)
 ```
 //todo make api easier
+//todo make textures stream and pipe through compute
 
+```
 
+```
 
 module for using webgpu for data visualization and more
 intention: make compute shaders as simple as possible
