@@ -236,4 +236,4 @@ async function start_loop_static(options) {
     requestAnimationFrame(test);
   });
 }
-export { start_loop_nb, start_loop_static };
+export { init, start_loop_nb, start_loop_static };

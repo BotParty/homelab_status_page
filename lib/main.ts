@@ -283,4 +283,6 @@ async function start_loop_static(options:any,) {
 //   // });
 // }
 
-export { start_loop_static, start_loop_nb };
+export { 
+  init,
+  start_loop_static, start_loop_nb };
