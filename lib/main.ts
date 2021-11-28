@@ -177,7 +177,6 @@ async function init(options:any) {
   return draw
 }
 
-
 export { 
   init,
-  };
+};
