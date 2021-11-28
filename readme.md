@@ -1,4 +1,45 @@
 * simple-webgpu-compute
+
+
+
+```
+ import {init} from "https://cdn.skypack.dev/simple-data-texture/"
+
+
+let options = {}
+
+let draw = init(options)
+
+let uniformData = {}
+
+draw(uniformData)
+
+```
+
+
+
+```
+ import {init, Texture} from "https://cdn.skypack.dev/simple-data-texture/"
+
+
+let catTexture = Texture('http://giphy.com/cat_pic.png');
+let dogTexture = Texture('http://giphy.com/dog.png');
+
+let draw = init({
+  data: {time: 123, texture:catTexture}
+})
+
+draw({texture: dogTexture})
+
+cat.subImage({
+  width: 200, height: 200,
+  data: dogTexture.read({x:5,y:5,w:200,h: 200})
+}, 1,1)
+```
+//todo make api easier
+
+
+
 module for using webgpu for data visualization and more
 intention: make compute shaders as simple as possible
 minimalist runtime for using webgpu shaders in nb/static website
