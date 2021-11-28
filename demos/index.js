@@ -1,6 +1,6 @@
 import shapeTransition from "./webgl/shape-transition";
 import breath from "./webgl/breath";
-import { start_loop_static, start_loop_nb } from "../lib/main";
+import { init } from "../lib/main";
 import rings from './shaders/ringu.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
@@ -9,6 +9,29 @@ import one from './shaders/one.wgsl?raw';
 import four from './shaders/four.wgsl?raw';
 
 
+let data = {
+  width: 900, //based on canvas
+  height: 500, //based on canvas
+  pixelRatio: 2, //based on canvas
+  time: 0,
+  mouseX: 0,
+  mouseY: 0,
+  angle: 0,
+};
+
+
+async function start_loop_static(options) {
+  options.data = options.data || data; //extend 
+  let state = await init(options);
+  //addMouseEvents(state);
+  requestAnimationFrame(function test() {
+    data.time = performance.now()
+    state = state.draw(state);
+    //todo only pass in data that changed and update in place based on names
+    requestAnimationFrame(test)
+  });
+}
+
 let demoTitles = [
   'shapeTransition', 'breath', 'stripes', 'rings', 'checkerboard', 'one', 'four'
 ]
@@ -16,6 +39,10 @@ let demoTitles = [
 let demos = [
   shapeTransition, breath, stripes, rings, checkerboard, one, 'four'
 ]
+
+//make 1 draw call per thing
+//inline a  loop to draw currently selected draw call
+//make sure animations save state when draw call is swapped
 
 function choose(name) {
   let idx = demoTitles.indexOf(name);

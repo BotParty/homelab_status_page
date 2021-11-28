@@ -49,8 +49,6 @@ let size = 4.0;
   
   `
 
-
-
 const createBuffer = (gpuDevice:any, arr:any, usage:any,) => {
   let desc = {
     size: (arr.byteLength + 3) & ~3,
@@ -186,7 +184,7 @@ async function init(options:any) {
   const stuff = {
     renderPassDescriptor: {},
     attribsBuffer: {},
-    data: options.data,
+    data: options.data || {},
     canvas: options.canvas || utils.createCanvas(),
     state: {}, //passed from frame to frame-comment line 229
   };
@@ -209,7 +207,7 @@ async function init(options:any) {
     format: presentationFormat,
     size: presentationSize,
   });
-  let shader = makeShaderModule(gpuDevice, data, options.shader);
+  let shader = makeShaderModule(gpuDevice, stuff.data, options.shader);
 
   const pipeline = makePipeline(shader, gpuDevice);
 
@@ -228,49 +226,13 @@ async function init(options:any) {
     pipeline,
   });
   stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw(state:any) {
+  function draw() {
+    
     updateUniforms(stuff);
     recordRenderPass(stuff) 
-    return state;
+    return draw
   }
   return { draw, canvas: stuff.canvas};
-}
-
-async function start_loop_nb(data:any) {
-  const canvas = document.createElement("canvas");
-
-  canvas.addEventListener("mousemove", function (e) {
-    data.mouseX = e.clientX / data.width;
-    data.mouseY = e.clientY / data.height;
-  });
-
-  let copiedData = Object.assign({}, data); //should come from args
-  copiedData.time = Date.now() % 1000; //le clock
-  let options = { data: copiedData, canvas: canvas, width: data.width, height: data.height };
-  let state = await init(options);
-  let next_state = state.draw(state); //this should have all the inner stuff
-  return next_state;
-}
-let data = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
-  time: 0,
-  mouseX: 0,
-  mouseY: 0,
-  angle: 0,
-};
-//user land
-async function start_loop_static(options:any,) {
-  options.data = options.data || data; //extend 
-  let state = await init(options);
-  //addMouseEvents(state);
-  requestAnimationFrame(function test() {
-    data.time = performance.now()
-    state = state.draw(state);
-    //todo only pass in data that changed and update in place based on names
-    requestAnimationFrame(test)
-  });
 }
 
 // function addMouseEvents() {
@@ -285,4 +247,5 @@ async function start_loop_static(options:any,) {
 
 export { 
   init,
-  start_loop_static, start_loop_nb };
+  
+  };
