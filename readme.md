@@ -1,6 +1,10 @@
 * simple-webgpu-compute
-
-
+...
+---
+module for using webgpu for data visualization and more
+make compute shaders as simple as possible
+minimalist runtime for using webgpu shaders in nb/static website
+---
 
 ```
  import {init} from "https://cdn.skypack.dev/simple-data-texture/"
@@ -43,14 +47,18 @@ cat.subImage({
 
 ```
 
-module for using webgpu for data visualization and more
-intention: make compute shaders as simple as possible
-minimalist runtime for using webgpu shaders in nb/static website
+
 
 this library currently just draws a quad and allows
   custom shaders with minimal boilerplate
   custom uniforms and textures 
 
+
+* Default Options
+### WidthxHeight
+//1. passed in explicitly
+//2. check canvas 
+//3. if neither 1,2 default to 900x500
 
 * References
 http://vis.stanford.edu/files/2013-imMens-EuroVis.pdf

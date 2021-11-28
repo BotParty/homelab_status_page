@@ -37,14 +37,8 @@ const recordRenderPass = async function (stuff:any,) {
   passEncoder.setVertexBuffer(0, attribsBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
   passEncoder.endPass();
-//  const renderBundle = passEncoder.finish();
-  //2nd pass
-  // passEncoder.executeBundles([renderBundle]);
-  // passEncoder.endPass();
   gpuDevice.queue.submit([commandEncoder.finish()]); //async
-  //return renderBundle
 };
-
 
 function updateUniforms(stuff:any) {
   let {
