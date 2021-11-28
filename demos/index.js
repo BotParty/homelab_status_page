@@ -8,7 +8,6 @@ import * as d3 from "d3";
 import one from './shaders/one.wgsl?raw';
 import four from './shaders/four.wgsl?raw';
 
-
 let data = {
   width: 900, //based on canvas
   height: 500, //based on canvas
@@ -19,15 +18,12 @@ let data = {
   angle: 0,
 };
 
-
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   let draw = await init(options);
-  //addMouseEvents(state);
   requestAnimationFrame(function test() {
     data.time = performance.now()
     draw(data);
-    //todo only pass in data that changed and update in place based on names
     requestAnimationFrame(test)
   });
 }

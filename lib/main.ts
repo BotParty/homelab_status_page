@@ -227,7 +227,8 @@ async function init(options:any) {
   });
   stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(data:any) {
-    //merge 
+    //todo diff data for reupload uniform/texture
+    Object.assign(stuff.data, data)
     updateUniforms(stuff);
     recordRenderPass(stuff) 
     return draw

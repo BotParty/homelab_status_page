@@ -96,10 +96,10 @@ const recordRenderPass = async function(stuff) {
 };
 function updateUniforms(stuff) {
   let {
-    data: data2,
+    data,
     gpuDevice
   } = stuff;
-  let values = Object.values(data2);
+  let values = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
   stuff.uniformsBuffer = utils.createBuffer(gpuDevice, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
@@ -123,10 +123,10 @@ function makePipeline(shader, gpuDevice) {
   };
   return gpuDevice.createRenderPipeline(pipelineDesc);
 }
-function makeShaderModule(gpuDevice, data2, source) {
+function makeShaderModule(gpuDevice, data, source) {
   if (!source)
     source = defaultShader;
-  const uniforms = Object.keys(data2).map((name) => `${name}: f32;`).join("\n");
+  const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
   [[block]] struct Uniforms {
     ${uniforms}
@@ -157,7 +157,7 @@ async function init(options) {
   const stuff = {
     renderPassDescriptor: {},
     attribsBuffer: {},
-    data: options.data,
+    data: options.data || {},
     canvas: options.canvas || utils.createCanvas(),
     state: {}
   };
@@ -179,7 +179,7 @@ async function init(options) {
     format: presentationFormat,
     size: presentationSize
   });
-  let shader = makeShaderModule(gpuDevice, data, options.shader);
+  let shader = makeShaderModule(gpuDevice, stuff.data, options.shader);
   const pipeline = makePipeline(shader, gpuDevice);
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
@@ -198,42 +198,13 @@ async function init(options) {
     pipeline
   });
   stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw(state) {
+  function draw(data) {
+    Object.assign(stuff.data, data);
     updateUniforms(stuff);
     recordRenderPass(stuff);
-    return state;
+    return draw;
   }
-  return { draw, canvas: stuff.canvas };
+  draw.canvas = stuff.canvas;
+  return draw;
 }
-async function start_loop_nb(data2) {
-  const canvas = document.createElement("canvas");
-  canvas.addEventListener("mousemove", function(e) {
-    data2.mouseX = e.clientX / data2.width;
-    data2.mouseY = e.clientY / data2.height;
-  });
-  let copiedData = Object.assign({}, data2);
-  copiedData.time = Date.now() % 1e3;
-  let options = { data: copiedData, canvas, width: data2.width, height: data2.height };
-  let state = await init(options);
-  let next_state = state.draw(state);
-  return next_state;
-}
-let data = {
-  width: 900,
-  height: 500,
-  pixelRatio: 2,
-  time: 0,
-  mouseX: 0,
-  mouseY: 0,
-  angle: 0
-};
-async function start_loop_static(options) {
-  options.data = options.data || data;
-  let state = await init(options);
-  requestAnimationFrame(function test() {
-    data.time = performance.now();
-    state = state.draw(state);
-    requestAnimationFrame(test);
-  });
-}
-export { init, start_loop_nb, start_loop_static };
+export { init };
