@@ -6,7 +6,7 @@ import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
 import * as d3 from "d3";
 import one from './shaders/one.wgsl?raw';
-import four from './shaders/four.wgsl?raw';
+import textureShader from './shaders/four.wgsl?raw';
 
 let data = {
   width: 900, //based on canvas
@@ -28,12 +28,22 @@ async function start_loop_static(options) {
   });
 }
 
+function textureDemo () {
+  let img = document.createElement('img')
+  img.src = './late.png'
+  
+  customShader({
+    data: {texture: img},
+    shader: textureShader,
+  }); 
+}
+//last resort
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'four'
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'textureDemo'
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, four
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, textureDemo
 ]
 
 //make 1 draw call per thing
@@ -44,12 +54,9 @@ function choose(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
-  if (idx < 2) {
-    demo()
-  }
+  cleanup() 
   if (typeof demo === 'function') demo()
   else {
-    cleanup() 
     customShader({
       shader: demo,
     }); 
