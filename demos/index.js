@@ -22,11 +22,11 @@ let data = {
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
-  let state = await init(options);
+  let draw = await init(options);
   //addMouseEvents(state);
   requestAnimationFrame(function test() {
     data.time = performance.now()
-    state = state.draw(state);
+    draw(data);
     //todo only pass in data that changed and update in place based on names
     requestAnimationFrame(test)
   });

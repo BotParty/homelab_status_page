@@ -226,13 +226,15 @@ async function init(options:any) {
     pipeline,
   });
   stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw() {
-    
+  function draw(data:any) {
+    //merge 
     updateUniforms(stuff);
     recordRenderPass(stuff) 
     return draw
   }
-  return { draw, canvas: stuff.canvas};
+
+  draw.canvas = stuff.canvas
+  return draw
 }
 
 // function addMouseEvents() {
