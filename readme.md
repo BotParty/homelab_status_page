@@ -53,12 +53,15 @@ this library currently just draws a quad and allows
   custom shaders with minimal boilerplate
   custom uniforms and textures 
 
+* TopLevel Functions
+init -> returns draw
+Texture 
 
 * Default Options
 ### WidthxHeight
-//1. passed in explicitly
-//2. check canvas 
-//3. if neither 1,2 default to 900x500
+1. passed in explicitly
+2. check canvas 
+3. if neither 1,2 default to 900x500
 
 * References
 http://vis.stanford.edu/files/2013-imMens-EuroVis.pdf
