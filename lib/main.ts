@@ -76,6 +76,7 @@ function makePipeline(shader:any, gpuDevice:any,) {
 
 function makeShaderModule(gpuDevice:any, data:any, source:any,) {
   if (! source) source = defaultShader;
+  validateData(data)
   const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
   [[block]] struct Uniforms {
@@ -120,13 +121,12 @@ function validateData (data) {
 
 async function init(options:any) {
   let canvas = options.canvas || utils.createCanvas();
-  let data = Object.assign(defaultData, options.data);
-
-  const state = {
+  const state = { 
     renderPassDescriptor: {},
     attribsBuffer: {},
-    data
+    data: Object.assign(defaultData, options.data);
   };
+  
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter?.requestDevice();
@@ -166,8 +166,7 @@ async function init(options:any) {
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(newData:any) {
-    Object.assign(data, newData)//todo diff data for reupload uniform/texture
-    state.data = data
+    Object.assign(state.data, newData)//todo diff data for reupload uniform/texture
     updateUniforms(state);
     recordRenderPass(state) 
     return draw
