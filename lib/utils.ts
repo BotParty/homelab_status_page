@@ -28,6 +28,8 @@ const createBuffer = (gpuDevice:any, arr:any, usage:any,) => {
 
 
 function addMouseEvents(canvas:any) {
+
+    return canvas
   // let scaleX = scaleLinear().domain([0, 1]).range([0, 0.3]);
   // let scaleY = scaleLinear().domain([1, 0]).range([0, 1]);
   // state.canvas.addEventListener("mousemove", function (e) {
@@ -36,5 +38,5 @@ function addMouseEvents(canvas:any) {
   // });
 }
   export default {
-      createBuffer,  createCanvas
+      createBuffer,  createCanvas, addMouseEvents
   }

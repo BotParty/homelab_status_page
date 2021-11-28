@@ -1,51 +1,3 @@
-let defaultShader = `//This is rings
-let size = 4.0;
-
-    let b = 0.3;		//size of the smoothed border
-
-    fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
-      let aspect = iResolution.x/iResolution.y;
-      let position = (fragCoord.xy) * aspect;
-      let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
-      let offset=u.time * 000.0001;
-      let conv=4.;
-      let v=dist*4.-offset;
-      let ringr=floor(v);
-      
-      var stuff = 0.;
-      if (v % 3. > .5) {
-        stuff = 0.;
-      }
-
-	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));
-      if (ringr % 2. ==1.) {
-       color=2.-color;
-      }
-
-    let distToMouseX = distance(u.mouseX, fragCoord.x);
-    let distToMouseY = distance(u.mouseY, fragCoord.y);
-
-    return vec4<f32>(
-      distToMouseX, 
-      color, 
-      color, 
-      1.
-      );
-  };
-
-  fn main(uv: vec2<f32>) -> vec4<f32> {
-    let fragCoord = vec2<f32>(uv.x, uv.y);
-    var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);
-    let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-    return mainImage(fragCoord, vec2<f32>(u.width, u.height));
-  }
-
-  [[stage(fragment)]]
-  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {
-    return main(in.uv) - vec4<f32>(.8);
-  }
-  
-  `;
 const createBuffer = (gpuDevice, arr, usage) => {
   let desc = {
     size: arr.byteLength + 3 & ~3,
@@ -68,7 +20,15 @@ function createCanvas(width = 960, height = 500) {
   document.body.appendChild(canvas);
   return canvas;
 }
-let utils = { createBuffer, createCanvas };
+function addMouseEvents(canvas) {
+  return canvas;
+}
+var utils = {
+  createBuffer,
+  createCanvas,
+  addMouseEvents
+};
+var defaultShader = "let size = 4.0;\n\n    let b = 0.3;		//size of the smoothed border\n\n    fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {\n      let aspect = iResolution.x/iResolution.y;\n      let position = (fragCoord.xy) * aspect;\n      let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));\n      let offset=u.time * 000.0001;\n      let conv=4.;\n      let v=dist*4.-offset;\n      let ringr=floor(v);\n      \n      var stuff = 0.;\n      if (v % 3. > .5) {\n        stuff = 0.;\n      }\n\n	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));\n      if (ringr % 2. ==1.) {\n       color=2.-color;\n      }\n\n    let distToMouseX = distance(u.mouseX, fragCoord.x);\n    let distToMouseY = distance(u.mouseY, fragCoord.y);\n\n    return vec4<f32>(\n      distToMouseX, \n      color, \n      color, \n      1.\n      );\n  };\n\n  fn main(uv: vec2<f32>) -> vec4<f32> {\n    let fragCoord = vec2<f32>(uv.x, uv.y);\n    var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);\n    let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));\n    return mainImage(fragCoord, vec2<f32>(u.width, u.height));\n  }\n\n  [[stage(fragment)]]\n  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {\n    return main(in.uv) - vec4<f32>(.8);\n  }\n  ";
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 const recordRenderPass = async function(stuff) {
   let {
@@ -126,6 +86,7 @@ function makePipeline(shader, gpuDevice) {
 function makeShaderModule(gpuDevice, data, source) {
   if (!source)
     source = defaultShader;
+  validateData(data);
   const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
   [[block]] struct Uniforms {
@@ -153,23 +114,35 @@ function makeShaderModule(gpuDevice, data, source) {
   ${source}`;
   return gpuDevice.createShaderModule({ code });
 }
+let defaultData = {
+  width: 900,
+  height: 500,
+  pixelRatio: 2,
+  time: 0,
+  mouseX: 0,
+  mouseY: 0,
+  angle: 0
+};
+function validateData(data) {
+  if (typeof data.width !== "number")
+    throw new Error("bad data!!");
+}
 async function init(options) {
-  const stuff = {
+  let canvas = options.canvas || utils.createCanvas();
+  const state = {
     renderPassDescriptor: {},
     attribsBuffer: {},
-    data: options.data || {},
-    canvas: options.canvas || utils.createCanvas(),
-    state: {}
+    data: Object.assign(defaultData, options.data)
   };
-  const context = stuff.canvas.value || stuff.canvas.getContext("webgpu");
+  const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await (adapter == null ? void 0 : adapter.requestDevice());
   const presentationFormat = context.getPreferredFormat(adapter);
   const presentationSize = [
-    stuff.canvas.width * devicePixelRatio,
-    stuff.canvas.height * devicePixelRatio
+    canvas.width * devicePixelRatio,
+    canvas.height * devicePixelRatio
   ];
-  Object.assign(stuff, {
+  Object.assign(state, {
     gpuDevice,
     context,
     adapter
@@ -179,7 +152,7 @@ async function init(options) {
     format: presentationFormat,
     size: presentationSize
   });
-  let shader = makeShaderModule(gpuDevice, stuff.data, options.shader);
+  let shader = makeShaderModule(gpuDevice, state.data, options.shader);
   const pipeline = makePipeline(shader, gpuDevice);
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
@@ -191,20 +164,20 @@ async function init(options) {
       }
     ]
   };
-  stuff.renderPassDescriptor = renderPassDescriptor;
-  Object.assign(stuff, {
+  state.renderPassDescriptor = renderPassDescriptor;
+  Object.assign(state, {
     textureView,
     renderPassDescriptor,
     pipeline
   });
-  stuff.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
-  function draw(data) {
-    Object.assign(stuff.data, data);
-    updateUniforms(stuff);
-    recordRenderPass(stuff);
+  state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+  function draw(newData) {
+    Object.assign(state.data, newData);
+    updateUniforms(state);
+    recordRenderPass(state);
     return draw;
   }
-  draw.canvas = stuff.canvas;
+  draw.canvas = canvas;
   return draw;
 }
 export { init };

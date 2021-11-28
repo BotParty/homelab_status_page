@@ -1,5 +1,6 @@
 // import { scaleLinear } from "d3-scale";
 import utils from './utils';
+// @ts-ignore
 import defaultShader from './default.wgsl?raw';
 
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
@@ -115,7 +116,7 @@ let defaultData =  {
   angle: 0,
 };
 
-function validateData (data) {
+function validateData (data:any) {
   if (typeof data.width !== 'number') throw new Error('bad data!!')
 }
 
@@ -124,7 +125,7 @@ async function init(options:any) {
   const state = { 
     renderPassDescriptor: {},
     attribsBuffer: {},
-    data: Object.assign(defaultData, options.data);
+    data: Object.assign(defaultData, options.data)
   };
   
   const context = canvas.getContext("webgpu");
