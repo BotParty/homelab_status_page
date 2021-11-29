@@ -128,4 +128,4 @@ function cleanup () {
   d3.selectAll('canvas').remove()
 }
 
-choose('checkerboard')
+choose('one')
