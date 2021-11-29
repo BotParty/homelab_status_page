@@ -6,11 +6,6 @@ import blurWGSL from './blur.wgsl?raw';
 import fullscreenTexturedQuadWGSL from './fullscreenTexturedQuad.wgsl?raw';
 
 
-
-
-
-
-
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
 const recordRenderPass = async function (stuff:any,) {
@@ -181,7 +176,7 @@ async function init2(options:any) {
 const tileDim = 128;
 const batch = [4, 4];
 const init = async (options:any) => {
-  let canvasRef = options.canvas || utils.createCanvas();
+  let canvas = options.canvas || utils.createCanvas();
   const state = { 
     renderPassDescriptor: {},
     attribsBuffer: {},
@@ -194,12 +189,12 @@ const init = async (options:any) => {
   const adapter = await navigator.gpu?.requestAdapter();
   const device = await adapter.requestDevice();
 
-  const context = canvasRef.getContext('webgpu');
+  const context = canvas.getContext('webgpu');
 
   const devicePixelRatio = window.devicePixelRatio || 1;
   const presentationSize = [
-    canvasRef.clientWidth * devicePixelRatio,
-    canvasRef.clientHeight * devicePixelRatio,
+    canvas.clientWidth * devicePixelRatio,
+    canvas.clientHeight * devicePixelRatio,
   ];
   const presentationFormat = context.getPreferredFormat(adapter);
 
