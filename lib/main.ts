@@ -59,7 +59,8 @@ function makePipeline(shader:any, gpuDevice:any,) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-      buffers: [{ arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
+      buffers: [{ 
+        arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
                 attributes: [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
     fragment: {
       module: shader,
@@ -177,7 +178,8 @@ async function init(options:any) {
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(newData:any) {
-    //Object.assign(state.data, newData)//todo diff data for reupload uniform/texture
+    
+    Object.assign(state.data, newData)
     updateUniforms(state);
     recordRenderPass(state) 
     return draw

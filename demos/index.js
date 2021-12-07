@@ -38,19 +38,13 @@ function textureDemo () {
     shader: textureShader,
   }); 
 }
-//last resort
 let demoTitles = [
   'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'five'
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, 'five'
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, five
 ]
-
-//make 1 draw call per thing
-//inline a  loop to draw currently selected draw call
-//make sure animations save state when draw call is swapped
-
 function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
