@@ -6,7 +6,8 @@ import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
 import * as d3 from "d3";
 import one from './shaders/one.wgsl?raw';
-import textureShader from './shaders/four.wgsl?raw';
+import mouse from './shaders/four.wgsl?raw';
+import five from './shaders/five.wgsl?raw';
 
 let data = {
   width: 900, //based on canvas
@@ -39,22 +40,23 @@ function textureDemo () {
 }
 //last resort
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'textureDemo'
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'five'
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, textureDemo
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, 'five'
 ]
 
 //make 1 draw call per thing
 //inline a  loop to draw currently selected draw call
 //make sure animations save state when draw call is swapped
 
-function choose(name) {
+function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
   cleanup() 
+  document.querySelectorAll('input')[idx].checked = true
   if (typeof demo === 'function') demo()
   else {
     customShader({
@@ -62,6 +64,8 @@ function choose(name) {
     }); 
   }
 }
+
+
 
 let template = document.querySelector('template').innerHTML
 let controlpanel  =  document.querySelector('#control-panel');
@@ -72,6 +76,9 @@ let controlpanel  =  document.querySelector('#control-panel');
 // .join('input')
 // .attr('type', 'radio')
 
+
+
+
 controlpanel.innerHTML += Object.keys(demos).map(
   title => template
   .replace(/{replace_me}/g, demoTitles[title]))
@@ -79,7 +86,7 @@ controlpanel.innerHTML += Object.keys(demos).map(
   
   d3.selectAll('input')
   .on('click', (event) => {
-    choose(event.target.value)
+    select(event.target.value)
   })
 
   console.log('hi')
@@ -124,8 +131,18 @@ function cleanup () {
   let video = document.querySelector('video')
   if (video) document.body.removeChild(video)
   let canvas = document.querySelector('canvas')
-  
+  //d3.selectAll('input').attr('checked', '')
+  document.querySelector(':checked').checked = null 
+
   d3.selectAll('canvas').remove()
 }
 
-choose('checkerboard')
+let choice = 0
+function choose () {
+  let input = document.querySelectorAll('input')
+  choice += 1;
+  input[choice].click()
+}
+
+setInterval(choose, 5000)
+choose()

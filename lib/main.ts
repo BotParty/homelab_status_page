@@ -47,7 +47,9 @@ function updateUniforms(stuff:any) {
   } = stuff;
   let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
+  //console.log(data.mouseX)
   uniformsArray.set(values, 0);
+
   stuff.uniformsBuffer = utils.createBuffer(
     gpuDevice, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
@@ -114,6 +116,19 @@ function validateData (data:any) {
   if (typeof data.width !== 'number') throw new Error('bad data!!')
 }
 
+
+
+const addMouseEvents = function (canvas, data) {
+  canvas.addEventListener('mousemove', (event) => {
+    //console.log(event)
+    let x = event.pageX 
+    let y = event.pageY
+    data.mouseX = x / event.target.clientWidth
+    data.mouseY = y / event.target.clientHeight
+    //console.log(data.mouseX, data.mouseY)
+  })
+}
+
 async function init(options:any) {
   let canvas = options.canvas || utils.createCanvas();
   const state = { 
@@ -121,7 +136,8 @@ async function init(options:any) {
     attribsBuffer: {},
     data: Object.assign(defaultData, options.data)
   };
-  
+  addMouseEvents(canvas, state.data)
+
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter?.requestDevice();
@@ -161,7 +177,7 @@ async function init(options:any) {
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(newData:any) {
-    Object.assign(state.data, newData)//todo diff data for reupload uniform/texture
+    //Object.assign(state.data, newData)//todo diff data for reupload uniform/texture
     updateUniforms(state);
     recordRenderPass(state) 
     return draw
