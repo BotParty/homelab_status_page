@@ -60,8 +60,10 @@ function makePipeline(shader:any, gpuDevice:any,) {
       module: shader,
       entryPoint: "main_vertex",
       buffers: [{ 
-        arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
-                attributes: [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
+        arrayStride: 
+        Float32Array.BYTES_PER_ELEMENT * 2,
+                attributes:
+                 [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
@@ -119,8 +121,8 @@ function validateData (data:any) {
 
 
 
-const addMouseEvents = function (canvas, data) {
-  canvas.addEventListener('mousemove', (event) => {
+const addMouseEvents = function (canvas:any, data:any) {
+  canvas.addEventListener('mousemove', (event:any) => {
     //console.log(event)
     let x = event.pageX 
     let y = event.pageY
@@ -178,7 +180,7 @@ async function init(options:any) {
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(newData:any) {
-    
+    if (! newData.time) newData.time = performance.now()
     Object.assign(state.data, newData)
     updateUniforms(state);
     recordRenderPass(state) 

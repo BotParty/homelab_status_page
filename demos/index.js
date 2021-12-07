@@ -10,13 +10,13 @@ import mouse from './shaders/four.wgsl?raw';
 import five from './shaders/five.wgsl?raw';
 
 let data = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
-  time: 0,
-  mouseX: 0,
-  mouseY: 0,
-  angle: 0,
+  // width: 900, //based on canvas
+  // height: 500, //based on canvas
+  // pixelRatio: 2, //based on canvas
+  // time: 0,
+  // mouseX: 0,
+  // mouseY: 0,
+  // angle: 0,
 };
 
 async function start_loop_static(options) {
