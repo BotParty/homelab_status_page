@@ -65,11 +65,8 @@ function select(name) {
   }
 }
 
-
-
 let template = document.querySelector('template').innerHTML
 let controlpanel  =  document.querySelector('#control-panel');
-
 
 controlpanel.innerHTML += Object.keys(demos).map(
   title => template
@@ -88,21 +85,18 @@ function customShader(options) {
 }
 
 function cleanup () {
-  let video = document.querySelector('video')
-  if (video) document.body.removeChild(video)
-  let canvas = document.querySelector('canvas')
-  //d3.selectAll('input').attr('checked', '')
   document.querySelector(':checked').checked = null 
-
   d3.selectAll('canvas').remove()
 }
 
 let choice = 0
-function choose () {
+function choose (idx) {
   let input = document.querySelectorAll('input')
-  choice += 1;
+ 
+  if (idx) choice = idx
+  else  choice += 1;
   input[choice].click()
 }
 
-setInterval(choose, 5000)
-choose()
+//setInterval(choose, 5000)
+choose(3)
