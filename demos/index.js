@@ -93,4 +93,4 @@ function choose (idx) {
 }
 
 //setInterval(choose, 5000)
-choose(3)
+choose(7)

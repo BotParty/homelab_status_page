@@ -119,15 +119,13 @@ function validateData (data:any) {
   if (typeof data.width !== 'number') throw new Error('bad data!!')
 }
 
-
-
 const addMouseEvents = function (canvas:any, data:any) {
   canvas.addEventListener('mousemove', (event:any) => {
-    //console.log(event)
     let x = event.pageX 
     let y = event.pageY
     data.mouseX = x / event.target.clientWidth
     data.mouseY = y / event.target.clientHeight
+    //console.log(data.mouseX, data.mouseY)
     //console.log(data.mouseX, data.mouseY)
   })
 }
