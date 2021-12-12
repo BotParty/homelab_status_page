@@ -83,6 +83,7 @@ function cleanup () {
   d3.selectAll('canvas').remove()
 }
 
+
 let choice = 0
 function choose (idx) {
   let input = document.querySelectorAll('input')
@@ -94,3 +95,4 @@ function choose (idx) {
 
 //setInterval(choose, 5000)
 choose(7)
+
