@@ -1,5 +1,6 @@
 # simple-webgpu-compute
-## Designed specifically for Biotech, robotics, and simulation games
+## Please star https://github.com/gpuweb/gpuweb to support progress in Computer Graphics for 7 billion people
+## Designed specifically for Biotech, Robotics, and Simulation Games
 
 module for using webgpu for data visualization and more
 make compute shaders as simple as possible
