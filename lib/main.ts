@@ -50,7 +50,9 @@ function updateUniforms(stuff:any) {
   } = stuff;
   let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
+  //console.log(data.mouseX)
   uniformsArray.set(values, 0);
+
   stuff.uniformsBuffer = utils.createBuffer(
     gpuDevice, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
@@ -60,8 +62,11 @@ function makePipeline(shader:any, gpuDevice:any,) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-      buffers: [{ arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
-                attributes: [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
+      buffers: [{ 
+        arrayStride: 
+        Float32Array.BYTES_PER_ELEMENT * 2,
+                attributes:
+                 [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
@@ -115,14 +120,26 @@ function validateData (data:any) {
   if (typeof data.width !== 'number') throw new Error('bad data!!')
 }
 
-async function init2(options:any) {
+const addMouseEvents = function (canvas:any, data:any) {
+  canvas.addEventListener('mousemove', (event:any) => {
+    let x = event.pageX 
+    let y = event.pageY
+    data.mouseX = x / event.target.clientWidth
+    data.mouseY = y / event.target.clientHeight
+    //console.log(data.mouseX, data.mouseY)
+    //console.log(data.mouseX, data.mouseY)
+  })
+}
+
+async function init(options:any) {
   let canvas = options.canvas || utils.createCanvas();
   const state = { 
     renderPassDescriptor: {},
     attribsBuffer: {},
     data: Object.assign(defaultData, options.data)
   };
-  
+  addMouseEvents(canvas, state.data)
+
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await adapter?.requestDevice();
@@ -162,7 +179,8 @@ async function init2(options:any) {
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(newData:any) {
-    Object.assign(state.data, newData)//todo diff data for reupload uniform/texture
+    if (! newData.time) newData.time = performance.now()
+    Object.assign(state.data, newData)
     updateUniforms(state);
     recordRenderPass(state) 
     return draw

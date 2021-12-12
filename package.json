@@ -1,6 +1,6 @@
 {
-  "name": "simple-data-texture",
-  "version": "0.1.0",
+  "name": "simple-webgpu-compute",
+  "version": "0.3.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

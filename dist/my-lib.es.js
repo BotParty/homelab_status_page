@@ -20,13 +20,9 @@ function createCanvas(width = 960, height = 500) {
   document.body.appendChild(canvas);
   return canvas;
 }
-function addMouseEvents(canvas) {
-  return canvas;
-}
 var utils = {
   createBuffer,
-  createCanvas,
-  addMouseEvents
+  createCanvas
 };
 var defaultShader = "let size = 4.0;\n\n    let b = 0.3;		//size of the smoothed border\n\n    fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {\n      let aspect = iResolution.x/iResolution.y;\n      let position = (fragCoord.xy) * aspect;\n      let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));\n      let offset=u.time * 000.0001;\n      let conv=4.;\n      let v=dist*4.-offset;\n      let ringr=floor(v);\n      \n      var stuff = 0.;\n      if (v % 3. > .5) {\n        stuff = 0.;\n      }\n\n	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));\n      if (ringr % 2. ==1.) {\n       color=2.-color;\n      }\n\n    let distToMouseX = distance(u.mouseX, fragCoord.x);\n    let distToMouseY = distance(u.mouseY, fragCoord.y);\n\n    return vec4<f32>(\n      distToMouseX, \n      color, \n      color, \n      1.\n      );\n  };\n\n  fn main(uv: vec2<f32>) -> vec4<f32> {\n    let fragCoord = vec2<f32>(uv.x, uv.y);\n    var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);\n    let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));\n    return mainImage(fragCoord, vec2<f32>(u.width, u.height));\n  }\n\n  [[stage(fragment)]]\n  fn main_fragment(in: VertexOutput) -> [[location(0)]] vec4<f32> {\n    return main(in.uv) - vec4<f32>(.8);\n  }\n  ";
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
@@ -127,6 +123,14 @@ function validateData(data) {
   if (typeof data.width !== "number")
     throw new Error("bad data!!");
 }
+const addMouseEvents = function(canvas, data) {
+  canvas.addEventListener("mousemove", (event) => {
+    let x = event.pageX;
+    let y = event.pageY;
+    data.mouseX = x / event.target.clientWidth;
+    data.mouseY = y / event.target.clientHeight;
+  });
+};
 async function init(options) {
   let canvas = options.canvas || utils.createCanvas();
   const state = {
@@ -134,6 +138,7 @@ async function init(options) {
     attribsBuffer: {},
     data: Object.assign(defaultData, options.data)
   };
+  addMouseEvents(canvas, state.data);
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const gpuDevice = await (adapter == null ? void 0 : adapter.requestDevice());
@@ -172,6 +177,8 @@ async function init(options) {
   });
   state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
   function draw(newData) {
+    if (!newData.time)
+      newData.time = performance.now();
     Object.assign(state.data, newData);
     updateUniforms(state);
     recordRenderPass(state);

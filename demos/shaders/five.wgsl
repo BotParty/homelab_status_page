@@ -6,5 +6,5 @@
     var p = in.uv * fragPosition;
     var q = p.x % 25. * 2.0 < 25. == p.y % 25. * 2.0 < 25.;
     var o = f32(q);
-    return vec4<f32>(0., u.mouseY, o, .1);
+    return vec4<f32>(0., 0.1, o, .1);
 }

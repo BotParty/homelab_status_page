@@ -6,16 +6,17 @@ import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
 import * as d3 from "d3";
 import one from './shaders/one.wgsl?raw';
-import textureShader from './shaders/four.wgsl?raw';
+import mouse from './shaders/four.wgsl?raw';
+import five from './shaders/five.wgsl?raw';
 
 let data = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
-  time: 0,
-  mouseX: 0,
-  mouseY: 0,
-  angle: 0,
+  // width: 900, //based on canvas
+  // height: 500, //based on canvas
+  // pixelRatio: 2, //based on canvas
+  // time: 0,
+  // mouseX: 0,
+  // mouseY: 0,
+  // angle: 0,
 };
 
 async function start_loop_static(options) {
@@ -37,24 +38,19 @@ function textureDemo () {
     shader: textureShader,
   }); 
 }
-//last resort
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'textureDemo'
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'five'
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, textureDemo
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, five
 ]
-
-//make 1 draw call per thing
-//inline a  loop to draw currently selected draw call
-//make sure animations save state when draw call is swapped
-
-function choose(name) {
+function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
   cleanup() 
+  document.querySelectorAll('input')[idx].checked = true
   if (typeof demo === 'function') demo()
   else {
     customShader({
@@ -66,12 +62,6 @@ function choose(name) {
 let template = document.querySelector('template').innerHTML
 let controlpanel  =  document.querySelector('#control-panel');
 
-// d3.select('#control-panel')
-// .selectAll('input')
-// .data(demos)
-// .join('input')
-// .attr('type', 'radio')
-
 controlpanel.innerHTML += Object.keys(demos).map(
   title => template
   .replace(/{replace_me}/g, demoTitles[title]))
@@ -79,7 +69,7 @@ controlpanel.innerHTML += Object.keys(demos).map(
   
   d3.selectAll('input')
   .on('click', (event) => {
-    choose(event.target.value)
+    select(event.target.value)
   })
 
   console.log('hi')
@@ -88,44 +78,21 @@ function customShader(options) {
   start(options);
 }
 
-// async function video() {
-//   async function createVideo() {
-//     const video = document.createElement("video");
-//     video.loop = true;
-//     video.autoplay = true;
-//     video.muted = true;
-//     video.width = "480";
-//     video.height = "270";
-//     video.currentTime = 15;
-//     video.loop = true;
-//     video.crossorigin = "anonymous";
-//     video.controls = "true";
-//     video.src = './data/ue5-short.webm'
-//     await video.play();
-//     document.body.appendChild(video);
-//     return video;
-//   }
-//   let vid = await createVideo()
-//   customShader({
-//     video: vid
-//   })
-// }
-
-
-// document.querySelectorAll("input").forEach((e) => {
-//   e.addEventListener("click", (e) => {
-//     console.log('name', e.target.value);
-//     cleanup()
-//     demos[e.target.value]()
-//   });
-// });
-
 function cleanup () {
-  let video = document.querySelector('video')
-  if (video) document.body.removeChild(video)
-  let canvas = document.querySelector('canvas')
-  
+  document.querySelector(':checked').checked = null 
   d3.selectAll('canvas').remove()
 }
 
-choose('one')
+
+let choice = 0
+function choose (idx) {
+  let input = document.querySelectorAll('input')
+ 
+  if (idx) choice = idx
+  else  choice += 1;
+  input[choice].click()
+}
+
+//setInterval(choose, 5000)
+choose(7)
+
