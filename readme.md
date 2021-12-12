@@ -1,10 +1,9 @@
 # simple-webgpu-compute
-...
----
+## Designed specifically for Biotech, robotics, and simulation games
+
 module for using webgpu for data visualization and more
 make compute shaders as simple as possible
 minimalist runtime for using webgpu shaders in nb/static website
----
 
 ```
  import {init} from "https://cdn.skypack.dev/simple-data-texture/"
@@ -84,4 +83,6 @@ https://explorer.morphocode.com/map
 ## sponsored by
 <a href="https://a16z.com/bio/"><img src="/1.png" align="left" hspace="10" vspace="6"></a>
 
+
+## Thank you to Firefox Nightly and Microsoft Edge and Safari and Chrome Canary 
 
