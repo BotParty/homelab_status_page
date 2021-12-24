@@ -93,6 +93,6 @@ function choose (idx) {
   input[choice].click()
 }
 
-//setInterval(choose, 5000)
+setInterval(choose, 2500)
 choose(7)
 

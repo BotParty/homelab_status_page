@@ -1,10 +1,43 @@
 # simple-webgpu-compute
 ## Please star https://github.com/gpuweb/gpuweb to support progress in Computer Graphics for 7 billion people
 ## Designed specifically for Biotech, Robotics, and Simulation Games
+### webgpu public launch eta jan 1 (according to rumors)
 
 module for using webgpu for data visualization and more
 make compute shaders as simple as possible
 minimalist runtime for using webgpu shaders in nb/static website
+
+<div align="center">
+
+  [![NPM Version](https://img.shields.io/npm/v/regl.svg?style=flat-square)](https://npmjs.org/package/regl)
+  [![Build Status](https://img.shields.io/travis/regl-project/regl.svg?style=flat-square)](https://travis-ci.org/regl-project/regl/)
+  [![File Size](https://badge-size.herokuapp.com/regl-project/regl/gh-pages/dist/regl.min.js.svg?compression=gzip&style=flat-square)](https://npmcdn.com/regl/dist/regl.min.js)
+  [![Downloads](https://img.shields.io/npm/dm/regl.svg?style=flat-square)](https://npmjs.org/package/regl)
+  [![Standard](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
+
+</div>
+
+
+
+<div align="center">
+  <h3>
+    <a href="https://github.com/regl-project/regl/blob/gh-pages/API.md">
+      Docs
+    </a>
+    <span> | </span>
+    <a href="https://gitter.im/mikolalysenko/regl">
+      Chat
+    </a>
+    <span> | </span>
+    <a href="https://npmcdn.com/regl/dist/regl.js">
+      Download
+    </a>
+    <span> | </span>
+    <a href="https://npmcdn.com/regl/dist/regl.min.js">
+      Minified
+    </a>
+  </h3>
+</div>
 
 ```
  import {init} from "https://cdn.skypack.dev/simple-data-texture/"
@@ -82,7 +115,7 @@ https://www1.nyc.gov/site/doitt/initiatives/3d-building.page
 https://explorer.morphocode.com/map
 
 ## sponsored by
-<a href="https://a16z.com/bio/"><img src="/1.png" align="left" hspace="10" vspace="6"></a>
+<a href="https://a16z.com/bio/"><img src="https://raw.githubusercontent.com/nyc-map/Simple-webgpu-compute/main/public/1.png" align="left" hspace="10" vspace="6"></a>
 
 
 ## Thank you to Firefox Nightly and Microsoft Edge and Safari and Chrome Canary 
