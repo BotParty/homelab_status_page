@@ -189,6 +189,8 @@ async function init(options:any) {
   return draw
 }
 
+init.version = '0.0.7';
+console.log(init)
 export { 
   init,
 };

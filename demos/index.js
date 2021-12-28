@@ -92,5 +92,13 @@ function choose (idx) {
   input[choice].click()
 }
 
-setInterval(choose, 2500)
-//choose(7)
+//setInterval(choose, 2500)
+choose(7)
+
+document.querySelectorAll('input').forEach((el, idx) =>
+  el.addEventListener('mouseover', () => {
+    cleanup() 
+
+    choose(idx)
+  })
+)
