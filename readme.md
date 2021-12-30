@@ -78,7 +78,6 @@ https://developers.google.com/protocol-buffers
 column-based data-stores like arrow/cassandra
 mega-textures from id-engine-5 (virtual-streaming textures )
 immens / nanocubes
-https://scale.com/resources/download/pandaset
 https://nanocubes.net/
 https://www1.nyc.gov/site/doitt/initiatives/3d-building.page
 https://explorer.morphocode.com/map
