@@ -47,7 +47,7 @@ function updateUniforms(stuff:any) {
   } = stuff;
   let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
-  //console.log(data.mouseX)
+
   uniformsArray.set(values, 0);
 
   stuff.uniformsBuffer = utils.createBuffer(
@@ -79,7 +79,7 @@ function makeShaderModule(gpuDevice:any, data:any, source:any,) {
   validateData(data)
   const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
-  [[block]] struct Uniforms {
+   struct Uniforms {
     ${uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;

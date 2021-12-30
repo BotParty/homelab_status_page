@@ -93,9 +93,9 @@ function choose (idx) {
 }
 
 //setInterval(choose, 2500)
-choose(7)
+choose(5)
 
-document.querySelectorAll('input').forEach((el, idx) =>
+document.querySelectorAll('label').forEach((el, idx) =>
   el.addEventListener('mouseover', () => {
     cleanup() 
 
