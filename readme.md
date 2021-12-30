@@ -7,6 +7,14 @@ module for using webgpu for data visualization and more
 make compute shaders as simple as possible
 minimalist runtime for using webgpu shaders in nb/static website
 
+requirements:
+  textures
+  compute shaders(image processing)
+
+
+
+
+
 
 ```
  import {init} from "https://cdn.skypack.dev/simple-data-texture/"
