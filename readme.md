@@ -17,28 +17,6 @@ minimalist runtime for using webgpu shaders in nb/static website
 
 </div>
 
-
-
-<div align="center">
-  <h3>
-    <a href="https://github.com/regl-project/regl/blob/gh-pages/API.md">
-      Docs
-    </a>
-    <span> | </span>
-    <a href="https://gitter.im/mikolalysenko/regl">
-      Chat
-    </a>
-    <span> | </span>
-    <a href="https://npmcdn.com/regl/dist/regl.js">
-      Download
-    </a>
-    <span> | </span>
-    <a href="https://npmcdn.com/regl/dist/regl.min.js">
-      Minified
-    </a>
-  </h3>
-</div>
-
 ```
  import {init} from "https://cdn.skypack.dev/simple-data-texture/"
 
