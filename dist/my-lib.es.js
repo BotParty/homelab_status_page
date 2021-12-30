@@ -85,7 +85,7 @@ function makeShaderModule(gpuDevice, data, source) {
   validateData(data);
   const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
   const code = `
-  [[block]] struct Uniforms {
+   struct Uniforms {
     ${uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;
@@ -187,4 +187,6 @@ async function init(options) {
   draw.canvas = canvas;
   return draw;
 }
+init.version = "0.0.7";
+console.log(init);
 export { init };
