@@ -4,7 +4,6 @@ import { init } from "../lib/main";
 import rings from './shaders/ringu.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
-import * as d3 from "d3";
 import one from './shaders/one.wgsl?raw';
 import mouse from './shaders/four.wgsl?raw';
 import five from './shaders/five.wgsl?raw';
@@ -67,12 +66,14 @@ controlpanel.innerHTML += Object.keys(demos).map(
   .replace(/{replace_me}/g, demoTitles[title]))
   .join('\n')
   
-  d3.selectAll('input')
-  .on('click', (event) => {
-    select(event.target.value)
+  
+  document.querySelectorAll('input').forEach(e => {
+   e.addEventListener('click', (event) => {
+      select(event.target.value)
+    })
   })
+  
 
-  console.log('hi')
 function customShader(options) {
   let start = window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
   start(options);
@@ -80,7 +81,9 @@ function customShader(options) {
 
 function cleanup () {
   document.querySelector(':checked').checked = null 
-  d3.selectAll('canvas').remove()
+  let canvas = document.querySelector('canvas')
+  
+  if (canvas) canvas.remove()
 }
 
 let choice = 0
