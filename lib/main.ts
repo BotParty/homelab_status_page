@@ -2,6 +2,9 @@
 import utils from './utils';
 // @ts-ignore
 import defaultShader from './default.wgsl?raw';
+import blurWGSL from './blur.wgsl?raw';
+import fullscreenTexturedQuadWGSL from './fullscreenTexturedQuad.wgsl?raw';
+
 
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
@@ -83,9 +86,7 @@ function makeShaderModule(gpuDevice:any, data:any, source:any,) {
     ${uniforms}
   };
   [[group(0), binding(0)]] var<uniform> u: Uniforms;
-  // [[group(0), binding(1)]] var mySampler: sampler;
-  // [[group(0), binding(2)]] var myTexture: texture_external;
-  struct VertexInput {
+ struct VertexInput {
     [[location(0)]] pos: vec2<f32>;
   };
   struct VertexOutput {
@@ -191,6 +192,7 @@ async function init(options:any) {
 
 init.version = '0.0.7';
 console.log(init)
+
 export { 
   init,
 };

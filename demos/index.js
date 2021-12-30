@@ -83,6 +83,7 @@ function cleanup () {
   d3.selectAll('canvas').remove()
 }
 
+
 let choice = 0
 function choose (idx) {
   let input = document.querySelectorAll('input')
@@ -91,6 +92,7 @@ function choose (idx) {
   else  choice += 1;
   input[choice].click()
 }
+
 
 //setInterval(choose, 2500)
 choose(5)
@@ -102,3 +104,4 @@ document.querySelectorAll('label').forEach((el, idx) =>
     choose(idx)
   })
 )
+
