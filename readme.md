@@ -83,9 +83,6 @@ https://nanocubes.net/
 https://www1.nyc.gov/site/doitt/initiatives/3d-building.page
 https://explorer.morphocode.com/map
 
-## Sponsored by
-<a href="https://a16z.com/bio/"><img src="https://raw.githubusercontent.com/nyc-map/Simple-webgpu-compute/main/public/1.png" align="left" hspace="10" vspace="6"></a>
-
 
 ## Thank you to Firefox Nightly and Microsoft Edge and Safari and Chrome Canary 
 
