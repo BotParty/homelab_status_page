@@ -125,8 +125,6 @@ const addMouseEvents = function (canvas:any, data:any) {
     let y = event.pageY
     data.mouseX = x / event.target.clientWidth
     data.mouseY = y / event.target.clientHeight
-    //console.log(data.mouseX, data.mouseY)
-    //console.log(data.mouseX, data.mouseY)
   })
 }
 
