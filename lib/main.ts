@@ -210,7 +210,7 @@ async function init(options:any) {
 
 
 
-init.version = '0.4.0';
+init.version = '0.8.0';
 
 export { 
   init,
