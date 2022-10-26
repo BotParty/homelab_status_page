@@ -13,7 +13,8 @@ const recordRenderPass = async function (stuff:any,) {
     pipeline,
     uniformsBuffer,
     renderPassDescriptor,
-    bindGroupLayout
+    bindGroupLayout,
+    bindGroup
   } = stuff;
 
   const commandEncoder = device.createCommandEncoder();
@@ -29,13 +30,6 @@ const recordRenderPass = async function (stuff:any,) {
 
   passEncoder.setPipeline(pipeline);
 
-
-  const bindGroup = device.createBindGroup({
-    layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
-    entries: [{ 
-      binding: 0, resource: { buffer: uniformsBuffer } } ],
-  });
-
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, vertexBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
@@ -44,24 +38,22 @@ const recordRenderPass = async function (stuff:any,) {
   device.queue.submit([commandEncoder.finish()]); //async
 };
 
-function updateUniforms(stuff:any) {
+function updateUniforms(state:any) {
   let {
     data,
     device,
-  } = stuff;
+  } = state;
   let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
 
   uniformsArray.set(values, 0);
 
-  stuff.uniformsBuffer = utils.createBuffer(
+  state.uniformsBuffer = utils.createBuffer(
     device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
 }
-function makePipeline(shader, stuff) {
-  let {device} = stuff ;
-
-  console.log(device);
+async function makePipeline(shader, state) {
+  let {device} = state ;
 
   let pipelineDesc = {
     layout: 'auto',
@@ -90,11 +82,69 @@ function makePipeline(shader, stuff) {
     ],
   });
 
+  const sampler = device.createSampler({
+    magFilter: 'linear',
+    minFilter: 'linear',
+  });
+
+
+
+
+  const renderPassDescriptor = {
+    colorAttachments: [{ 
+        view: state.textureView,
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        loadOp: 'clear',
+        storeOp: 'store'
+      },
+    ],
+  };
+
+  state.renderPassDescriptor = renderPassDescriptor;
+
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout],
   });
 
- stuff.bindGroupLayout = bindGroupLayout
+ state.bindGroupLayout = bindGroupLayout
+
+//  const img = document.createElement('img');
+//  img.src = './late.png'
+//  await img.decode();
+//  const imageBitmap = await createImageBitmap(img);
+// let cubeTexture = device.createTexture({
+//   size: [imageBitmap.width, imageBitmap.height, 1],
+//   format: 'rgba8unorm',
+//   usage:
+//     GPUTextureUsage.TEXTURE_BINDING |
+//     GPUTextureUsage.COPY_DST |
+//     GPUTextureUsage.RENDER_ATTACHMENT,
+// });
+// device.queue.copyExternalImageToTexture(
+//   { source: imageBitmap },
+//   { texture: cubeTexture },
+//   [imageBitmap.width, imageBitmap.height]
+// );
+
+updateUniforms(state)
+ const bindGroup = device.createBindGroup({
+  layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
+  entries: [{ 
+    binding: 0, resource: { buffer: state.uniformsBuffer }
+  }]
+});
+    // {
+    //   binding: 1,
+    //   resource: sampler,
+    // },
+    // {
+    //   binding: 2,
+    //   resource: device.importExternalTexture({
+    //     resource: cubeTexture.createView(),
+    //   }),
+    // },
+
+state.bindGroup = bindGroup
 
   return device.createRenderPipeline({
     ...pipelineDesc, 
@@ -204,33 +254,18 @@ async function init(options:any) {
 
   let shader = makeShaderModule(device, state.data, options.shader);
 
-  const pipeline = makePipeline(shader, state);
-
+  const pipeline = await makePipeline(shader, state);
   const textureView = context.getCurrentTexture().createView();
-
-  const renderPassDescriptor = {
-    colorAttachments: [{ 
-        view: textureView,
-        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        loadOp: 'clear',
-        storeOp: 'store'
-      },
-    ],
-  };
-
-  state.renderPassDescriptor = renderPassDescriptor;
 
   Object.assign(state, {
     textureView,
-    renderPassDescriptor,
     pipeline,
   });
 
   state.vertexBuffer = utils.createBuffer(device, attribs, GPUBufferUsage.VERTEX);
 
   function draw(newData:any) {
-    //if (! newData.time)
-     newData.time = performance.now()
+    newData.time = performance.now()
     Object.assign(state.data, newData)
     updateUniforms(state);
     recordRenderPass(state) 

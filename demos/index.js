@@ -6,6 +6,8 @@ import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
 import one from './shaders/one.wgsl?raw';
 import mouse from './shaders/mouse.wgsl?raw';
+import texture from './shaders/texture.wgsl?raw';
+
 
 let data = {
   // width: 900, //based on canvas
@@ -37,11 +39,11 @@ function textureDemo () {
   }); 
 }
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture
 ]
 function select(name) {
   let idx = demoTitles.indexOf(name);
