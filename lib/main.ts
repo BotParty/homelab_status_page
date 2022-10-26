@@ -29,17 +29,34 @@ const recordRenderPass = async function (stuff:any,) {
   passEncoder.setPipeline(pipeline);
 
   const layout = device.createBindGroupLayout({
+    layout: pipeline.getBindGroupLayout(0),
     entries: [
       {
         binding: 0,
         visibility: GPUShaderStage.VERTEX,
         buffer: {
           type: 'uniform',
-          minBindingSize: 4,
+          minBindingSize: 4 * 7,
         },
       },
     ],
   });
+
+  // const uniformBindGroup = device?.createBindGroup({
+  //   layout: pipeline.getBindGroupLayout(0),
+  //   entries: [
+  //     {
+  //       binding: 1,
+  //       resource: sampler,
+  //     },
+  //     {
+  //       binding: 2,
+  //       resource: device.importExternalTexture({
+  //         source: video,
+  //       }),
+  //     },
+  //   ],
+  // });
 
   const bindGroup = device.createBindGroup({
     layout,
@@ -49,7 +66,7 @@ const recordRenderPass = async function (stuff:any,) {
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, vertexBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
-  passEncoder.endPass();
+  passEncoder.end();
   device.queue.submit([commandEncoder.finish()]); //async
 };
 
@@ -69,14 +86,18 @@ function updateUniforms(stuff:any) {
 }
 function makePipeline(shader:any, device:any,) {
   let pipelineDesc = {
+    layout: 'auto',
+
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
       buffers: [{ 
-        arrayStride: 
-        Float32Array.BYTES_PER_ELEMENT * 2,
-                attributes:
-                 [ { offset: 0, shaderLocation: 0, format: "float32x2" } ] } ] },
+        arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
+        attributes:[ // vertex positions
+          { offset: 0, shaderLocation: 0, format: "float32x2" } 
+        ] 
+      }] 
+    },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
@@ -84,7 +105,29 @@ function makePipeline(shader:any, device:any,) {
     },
     primitives: { topology: "triangle-list" },
   };
-  return device.createRenderPipeline(pipelineDesc);
+
+  
+  const bindGroupLayout = device.createBindGroupLayout({
+    entries: [
+      {
+        binding: 0,
+        visibility: GPUShaderStage.VERTEX,
+        buffer: {
+          type: 'uniform',
+          minBindingSize: 4 * 7, //7 = num of uniforms
+        },
+      },
+    ],
+  });
+
+
+  const pipelineLayout = device.createPipelineLayout({
+    bindGroupLayouts: [bindGroupLayout],
+  });
+
+  return device.createRenderPipeline({...pipelineDesc, 
+    //layout:  pipeline.getBindGroupLayout(0)//pipelineLayout
+  })
 }
 
 function makeShaderModule(device:any, data:any, source:any,) {
@@ -92,9 +135,9 @@ function makeShaderModule(device:any, data:any, source:any,) {
   validateData(data)
   const uniforms = Object.keys(data).map((name) => `${name}: f32,`).join("\n");
   const code = `
-   struct Uniforms {
-    ${uniforms}
-  }
+    struct Uniforms {
+     ${uniforms}
+   }
 @group(0) @binding(0) var<uniform> u: Uniforms;
   // [[group(0), binding(1)]] var mySampler: sampler;
   // [[group(0), binding(2)]] var myTexture: texture_external;
@@ -171,7 +214,7 @@ async function init(options:any) {
   context.configure({
     device,
     format: presentationFormat,
-    size: presentationSize,
+    //size: presentationSize,
     alphaMode: 'opaque',
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
@@ -182,9 +225,11 @@ async function init(options:any) {
 
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
-    colorAttachments: [{ view: textureView,
-        loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        storeOp: "store",
+    colorAttachments: [{ 
+        view: textureView,
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        loadOp: 'clear',
+        storeOp: 'store'
       },
     ],
   };
@@ -196,11 +241,11 @@ async function init(options:any) {
     renderPassDescriptor,
     pipeline,
   });
-
   state.vertexBuffer = utils.createBuffer(device, attribs, GPUBufferUsage.VERTEX);
 
   function draw(newData:any) {
-    if (! newData.time) newData.time = performance.now()
+    //if (! newData.time)
+     newData.time = performance.now()
     Object.assign(state.data, newData)
     updateUniforms(state);
     recordRenderPass(state) 

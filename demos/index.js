@@ -5,7 +5,7 @@ import rings from './shaders/ringu.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
 import one from './shaders/one.wgsl?raw';
-import mouse from './shaders/four.wgsl?raw';
+import mouse from './shaders/mouse.wgsl?raw';
 import five from './shaders/five.wgsl?raw';
 
 let data = {
