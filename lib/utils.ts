@@ -1,10 +1,10 @@
-const createBuffer = (gpuDevice:any, arr:any, usage:any,) => {
+const createBuffer = (device:any, arr:any, usage:any,) => {
     let desc = {
       size: (arr.byteLength + 3) & ~3,
       usage,
       mappedAtCreation: true,
     };
-    let buffer = gpuDevice.createBuffer(desc);
+    let buffer = device.createBuffer(desc);
     arr[5] = Date.now();
   
     const writeArray =

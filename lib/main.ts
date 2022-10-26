@@ -7,15 +7,15 @@ const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
 const recordRenderPass = async function (stuff:any,) {
   let {
-    attribsBuffer,
+    vertexBuffer,
     context,
-    gpuDevice,
+    device,
     pipeline,
     uniformsBuffer,
     renderPassDescriptor,
   } = stuff;
 
-  const commandEncoder = gpuDevice.createCommandEncoder();
+  const commandEncoder = device.createCommandEncoder();
   const textureView = context.getCurrentTexture().createView();
   renderPassDescriptor.colorAttachments[0].view = textureView;
 
@@ -27,23 +27,36 @@ const recordRenderPass = async function (stuff:any,) {
   //   })
 
   passEncoder.setPipeline(pipeline);
-  const bindGroup = gpuDevice.createBindGroup({
-    layout: pipeline.getBindGroupLayout(0),
+
+  const layout = device.createBindGroupLayout({
+    entries: [
+      {
+        binding: 0,
+        visibility: GPUShaderStage.VERTEX,
+        buffer: {
+          type: 'uniform',
+          minBindingSize: 4,
+        },
+      },
+    ],
+  });
+
+  const bindGroup = device.createBindGroup({
+    layout,
     entries: [{ binding: 0, resource: { buffer: uniformsBuffer } } ],
   });
 
-  //first pass
   passEncoder.setBindGroup(0, bindGroup);
-  passEncoder.setVertexBuffer(0, attribsBuffer);
+  passEncoder.setVertexBuffer(0, vertexBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
   passEncoder.endPass();
-  gpuDevice.queue.submit([commandEncoder.finish()]); //async
+  device.queue.submit([commandEncoder.finish()]); //async
 };
 
 function updateUniforms(stuff:any) {
   let {
     data,
-    gpuDevice,
+    device,
   } = stuff;
   let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
@@ -51,10 +64,10 @@ function updateUniforms(stuff:any) {
   uniformsArray.set(values, 0);
 
   stuff.uniformsBuffer = utils.createBuffer(
-    gpuDevice, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+    device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
 }
-function makePipeline(shader:any, gpuDevice:any,) {
+function makePipeline(shader:any, device:any,) {
   let pipelineDesc = {
     vertex: {
       module: shader,
@@ -71,29 +84,30 @@ function makePipeline(shader:any, gpuDevice:any,) {
     },
     primitives: { topology: "triangle-list" },
   };
-  return gpuDevice.createRenderPipeline(pipelineDesc);
+  return device.createRenderPipeline(pipelineDesc);
 }
 
-function makeShaderModule(gpuDevice:any, data:any, source:any,) {
+function makeShaderModule(device:any, data:any, source:any,) {
   if (! source) source = defaultShader;
   validateData(data)
-  const uniforms = Object.keys(data).map((name) => `${name}: f32;`).join("\n");
+  const uniforms = Object.keys(data).map((name) => `${name}: f32,`).join("\n");
   const code = `
    struct Uniforms {
     ${uniforms}
-  };
-  [[group(0), binding(0)]] var<uniform> u: Uniforms;
+  }
+@group(0) @binding(0) var<uniform> u: Uniforms;
   // [[group(0), binding(1)]] var mySampler: sampler;
   // [[group(0), binding(2)]] var myTexture: texture_external;
   struct VertexInput {
-    [[location(0)]] pos: vec2<f32>;
-  };
-  struct VertexOutput {
-    [[builtin(position)]] pos: vec4<f32>;
-    [[location(0)]] uv: vec2<f32>;
-  };
+    @location(0) pos: vec2<f32>,
+  }
 
-  [[stage(vertex)]]
+  struct VertexOutput {
+    @builtin(position) pos: vec4<f32>,
+    @location(0) uv: vec2<f32>,
+  }
+
+  @vertex
   fn main_vertex(input: VertexInput) -> VertexOutput {
     var output: VertexOutput;
     var pos: vec2<f32> = input.pos * 3.0 - 1.0;
@@ -102,7 +116,8 @@ function makeShaderModule(gpuDevice:any, data:any, source:any,) {
     return output;
   }
   ${source}`
-  return gpuDevice.createShaderModule({ code });
+
+  return device.createShaderModule({ code });
 }
 
 let defaultData =  {
@@ -137,28 +152,33 @@ async function init(options:any) {
   };
   addMouseEvents(canvas, state.data)
 
-  const context = canvas.getContext("webgpu");
+  const context = canvas.getContext("webgpu") as GPUCanvasContext;
   const adapter = await navigator.gpu.requestAdapter();
-  const gpuDevice = await adapter?.requestDevice();
-  const presentationFormat = context.getPreferredFormat(adapter);
+  const device = await adapter?.requestDevice();
+
+  const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
+
   const presentationSize = [
     canvas.width * devicePixelRatio,
     canvas.height * devicePixelRatio,
   ];
   Object.assign(state, {
-    gpuDevice,
+    device,
     context,
     adapter, 
   });
 
   context.configure({
-    device: gpuDevice,
+    device,
     format: presentationFormat,
     size: presentationSize,
+    alphaMode: 'opaque',
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  let shader = makeShaderModule(gpuDevice, state.data, options.shader);
 
-  const pipeline = makePipeline(shader, gpuDevice);
+  let shader = makeShaderModule(device, state.data, options.shader);
+
+  const pipeline = makePipeline(shader, device);
 
   const textureView = context.getCurrentTexture().createView();
   const renderPassDescriptor = {
@@ -168,13 +188,17 @@ async function init(options:any) {
       },
     ],
   };
+
   state.renderPassDescriptor = renderPassDescriptor;
+
   Object.assign(state, {
     textureView,
     renderPassDescriptor,
     pipeline,
   });
-  state.attribsBuffer = utils.createBuffer(gpuDevice, attribs, GPUBufferUsage.VERTEX);
+
+  state.vertexBuffer = utils.createBuffer(device, attribs, GPUBufferUsage.VERTEX);
+
   function draw(newData:any) {
     if (! newData.time) newData.time = performance.now()
     Object.assign(state.data, newData)
@@ -186,29 +210,6 @@ async function init(options:any) {
   draw.canvas = canvas
   return draw
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 init.version = '0.8.0';
 

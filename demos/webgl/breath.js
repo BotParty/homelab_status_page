@@ -3,7 +3,7 @@ import createREGL from "regl";
 let regl
 
 let successFunction = (stream) => {
-  console.log("after get user media");
+  //console.log("after get user media");
 
   //convert this function to promise
   // Next we create an analyser node to intercept data from the mic
@@ -81,21 +81,21 @@ let successFunction = (stream) => {
 };
 
 let errorFunction = (err) => {
-  console.log(err);
-  console.log("ground");
+  //console.log(err);
+  //console.log("ground");
 };
 
 async function breath() {
   regl = createREGL();
   //navigator.webkitGetUserMedia({ audio: true }, successFunction, errorFunction);
   // .then(successFunction)
-  console.log("b4 get user media");
+  //console.log("b4 get user media");
   // .catch(errorFunction)
   let stream = await navigator.mediaDevices
     .getUserMedia({ audio: true })
     .then(successFunction)
     .then(errorFunction);
-  console.log("hello");
+  //console.log("hello");
   // .then(successFunction)
   // .catch(errorFunction);
 }
