@@ -1,12 +1,11 @@
 import shapeTransition from "./webgl/shape-transition";
 import audioTexture from "./webgl/breath";
 import { init } from "../lib/main";
-import rings from './shaders/ringu.wgsl?raw';
+import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
 import one from './shaders/one.wgsl?raw';
 import mouse from './shaders/mouse.wgsl?raw';
-import five from './shaders/five.wgsl?raw';
 
 let data = {
   // width: 900, //based on canvas
@@ -38,11 +37,11 @@ function textureDemo () {
   }); 
 }
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'five'
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, five
+  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse
 ]
 function select(name) {
   let idx = demoTitles.indexOf(name);
