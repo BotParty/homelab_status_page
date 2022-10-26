@@ -22,50 +22,22 @@ const recordRenderPass = async function (stuff:any,) {
   let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
   // if (! stuff.renderBundle)
-  //   passEncoder = stuff.gpuDevice.createRenderBundleEncoder({
+  //   passEncoder = device.createRenderBundleEncoder({
   //     colorFormats: ['rgb10a2unorm']
   //   })
 
   passEncoder.setPipeline(pipeline);
 
-  const layout = device.createBindGroupLayout({
-    layout: pipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.VERTEX,
-        buffer: {
-          type: 'uniform',
-          minBindingSize: 4 * 7,
-        },
-      },
-    ],
-  });
-
-  // const uniformBindGroup = device?.createBindGroup({
-  //   layout: pipeline.getBindGroupLayout(0),
-  //   entries: [
-  //     {
-  //       binding: 1,
-  //       resource: sampler,
-  //     },
-  //     {
-  //       binding: 2,
-  //       resource: device.importExternalTexture({
-  //         source: video,
-  //       }),
-  //     },
-  //   ],
-  // });
-
   const bindGroup = device.createBindGroup({
-    layout,
-    entries: [{ binding: 0, resource: { buffer: uniformsBuffer } } ],
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [{ 
+      binding: 0, resource: { buffer: uniformsBuffer } } ],
   });
 
   passEncoder.setBindGroup(0, bindGroup);
   passEncoder.setVertexBuffer(0, vertexBuffer);
   passEncoder.draw(3 * 2, 1, 0, 0);
+
   passEncoder.end();
   device.queue.submit([commandEncoder.finish()]); //async
 };
@@ -120,13 +92,13 @@ function makePipeline(shader:any, device:any,) {
     ],
   });
 
-
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout],
   });
 
-  return device.createRenderPipeline({...pipelineDesc, 
-    //layout:  pipeline.getBindGroupLayout(0)//pipelineLayout
+  return device.createRenderPipeline({
+    ...pipelineDesc, 
+    layout: pipelineLayout
   })
 }
 
@@ -166,7 +138,7 @@ function makeShaderModule(device:any, data:any, source:any,) {
 let defaultData =  {
   width: 900, //based on canvas
   height: 500, //based on canvas
-  pixelRatio: 2, //based on canvas
+  pixelRatio: 2, //recompile
   time: 0,
   mouseX: 0,
   mouseY: 0,
@@ -201,10 +173,6 @@ async function init(options:any) {
 
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
-  const presentationSize = [
-    canvas.width * devicePixelRatio,
-    canvas.height * devicePixelRatio,
-  ];
   Object.assign(state, {
     device,
     context,
@@ -214,7 +182,6 @@ async function init(options:any) {
   context.configure({
     device,
     format: presentationFormat,
-    //size: presentationSize,
     alphaMode: 'opaque',
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
@@ -241,6 +208,7 @@ async function init(options:any) {
     renderPassDescriptor,
     pipeline,
   });
+
   state.vertexBuffer = utils.createBuffer(device, attribs, GPUBufferUsage.VERTEX);
 
   function draw(newData:any) {
