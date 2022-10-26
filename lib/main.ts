@@ -30,18 +30,18 @@ const recordRenderPass = async function (stuff:any,) {
 
 
   
-  const bindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.VERTEX,
-        buffer: {
-          type: 'uniform',
-          minBindingSize: 4 * 7, 
-        },
-      },
-    ],
-  });
+  // const bindGroupLayout = device.createBindGroupLayout({
+  //   entries: [
+  //     {
+  //       binding: 0,
+  //       visibility: GPUShaderStage.VERTEX,
+  //       buffer: {
+  //         type: 'uniform',
+  //         minBindingSize: 4 * 7, 
+  //       },
+  //     },
+  //   ],
+  // });
 
   const bindGroup = device.createBindGroup({
     layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
@@ -92,7 +92,7 @@ function makePipeline(shader:any, device:any,) {
     entries: [
       {
         binding: 0,
-        visibility: GPUShaderStage.VERTEX,
+        visibility: GPUShaderStage.FRAGMENT,
         buffer: {
           type: 'uniform',
           minBindingSize: 4 * 7, 
@@ -100,14 +100,16 @@ function makePipeline(shader:any, device:any,) {
       },
     ],
   });
+  window.bindGroupLayout = bindGroupLayout
 
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout],
   });
 
+ 
   return device.createRenderPipeline({
     ...pipelineDesc, 
-    //layout: pipelineLayout
+    layout: pipelineLayout
   })
 }
 
@@ -128,8 +130,7 @@ function makeShaderModule(device:any, data:any, source:any,) {
     @builtin(position) Position : vec4<f32>,
     @location(0) fragUV : vec2<f32>,
   }
-
-  @vertex
+@vertex
 fn main_vertex(
   @builtin(vertex_index) VertexIndex : u32
 ) -> VertexOutput {
@@ -158,7 +159,6 @@ fn main_vertex(
   return output;
 }
   ${source}`
-//console.log(code)
   return device.createShaderModule({ code });
 }
 
@@ -191,6 +191,7 @@ async function init(options:any) {
     renderPassDescriptor: {},
     data: Object.assign(defaultData, options.data)
   };
+
   addMouseEvents(canvas, state.data)
 
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
@@ -217,6 +218,7 @@ async function init(options:any) {
   const pipeline = makePipeline(shader, device);
 
   const textureView = context.getCurrentTexture().createView();
+
   const renderPassDescriptor = {
     colorAttachments: [{ 
         view: textureView,
