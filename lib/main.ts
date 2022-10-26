@@ -13,6 +13,7 @@ const recordRenderPass = async function (stuff:any,) {
     pipeline,
     uniformsBuffer,
     renderPassDescriptor,
+    bindGroupLayout
   } = stuff;
 
   const commandEncoder = device.createCommandEncoder();
@@ -28,20 +29,6 @@ const recordRenderPass = async function (stuff:any,) {
 
   passEncoder.setPipeline(pipeline);
 
-
-  
-  // const bindGroupLayout = device.createBindGroupLayout({
-  //   entries: [
-  //     {
-  //       binding: 0,
-  //       visibility: GPUShaderStage.VERTEX,
-  //       buffer: {
-  //         type: 'uniform',
-  //         minBindingSize: 4 * 7, 
-  //       },
-  //     },
-  //   ],
-  // });
 
   const bindGroup = device.createBindGroup({
     layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
@@ -71,10 +58,13 @@ function updateUniforms(stuff:any) {
     device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
 }
-function makePipeline(shader:any, device:any,) {
+function makePipeline(shader, stuff) {
+  let {device} = stuff ;
+
+  console.log(device);
+
   let pipelineDesc = {
     layout: 'auto',
-
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
@@ -87,7 +77,6 @@ function makePipeline(shader:any, device:any,) {
     primitives: { topology: "triangle-list" },
   };
 
-  
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
@@ -100,13 +89,13 @@ function makePipeline(shader:any, device:any,) {
       },
     ],
   });
-  window.bindGroupLayout = bindGroupLayout
 
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout],
   });
 
- 
+ stuff.bindGroupLayout = bindGroupLayout
+
   return device.createRenderPipeline({
     ...pipelineDesc, 
     layout: pipelineLayout
@@ -215,7 +204,7 @@ async function init(options:any) {
 
   let shader = makeShaderModule(device, state.data, options.shader);
 
-  const pipeline = makePipeline(shader, device);
+  const pipeline = makePipeline(shader, state);
 
   const textureView = context.getCurrentTexture().createView();
 
