@@ -108,41 +108,42 @@ async function makePipeline(shader, state) {
 
  state.bindGroupLayout = bindGroupLayout
 
-//  const img = document.createElement('img');
-//  img.src = './late.png'
-//  await img.decode();
-//  const imageBitmap = await createImageBitmap(img);
-// let cubeTexture = device.createTexture({
-//   size: [imageBitmap.width, imageBitmap.height, 1],
-//   format: 'rgba8unorm',
-//   usage:
-//     GPUTextureUsage.TEXTURE_BINDING |
-//     GPUTextureUsage.COPY_DST |
-//     GPUTextureUsage.RENDER_ATTACHMENT,
-// });
-// device.queue.copyExternalImageToTexture(
-//   { source: imageBitmap },
-//   { texture: cubeTexture },
-//   [imageBitmap.width, imageBitmap.height]
-// );
+ const img = document.createElement('img');
+ img.src = './late.png'
+ await img.decode();
+ const imageBitmap = await createImageBitmap(img);
+let cubeTexture = device.createTexture({
+  size: [imageBitmap.width, imageBitmap.height, 1],
+  format: 'rgba8unorm',
+  usage:
+    GPUTextureUsage.TEXTURE_BINDING |
+    GPUTextureUsage.COPY_DST |
+    GPUTextureUsage.RENDER_ATTACHMENT,
+});
+device.queue.copyExternalImageToTexture(
+  { source: imageBitmap },
+  { texture: cubeTexture },
+  [imageBitmap.width, imageBitmap.height]
+);
 
 updateUniforms(state)
  const bindGroup = device.createBindGroup({
   layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
   entries: [{ 
-    binding: 0, resource: { buffer: state.uniformsBuffer }
-  }]
+    binding: 0, resource: { buffer: state.uniformsBuffer }},
+  //   {
+  //     binding: 1,
+  //     resource: sampler,
+  //   },
+  //   {
+  //     binding: 2,
+  //     resource: device.importExternalTexture({
+  //       resource: cubeTexture.createView(),
+  //     }),
+  // }
+]
 });
-    // {
-    //   binding: 1,
-    //   resource: sampler,
-    // },
-    // {
-    //   binding: 2,
-    //   resource: device.importExternalTexture({
-    //     resource: cubeTexture.createView(),
-    //   }),
-    // },
+  
 
 state.bindGroup = bindGroup
 
