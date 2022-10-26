@@ -7,7 +7,10 @@
   // }
 
 @fragment
-  fn main_fragment(in: VertexOutput) -> @location(0) vec4<f32> {
-  return vec4<f32>(.5, .0, 1.0, 1.0);
+  fn main_fragment(@location(0) fragUV : vec2<f32>,
+  ) -> @location(0) vec4<f32> {
+  return vec4<f32>(.5, .0, 1.0 * u.mouseX, 1.0);
   }
   
+  //  output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+  // output.fragUV = uv[VertexIndex];

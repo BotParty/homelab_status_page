@@ -63,12 +63,15 @@ function makePipeline(shader:any, device:any,) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-      buffers: [{ 
-        arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
-        attributes:[ // vertex positions
-          { offset: 0, shaderLocation: 0, format: "float32x2" } 
-        ] 
-      }] 
+    //   buffers: [{ 
+    //     arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
+    //     attributes:[ // vertex positions
+    //       { offset: 0, shaderLocation: 0, format: "float32x2" } ,
+    //     ] 
+    //   }
+    
+    
+    // ] 
     },
     fragment: {
       module: shader,
@@ -86,7 +89,7 @@ function makePipeline(shader:any, device:any,) {
         visibility: GPUShaderStage.VERTEX,
         buffer: {
           type: 'uniform',
-          minBindingSize: 4 * 7, //7 = num of uniforms
+          //minBindingSize: 4 * 7, 
         },
       },
     ],
@@ -98,7 +101,7 @@ function makePipeline(shader:any, device:any,) {
 
   return device.createRenderPipeline({
     ...pipelineDesc, 
-    layout: pipelineLayout
+    //layout: pipelineLayout
   })
 }
 
@@ -113,23 +116,45 @@ function makeShaderModule(device:any, data:any, source:any,) {
 @group(0) @binding(0) var<uniform> u: Uniforms;
   // [[group(0), binding(1)]] var mySampler: sampler;
   // [[group(0), binding(2)]] var myTexture: texture_external;
-  struct VertexInput {
-    @location(0) pos: vec2<f32>,
-  }
+
 
   struct VertexOutput {
-    @builtin(position) pos: vec4<f32>,
-    @location(0) uv: vec2<f32>,
+    @builtin(position) Position : vec4<f32>,
+    @location(0) fragUV : vec2<f32>,
   }
 
+
+  
+
+
   @vertex
-  fn main_vertex(input: VertexInput) -> VertexOutput {
-    var output: VertexOutput;
-    var pos: vec2<f32> = input.pos * 3.0 - 1.0;
-    output.pos = vec4<f32>(pos, 0.0, 1.0);
-    output.uv = input.pos;
-    return output;
-  }
+fn main_vertex(
+  @builtin(vertex_index) VertexIndex : u32
+) -> VertexOutput {
+
+  var uv = array<vec2<f32>, 6>(
+    vec2<f32>(1.0, 0.0),
+    vec2<f32>(1.0, 1.0),
+    vec2<f32>(0.0, 1.0),
+    vec2<f32>(1.0, 0.0),
+    vec2<f32>(0.0, 1.0),
+    vec2<f32>(0.0, 0.0)
+  );
+
+  var pos = array<vec2<f32>, 6>(
+    vec2<f32>( 1.0,  1.0),
+    vec2<f32>( 1.0, -1.0),
+    vec2<f32>(-1.0, -1.0),
+    vec2<f32>( 1.0,  1.0),
+    vec2<f32>(-1.0, -1.0),
+    vec2<f32>(-1.0,  1.0)
+);
+
+  var output : VertexOutput;
+  output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+  output.fragUV = uv[VertexIndex];
+  return output;
+}
   ${source}`
 
   return device.createShaderModule({ code });
@@ -162,7 +187,6 @@ async function init(options:any) {
   let canvas = options.canvas || utils.createCanvas();
   const state = { 
     renderPassDescriptor: {},
-    attribsBuffer: {},
     data: Object.assign(defaultData, options.data)
   };
   addMouseEvents(canvas, state.data)

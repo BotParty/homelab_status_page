@@ -1,14 +1,19 @@
 @fragment
-  fn main_fragment(in: VertexOutput) -> @location(0) vec4<f32> {
-    let fragPosition = in.uv * vec2<f32>(u.height, u.width);
-    
+  fn main_fragment(
+    @location(0) fragUV: vec2<f32>,
+    @builtin(position) fragPosition : vec4<f32>
+  ) -> @location(0) vec4<f32> {    
     var color = vec4<f32>(1., 1., 0., 1.);
-    if (in.uv.x < .3) { color.x = 0.; }
+    if (fragUV.x < .3) { color.x = 0.; }
     if (fragPosition.x % 2. == 1.) {color.x = 0.;}
     if (fragPosition.x % 2. == 1.) {color.y = 0.;}
 
-    var p = in.uv * fragPosition;
+    var p = fragUV * fragPosition.xy;
     var q = (p.x % 25. * 2.0 < 25.) == (p.y % 25. * 2.0 < 25.);
     var o = f32(q);
     return vec4<f32>(o,o, .5, 1.0) * .5;
 }
+// @fragment
+//   fn main_fragment(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
+//   return vec4<f32>(.5, .0, 1.0 * u.mouseX, 1.0);
+//   }
