@@ -28,8 +28,23 @@ const recordRenderPass = async function (stuff:any,) {
 
   passEncoder.setPipeline(pipeline);
 
+
+  
+  const bindGroupLayout = device.createBindGroupLayout({
+    entries: [
+      {
+        binding: 0,
+        visibility: GPUShaderStage.VERTEX,
+        buffer: {
+          type: 'uniform',
+          minBindingSize: 4 * 7, 
+        },
+      },
+    ],
+  });
+
   const bindGroup = device.createBindGroup({
-    layout: pipeline.getBindGroupLayout(0),
+    layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
     entries: [{ 
       binding: 0, resource: { buffer: uniformsBuffer } } ],
   });
@@ -63,15 +78,6 @@ function makePipeline(shader:any, device:any,) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-    //   buffers: [{ 
-    //     arrayStride: Float32Array.BYTES_PER_ELEMENT * 2,
-    //     attributes:[ // vertex positions
-    //       { offset: 0, shaderLocation: 0, format: "float32x2" } ,
-    //     ] 
-    //   }
-    
-    
-    // ] 
     },
     fragment: {
       module: shader,
@@ -89,7 +95,7 @@ function makePipeline(shader:any, device:any,) {
         visibility: GPUShaderStage.VERTEX,
         buffer: {
           type: 'uniform',
-          //minBindingSize: 4 * 7, 
+          minBindingSize: 4 * 7, 
         },
       },
     ],
@@ -113,7 +119,7 @@ function makeShaderModule(device:any, data:any, source:any,) {
     struct Uniforms {
      ${uniforms}
    }
-@group(0) @binding(0) var<uniform> u: Uniforms;
+@binding(0) @group(0) var<uniform> u: Uniforms;
   // [[group(0), binding(1)]] var mySampler: sampler;
   // [[group(0), binding(2)]] var myTexture: texture_external;
 
@@ -122,10 +128,6 @@ function makeShaderModule(device:any, data:any, source:any,) {
     @builtin(position) Position : vec4<f32>,
     @location(0) fragUV : vec2<f32>,
   }
-
-
-  
-
 
   @vertex
 fn main_vertex(
@@ -156,7 +158,7 @@ fn main_vertex(
   return output;
 }
   ${source}`
-
+//console.log(code)
   return device.createShaderModule({ code });
 }
 
