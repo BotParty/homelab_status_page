@@ -7,7 +7,7 @@ import checkerboard from './shaders/checkerboard.wgsl?raw';
 import one from './shaders/one.wgsl?raw';
 import mouse from './shaders/mouse.wgsl?raw';
 import texture from './shaders/texture.wgsl?raw';
-
+let defaultDemo = 'mouse'
 
 let data = {
   // width: 900, //based on canvas
@@ -97,7 +97,7 @@ function choose (idx) {
 }
 
 //setInterval(choose, 2500)
-choose(5)
+choose(demoTitles.indexOf(defaultDemo))
 
 document.querySelectorAll('label').forEach((el, idx) =>
   el.addEventListener('mouseover', () => {
