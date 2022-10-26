@@ -108,23 +108,23 @@ async function makePipeline(shader, state) {
 
  state.bindGroupLayout = bindGroupLayout
 
- const img = document.createElement('img');
- img.src = './late.png'
- await img.decode();
- const imageBitmap = await createImageBitmap(img);
-let cubeTexture = device.createTexture({
-  size: [imageBitmap.width, imageBitmap.height, 1],
-  format: 'rgba8unorm',
-  usage:
-    GPUTextureUsage.TEXTURE_BINDING |
-    GPUTextureUsage.COPY_DST |
-    GPUTextureUsage.RENDER_ATTACHMENT,
-});
-device.queue.copyExternalImageToTexture(
-  { source: imageBitmap },
-  { texture: cubeTexture },
-  [imageBitmap.width, imageBitmap.height]
-);
+//  const img = document.createElement('img');
+//  img.src = './late.png'
+//  await img.decode();
+//  const imageBitmap = await createImageBitmap(img);
+// let cubeTexture = device.createTexture({
+//   size: [imageBitmap.width, imageBitmap.height, 1],
+//   format: 'rgba8unorm',
+//   usage:
+//     GPUTextureUsage.TEXTURE_BINDING |
+//     GPUTextureUsage.COPY_DST |
+//     GPUTextureUsage.RENDER_ATTACHMENT,
+// });
+// device.queue.copyExternalImageToTexture(
+//   { source: imageBitmap },
+//   { texture: cubeTexture },
+//   [imageBitmap.width, imageBitmap.height]
+// );
 
 updateUniforms(state)
  const bindGroup = device.createBindGroup({
