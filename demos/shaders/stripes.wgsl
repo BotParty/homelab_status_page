@@ -5,7 +5,7 @@ fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
   var aspect = iResolution.x/iResolution.y;
   var position = (fragCoord.xy/iResolution.xy) * aspect;
   var dist = distance(position, vec2<f32>(aspect*0.5, 0.5));
-  var offset=u.time;
+  var offset=u.time * 10.;
   var conv=4.;
   var v=dist*4.-offset;
   var ringr=floor(v);
@@ -21,9 +21,9 @@ fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
 
 fn main(uv: vec2<f32>) -> vec4<f32> {
   let fragCoord = vec2<f32>(uv.x, uv.y);
-  var base = vec4<f32>(cos(u.time), .5, sin(u.time), 1.);
+  var base = vec4<f32>(cos(u.time), .5, sin(u.time * 10.), 1.);
   let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));
-  return vec4<f32>(.3, .3, sin(u.time * .001), 1.) + mainImage(fragCoord, vec2<f32>(u.width, u.height));
+  return vec4<f32>(u.mouseX, .3, sin(u.time * 100.), 1.) + mainImage(fragCoord, vec2<f32>(u.width, u.height));
 }
 
 @fragment

@@ -45,7 +45,6 @@ function updateUniforms(state:any) {
   } = state;
   let values:any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
-
   uniformsArray.set(values, 0);
 
   state.uniformsBuffer = utils.createBuffer(
@@ -218,6 +217,7 @@ function validateData (data:any) {
 
 const addMouseEvents = function (canvas:any, data:any) {
   canvas.addEventListener('mousemove', (event:any) => {
+    
     let x = event.pageX 
     let y = event.pageY
     data.mouseX = x / event.target.clientWidth
