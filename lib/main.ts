@@ -1,61 +1,57 @@
 // import { scaleLinear } from "d3-scale";
-import utils from './utils';
+import utils from "./utils";
 // @ts-ignore
-import defaultShader from './default.wgsl?raw';
+import defaultShader from "./default.wgsl?raw";
 
 const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
-const recordRenderPass = async function (stuff:any,) {
+const recordRenderPass = async function (state: any) {
   let {
     vertexBuffer,
-    context,
     device,
     pipeline,
-    uniformsBuffer,
     renderPassDescriptor,
-    bindGroupLayout,
-    bindGroup
-  } = stuff;
+  } = state;
+
+  renderPassDescriptor.colorAttachments[0].view =  state.context.getCurrentTexture().createView();
 
   const commandEncoder = device.createCommandEncoder();
-  const textureView = context.getCurrentTexture().createView();
-  renderPassDescriptor.colorAttachments[0].view = textureView;
 
-  let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+  let renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
   // if (! stuff.renderBundle)
-  //   passEncoder = device.createRenderBundleEncoder({
+  //   passEncoder = device.creacteRenderBundleEncoder({
   //     colorFormats: ['rgb10a2unorm']
-  //   })
+  //   }
 
-  passEncoder.setPipeline(pipeline);
+  renderPassEncoder.setPipeline(pipeline);
 
-  passEncoder.setBindGroup(0, bindGroup);
-  passEncoder.setVertexBuffer(0, vertexBuffer);
-  passEncoder.draw(3 * 2, 1, 0, 0);
+  renderPassEncoder.setBindGroup(0, state.bindGroup);
+  renderPassEncoder.setVertexBuffer(0, vertexBuffer);
+  renderPassEncoder.draw(3 * 2, 1, 0, 0);
 
-  passEncoder.end();
+  renderPassEncoder.end();
   device.queue.submit([commandEncoder.finish()]); //async
 };
 
-function updateUniforms(state:any) {
-  let {
-    data,
-    device,
-  } = state;
-  let values:any = Object.values(data);
+function updateUniforms(state: any) {
+  let { data, device } = state;
+  let values: any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
 
   state.uniformsBuffer = utils.createBuffer(
-    device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+    device,
+    uniformsArray,
+    GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
+  ``;
 }
 async function makePipeline(shader, state) {
-  let {device} = state ;
+  let { device } = state;
 
   let pipelineDesc = {
-    layout: 'auto',
+    layout: "auto",
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
@@ -68,107 +64,146 @@ async function makePipeline(shader, state) {
     primitives: { topology: "triangle-list" },
   };
 
+  // Create a sampler with linear filtering for smooth interpolation.
+  const sampler = device.createSampler({
+    magFilter: "linear",
+    minFilter: "linear",
+  });
+
+  const img = document.createElement("img");
+  const source = img;
+  source.width = 500;
+  source.height = 500;
+
+  img.src = "../october.png";
+  await img.decode();
+
+  const imageBitmap = await createImageBitmap(img);
+
+  // Fetch the image and upload it into a GPUTexture.
+  let cubeTexture: GPUTexture;
+  {
+    const img = document.createElement("img");
+    img.src = "../october.png";
+    await img.decode();
+    const imageBitmap = await createImageBitmap(img);
+
+    cubeTexture = device.createTexture({
+      size: [imageBitmap.width, imageBitmap.height, 1],
+      format: "rgba8unorm",
+      usage:
+        GPUTextureUsage.TEXTURE_BINDING |
+        GPUTextureUsage.COPY_DST |
+        GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+    device.queue.copyExternalImageToTexture(
+      { source: imageBitmap },
+      { texture: cubeTexture },
+      [imageBitmap.width, imageBitmap.height]
+    );
+  }
+
+
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
         binding: 0,
         visibility: GPUShaderStage.FRAGMENT,
         buffer: {
-          type: 'uniform',
-          minBindingSize: 4 * 7, 
+          type: "uniform",
+          minBindingSize: 4 * 7,
         },
       },
-    ],
-  });
-
-  const sampler = device.createSampler({
-    magFilter: 'linear',
-    minFilter: 'linear',
-  });
-
-
-
-
-  const renderPassDescriptor = {
-    colorAttachments: [{ 
-        view: state.textureView,
-        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        loadOp: 'clear',
-        storeOp: 'store'
+   
+      {
+        binding: 1,
+        visibility: GPUShaderStage.FRAGMENT,
+        type: "sampler",
+        sampler,
+      },
+      {
+        binding: 2,
+        visibility: GPUShaderStage.FRAGMENT,
+        texture: {
+          textureView: cubeTexture.createView(),
+        },
+        textureView: cubeTexture.createView(),
       },
     ],
-  };
-
-  state.renderPassDescriptor = renderPassDescriptor;
+  });
 
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout],
   });
 
- state.bindGroupLayout = bindGroupLayout
+  state.bindGroupLayout = bindGroupLayout;
 
-//  const img = document.createElement('img');
-//  img.src = './late.png'
-//  await img.decode();
-//  const imageBitmap = await createImageBitmap(img);
-// let cubeTexture = device.createTexture({
-//   size: [imageBitmap.width, imageBitmap.height, 1],
-//   format: 'rgba8unorm',
-//   usage:
-//     GPUTextureUsage.TEXTURE_BINDING |
-//     GPUTextureUsage.COPY_DST |
-//     GPUTextureUsage.RENDER_ATTACHMENT,
-// });
-// device.queue.copyExternalImageToTexture(
-//   { source: imageBitmap },
-//   { texture: cubeTexture },
-//   [imageBitmap.width, imageBitmap.height]
-// );
+  updateUniforms(state);
 
-updateUniforms(state)
- const bindGroup = device.createBindGroup({
-  layout: bindGroupLayout, //pipeline.getBindGroupLayout(0)
-  entries: [{ 
-    binding: 0, resource: { buffer: state.uniformsBuffer }},
-  //   {
-  //     binding: 1,
-  //     resource: sampler,
-  //   },
-  //   {
-  //     binding: 2,
-  //     resource: device.importExternalTexture({
-  //       resource: cubeTexture.createView(),
-  //     }),
-  // }
-]
-});
-  
+  const renderPassDescriptor = {
+    colorAttachments: [
+      {
+        view:  void 0,
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        loadOp: "clear",
+        storeOp: "store",
+      },
+    ],
+  };
 
-state.bindGroup = bindGroup
+//  renderPassDescriptor.colorAttachments[0].view = cubeTexture.createView();
 
-  return device.createRenderPipeline({
-    ...pipelineDesc, 
-    layout: pipelineLayout
-  })
+  state.renderPassDescriptor = renderPassDescriptor;
+
+  let pipeline = device.createRenderPipeline({
+    ...pipelineDesc,
+    layout: pipelineLayout,
+  });
+  const bindGroup = device.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: { buffer: state.uniformsBuffer },
+      },
+      {
+        binding: 1,
+        resource: sampler,
+      },
+      {
+        binding: 2,
+        resource: cubeTexture.createView(),
+        texture: {
+          sampleType: "float",
+
+          viewDimension: "2d",
+          multisampled: 0,
+        },
+      },
+    ],
+  });
+  state.bindGroup = bindGroup;
+  return pipeline;
 }
 
-function makeShaderModule(device:any, data:any, source:any,) {
-  if (! source) source = defaultShader;
-  validateData(data)
-  const uniforms = Object.keys(data).map((name) => `${name}: f32,`).join("\n");
+function makeShaderModule(device: any, data: any, source: any) {
+  if (!source) source = defaultShader;
+  validateData(data);
+  const uniforms = Object.keys(data)
+    .map((name) => `${name}: f32,`)
+    .join("\n");
   const code = `
     struct Uniforms {
      ${uniforms}
    }
 @binding(0) @group(0) var<uniform> u: Uniforms;
-  // [[group(0), binding(1)]] var mySampler: sampler;
-  // [[group(0), binding(2)]] var myTexture: texture_external;
+@binding(1) @group(0)  var mySampler: sampler;
+@binding(2) @group(0) var myTexture: texture_external;
 
-
-  struct VertexOutput {
-    @builtin(position) Position : vec4<f32>,
-    @location(0) fragUV : vec2<f32>,
-  }
+struct VertexOutput {
+  @builtin(position) Position : vec4<f32>,
+  @location(0) fragUV : vec2<f32>,
+}
 @vertex
 fn main_vertex(
   @builtin(vertex_index) VertexIndex : u32
@@ -197,11 +232,11 @@ fn main_vertex(
   output.fragUV = uv[VertexIndex];
   return output;
 }
-  ${source}`
+  ${source}`;
   return device.createShaderModule({ code });
 }
 
-let defaultData =  {
+let defaultData = {
   width: 900, //based on canvas
   height: 500, //based on canvas
   pixelRatio: 2, //recompile
@@ -211,74 +246,73 @@ let defaultData =  {
   angle: 0,
 };
 
-function validateData (data:any) {
-  if (typeof data.width !== 'number') throw new Error('bad data!!')
+function validateData(data: any) {
+  if (typeof data.width !== "number") throw new Error("bad data!!");
 }
 
-const addMouseEvents = function (canvas:any, data:any) {
-  canvas.addEventListener('mousemove', (event:any) => {
-    
-    let x = event.pageX 
-    let y = event.pageY
-    data.mouseX = x / event.target.clientWidth
-    data.mouseY = y / event.target.clientHeight
-  })
-}
+const addMouseEvents = function (canvas: any, data: any) {
+  canvas.addEventListener("mousemove", (event: any) => {
+    let x = event.pageX;
+    let y = event.pageY;
+    data.mouseX = x / event.target.clientWidth;
+    data.mouseY = y / event.target.clientHeight;
+  });
+};
 
-async function init(options:any) {
+async function init(options: any) {
   let canvas = options.canvas || utils.createCanvas();
-  const state = { 
+  const state = {
     renderPassDescriptor: {},
-    data: Object.assign(defaultData, options.data)
+    data: Object.assign(defaultData, options.data),
   };
 
-  addMouseEvents(canvas, state.data)
+  addMouseEvents(canvas, state.data);
 
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
   const adapter = await navigator.gpu.requestAdapter();
-  const device = await adapter?.requestDevice();
+  const device = await adapter?.requestDevice() as GPUDevice;
 
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
   Object.assign(state, {
     device,
     context,
-    adapter, 
+    adapter,
   });
 
   context.configure({
     device,
     format: presentationFormat,
-    alphaMode: 'opaque',
+    alphaMode: "opaque",
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
   let shader = makeShaderModule(device, state.data, options.shader);
 
   const pipeline = await makePipeline(shader, state);
-  const textureView = context.getCurrentTexture().createView();
 
   Object.assign(state, {
-    textureView,
     pipeline,
   });
 
-  state.vertexBuffer = utils.createBuffer(device, attribs, GPUBufferUsage.VERTEX);
+  state.vertexBuffer = utils.createBuffer(
+    device,
+    attribs,
+    GPUBufferUsage.VERTEX
+  );
 
-  function draw(newData:any) {
-    newData.time = performance.now()
-    Object.assign(state.data, newData)
+  function draw(newData: any) {
+    newData.time = performance.now();
+    Object.assign(state.data, newData);
     updateUniforms(state);
-    recordRenderPass(state) 
-    return draw
+    recordRenderPass(state);
+    return draw;
   }
 
-  draw.canvas = canvas
-  return draw
+  draw.canvas = canvas;
+  return draw;
 }
 
-init.version = '0.8.0';
+init.version = "0.8.0";
 
-export { 
-  init,
-};
+export { init };

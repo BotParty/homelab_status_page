@@ -7,17 +7,17 @@ import checkerboard from './shaders/checkerboard.wgsl?raw';
 import one from './shaders/one.wgsl?raw';
 import mouse from './shaders/mouse.wgsl?raw';
 import texture from './shaders/texture.wgsl?raw';
-let defaultDemo = 'mouse'
+import sky from './shaders/sky.wgsl?raw';
 
-let data = {
-  // width: 900, //based on canvas
-  // height: 500, //based on canvas
-  // pixelRatio: 2, //based on canvas
-  // time: 0,
-  // mouseX: 0,
-  // mouseY: 0,
-  // angle: 0,
-};
+import four from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/four.wgsl?raw'
+
+import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?raw'
+// import hello from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/morning.wgsl?raw'
+
+
+let defaultDemo = 'texture';
+// console.log(hello)
+let data = {};
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
@@ -25,13 +25,19 @@ async function start_loop_static(options) {
   requestAnimationFrame(function test() {
     data.time = performance.now()
     draw(data);
-    requestAnimationFrame(test)
+    
+
   });
+
+}
+function sleep(ms) {
+  return new Promise(resolveFunc => setTimeout(resolveFunc, ms));
 }
 
-function textureDemo () {
+
+function textureDemo() {
   let img = document.createElement('img')
-  img.src = './late.png'
+  img.src = './october.png'
   
   customShader({
     data: {texture: img},
@@ -39,11 +45,15 @@ function textureDemo () {
   }); 
 }
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 
+  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
+
+  'four', 'five'
 ]
 
 let demos = [
-  shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture
+   shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture, sky,
+
+   four, five
 ]
 function select(name) {
   let idx = demoTitles.indexOf(name);

@@ -24,21 +24,9 @@ var i: i32 = 0;
     p *= 1.3;
     p = rotz(p, 30.0);
     p.y += 0.1*sin(0.5*time); 
-   
- 
 
   i++;
 	} 
   color *= .8;
-    return vec4<f32>(u.mouseX, color.y, 1., 1.0);
+  return vec4<f32>(u.mouseX, color.y, 1., 1.0);
 }
-
-
-
-	// 
-	// 
-	
-	// 
-	// col *= 0.8; 
-	// gl_FragColor = vec4(col, 1.0); 
-//}
