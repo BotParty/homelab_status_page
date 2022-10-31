@@ -5,6 +5,7 @@ fn rotz(p:vec2<f32>,ang:f32)->vec2<f32> {
 @fragment
   fn main_fragment(
     @location(0) fragUV: vec2<f32>,
+        @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32> {   
     let time = u.time * 1000.; 
 var p = 2. * vec2(fragUV / vec2(u.width, u.height)) - 1.;

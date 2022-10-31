@@ -24,9 +24,13 @@ const recordRenderPass = async function (state: any) {
   //     colorFormats: ['rgb10a2unorm']
   //   }
 
+  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
+
+  const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
+
   renderPassEncoder.setPipeline(pipeline);
 
-  renderPassEncoder.setBindGroup(0, state.bindGroup);
+  renderPassEncoder.setBindGroup(0, bindGroup);
   renderPassEncoder.setVertexBuffer(0, vertexBuffer);
   renderPassEncoder.draw(3 * 2, 1, 0, 0);
 
@@ -39,13 +43,11 @@ function updateUniforms(state: any) {
   let values: any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
-
-  state.uniformsBuffer = utils.createBuffer(
+  return state.uniformsBuffer = utils.createBuffer(
     device,
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   );
-  ``;
 }
 async function makePipeline(shader, state) {
   let { device } = state;
@@ -55,12 +57,21 @@ async function makePipeline(shader, state) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
+      buffers: [
+        {
+          // position
+          shaderLocation: 0,
+          offset: 0,
+          format: 'float32x4',
+        },
+      ]
     },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
       targets: [{ format: "bgra8unorm" }],
     },
+    
     primitives: { topology: "triangle-list" },
   };
 
@@ -102,6 +113,34 @@ async function makePipeline(shader, state) {
       [imageBitmap.width, imageBitmap.height]
     );
   }
+ 
+
+const makeStuff = (device) => {
+ const cubeVertexArray = 
+ 
+ new Float64Array(new Array(1024).fill(0).map((d, i) => i));
+
+  const waveGridSize = 1024;
+  const waveGridBufferSize = waveGridSize * waveGridSize * 3 * Float32Array.BYTES_PER_ELEMENT;
+  const waveGridVertexBuffer = device.createBuffer({
+    size: waveGridBufferSize,
+    usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+  });
+  waveGridVertexBuffer.unmap()
+
+
+
+  const numParticles = 1500;
+  const initialParticleData = new Float32Array(numParticles * 4);
+
+  const verticesBuffer = device.createBuffer({
+    size: cubeVertexArray.byteLength,
+    usage: GPUBufferUsage.VERTEX,
+    mappedAtCreation: true,
+  });
+  new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
+  verticesBuffer.unmap();
+}
 
 
   const bindGroupLayout = device.createBindGroupLayout({
@@ -159,7 +198,7 @@ async function makePipeline(shader, state) {
     ...pipelineDesc,
     layout: pipelineLayout,
   });
-  const bindGroup = device.createBindGroup({
+  state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
       {
@@ -181,8 +220,8 @@ async function makePipeline(shader, state) {
         },
       },
     ],
-  });
-  state.bindGroup = bindGroup;
+  }
+
   return pipeline;
 }
 
@@ -198,11 +237,12 @@ function makeShaderModule(device: any, data: any, source: any) {
    }
 @binding(0) @group(0) var<uniform> u: Uniforms;
 @binding(1) @group(0)  var mySampler: sampler;
-@binding(2) @group(0) var myTexture: texture_external;
+@binding(2) @group(0) var myTexture: texture_2d<f32>;
 
 struct VertexOutput {
   @builtin(position) Position : vec4<f32>,
   @location(0) fragUV : vec2<f32>,
+  @location(1) fragPosition: vec4<f32>,
 }
 @vertex
 fn main_vertex(
@@ -230,6 +270,8 @@ fn main_vertex(
   var output : VertexOutput;
   output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
   output.fragUV = uv[VertexIndex];
+  output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
+  output.fragPosition.g = 1.5 - output.fragPosition.g ;
   return output;
 }
   ${source}`;

@@ -13,10 +13,10 @@ import four from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/four.wgsl?r
 
 import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?raw'
 // import hello from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/morning.wgsl?raw'
+import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
 
 
-let defaultDemo = 'texture';
-// console.log(hello)
+let defaultDemo = 'music';
 let data = {};
 
 async function start_loop_static(options) {
@@ -25,15 +25,10 @@ async function start_loop_static(options) {
   requestAnimationFrame(function test() {
     data.time = performance.now()
     draw(data);
-    
-
+    requestAnimationFrame(test)
   });
 
 }
-function sleep(ms) {
-  return new Promise(resolveFunc => setTimeout(resolveFunc, ms));
-}
-
 
 function textureDemo() {
   let img = document.createElement('img')
@@ -47,13 +42,13 @@ function textureDemo() {
 let demoTitles = [
   'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
 
-  'four', 'five'
+  'four', 'five', 'music'
 ]
 
 let demos = [
    shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture, sky,
 
-   four, five
+   four, five, music
 ]
 function select(name) {
   let idx = demoTitles.indexOf(name);

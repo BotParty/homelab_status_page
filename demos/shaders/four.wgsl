@@ -1,5 +1,6 @@
   fn a(
   fragUV: vec2<f32>,
+  
   ) ->vec4<f32> {    
     var color = vec4<f32>(1., 1., 0., 1.);
     var e = 0.0;
@@ -30,6 +31,7 @@ fn b()->vec4<f32> {
 @fragment
 fn main_fragment(
     @location(0) fragUV: vec2<f32>,
+        @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32>{
 
     if (fragUV.x > sin(u.time * .0005)  * .005) {
