@@ -15,19 +15,36 @@ import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?r
 // import hello from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/morning.wgsl?raw'
 import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
 
-
 let defaultDemo = 'music';
-let data = {};
+let data = {}, context
+
+let audio = document.querySelector('audio')
+audio.controls = true;
+audio.addEventListener('play', function abc() {
+  context = new AudioContext();
+  var src = context.createMediaElementSource(audio);
+  var analyser = context.createAnalyser();
+  src.connect(analyser);
+  analyser.connect(context.destination);
+  analyser.fftSize = 256;
+  var bufferLength = analyser.frequencyBinCount;
+  console.log(bufferLength)
+})
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   let draw = await init(options);
+
+
   requestAnimationFrame(function test() {
     data.time = performance.now()
+
+    //data.data = new Uint8Array(1024);
+
     draw(data);
     requestAnimationFrame(test)
-  });
 
+  });
 }
 
 function textureDemo() {

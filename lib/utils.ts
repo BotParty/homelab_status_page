@@ -1,4 +1,5 @@
 const createBuffer = (device:any, arr:any, usage:any,) => {
+
     let desc = {
       size: (arr.byteLength + 3) & ~3,
       usage,
@@ -6,13 +7,15 @@ const createBuffer = (device:any, arr:any, usage:any,) => {
     };
     let buffer = device.createBuffer(desc);
     arr[5] = Date.now();
-  //console.log(arr)
+
     const writeArray =
       arr instanceof Uint16Array
         ? new Uint16Array(buffer.getMappedRange())
         : new Float32Array(buffer.getMappedRange());
     writeArray.set(arr);
     buffer.unmap();
+
+    
     return buffer;
   };
 

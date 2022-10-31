@@ -22,16 +22,12 @@ let successFunction = (stream) => {
     usage: "dynamic",
   });
 
-  // This command draws the spectrogram
   const drawSpectrum = regl({
     vert: `
   precision mediump float;
-
   #define FFT_SIZE ${fftSize}
   #define PI ${Math.PI}
-
   attribute float index, frequency;
-
   void main() {
     float theta = 2.0 * PI * index / float(FFT_SIZE);
     gl_Position = vec4(
@@ -40,7 +36,6 @@ let successFunction = (stream) => {
       0,
       1);
   }`,
-
     frag: `
   void main() {
     gl_FragColor = vec4(1, 1, 1, 1);

@@ -3,8 +3,6 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
-const attribs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-
 const recordRenderPass = async function (state: any) {
   let {
     vertexBuffer,
@@ -31,7 +29,8 @@ const recordRenderPass = async function (state: any) {
   renderPassEncoder.setPipeline(pipeline);
 
   renderPassEncoder.setBindGroup(0, bindGroup);
-  renderPassEncoder.setVertexBuffer(0, vertexBuffer);
+  if (vertexBuffer) renderPassEncoder.setVertexBuffer(0, vertexBuffer);
+  
   renderPassEncoder.draw(3 * 2, 1, 0, 0);
 
   renderPassEncoder.end();
@@ -57,25 +56,23 @@ async function makePipeline(shader, state) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-      buffers: [
-        {
-          // position
-          shaderLocation: 0,
-          offset: 0,
-          format: 'float32x4',
-        },
-      ]
+      // buffers: [
+      //   {
+      //     shaderLocation: 0,
+      //     offset: 0,
+      //     format: 'float32x4',
+      //     arrayStride: 0
+      //   },
+      // ]
     },
     fragment: {
       module: shader,
       entryPoint: "main_fragment",
       targets: [{ format: "bgra8unorm" }],
     },
-    
     primitives: { topology: "triangle-list" },
-  };
+  } as GPURenderPipelineDescriptor;
 
-  // Create a sampler with linear filtering for smooth interpolation.
   const sampler = device.createSampler({
     magFilter: "linear",
     minFilter: "linear",
@@ -115,33 +112,31 @@ async function makePipeline(shader, state) {
   }
  
 
-const makeStuff = (device) => {
- const cubeVertexArray = 
+// const makeStuff = (device) => {
+//  const cubeVertexArray = 
  
- new Float64Array(new Array(1024).fill(0).map((d, i) => i));
+//  new Float64Array(new Array(1024).fill(0).map((d, i) => i));
 
-  const waveGridSize = 1024;
-  const waveGridBufferSize = waveGridSize * waveGridSize * 3 * Float32Array.BYTES_PER_ELEMENT;
-  const waveGridVertexBuffer = device.createBuffer({
-    size: waveGridBufferSize,
-    usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-  });
-  waveGridVertexBuffer.unmap()
+//   const waveGridSize = 1024;
+//   const waveGridBufferSize = waveGridSize * waveGridSize * 3 * Float32Array.BYTES_PER_ELEMENT;
+//   const waveGridVertexBuffer = device.createBuffer({
+//     size: waveGridBufferSize,
+//     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+//   });
+//   waveGridVertexBuffer.unmap()
 
 
+//   const numParticles = 1500;
+//   const initialParticleData = new Float32Array(numParticles * 4);
 
-  const numParticles = 1500;
-  const initialParticleData = new Float32Array(numParticles * 4);
-
-  const verticesBuffer = device.createBuffer({
-    size: cubeVertexArray.byteLength,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
-  new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
-  verticesBuffer.unmap();
-}
-
+//   const verticesBuffer = device.createBuffer({
+//     size: cubeVertexArray.byteLength,
+//     usage: GPUBufferUsage.VERTEX,
+//     mappedAtCreation: true,
+//   });
+//   new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
+//   verticesBuffer.unmap();
+// }
 
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
@@ -198,6 +193,7 @@ const makeStuff = (device) => {
     ...pipelineDesc,
     layout: pipelineLayout,
   });
+
   state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -243,10 +239,13 @@ struct VertexOutput {
   @builtin(position) Position : vec4<f32>,
   @location(0) fragUV : vec2<f32>,
   @location(1) fragPosition: vec4<f32>,
+//  @location(2) stuff: vec4<f32>
 }
 @vertex
 fn main_vertex(
-  @builtin(vertex_index) VertexIndex : u32
+  @builtin(vertex_index) VertexIndex : u32,
+  //@location(0) stuff : vec4<f32>,
+
 ) -> VertexOutput {
 
   var uv = array<vec2<f32>, 6>(
@@ -271,7 +270,8 @@ fn main_vertex(
   output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
   output.fragUV = uv[VertexIndex];
   output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
-  output.fragPosition.g = 1.5 - output.fragPosition.g ;
+  output.fragPosition.g = 1.5 - output.fragPosition.g;
+  //output.stuff = stuff;
   return output;
 }
   ${source}`;
@@ -337,17 +337,14 @@ async function init(options: any) {
     pipeline,
   });
 
-  state.vertexBuffer = utils.createBuffer(
-    device,
-    attribs,
-    GPUBufferUsage.VERTEX
-  );
-
+  
   function draw(newData: any) {
     newData.time = performance.now();
+    updateAttribs(newData, state)
     Object.assign(state.data, newData);
     updateUniforms(state);
     recordRenderPass(state);
+
     return draw;
   }
 
@@ -356,5 +353,15 @@ async function init(options: any) {
 }
 
 init.version = "0.8.0";
+
+
+function updateAttribs(newData, state) {
+  if (! newData.data) return
+  state.vertexBuffer = utils.createBuffer(
+    state.device,
+    newData.data,
+    GPUBufferUsage.VERTEX
+  );
+}
 
 export { init };

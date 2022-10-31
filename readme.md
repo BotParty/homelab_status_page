@@ -1,3 +1,31 @@
+- SIMPLE WEBGPU COMPUTE - 
+simplest GPGPU compute library ever
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # simple-webgpu-compute
 ## Please star https://github.com/gpuweb/gpuweb to support progress in Computer Graphics for 7 billion people
 ## Designed specifically for Biotech, Robotics, and Simulation Games

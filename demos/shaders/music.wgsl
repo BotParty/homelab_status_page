@@ -1,10 +1,14 @@
+// #define FFT_SIZE ${fftSize}
+// #define PI ${Math.PI}
+
+//#define PI 3.1415
 @fragment
   fn main_fragment(
     @location(0) fragUV: vec2<f32>,
     @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32> {    
     var color = vec4<f32>(1., 1., 0., 1.);
-  var p = fragUV;
+    var p = fragUV;
     var q = (p.x % 25. * 2.0 < 25.) == (p.y % 25. * 2.0 < 25.);
     var o = f32(q);
     var cubemapVec = fragPosition.xy;
