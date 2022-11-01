@@ -60,6 +60,14 @@
       }
       canvas {
         pointer-events: none;
+        z-index: 0;
+        position: absolute;
+      }
+      audio {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 999;
       }
     </style>
     <script type="module" src="./demos/index.js"></script>
@@ -84,8 +92,8 @@
       </div>
     </fieldset>
       </form>
-      
-      <audio src="../237.mp3" control autoplay></audio>
+
+      <audio src="../237.mp3" control ></audio>
 
     </div>
   </body>

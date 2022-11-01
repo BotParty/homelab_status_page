@@ -4,16 +4,16 @@ import utils from "./utils";
 import defaultShader from "./default.wgsl?raw";
 
 const recordRenderPass = async function (state: any) {
-  let {
-    vertexBuffer,
-    device,
-    pipeline,
-    renderPassDescriptor,
-  } = state;
+  let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
 
-  renderPassDescriptor.colorAttachments[0].view =  state.context.getCurrentTexture().createView();
+  renderPassDescriptor.colorAttachments[0].view = state.context
+    .getCurrentTexture()
+    .createView();
 
   const commandEncoder = device.createCommandEncoder();
+
+//  commandEncoder.copyBufferToTexture(cubeTexture, )
+
 
   let renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
@@ -22,15 +22,15 @@ const recordRenderPass = async function (state: any) {
   //     colorFormats: ['rgb10a2unorm']
   //   }
 
-  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
+//  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
 
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
   renderPassEncoder.setPipeline(pipeline);
 
   renderPassEncoder.setBindGroup(0, bindGroup);
-  if (vertexBuffer) renderPassEncoder.setVertexBuffer(0, vertexBuffer);
-  
+  renderPassEncoder.setVertexBuffer(0, updateAttribs(state));
+
   renderPassEncoder.draw(3 * 2, 1, 0, 0);
 
   renderPassEncoder.end();
@@ -42,11 +42,11 @@ function updateUniforms(state: any) {
   let values: any = Object.values(data);
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
-  return state.uniformsBuffer = utils.createBuffer(
+  return (state.uniformsBuffer = utils.createBuffer(
     device,
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-  );
+  ));
 }
 async function makePipeline(shader, state) {
   let { device } = state;
@@ -56,14 +56,32 @@ async function makePipeline(shader, state) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
+      buffers: [
+        {
+          arrayStride: 16,
+          attributes: [
+            {
+              // position
+              shaderLocation: 0,
+              offset: 0,
+              format: 'float32x4',
+            },
+     
+          ],
+        },
+      ],
       // buffers: [
       //   {
-      //     shaderLocation: 0,
-      //     offset: 0,
-      //     format: 'float32x4',
-      //     arrayStride: 0
+      //     arrayStride: 0,
+      //     attributes: [
+      //       {
+      //         shaderLocation: 0,
+      //         offset: 0,
+      //         format: "float32x4",
+      //       },
+      //     ],
       //   },
-      // ]
+      // ],
     },
     fragment: {
       module: shader,
@@ -95,7 +113,7 @@ async function makePipeline(shader, state) {
     img.src = "../october.png";
     await img.decode();
     const imageBitmap = await createImageBitmap(img);
-
+console.log(imageBitmap)
     cubeTexture = device.createTexture({
       size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
@@ -109,34 +127,38 @@ async function makePipeline(shader, state) {
       { texture: cubeTexture },
       [imageBitmap.width, imageBitmap.height]
     );
+state.cubeTexture = cubeTexture;
+let data=   new Uint8Array(new Array(2556 * 1824).fill(5).map((d, i) => i))
+    device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
+      bytesPerRow: 10224,
+      rowsPerImage: 1824
+    } ,  [imageBitmap.width, imageBitmap.height])
   }
- 
 
-// const makeStuff = (device) => {
-//  const cubeVertexArray = 
- 
-//  new Float64Array(new Array(1024).fill(0).map((d, i) => i));
+  // const makeStuff = (device) => {
+  //  const cubeVertexArray =
 
-//   const waveGridSize = 1024;
-//   const waveGridBufferSize = waveGridSize * waveGridSize * 3 * Float32Array.BYTES_PER_ELEMENT;
-//   const waveGridVertexBuffer = device.createBuffer({
-//     size: waveGridBufferSize,
-//     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-//   });
-//   waveGridVertexBuffer.unmap()
+  //  new Float64Array(new Array(1024).fill(0).map((d, i) => i));
 
+  //   const waveGridSize = 1024;
+  //   const waveGridBufferSize = waveGridSize * waveGridSize * 3 * Float32Array.BYTES_PER_ELEMENT;
+  //   const waveGridVertexBuffer = device.createBuffer({
+  //     size: waveGridBufferSize,
+  //     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+  //   });
+  //   waveGridVertexBuffer.unmap()
 
-//   const numParticles = 1500;
-//   const initialParticleData = new Float32Array(numParticles * 4);
+  //   const numParticles = 1500;
+  //   const initialParticleData = new Float32Array(numParticles * 4);
 
-//   const verticesBuffer = device.createBuffer({
-//     size: cubeVertexArray.byteLength,
-//     usage: GPUBufferUsage.VERTEX,
-//     mappedAtCreation: true,
-//   });
-//   new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
-//   verticesBuffer.unmap();
-// }
+  //   const verticesBuffer = device.createBuffer({
+  //     size: cubeVertexArray.byteLength,
+  //     usage: GPUBufferUsage.VERTEX,
+  //     mappedAtCreation: true,
+  //   });
+  //   new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
+  //   verticesBuffer.unmap();
+  // }
 
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
@@ -148,7 +170,7 @@ async function makePipeline(shader, state) {
           minBindingSize: 4 * 7,
         },
       },
-   
+
       {
         binding: 1,
         visibility: GPUShaderStage.FRAGMENT,
@@ -177,7 +199,7 @@ async function makePipeline(shader, state) {
   const renderPassDescriptor = {
     colorAttachments: [
       {
-        view:  void 0,
+        view: void 0,
         clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
         loadOp: "clear",
         storeOp: "store",
@@ -185,7 +207,7 @@ async function makePipeline(shader, state) {
     ],
   };
 
-//  renderPassDescriptor.colorAttachments[0].view = cubeTexture.createView();
+  //  renderPassDescriptor.colorAttachments[0].view = cubeTexture.createView();
 
   state.renderPassDescriptor = renderPassDescriptor;
 
@@ -216,7 +238,7 @@ async function makePipeline(shader, state) {
         },
       },
     ],
-  }
+  };
 
   return pipeline;
 }
@@ -239,12 +261,12 @@ struct VertexOutput {
   @builtin(position) Position : vec4<f32>,
   @location(0) fragUV : vec2<f32>,
   @location(1) fragPosition: vec4<f32>,
-//  @location(2) stuff: vec4<f32>
+  @location(2) stuff: vec4<f32>
 }
 @vertex
 fn main_vertex(
   @builtin(vertex_index) VertexIndex : u32,
-  //@location(0) stuff : vec4<f32>,
+  @location(0) stuff : vec4<f32>,
 
 ) -> VertexOutput {
 
@@ -258,12 +280,15 @@ fn main_vertex(
   );
 
   var pos = array<vec2<f32>, 6>(
-    vec2<f32>( 1.0,  1.0),
     vec2<f32>( 1.0, -1.0),
     vec2<f32>(-1.0, -1.0),
     vec2<f32>( 1.0,  1.0),
+  
+    vec2<f32>(-1.0,  1.0),
+    vec2<f32>( 1.0,  1.0),
+  
     vec2<f32>(-1.0, -1.0),
-    vec2<f32>(-1.0,  1.0)
+  
 );
 
   var output : VertexOutput;
@@ -271,12 +296,30 @@ fn main_vertex(
   output.fragUV = uv[VertexIndex];
   output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
   output.fragPosition.g = 1.5 - output.fragPosition.g;
-  //output.stuff = stuff;
+  output.stuff = stuff;
   return output;
 }
   ${source}`;
+
+
+  //add actual vertex attributes for the quad positions
+
   return device.createShaderModule({ code });
 }
+
+
+//waveForm = range from 0 - 500
+//vertex attributes = 6
+
+//how to pass data evenly to vertices 
+//each pixel gets data from the vertices its closest to
+//i want each pixel to get access to the appropriate waveform data based on its location
+
+//left most pixel gets waveform[0], rightmost Pixel gets waveform[1000]
+
+//if you have 
+//texture data is random access 
+
 
 let defaultData = {
   width: 900, //based on canvas
@@ -311,8 +354,8 @@ async function init(options: any) {
   addMouseEvents(canvas, state.data);
 
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
-  const adapter = await navigator.gpu.requestAdapter();
-  const device = await adapter?.requestDevice() as GPUDevice;
+  const adapter = await navigator.gpu.requestAdapter() as GPUAdapter;
+  const device = (await adapter?.requestDevice()) as GPUDevice;
 
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
@@ -331,18 +374,13 @@ async function init(options: any) {
 
   let shader = makeShaderModule(device, state.data, options.shader);
 
-  const pipeline = await makePipeline(shader, state);
+  state.pipeline = await makePipeline(shader, state);
 
-  Object.assign(state, {
-    pipeline,
-  });
-
-  
   function draw(newData: any) {
     newData.time = performance.now();
-    updateAttribs(newData, state)
+  
     Object.assign(state.data, newData);
-    updateUniforms(state);
+//    updateUniforms(state);
     recordRenderPass(state);
 
     return draw;
@@ -352,16 +390,27 @@ async function init(options: any) {
   return draw;
 }
 
-init.version = "0.8.0";
+function updateAttribs(state) {
+  state.dataArray = new Uint8Array(new Array(500).fill(5).map((d, i) => i))
+  let data = state.dataArray
+    let desc = {
+      size: (data.byteLength + 3) & ~3,
+      usage: GPUBufferUsage.VERTEX,
+      mappedAtCreation: true,
+    };
+    let buffer = state.device.createBuffer(desc);
 
+    let writeArray =
+      
+        new Uint8Array(buffer.getMappedRange())
+        
 
-function updateAttribs(newData, state) {
-  if (! newData.data) return
-  state.vertexBuffer = utils.createBuffer(
-    state.device,
-    newData.data,
-    GPUBufferUsage.VERTEX
-  );
+    writeArray.set(data);
+    buffer.unmap();
+    //new Typed Array makes a writable location to the buffer
+    //writearray.set sends values in user's array to buffer
+
+    return buffer;
 }
 
 export { init };

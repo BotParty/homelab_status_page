@@ -20,30 +20,32 @@ let data = {}, context
 
 let audio = document.querySelector('audio')
 audio.controls = true;
-audio.addEventListener('play', function abc() {
-  context = new AudioContext();
-  var src = context.createMediaElementSource(audio);
-  var analyser = context.createAnalyser();
+
+let dataArray
+audio.addEventListener('play', abc)
+
+function abc() {
+  let analyser
+  if (! dataArray) {
+  let context = new AudioContext();
+  let src = context.createMediaElementSource(audio);
+  analyser =  context.createAnalyser();
   src.connect(analyser);
   analyser.connect(context.destination);
-  analyser.fftSize = 256;
+  analyser.fftSize = 1024;
   var bufferLength = analyser.frequencyBinCount;
-  console.log(bufferLength)
-})
+  dataArray = new Uint8Array(bufferLength);
+  }
+  if (analyser)analyser.getByteTimeDomainData(dataArray);
+}
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   let draw = await init(options);
-
-
+  options.dataArray = dataArray
   requestAnimationFrame(function test() {
-    data.time = performance.now()
-
-    //data.data = new Uint8Array(1024);
-
     draw(data);
     requestAnimationFrame(test)
-
   });
 }
 
