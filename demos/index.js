@@ -27,7 +27,6 @@ const fftSize = analyser.frequencyBinCount;
 const frequencies = new Uint8Array(fftSize);
 stuff = function abc() {
   if (analyser)analyser.getByteFrequencyData(frequencies);
-//  console.log(frequencies)
   return frequencies;
 }
 }
@@ -42,9 +41,12 @@ async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   let draw = await init(options);
 
-  requestAnimationFrame(function test() {
-    if (stuff ) data.dataArray = stuff()
+  requestAnimationFrame(async function test() {
+    if (stuff) data.texture = stuff()
     draw(data);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 500)
+    })
     requestAnimationFrame(test)
   });
 }
@@ -91,13 +93,11 @@ controlpanel.innerHTML += Object.keys(demos).map(
   .replace(/{replace_me}/g, demoTitles[title]))
   .join('\n')
   
-  
   document.querySelectorAll('input').forEach(e => {
    e.addEventListener('click', (event) => {
       select(event.target.value)
     })
   })
-  
 
 function customShader(options) {
   let start = window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;

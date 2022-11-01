@@ -3,8 +3,53 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
+async function makeTexture(state) {
+  const img = document.createElement("img");
+  const source = img;
+  source.width = innerWidth;
+  source.height = innerHeight;
+
+  img.src = "../october.png";
+  await img.decode();
+
+  const imageBitmap = await createImageBitmap(img);
+  let cubeTexture = state.device.createTexture({
+    size: [255, 188, 1],
+    format: "rgba8unorm",
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+
+  // let music = new Array(255 * 182 * 4)
+  //   .fill(5)
+  //   .map((d, i) => 
+  //   state.data.texture ? 
+  //   state.data.texture[i % state.data.texture.length] : new Float32Array(
+  //     new Array(255 * 182 * 4).fill(5).map((d, i) => Math.random())
+  //   ));
+
+  // updateTexture(state)
+  // let data = new Float32Array(music);
+
+  state.cubeTexture = cubeTexture;
+  return cubeTexture
+}
+
+function updateTexture(state) {
+  state.device.queue.writeTexture(
+    { texture: state.cubeTexture },
+    state.data.buffer,
+    {
+      bytesPerRow: 1024,
+      rowsPerImage: 7846,
+    },
+    [2556, 1824]
+  );
+}
+
 const recordRenderPass = async function (state: any) {
- 
   let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
 
   renderPassDescriptor.colorAttachments[0].view = state.context
@@ -13,42 +58,18 @@ const recordRenderPass = async function (state: any) {
 
   const commandEncoder = device.createCommandEncoder();
 
-//  commandEncoder.copyBufferToTexture(cubeTexture, )
-
-
   let renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
   // if (! stuff.renderBundle)
   //   passEncoder = device.creacteRenderBundleEncoder({
   //     colorFormats: ['rgb10a2unorm']
-  //   }
-  let cubeTexture = device.createTexture({
-    size: [2556, 1884, 1],
-    format: "rgba8unorm",
-    usage:
-      GPUTextureUsage.TEXTURE_BINDING |
-      GPUTextureUsage.COPY_DST |
-      GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-
-state.cubeTexture = cubeTexture;
-let music = new Array(2556 * 1824 * 4).fill(5).map((d, i) => state.data.dataArray[i % state.data.dataArray.length ])
-
-let data = new Float32Array(music)
-  device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
-    bytesPerRow: 10224,
-    rowsPerImage: 72846
-  } ,  [2556, 1824])
-
-  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
-  state.bindGroupDescriptor.entries[2].resource = state.cubeTexture.createView()
+  //   } 
+  
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
-//  console.log(state.bindGroupDescriptor, 123)
 
   renderPassEncoder.setPipeline(state.pipeline);
 
   renderPassEncoder.setBindGroup(0, bindGroup);
-  renderPassEncoder.setVertexBuffer(0, updateAttribs(state));
 
   renderPassEncoder.draw(3 * 2, 1, 0, 0);
 
@@ -58,7 +79,9 @@ let data = new Float32Array(music)
 
 function updateUniforms(state: any) {
   let { data, device } = state;
-  let values: any = Object.values(data);
+  //console.log(data)
+  let values: any = Object.values(data).filter(val => typeof val !== 'object');
+
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
   return (state.uniformsBuffer = utils.createBuffer(
@@ -75,32 +98,6 @@ async function makePipeline(shader, state) {
     vertex: {
       module: shader,
       entryPoint: "main_vertex",
-      buffers: [
-        {
-          arrayStride: 16,
-          attributes: [
-            {
-              // position
-              shaderLocation: 0,
-              offset: 0,
-              format: 'float32x4',
-            },
-     
-          ],
-        },
-      ],
-      // buffers: [
-      //   {
-      //     arrayStride: 0,
-      //     attributes: [
-      //       {
-      //         shaderLocation: 0,
-      //         offset: 0,
-      //         format: "float32x4",
-      //       },
-      //     ],
-      //   },
-      // ],
     },
     fragment: {
       module: shader,
@@ -113,70 +110,8 @@ async function makePipeline(shader, state) {
   const sampler = device.createSampler({
     magFilter: "linear",
     minFilter: "linear",
+    mipmapFilter: "nearest",
   });
-
-  const img = document.createElement("img");
-  const source = img;
-  source.width = innerWidth;
-  source.height = innerHeight;
-
-  img.src = "../october.png";
-  await img.decode();
-
-  const imageBitmap = await createImageBitmap(img);
-
-  // Fetch the image and upload it into a GPUTexture.
-  // let cubeTexture: GPUTexture;
-  // {
-  //   const img = document.createElement("img");
-  //   img.src = "../october.png";
-  //   await img.decode();
-  //   const imageBitmap = await createImageBitmap(img);
-
-  
-  // }
-
-  // const makeStuff = (device) => {
-  //  const cubeVertexArray =
-
-  //  new Float64Array(new Array(1024).fill(0).map((d, i) => i));
-
-  //   const waveGridSize = 1024;
-  //   const waveGridBufferSize = waveGridSize * waveGridSize * 3 * Float32Array.BYTES_PER_ELEMENT;
-  //   const waveGridVertexBuffer = device.createBuffer({
-  //     size: waveGridBufferSize,
-  //     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-  //   });
-  //   waveGridVertexBuffer.unmap()
-
-  //   const numParticles = 1500;
-  //   const initialParticleData = new Float32Array(numParticles * 4);
-
-  //   const verticesBuffer = device.createBuffer({
-  //     size: cubeVertexArray.byteLength,
-  //     usage: GPUBufferUsage.VERTEX,
-  //     mappedAtCreation: true,
-  //   });
-  //   new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
-  //   verticesBuffer.unmap();
-  // }
-
-  let cubeTexture = device.createTexture({
-    size: [2556, 1884, 1],
-    format: "rgba8unorm",
-    usage:
-      GPUTextureUsage.TEXTURE_BINDING |
-      GPUTextureUsage.COPY_DST |
-      GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-
-state.cubeTexture = cubeTexture;
-let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 25))
-  device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
-    bytesPerRow: 10224,
-    rowsPerImage: 72846
-  } ,  [2556, 1824])
-
 
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
@@ -188,7 +123,6 @@ let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 2
           minBindingSize: 4 * 7,
         },
       },
-
       {
         binding: 1,
         visibility: GPUShaderStage.FRAGMENT,
@@ -198,10 +132,7 @@ let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 2
       {
         binding: 2,
         visibility: GPUShaderStage.FRAGMENT,
-        texture: {
-          textureView: cubeTexture.createView(),
-        },
-        textureView: cubeTexture.createView(),
+        texture: {},
       },
     ],
   });
@@ -211,7 +142,6 @@ let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 2
   });
 
   state.bindGroupLayout = bindGroupLayout;
-
   updateUniforms(state);
 
   const renderPassDescriptor = {
@@ -224,9 +154,6 @@ let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 2
       },
     ],
   };
- 
-
-  //  renderPassDescriptor.colorAttachments[0].view = cubeTexture.createView();
 
   state.renderPassDescriptor = renderPassDescriptor;
 
@@ -235,7 +162,8 @@ let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 2
     layout: pipelineLayout,
   });
 
-  console.log(state.uniformsBuffer );
+  let cubeTexture = await makeTexture(state);
+    
   state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -249,16 +177,25 @@ let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 2
       },
       {
         binding: 2,
-        resource: cubeTexture.createView(),
+        resource: cubeTexture.createView({
+          baseMipLevel: 0, // Make sure we're getting the right mip level...
+          mipLevelCount: 1,
+        }),
         texture: {
           sampleType: "float",
-
           viewDimension: "2d",
           multisampled: 0,
         },
       },
     ],
   };
+
+  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
+
+  state.bindGroupDescriptor.entries[2].resource = state.cubeTexture.createView({
+    baseMipLevel: 0, // Make sure we're getting the right mip level...
+    mipLevelCount: 1,
+  });
 
   return pipeline;
 }
@@ -273,73 +210,49 @@ function makeShaderModule(device: any, data: any, source: any) {
     struct Uniforms {
      ${uniforms}
    }
-@binding(0) @group(0) var<uniform> u: Uniforms;
-@binding(1) @group(0)  var mySampler: sampler;
-@binding(2) @group(0) var myTexture: texture_2d<f32>;
+  @binding(0) @group(0) var<uniform> u: Uniforms;
+  @binding(1) @group(0) var mySampler: sampler;
+  @binding(2) @group(0) var myTexture: texture_2d<f32>;
 
-struct VertexOutput {
-  @builtin(position) Position : vec4<f32>,
-  @location(0) fragUV : vec2<f32>,
-  @location(1) fragPosition: vec4<f32>,
-  @location(2) stuff: vec4<f32>
-}
-@vertex
-fn main_vertex(
-  @builtin(vertex_index) VertexIndex : u32,
-  @location(0) stuff : vec4<f32>,
+  struct VertexOutput {
+    @builtin(position) Position : vec4<f32>,
+    @location(0) fragUV : vec2<f32>,
+    @location(1) fragPosition: vec4<f32>,
+  }
+  @vertex
+  fn main_vertex(
+    @builtin(vertex_index) VertexIndex : u32,
+  ) -> VertexOutput {
+    var uv = array<vec2<f32>, 6>(
+      vec2<f32>(1.0, 0.0),
+      vec2<f32>(1.0, 1.0),
+      vec2<f32>(0.0, 1.0),
+      vec2<f32>(1.0, 0.0),
+      vec2<f32>(0.0, 1.0),
+      vec2<f32>(0.0, 0.0)
+    );
 
-) -> VertexOutput {
-
-  var uv = array<vec2<f32>, 6>(
-    vec2<f32>(1.0, 0.0),
-    vec2<f32>(1.0, 1.0),
-    vec2<f32>(0.0, 1.0),
-    vec2<f32>(1.0, 0.0),
-    vec2<f32>(0.0, 1.0),
-    vec2<f32>(0.0, 0.0)
+    var pos = array<vec2<f32>, 6>(
+      vec2<f32>( 1.0, -1.0),
+      vec2<f32>(-1.0, -1.0),
+      vec2<f32>( 1.0,  1.0),
+      vec2<f32>(-1.0,  1.0),
+      vec2<f32>( 1.0,  1.0),
+      vec2<f32>(-1.0, -1.0),
   );
 
-  var pos = array<vec2<f32>, 6>(
-    vec2<f32>( 1.0, -1.0),
-    vec2<f32>(-1.0, -1.0),
-    vec2<f32>( 1.0,  1.0),
-  
-    vec2<f32>(-1.0,  1.0),
-    vec2<f32>( 1.0,  1.0),
-  
-    vec2<f32>(-1.0, -1.0),
-  
-);
-
-  var output : VertexOutput;
-  output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
-  output.fragUV = uv[VertexIndex];
-  output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
-  output.fragPosition.g = 1.5 - output.fragPosition.g;
-  output.stuff = stuff;
-  return output;
-}
+    var output : VertexOutput;
+    output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+    output.fragUV = uv[VertexIndex];
+    output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
+    output.fragPosition.g = 1.5 - output.fragPosition.g;
+    return output;
+  }
   ${source}`;
-
-
+  //console.log(code)
   //add actual vertex attributes for the quad positions
-
   return device.createShaderModule({ code });
 }
-
-
-//waveForm = range from 0 - 500
-//vertex attributes = 6
-
-//how to pass data evenly to vertices 
-//each pixel gets data from the vertices its closest to
-//i want each pixel to get access to the appropriate waveform data based on its location
-
-//left most pixel gets waveform[0], rightmost Pixel gets waveform[1000]
-
-//if you have 
-//texture data is random access 
-
 
 let defaultData = {
   width: innerWidth, //based on canvas
@@ -374,7 +287,7 @@ async function init(options: any) {
   addMouseEvents(canvas, state.data);
 
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
-  const adapter = await navigator.gpu.requestAdapter() as GPUAdapter;
+  const adapter = (await navigator.gpu.requestAdapter()) as GPUAdapter;
   const device = (await adapter?.requestDevice()) as GPUDevice;
 
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
@@ -392,33 +305,36 @@ async function init(options: any) {
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
- state.shader = makeShaderModule(device, state.data, options.shader);
+  state.shader = makeShaderModule(device, state.data, options.shader);
 
   state.pipeline = await makePipeline(state.shader, state);
 
-
-     
   function draw(newData: any) {
     newData.time = performance.now();
-  
 
-    let cubeTexture = device.createTexture({
-      size: [2556, 1884, 1],
-      format: "rgba8unorm",
-      usage:
-        GPUTextureUsage.TEXTURE_BINDING |
-        GPUTextureUsage.COPY_DST |
-        GPUTextureUsage.RENDER_ATTACHMENT,
-    });
+    // let cubeTexture = device.createTexture({
+    //   size: [2556, 1884, 1],
+    //   format: "rgba8unorm",
+    //   usage:
+    //     GPUTextureUsage.TEXTURE_BINDING |
+    //     GPUTextureUsage.COPY_DST |
+    //     GPUTextureUsage.RENDER_ATTACHMENT,
+    // });
 
-  state.cubeTexture = cubeTexture;
-  let data =  new Float32Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) => Math.random()))
-    device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
-      bytesPerRow: 10224,
-      rowsPerImage: 72846
-    } ,  [2556, 1824])
-
-
+    // state.cubeTexture = cubeTexture;
+    // let data = new Float32Array(
+    //   new Array(2556 * 1824 * 4).fill(5).map((d, i) => Math.random())
+    // );
+    // device.queue.writeTexture(
+    //   { texture: cubeTexture },
+    //   data.buffer,
+    //   {
+    //     bytesPerRow: 10224,
+    //     rowsPerImage: 72846,
+    //   },
+    //   [2556, 1824]
+    // );
+    //updateTexture(state)
     Object.assign(state.data, newData);
     updateUniforms(state);
     recordRenderPass(state);
@@ -428,30 +344,6 @@ async function init(options: any) {
 
   draw.canvas = canvas;
   return draw;
-}
-
-function updateAttribs(state) {
- state.dataArray = new Uint8Array(new Array(500).fill(5).map((d, i) => 1))
-///console.log(state.dataArray);
-  let data = state.dataArray
-    let desc = {
-      size: (data.byteLength + 3) & ~3,
-      usage: GPUBufferUsage.VERTEX,
-      mappedAtCreation: true,
-    };
-    let buffer = state.device.createBuffer(desc);
-
-    let writeArray =
-      
-        new Uint8Array(buffer.getMappedRange())
-        
-
-    writeArray.set(data);
-    buffer.unmap();
-    //new Typed Array makes a writable location to the buffer
-    //writearray.set sends values in user's array to buffer
-
-    return buffer;
 }
 
 export { init };
