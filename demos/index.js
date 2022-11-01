@@ -16,34 +16,34 @@ import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?r
 import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
 
 let defaultDemo = 'music';
-let data = {}, context
+let data = {}
 
-let audio = document.querySelector('audio')
-audio.controls = true;
-
-let dataArray
-audio.addEventListener('play', abc)
-
-function abc() {
-  let analyser
-  if (! dataArray) {
-  let context = new AudioContext();
-  let src = context.createMediaElementSource(audio);
-  analyser =  context.createAnalyser();
-  src.connect(analyser);
-  analyser.connect(context.destination);
-  analyser.fftSize = 1024;
-  var bufferLength = analyser.frequencyBinCount;
-  dataArray = new Uint8Array(bufferLength);
-  }
-  if (analyser)analyser.getByteTimeDomainData(dataArray);
+let stuff 
+function then(stream) {
+  const context = new AudioContext();
+  const analyser = context.createAnalyser();
+  context.createMediaStreamSource(stream).connect(analyser);
+const fftSize = analyser.frequencyBinCount;
+const frequencies = new Uint8Array(fftSize);
+stuff = function abc() {
+  if (analyser)analyser.getByteFrequencyData(frequencies);
+//  console.log(frequencies)
+  return frequencies;
 }
+}
+(async function () {
+  let stream = await navigator.mediaDevices
+  .getUserMedia({ audio: true })
+  .then(then)
+})();
+
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   let draw = await init(options);
-  options.dataArray = dataArray
+
   requestAnimationFrame(function test() {
+    if (stuff ) data.dataArray = stuff()
     draw(data);
     requestAnimationFrame(test)
   });

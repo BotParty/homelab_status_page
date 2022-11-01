@@ -4,6 +4,7 @@ import utils from "./utils";
 import defaultShader from "./default.wgsl?raw";
 
 const recordRenderPass = async function (state: any) {
+ 
   let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
 
   renderPassDescriptor.colorAttachments[0].view = state.context
@@ -21,12 +22,30 @@ const recordRenderPass = async function (state: any) {
   //   passEncoder = device.creacteRenderBundleEncoder({
   //     colorFormats: ['rgb10a2unorm']
   //   }
+  let cubeTexture = device.createTexture({
+    size: [2556, 1884, 1],
+    format: "rgba8unorm",
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
+  });
 
-//  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
+state.cubeTexture = cubeTexture;
+let music = new Array(2556 * 1824 * 4).fill(5).map((d, i) => state.data.dataArray[i % state.data.dataArray.length ])
 
+let data = new Float32Array(music)
+  device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
+    bytesPerRow: 10224,
+    rowsPerImage: 72846
+  } ,  [2556, 1824])
+
+  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
+  state.bindGroupDescriptor.entries[2].resource = state.cubeTexture.createView()
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
+//  console.log(state.bindGroupDescriptor, 123)
 
-  renderPassEncoder.setPipeline(pipeline);
+  renderPassEncoder.setPipeline(state.pipeline);
 
   renderPassEncoder.setBindGroup(0, bindGroup);
   renderPassEncoder.setVertexBuffer(0, updateAttribs(state));
@@ -98,8 +117,8 @@ async function makePipeline(shader, state) {
 
   const img = document.createElement("img");
   const source = img;
-  source.width = 500;
-  source.height = 500;
+  source.width = innerWidth;
+  source.height = innerHeight;
 
   img.src = "../october.png";
   await img.decode();
@@ -107,33 +126,15 @@ async function makePipeline(shader, state) {
   const imageBitmap = await createImageBitmap(img);
 
   // Fetch the image and upload it into a GPUTexture.
-  let cubeTexture: GPUTexture;
-  {
-    const img = document.createElement("img");
-    img.src = "../october.png";
-    await img.decode();
-    const imageBitmap = await createImageBitmap(img);
-console.log(imageBitmap)
-    cubeTexture = device.createTexture({
-      size: [imageBitmap.width, imageBitmap.height, 1],
-      format: "rgba8unorm",
-      usage:
-        GPUTextureUsage.TEXTURE_BINDING |
-        GPUTextureUsage.COPY_DST |
-        GPUTextureUsage.RENDER_ATTACHMENT,
-    });
-    device.queue.copyExternalImageToTexture(
-      { source: imageBitmap },
-      { texture: cubeTexture },
-      [imageBitmap.width, imageBitmap.height]
-    );
-state.cubeTexture = cubeTexture;
-let data=   new Uint8Array(new Array(2556 * 1824).fill(5).map((d, i) => i))
-    device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
-      bytesPerRow: 10224,
-      rowsPerImage: 1824
-    } ,  [imageBitmap.width, imageBitmap.height])
-  }
+  // let cubeTexture: GPUTexture;
+  // {
+  //   const img = document.createElement("img");
+  //   img.src = "../october.png";
+  //   await img.decode();
+  //   const imageBitmap = await createImageBitmap(img);
+
+  
+  // }
 
   // const makeStuff = (device) => {
   //  const cubeVertexArray =
@@ -159,6 +160,23 @@ let data=   new Uint8Array(new Array(2556 * 1824).fill(5).map((d, i) => i))
   //   new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
   //   verticesBuffer.unmap();
   // }
+
+  let cubeTexture = device.createTexture({
+    size: [2556, 1884, 1],
+    format: "rgba8unorm",
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+
+state.cubeTexture = cubeTexture;
+let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 25))
+  device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
+    bytesPerRow: 10224,
+    rowsPerImage: 72846
+  } ,  [2556, 1824])
+
 
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
@@ -206,6 +224,7 @@ let data=   new Uint8Array(new Array(2556 * 1824).fill(5).map((d, i) => i))
       },
     ],
   };
+ 
 
   //  renderPassDescriptor.colorAttachments[0].view = cubeTexture.createView();
 
@@ -216,6 +235,7 @@ let data=   new Uint8Array(new Array(2556 * 1824).fill(5).map((d, i) => i))
     layout: pipelineLayout,
   });
 
+  console.log(state.uniformsBuffer );
   state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -322,8 +342,8 @@ fn main_vertex(
 
 
 let defaultData = {
-  width: 900, //based on canvas
-  height: 500, //based on canvas
+  width: innerWidth, //based on canvas
+  height: innerHeight, //based on canvas
   pixelRatio: 2, //recompile
   time: 0,
   mouseX: 0,
@@ -372,15 +392,35 @@ async function init(options: any) {
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
-  let shader = makeShaderModule(device, state.data, options.shader);
+ state.shader = makeShaderModule(device, state.data, options.shader);
 
-  state.pipeline = await makePipeline(shader, state);
+  state.pipeline = await makePipeline(state.shader, state);
 
+
+     
   function draw(newData: any) {
     newData.time = performance.now();
   
+
+    let cubeTexture = device.createTexture({
+      size: [2556, 1884, 1],
+      format: "rgba8unorm",
+      usage:
+        GPUTextureUsage.TEXTURE_BINDING |
+        GPUTextureUsage.COPY_DST |
+        GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+
+  state.cubeTexture = cubeTexture;
+  let data =  new Float32Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) => Math.random()))
+    device.queue.writeTexture({texture: cubeTexture}, data.buffer, {
+      bytesPerRow: 10224,
+      rowsPerImage: 72846
+    } ,  [2556, 1824])
+
+
     Object.assign(state.data, newData);
-//    updateUniforms(state);
+    updateUniforms(state);
     recordRenderPass(state);
 
     return draw;
@@ -391,7 +431,8 @@ async function init(options: any) {
 }
 
 function updateAttribs(state) {
-  state.dataArray = new Uint8Array(new Array(500).fill(5).map((d, i) => i))
+ state.dataArray = new Uint8Array(new Array(500).fill(5).map((d, i) => 1))
+///console.log(state.dataArray);
   let data = state.dataArray
     let desc = {
       size: (data.byteLength + 3) & ~3,

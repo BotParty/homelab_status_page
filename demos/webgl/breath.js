@@ -16,6 +16,8 @@ let successFunction = (stream) => {
   // Here we preallocate buffers for streaming audio data
   const fftSize = analyser.frequencyBinCount;
   const frequencies = new Uint8Array(fftSize);
+  analyser.getByteFrequencyData(frequencies);
+
   const fftBuffer = regl.buffer({
     length: fftSize,
     type: "uint8",

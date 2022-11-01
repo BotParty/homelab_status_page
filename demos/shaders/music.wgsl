@@ -11,5 +11,6 @@
     var cubemapVec = fragPosition.xy;
 
 //return  vec4<f32>(fragPosition.xyz,1)- stuff;
-   return textureSample(myTexture, mySampler, cubemapVec);
+//return vec4<f32>(u.mouseX, 1, 1, 1);
+   return textureSample(myTexture, mySampler, cubemapVec) * vec4<f32>(1,u.mouseX,sin(u.time * .001),1);
 }
