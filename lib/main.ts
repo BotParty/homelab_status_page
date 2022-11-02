@@ -3,7 +3,10 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
-async function makeTexture(state) {
+//makeTexture - state.data.texture = {img, array, etc} 
+//make texture - array - resize appropriately 
+//make draw loop more robust and reliable 
+let makeImgTexture = async () => {
   const img = document.createElement("img");
   const source = img;
   source.width = innerWidth;
@@ -12,41 +15,55 @@ async function makeTexture(state) {
   img.src = "../october.png";
   await img.decode();
 
-  const imageBitmap = await createImageBitmap(img);
+  return await createImageBitmap(img);
+}
+
+async function makeTexture(state) {
   let cubeTexture = state.device.createTexture({
-    size: [255, 188, 1],
+    size: [2556, 1824, 1],
     format: "rgba8unorm",
     usage:
       GPUTextureUsage.TEXTURE_BINDING |
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
+  let imageBitmap = await makeImgTexture();
 
-  // let music = new Array(255 * 182 * 4)
+  // let music = new Array(2556)
   //   .fill(5)
   //   .map((d, i) => 
   //   state.data.texture ? 
   //   state.data.texture[i % state.data.texture.length] : new Float32Array(
-  //     new Array(255 * 182 * 4).fill(5).map((d, i) => Math.random())
+  //     new Array(2556)
+  //     .map((d, i) => Math.random())
   //   ));
 
-  // updateTexture(state)
-  // let data = new Float32Array(music);
+    state.device.queue.copyExternalImageToTexture(
+      { source: imageBitmap },
+      { texture: cubeTexture },
+      [imageBitmap.width, imageBitmap.height]
+    );
+  state.cubeTexture = cubeTexture
+  updateTexture(state)
+  //let data = new Float32Array(music);
 
-  state.cubeTexture = cubeTexture;
+
   return cubeTexture
 }
 
 function updateTexture(state) {
-  state.device.queue.writeTexture(
-    { texture: state.cubeTexture },
-    state.data.buffer,
-    {
-      bytesPerRow: 1024,
-      rowsPerImage: 7846,
-    },
-    [2556, 1824]
-  );
+
+
+  
+  // state.device.queue.writeTexture(
+  //   { texture: state.cubeTexture },
+  //   state.data.buffer,
+  //   {
+  //     bytesPerRow: 1024,
+  //     rowsPerImage: 7846,
+  //   },
+  //   [2556, 1824]
+  // );
 }
 
 const recordRenderPass = async function (state: any) {
@@ -112,7 +129,6 @@ async function makePipeline(shader, state) {
     minFilter: "linear",
     mipmapFilter: "nearest",
   });
-
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
@@ -140,10 +156,10 @@ async function makePipeline(shader, state) {
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout],
   });
-
+ 
   state.bindGroupLayout = bindGroupLayout;
   updateUniforms(state);
-
+  
   const renderPassDescriptor = {
     colorAttachments: [
       {
@@ -163,7 +179,6 @@ async function makePipeline(shader, state) {
   });
 
   let cubeTexture = await makeTexture(state);
-    
   state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -249,7 +264,7 @@ function makeShaderModule(device: any, data: any, source: any) {
     return output;
   }
   ${source}`;
-  //console.log(code)
+
   //add actual vertex attributes for the quad positions
   return device.createShaderModule({ code });
 }
@@ -288,6 +303,7 @@ async function init(options: any) {
 
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
   const adapter = (await navigator.gpu.requestAdapter()) as GPUAdapter;
+
   const device = (await adapter?.requestDevice()) as GPUDevice;
 
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
@@ -308,33 +324,10 @@ async function init(options: any) {
   state.shader = makeShaderModule(device, state.data, options.shader);
 
   state.pipeline = await makePipeline(state.shader, state);
-
   function draw(newData: any) {
-    newData.time = performance.now();
-
-    // let cubeTexture = device.createTexture({
-    //   size: [2556, 1884, 1],
-    //   format: "rgba8unorm",
-    //   usage:
-    //     GPUTextureUsage.TEXTURE_BINDING |
-    //     GPUTextureUsage.COPY_DST |
-    //     GPUTextureUsage.RENDER_ATTACHMENT,
-    // });
-
-    // state.cubeTexture = cubeTexture;
-    // let data = new Float32Array(
-    //   new Array(2556 * 1824 * 4).fill(5).map((d, i) => Math.random())
-    // );
-    // device.queue.writeTexture(
-    //   { texture: cubeTexture },
-    //   data.buffer,
-    //   {
-    //     bytesPerRow: 10224,
-    //     rowsPerImage: 72846,
-    //   },
-    //   [2556, 1824]
-    // );
-    //updateTexture(state)
+    console.log('i am being drawn');
+    //newData.time = performance.now();
+    updateTexture(state)
     Object.assign(state.data, newData);
     updateUniforms(state);
     recordRenderPass(state);
@@ -345,5 +338,4 @@ async function init(options: any) {
   draw.canvas = canvas;
   return draw;
 }
-
 export { init };

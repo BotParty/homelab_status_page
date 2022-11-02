@@ -36,19 +36,20 @@ stuff = function abc() {
   .then(then)
 })();
 
-
+console.log('compiled')
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
-  let draw = await init(options);
+  console.log('start draw loop')
 
-  requestAnimationFrame(async function test() {
-    if (stuff) data.texture = stuff()
-    draw(data);
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500)
-    })
-    requestAnimationFrame(test)
-  });
+  let draw = await init(options);
+  draw(data);
+  console.log('drawn')
+  // requestAnimationFrame(function test() {
+  //   if (stuff) data.texture = stuff()
+  //   draw(data);
+  //     //requestAnimationFrame(test)
+  //     setTimeout(test, 500)
+  // });
 }
 
 function textureDemo() {
