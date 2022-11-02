@@ -29,14 +29,14 @@ async function makeTexture(state) {
   });
   let imageBitmap = await makeImgTexture();
 
-  // let music = new Array(2556)
-  //   .fill(5)
-  //   .map((d, i) => 
-  //   state.data.texture ? 
-  //   state.data.texture[i % state.data.texture.length] : new Float32Array(
-  //     new Array(2556)
-  //     .map((d, i) => Math.random())
-  //   ));
+  let music = new Array(2556)
+    .fill(5)
+    .map((d, i) => 
+    state.data.texture ? 
+    state.data.texture[i % state.data.texture.length] : new Float32Array(
+      new Array(2556)
+      .map((d, i) => Math.random())
+    ));
 
     state.device.queue.copyExternalImageToTexture(
       { source: imageBitmap },
@@ -45,25 +45,22 @@ async function makeTexture(state) {
     );
   state.cubeTexture = cubeTexture
   updateTexture(state)
-  //let data = new Float32Array(music);
+  let data = new Float32Array(music);
 
 
   return cubeTexture
 }
 
-function updateTexture(state) {
-
-
-  
-  // state.device.queue.writeTexture(
-  //   { texture: state.cubeTexture },
-  //   state.data.buffer,
-  //   {
-  //     bytesPerRow: 1024,
-  //     rowsPerImage: 7846,
-  //   },
-  //   [2556, 1824]
-  // );
+function updateTexture(state) {  
+  state.device.queue.writeTexture(
+    { texture: state.cubeTexture },
+    state.data.buffer,
+    {
+      bytesPerRow: 1024,
+      rowsPerImage: 7846,
+    },
+    [2556, 1824]
+  );
 }
 
 const recordRenderPass = async function (state: any) {
