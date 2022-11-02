@@ -55,7 +55,7 @@ async function start_loop_static(options) {
 
 function textureDemo() {
   let img = document.createElement('img')
-  img.src = './test.png'
+  img.src = './october.png'
   
   customShader({
     data: {texture: img},

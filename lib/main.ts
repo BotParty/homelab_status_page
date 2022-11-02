@@ -12,7 +12,7 @@ let makeImgTexture = async () => {
   source.width = innerWidth;
   source.height = innerHeight;
 
-  img.src = "../october.png";
+  img.src = "../test.png";
   await img.decode();
 
   return await createImageBitmap(img);
@@ -20,7 +20,7 @@ let makeImgTexture = async () => {
 
 async function makeTexture(state) {
   let cubeTexture = state.device.createTexture({
-    size: [2556, 1824, 1],
+    size: [800, 600, 1],
     format: "rgba8unorm",
     usage:
       GPUTextureUsage.TEXTURE_BINDING |
@@ -51,17 +51,23 @@ async function makeTexture(state) {
 
 function updateTexture(state) { 
   // console.log(state.cubeTexture)
-  console.log(state.data.music)
+//  console.log(state.data.music)
   state.device.queue.writeTexture(
     { texture: state.cubeTexture },
     state.data.music[0],
     {
-      bytesPerRow: 1024,
+      bytesPerRow: 10224,
       rowsPerImage: 7846,
+      offset: 1020
+
     },
-    [2556, 1824]
+    [800, 600]
   );
 }
+//exceeds the linear data size (1020) with offset (0).
+//texture data layout 
+
+//[612376], [offset...data]
 
 const recordRenderPass = async function (state: any) {
   let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
