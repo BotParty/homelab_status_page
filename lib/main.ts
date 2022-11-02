@@ -29,32 +29,32 @@ async function makeTexture(state) {
   });
   let imageBitmap = await makeImgTexture();
 
-  let music = new Array(2556)
+    let music = new Array(255)
     .fill(5)
     .map((d, i) => 
     state.data.texture ? 
     state.data.texture[i % state.data.texture.length] : new Float32Array(
-      new Array(2556)
-      .map((d, i) => Math.random())
+      new Array(255).fill(5).map((d, i) => Math.random())
     ));
-
+      state.cubeTexture = cubeTexture
+      state.data.music = music
     state.device.queue.copyExternalImageToTexture(
       { source: imageBitmap },
       { texture: cubeTexture },
       [imageBitmap.width, imageBitmap.height]
     );
-  state.cubeTexture = cubeTexture
+  // state.cubeTexture = cubeTexture
   updateTexture(state)
   let data = new Float32Array(music);
-
-
   return cubeTexture
 }
 
-function updateTexture(state) {  
+function updateTexture(state) { 
+  // console.log(state.cubeTexture)
+  console.log(state.data.music)
   state.device.queue.writeTexture(
     { texture: state.cubeTexture },
-    state.data.buffer,
+    state.data.music[0],
     {
       bytesPerRow: 1024,
       rowsPerImage: 7846,

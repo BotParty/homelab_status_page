@@ -44,6 +44,7 @@ async function start_loop_static(options) {
   let draw = await init(options);
   draw(data);
   console.log('drawn')
+  
   // requestAnimationFrame(function test() {
   //   if (stuff) data.texture = stuff()
   //   draw(data);
@@ -54,7 +55,7 @@ async function start_loop_static(options) {
 
 function textureDemo() {
   let img = document.createElement('img')
-  img.src = './october.png'
+  img.src = './test.png'
   
   customShader({
     data: {texture: img},
@@ -63,7 +64,6 @@ function textureDemo() {
 }
 let demoTitles = [
   'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
-
   'four', 'five', 'music'
 ]
 
