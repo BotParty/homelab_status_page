@@ -1,5 +1,5 @@
 {
-  "name": "simple-webgpu-compute",
+  "name": "simple-webgpu",
   "version": "0.4.0",
   "scripts": {
     "dev": "vite",
