@@ -35,10 +35,15 @@ fn main_fragment(@location(0) fragUV: vec2<f32>,
   
   var color = vec4<f32>(.5, .3, .8, 1.);
 
-  if (fragUV.x < .3) { color.x = 1.4; }
+  if (fragUV.x < .3) { color.x = 5.4; }
+
+
 
   if (fragPosition.x % 2. == 1.) {color.x = 1.;}
 
-  if (fragPosition.x % 2. == 1.) {color.y = 1.;} 
+  if (fragPosition. x % 2. == 1.) {color.y = 1.;} 
+
+
+  
       return color;
 }

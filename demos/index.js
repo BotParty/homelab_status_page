@@ -15,6 +15,14 @@ import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?r
 // import hello from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/morning.wgsl?raw'
 import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
 
+
+import six from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/six.wgsl?raw'
+
+import seven from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/seven.wgsl?raw'
+
+
+import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl?raw'
+
 let defaultDemo = 'music';
 let data = {}
 
@@ -45,12 +53,12 @@ async function start_loop_static(options) {
   draw(data);
   console.log('drawn')
   
-  // requestAnimationFrame(function test() {
-  //   if (stuff) data.texture = stuff()
-  //   draw(data);
-  //     //requestAnimationFrame(test)
-  //     setTimeout(test, 500)
-  // });
+  requestAnimationFrame(function test() {
+    if (stuff) data.texture = stuff()
+    draw(data);
+      //requestAnimationFrame(test)
+      setTimeout(test, 50)
+  });
 }
 
 function textureDemo() {
@@ -64,13 +72,13 @@ function textureDemo() {
 }
 let demoTitles = [
   'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
-  'four', 'five', 'music'
+  'four', 'five', 'music', 'six', 'seven', 'light'
 ]
 
 let demos = [
    shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture, sky,
 
-   four, five, music
+   four, five, music, six, seven, light
 ]
 function select(name) {
   let idx = demoTitles.indexOf(name);
@@ -118,6 +126,7 @@ function choose (idx) {
  
   if (idx) choice = idx
   else  choice += 1;
+
   input[choice].click()
 }
 

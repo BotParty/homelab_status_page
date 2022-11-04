@@ -14,5 +14,5 @@
     var p = fragUV;
     var q = (p.x % 25. * 2.0 < 25.) == (p.y % 25. * 2.0 < 25.);
     var o = f32(q);
-    return vec4<f32>(o,color.y, color.x, 1.0) * .5;
+    return vec4<f32>(o,color.y, color.x, u.time) * .5;
 }

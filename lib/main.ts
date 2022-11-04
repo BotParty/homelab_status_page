@@ -3,9 +3,6 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
-//makeTexture - state.data.texture = {img, array, etc} 
-//make texture - array - resize appropriately 
-//make draw loop more robust and reliable 
 let makeImgTexture = async () => {
   const img = document.createElement("img");
   const source = img;
@@ -36,38 +33,34 @@ async function makeTexture(state) {
     state.data.texture[i % state.data.texture.length] : new Float32Array(
       new Array(255).fill(5).map((d, i) => Math.random())
     ));
+
       state.cubeTexture = cubeTexture
       state.data.music = music
+
     state.device.queue.copyExternalImageToTexture(
       { source: imageBitmap },
       { texture: cubeTexture },
       [imageBitmap.width, imageBitmap.height]
     );
-  // state.cubeTexture = cubeTexture
+
   updateTexture(state)
-  let data = new Float32Array(music);
+ let data = new Float32Array(music);
   return cubeTexture
 }
 
 function updateTexture(state) { 
-  // console.log(state.cubeTexture)
-//  console.log(state.data.music)
   state.device.queue.writeTexture(
     { texture: state.cubeTexture },
-    state.data.music[0],
+    new Float32Array([]),
     {
-      bytesPerRow: 10224,
-      rowsPerImage: 7846,
-      offset: 1020
+      bytesPerRow: 0,
+      rowsPerImage: 0,
+      offset: 0
 
     },
-    [800, 600]
+    [0, 0]
   );
 }
-//exceeds the linear data size (1020) with offset (0).
-//texture data layout 
-
-//[612376], [offset...data]
 
 const recordRenderPass = async function (state: any) {
   let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
@@ -84,8 +77,10 @@ const recordRenderPass = async function (state: any) {
   //   passEncoder = device.creacteRenderBundleEncoder({
   //     colorFormats: ['rgb10a2unorm']
   //   } 
-  
+  //state.pipeline = await makePipeline(state);
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
+
+
 
   renderPassEncoder.setPipeline(state.pipeline);
 
@@ -99,28 +94,36 @@ const recordRenderPass = async function (state: any) {
 
 function updateUniforms(state: any) {
   let { data, device } = state;
-  //console.log(data)
-  let values: any = Object.values(data).filter(val => typeof val !== 'object');
 
+  let values: any = Object.values(data).filter(val => typeof val !== 'object');
+// console.log(values)
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
+
+if (state.uniformsBuffer) {
+  console.log(uniformsArray)
+  console.log(state.uniformsBuffer)
+  device.queue.writeBuffer(state.uniformsBuffer, 0, uniformsArray.buffer, 0, 28);
+  return state.uniformsBuffer
+} else {
   return (state.uniformsBuffer = utils.createBuffer(
     device,
     uniformsArray,
     GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   ));
 }
-async function makePipeline(shader, state) {
+}
+async function makePipeline(state) {
   let { device } = state;
 
   let pipelineDesc = {
     layout: "auto",
     vertex: {
-      module: shader,
+      module: state.shader,
       entryPoint: "main_vertex",
     },
     fragment: {
-      module: shader,
+      module: state.shader,
       entryPoint: "main_fragment",
       targets: [{ format: "bgra8unorm" }],
     },
@@ -132,6 +135,7 @@ async function makePipeline(shader, state) {
     minFilter: "linear",
     mipmapFilter: "nearest",
   });
+
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
@@ -139,7 +143,7 @@ async function makePipeline(shader, state) {
         visibility: GPUShaderStage.FRAGMENT,
         buffer: {
           type: "uniform",
-          minBindingSize: 4 * 7,
+          minBindingSize: 4 *7,
         },
       },
       {
@@ -162,7 +166,6 @@ async function makePipeline(shader, state) {
  
   state.bindGroupLayout = bindGroupLayout;
   updateUniforms(state);
-  
   const renderPassDescriptor = {
     colorAttachments: [
       {
@@ -326,10 +329,9 @@ async function init(options: any) {
 
   state.shader = makeShaderModule(device, state.data, options.shader);
 
-  state.pipeline = await makePipeline(state.shader, state);
+  state.pipeline = await makePipeline(state);
   function draw(newData: any) {
-    console.log('i am being drawn');
-    //newData.time = performance.now();
+    newData.time = performance.now();
     updateTexture(state)
     Object.assign(state.data, newData);
     updateUniforms(state);
