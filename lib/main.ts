@@ -26,13 +26,13 @@ async function makeTexture(state) {
   });
   let imageBitmap = await makeImgTexture();
 
-    let music = new Float32Array(new Array(255)
+    let music = new Float32Array(new Array(2556)
     .fill(5)
     .map((d, i) => 
 
     state.data.texture ? 
     state.data.texture[i % state.data.texture.length] 
-    :Math.random() 
+    : Math.random() 
     ));
 
       state.cubeTexture = cubeTexture
@@ -50,17 +50,21 @@ async function makeTexture(state) {
 }
 
 function updateTexture(state) { 
-  // state.device.queue.writeTexture(
-  //   { texture: state.cubeTexture },
-  //   state.data.music[0],
-  //   {
-  //     bytesPerRow: 255,
-  //     rowsPerImage: 1,
-  //     offset: 0
-
-  //   },
-  //   [255, 1]
-  // );
+  // let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 25))
+  // state.device.queue.writeTexture({texture: state.cubeTexture}, data.buffer, {
+  //   bytesPerRow: 10224,
+  //   rowsPerImage: 72846
+  // } ,  [2556, 1824])
+console.log( state.cubeTexture)
+  state.device.queue.writeTexture(
+     state.cubeTexture,
+    state.data.music[0].buffer,
+    {
+      bytesPerRow: 1024,
+      rowsPerImage: 7846,
+    },
+    [800, 600]
+  );
 }
 
 const recordRenderPass = async function (state: any) {
@@ -223,7 +227,7 @@ async function makePipeline(state) {
 function makeShaderModule(device: any, data: any, source: any) {
   if (!source) source = defaultShader;
   validateData(data);
-  console.log(data)
+
   const uniforms = Object.keys(data)
     .filter((name) => typeof data[name] === 'number' )
     .map((name) => `${name}: f32,`)

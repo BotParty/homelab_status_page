@@ -32,6 +32,5 @@ fn aces_approx (v: vec3<f32>) -> vec3<f32> {
     var col2 = aces_approx(col.xyz);
     var col3= sRGB(col2);
 
-//return vec4<f32>(.5);
     return  vec4<f32>(col3, 1.);
 }

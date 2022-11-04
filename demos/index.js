@@ -114,7 +114,7 @@ function customShader(options) {
 }
 
 function cleanup () {
-  document.querySelector(':checked').checked = null 
+  document.querySelector(':checked').checked = null  
   let canvas = document.querySelector('canvas')
   
   if (canvas) canvas.remove()
