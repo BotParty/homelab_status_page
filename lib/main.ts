@@ -26,12 +26,13 @@ async function makeTexture(state) {
   });
   let imageBitmap = await makeImgTexture();
 
-    let music = new Array(255)
+    let music = new Float32Array(new Array(255)
     .fill(5)
     .map((d, i) => 
+
     state.data.texture ? 
-    state.data.texture[i % state.data.texture.length] : new Float32Array(
-      new Array(255).fill(5).map((d, i) => Math.random())
+    state.data.texture[i % state.data.texture.length] 
+    :Math.random() 
     ));
 
       state.cubeTexture = cubeTexture
@@ -49,17 +50,17 @@ async function makeTexture(state) {
 }
 
 function updateTexture(state) { 
-  state.device.queue.writeTexture(
-    { texture: state.cubeTexture },
-    new Float32Array([]),
-    {
-      bytesPerRow: 0,
-      rowsPerImage: 0,
-      offset: 0
+  // state.device.queue.writeTexture(
+  //   { texture: state.cubeTexture },
+  //   state.data.music[0],
+  //   {
+  //     bytesPerRow: 255,
+  //     rowsPerImage: 1,
+  //     offset: 0
 
-    },
-    [0, 0]
-  );
+  //   },
+  //   [255, 1]
+  // );
 }
 
 const recordRenderPass = async function (state: any) {
@@ -80,7 +81,7 @@ const recordRenderPass = async function (state: any) {
   //state.pipeline = await makePipeline(state);
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
-
+  updateTexture(state);
 
   renderPassEncoder.setPipeline(state.pipeline);
 
@@ -96,13 +97,11 @@ function updateUniforms(state: any) {
   let { data, device } = state;
 
   let values: any = Object.values(data).filter(val => typeof val !== 'object');
-// console.log(values)
+
   let uniformsArray = new Float32Array(values.length);
   uniformsArray.set(values, 0);
 
 if (state.uniformsBuffer) {
-  console.log(uniformsArray)
-  console.log(state.uniformsBuffer)
   device.queue.writeBuffer(state.uniformsBuffer, 0, uniformsArray.buffer, 0, 28);
   return state.uniformsBuffer
 } else {
@@ -224,9 +223,12 @@ async function makePipeline(state) {
 function makeShaderModule(device: any, data: any, source: any) {
   if (!source) source = defaultShader;
   validateData(data);
+  console.log(data)
   const uniforms = Object.keys(data)
+    .filter((name) => typeof data[name] === 'number' )
     .map((name) => `${name}: f32,`)
     .join("\n");
+
   const code = `
     struct Uniforms {
      ${uniforms}
@@ -244,23 +246,23 @@ function makeShaderModule(device: any, data: any, source: any) {
   fn main_vertex(
     @builtin(vertex_index) VertexIndex : u32,
   ) -> VertexOutput {
-    var uv = array<vec2<f32>, 6>(
-      vec2<f32>(1.0, 0.0),
-      vec2<f32>(1.0, 1.0),
-      vec2<f32>(0.0, 1.0),
-      vec2<f32>(1.0, 0.0),
-      vec2<f32>(0.0, 1.0),
-      vec2<f32>(0.0, 0.0)
+    const pos = array(
+      vec2( 1.0,  1.0),
+      vec2( 1.0, -1.0),
+      vec2(-1.0, -1.0),
+      vec2( 1.0,  1.0),
+      vec2(-1.0, -1.0),
+      vec2(-1.0,  1.0),
     );
-
-    var pos = array<vec2<f32>, 6>(
-      vec2<f32>( 1.0, -1.0),
-      vec2<f32>(-1.0, -1.0),
-      vec2<f32>( 1.0,  1.0),
-      vec2<f32>(-1.0,  1.0),
-      vec2<f32>( 1.0,  1.0),
-      vec2<f32>(-1.0, -1.0),
-  );
+  
+    const uv = array(
+      vec2(1.0, 0.0),
+      vec2(1.0, 1.0),
+      vec2(0.0, 1.0),
+      vec2(1.0, 0.0),
+      vec2(0.0, 1.0),
+      vec2(0.0, 0.0),
+    );
 
     var output : VertexOutput;
     output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
