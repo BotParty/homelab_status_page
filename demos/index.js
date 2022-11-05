@@ -57,7 +57,7 @@ async function start_loop_static(options) {
     if (stuff) data.texture = stuff()
     draw(data);
       //requestAnimationFrame(test)
-      setInterval(test, 50)
+      setTimeout(test, 500)
   });
 }
 

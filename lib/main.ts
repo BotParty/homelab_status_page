@@ -17,7 +17,7 @@ let makeImgTexture = async () => {
 
 async function makeTexture(state) {
   let cubeTexture = state.device.createTexture({
-    size: [800, 600, 1],
+    size: [256, 1, 1],
     format: "rgba8unorm",
     usage:
       GPUTextureUsage.TEXTURE_BINDING |
@@ -42,34 +42,26 @@ async function makeTexture(state) {
     //   [imageBitmap.width, imageBitmap.height]
     // );
     state.cubeTexture = cubeTexture;
-    let stuff = new Float32Array(new Array(800).fill(5).map((d, i) => Math.random()))
-      state.device.queue.writeTexture({texture: cubeTexture}, stuff.buffer, {
-        bytesPerRow: 800,
-        rowsPerImage: 600
-      } ,  [800, 600])
-  
+    let data = new Uint8Array(new Array(256).fill(5).map((d, i) =>i / 25))
+
 
   updateTexture(state)
- let data = new Float32Array(music);
+ //let data = new Float32Array(music);
   return cubeTexture
 }
 
 function updateTexture(state) { 
-  // let data=   new Uint8Array(new Array(2556 * 1824 * 4).fill(5).map((d, i) =>i / 25))
-  // state.device.queue.writeTexture({texture: state.cubeTexture}, data.buffer, {
-  //   bytesPerRow: 10224,
-  //   rowsPerImage: 72846
-  // } ,  [2556, 1824])
-// console.log( state.cubeTexture)
-  // state.device.queue.writeTexture(
-  //    state.cubeTexture,
-  //   state.data.music[0].buffer,
-  //   {
-  //     bytesPerRow: 1024,
-  //     rowsPerImage: 7846,
-  //   },
-  //   [800, 600]
-  // );
+  let data = new Uint8Array(new Array(256).fill(5).map((d, i) => Math.random() * 2))
+
+  state.device.queue.writeTexture(
+     {texture: state.cubeTexture},
+    state.data.music.buffer,
+    {
+      bytesPerRow: 3200,
+      rowsPerImage: 600,
+    },
+    [256, 1]
+  );
 }
 
 const recordRenderPass = async function (state: any) {
