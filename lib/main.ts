@@ -354,5 +354,5 @@ async function init(options: any) {
   draw.canvas = canvas;
   return draw;
 }
-init.version = '0.5.1'
+init.version = '0.5.9'
 export { init };
