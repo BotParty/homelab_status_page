@@ -32,7 +32,7 @@ async function makeTexture(state) {
     state.data.texture[i % state.data.texture.length] 
     : Math.random() 
     ));
-
+      
       state.cubeTexture = cubeTexture
       state.data.music = music
 
@@ -51,11 +51,16 @@ async function makeTexture(state) {
 }
 
 function updateTexture(state) { 
-  let data = new Uint8Array(new Array(256).fill(5).map((d, i) => Math.random() * 2))
 
+  let data = new Uint8Array(new Array(1024).fill(5).map((d, i) => 
+  state.data.texture ? 
+  state.data.texture[i % state.data.texture.length]
+  : Math.random() 
+  ))
+//console.log(state.data)
   state.device.queue.writeTexture(
      {texture: state.cubeTexture},
-    state.data.music.buffer,
+    data.buffer,
     {
       bytesPerRow: 3200,
       rowsPerImage: 600,

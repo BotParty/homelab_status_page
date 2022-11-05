@@ -31,12 +31,12 @@ function then(stream) {
   const context = new AudioContext();
   const analyser = context.createAnalyser();
   context.createMediaStreamSource(stream).connect(analyser);
-const fftSize = analyser.frequencyBinCount;
-const frequencies = new Uint8Array(fftSize);
-stuff = function abc() {
-  if (analyser)analyser.getByteFrequencyData(frequencies);
-  return frequencies;
-}
+  const fftSize = analyser.frequencyBinCount;
+  const frequencies = new Uint8Array(fftSize);
+  stuff = function abc() {
+    if (analyser)analyser.getByteFrequencyData(frequencies);
+    return frequencies;
+  }
 }
 (async function () {
   let stream = await navigator.mediaDevices
