@@ -3,6 +3,12 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
+import updateSpritesWGSL from "./updateSprites.wgsl?raw";
+import spriteWGSL from './sprite.wgsl?raw';
+
+let t = 0;
+
+
 let makeImgTexture = async () => {
   const img = document.createElement("img");
   const source = img;
@@ -24,6 +30,7 @@ async function makeTexture(state) {
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
+//  console.log(cubeTexture)
   let imageBitmap = await makeImgTexture();
     let music = new Float32Array(new Array(800)
     .fill(5)
@@ -78,76 +85,130 @@ const recordRenderPass = async function (state: any) {
 
   const commandEncoder = device.createCommandEncoder();
 
-  let renderPassEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    // prettier-ignore
+    const vertexBufferData = new Float32Array([
+      -0.01, -0.02, 0.01,
+      -0.02, 0.0, 0.02,
+    ]);
+
+  const spriteVertexBuffer = device.createBuffer({
+    size: vertexBufferData.byteLength,
+    usage: GPUBufferUsage.VERTEX,
+    mappedAtCreation: true,
+  });
+
+  new Float32Array(spriteVertexBuffer.getMappedRange()).set(vertexBufferData);
+  spriteVertexBuffer.unmap();
+
+  const simParams = {
+    deltaT: 0.04,
+    rule1Distance: 0.1,
+    rule2Distance: 0.025,
+    rule3Distance: 0.025,
+    rule1Scale: 0.02,
+    rule2Scale: 0.05,
+    rule3Scale: 0.005,
+  };
+  const numParticles = 1500;
+  const initialParticleData = new Float32Array(numParticles * 4);
+  for (let i = 0; i < numParticles; ++i) {
+    initialParticleData[4 * i + 0] = 2 * (Math.random() - 0.5);
+    initialParticleData[4 * i + 1] = 2 * (Math.random() - 0.5);
+    initialParticleData[4 * i + 2] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
+  }
+
+  const particleBuffers: GPUBuffer[] = new Array(2);
+  const particleBindGroups: GPUBindGroup[] = new Array(2);
+  for (let i = 0; i < 2; ++i) {
+    particleBuffers[i] = device.createBuffer({
+      size: initialParticleData.byteLength,
+      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
+      mappedAtCreation: true,
+    });
+    new Float32Array(particleBuffers[i].getMappedRange()).set(
+      initialParticleData
+    );
+    particleBuffers[i].unmap();
+  }
+
+  const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
+  const simParamBuffer = device.createBuffer({
+    size: simParamBufferSize,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  });
+
+  const computePipeline = device.createComputePipeline({
+    layout: 'auto',
+    compute: {
+      module: device.createShaderModule({
+        code: updateSpritesWGSL,
+      }),
+      entryPoint: 'main_vertex',
+    },
+  });
+    for (let i = 0; i < 2; ++i) {
+      particleBindGroups[i] = device.createBindGroup({
+        layout: computePipeline.getBindGroupLayout(0),
+        entries: [
+          {
+            binding: 0,
+            resource: {
+              buffer: simParamBuffer,
+            },
+          },
+          {
+            binding: 1,
+            resource: {
+              buffer: particleBuffers[i],
+              offset: 0,
+              size: initialParticleData.byteLength,
+            },
+          },
+          {
+            binding: 2,
+            resource: {
+              buffer: particleBuffers[(i + 1) % 2],
+              offset: 0,
+              size: initialParticleData.byteLength,
+            },
+          },
+        ],
+      });
+    }
+
+
 
   // if (! stuff.renderBundle)
   //   passEncoder = device.creacteRenderBundleEncoder({
   //     colorFormats: ['rgb10a2unorm']
   //   } 
-  //state.pipeline = await makePipeline(state);
-  // {
-  //   const passEncoder = commandEncoder.beginComputePass();
-  //   passEncoder.setPipeline(computePipeline);
-  //   passEncoder.setBindGroup(0, particleBindGroups[t % 2]);
-  //   passEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
-  //   passEncoder.end();
-  // }
+
+  {
+    const passEncoder = commandEncoder.beginComputePass();
+    passEncoder.setPipeline(computePipeline);
+    passEncoder.setBindGroup(0, particleBindGroups[t % 2]);
+    passEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
+    passEncoder.end();
+    t++
+  }
 
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
-
-    // for (let i = 0; i < 2; ++i) {
-    //   particleBindGroups[i] = device.createBindGroup({
-    //     layout: computePipeline.getBindGroupLayout(0),
-    //     entries: [
-    //       {
-    //         binding: 0,
-    //         resource: {
-    //           buffer: simParamBuffer,
-    //         },
-    //       },
-    //       {
-    //         binding: 1,
-    //         resource: {
-    //           buffer: particleBuffers[i],
-    //           offset: 0,
-    //           size: initialParticleData.byteLength,
-    //         },
-    //       },
-    //       {
-    //         binding: 2,
-    //         resource: {
-    //           buffer: particleBuffers[(i + 1) % 2],
-    //           offset: 0,
-    //           size: initialParticleData.byteLength,
-    //         },
-    //       },
-    //     ],
-    //   });
-    // }
-
-    // const particleBuffers: GPUBuffer[] = new Array(2);
-    // const particleBindGroups: GPUBindGroup[] = new Array(2);
-    // for (let i = 0; i < 2; ++i) {
-    //   particleBuffers[i] = device.createBuffer({
-    //     size: initialParticleData.byteLength,
-    //     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
-    //     mappedAtCreation: true,
-    //   });
-    //   new Float32Array(particleBuffers[i].getMappedRange()).set(
-    //     initialParticleData
-    //   );
-    //   particleBuffers[i].unmap();
-    // }
+//  state.pipeline = await makePipeline(state);
+  let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
   updateTexture(state);
 
-  renderPassEncoder.setPipeline(state.pipeline);
+  passEncoder.setPipeline(state.pipeline);
 
-  renderPassEncoder.setBindGroup(0, bindGroup);
+  passEncoder.setBindGroup(0, bindGroup);
+  passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
+  passEncoder.setVertexBuffer(1, spriteVertexBuffer);
+  //passEncoder.draw(3 * 2, 1, 0, 0);
+  passEncoder.draw(3, numParticles, 0, 0);
 
-  renderPassEncoder.draw(3 * 2, 1, 0, 0);
 
-  renderPassEncoder.end();
+  passEncoder.end();
   device.queue.submit([commandEncoder.finish()]); //async
 };
 
@@ -178,13 +239,50 @@ async function makePipeline(state) {
     vertex: {
       module: state.shader,
       entryPoint: "main_vertex",
+      buffers: [
+        {
+          // instanced particles buffer
+          arrayStride: 4 * 4,
+          stepMode: 'instance',
+          attributes: [
+            {
+              // instance position
+              shaderLocation: 0,
+              offset: 0,
+              format: 'float32x2',
+            },
+            {
+              // instance velocity
+              shaderLocation: 1,
+              offset: 2 * 4,
+              format: 'float32x2',
+            },
+          ],
+        },
+        {
+          // vertex buffer
+          arrayStride: 2 * 4,
+          stepMode: 'vertex',
+          attributes: [
+            {
+              // vertex positions
+              shaderLocation: 2,
+              offset: 0,
+              format: 'float32x2',
+            },
+          ],
+        },
+      ],
     },
     fragment: {
       module: state.shader,
       entryPoint: "main_fragment",
       targets: [{ format: "bgra8unorm" }],
     },
-    primitives: { topology: "triangle-list" },
+
+    primitive: {
+      topology: 'triangle-list',
+    },
   } as GPURenderPipelineDescriptor;
 
   const sampler = device.createSampler({
@@ -332,7 +430,10 @@ function makeShaderModule(device: any, data: any, source: any) {
   ${source}`;
 
   //add actual vertex attributes for the quad positions
-  return device.createShaderModule({ code });
+//  return device.createShaderModule({ code });
+  const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
+
+  return spriteShaderModule
 }
 
 let defaultData = {

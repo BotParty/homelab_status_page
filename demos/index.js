@@ -25,7 +25,7 @@ import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl
 
 import physics from "./webgl/physics";
 
-let defaultDemo = 'music';
+let defaultDemo = 'physics';
 let data = {}
 
 let stuff 
@@ -46,7 +46,7 @@ function then(stream) {
   .then(then)
 })();
 
-console.log('compiled')
+
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   console.log('start draw loop')
