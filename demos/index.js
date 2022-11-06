@@ -20,8 +20,10 @@ import six from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/six.wgsl?raw
 
 import seven from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/seven.wgsl?raw'
 
-
 import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl?raw'
+
+
+import physics from "./webgl/physics";
 
 let defaultDemo = 'music';
 let data = {}
@@ -72,13 +74,13 @@ function textureDemo() {
 }
 let demoTitles = [
   'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
-  'four', 'five', 'music', 'six', 'seven', 'light'
+  'four', 'five', 'music', 'six', 'seven', 'light', 'physics'
 ]
 
 let demos = [
    shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture, sky,
 
-   four, five, music, six, seven, light
+   four, five, music, six, seven, light, physics
 ]
 function select(name) {
   let idx = demoTitles.indexOf(name);

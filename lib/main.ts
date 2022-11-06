@@ -85,7 +85,59 @@ const recordRenderPass = async function (state: any) {
   //     colorFormats: ['rgb10a2unorm']
   //   } 
   //state.pipeline = await makePipeline(state);
+  // {
+  //   const passEncoder = commandEncoder.beginComputePass();
+  //   passEncoder.setPipeline(computePipeline);
+  //   passEncoder.setBindGroup(0, particleBindGroups[t % 2]);
+  //   passEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
+  //   passEncoder.end();
+  // }
+
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
+
+    // for (let i = 0; i < 2; ++i) {
+    //   particleBindGroups[i] = device.createBindGroup({
+    //     layout: computePipeline.getBindGroupLayout(0),
+    //     entries: [
+    //       {
+    //         binding: 0,
+    //         resource: {
+    //           buffer: simParamBuffer,
+    //         },
+    //       },
+    //       {
+    //         binding: 1,
+    //         resource: {
+    //           buffer: particleBuffers[i],
+    //           offset: 0,
+    //           size: initialParticleData.byteLength,
+    //         },
+    //       },
+    //       {
+    //         binding: 2,
+    //         resource: {
+    //           buffer: particleBuffers[(i + 1) % 2],
+    //           offset: 0,
+    //           size: initialParticleData.byteLength,
+    //         },
+    //       },
+    //     ],
+    //   });
+    // }
+
+    // const particleBuffers: GPUBuffer[] = new Array(2);
+    // const particleBindGroups: GPUBindGroup[] = new Array(2);
+    // for (let i = 0; i < 2; ++i) {
+    //   particleBuffers[i] = device.createBuffer({
+    //     size: initialParticleData.byteLength,
+    //     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
+    //     mappedAtCreation: true,
+    //   });
+    //   new Float32Array(particleBuffers[i].getMappedRange()).set(
+    //     initialParticleData
+    //   );
+    //   particleBuffers[i].unmap();
+    // }
 
   updateTexture(state);
 
