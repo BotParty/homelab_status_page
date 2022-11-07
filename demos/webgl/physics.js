@@ -7,16 +7,21 @@ import spriteWGSLVS from '../shaders/sprite_vs.wgsl?raw';
 //drawCompute()
 //drawScreen()
 
-
 //draw() - schedules a draw to happen in the next frame 
 //in main_run_loop 
   //renderPipelines.exec()
+//water = init(options)
 
+let draw1 = {
+  attributes: [],
+  uniforms: [],
+  shader: []
+}
 
 let data = {}
 const options = {
   data: {},
-  compute: {
+  compute: { //optional
   vs: spriteWGSLVS,
   fs: spriteWGSLFS,
   cs: updateSpritesWGSL,
@@ -31,6 +36,30 @@ const options = {
     },
   }
 }
+
+//let draw = await init(options);
+/// let compute = await init(options);
+
+
+//regl.frame(function () {
+//  draw()
+// compute()
+//})
+
+
+///  simulation computeDrawCall
+///  simulation computeDrawCall
+//   blur computeDrawCall
+/// one view
+//
+
+//rename draw to render
+//[render, compute] = init(vertexBuffers,shaders...etc)
+//render(uniforms)
+
+//compute = init({})
+//
+
 async function physics() {
   options.data = options.data  //extend 
   console.log('start draw loop')

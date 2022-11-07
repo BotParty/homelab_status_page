@@ -25,7 +25,7 @@ import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl
 
 import physics from "./webgl/physics";
 
-let defaultDemo = 'rings';
+let defaultDemo = 'physics';
 let data = {}
 let stuff 
 function then(stream) {

@@ -6,10 +6,42 @@ simplest GPGPU compute library ever
 
 
 
+//get test suite working
+//add one more compute example
+//one render pass and one compute per draw call
+
+//3 days 
+//boid simulation -> sheep or pokemon -> existing ismulation and add a image texture 
+//image processing -> blur 
+//falling box (if position > 0, dont fall)
+
+//10 days
+//gravity simulation -> convert from rickkyreusser
+//water simulation -> convert from madebyevan
 
 
 
+//for AI 
+//neural net as shader
+//hand writing recognition
+//eye tracking for focus game
+//render output to screen as colors???
 
+
+
+//this is for 
+//book of simulations and image processing 
+//physics of information theory
+
+//erosion scene
+
+//assume only one draw call and one compute call
+//
+
+
+//visualizations that change the way you see the world
+//https://bost.ocks.org/mike/algorithms/
+//https://pudding.cool/
 
 
 
