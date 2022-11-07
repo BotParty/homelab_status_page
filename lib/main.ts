@@ -5,7 +5,6 @@ import defaultShader from "./default.wgsl?raw";
 
 let makeCompute = (state) => {
   let { device } = state;
-
   // prettier-ignore
   const vertexBufferData = new Float32Array([
       -0.01, -0.02, 0.01,
@@ -30,25 +29,18 @@ let makeCompute = (state) => {
     rule2Scale: 0.05,
     rule3Scale: 0.005,
   };
-  const numParticles = 1500;
-  const initialParticleData = new Float32Array(numParticles * 4);
-  for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[4 * i + 0] = 2 * (Math.random() - 0.5);
-    initialParticleData[4 * i + 1] = 2 * (Math.random() - 0.5);
-    initialParticleData[4 * i + 2] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
-  }
+
 
   const particleBuffers: GPUBuffer[] = new Array(2);
   const particleBindGroups: GPUBindGroup[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
     particleBuffers[i] = device.createBuffer({
-      size: initialParticleData.byteLength,
+      size: state.compute.buffers.byteLength,
       usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
       mappedAtCreation: true,
     });
     new Float32Array(particleBuffers[i].getMappedRange()).set(
-      initialParticleData
+      state.compute.buffers
     );
     particleBuffers[i].unmap();
   }
@@ -83,7 +75,7 @@ let makeCompute = (state) => {
           resource: {
             buffer: particleBuffers[i],
             offset: 0,
-            size: initialParticleData.byteLength,
+            size: state.compute.buffers.byteLength,
           },
         },
         {
@@ -91,7 +83,7 @@ let makeCompute = (state) => {
           resource: {
             buffer: particleBuffers[(i + 1) % 2],
             offset: 0,
-            size: initialParticleData.byteLength,
+            size: state.compute.buffers.byteLength,
           },
         },
       ],
@@ -101,12 +93,10 @@ let makeCompute = (state) => {
   Object.assign(state, {
     computePipeline,
     particleBindGroups,
-    numParticles,
     particleBuffers,
     spriteVertexBuffer,
   });
 };
-
 
 let hasMadeCompute = false;
 let makeImgTexture = async () => {
@@ -130,7 +120,6 @@ async function makeTexture(state) {
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  //  console.log(cubeTexture)
   let imageBitmap = await makeImgTexture();
   let music = new Float32Array(
     new Array(800)
@@ -144,7 +133,6 @@ async function makeTexture(state) {
 
   state.cubeTexture = cubeTexture;
   state.data.music = music;
-
   // state.device.queue.copyExternalImageToTexture(
   //   { source: imageBitmap },
   //   { texture: cubeTexture },
@@ -181,15 +169,7 @@ function updateTexture(state) {
   );
 }
 
-const recordRenderPass = async function (state: any) {
-  let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
-
-  renderPassDescriptor.colorAttachments[0].view = state.context
-    .getCurrentTexture()
-    .createView();
-
-  const commandEncoder = device.createCommandEncoder();
-
+function createRenderPasses(state) {
   if (!hasMadeCompute && state.compute) {
     hasMadeCompute = true;
     makeCompute(state);
@@ -198,9 +178,9 @@ const recordRenderPass = async function (state: any) {
   let {
     computePipeline,
     particleBindGroups,
-    numParticles,
     particleBuffers,
     spriteVertexBuffer,
+    device, 
   } = state;
   // if (! stuff.renderBundle)
   //   passEncoder = device.createRenderBundleEncoder({
@@ -212,7 +192,7 @@ const recordRenderPass = async function (state: any) {
     {
       pipeline: computePipeline,
       bindGroup: particleBindGroups,
-      dispatchWorkGroups: Math.ceil(numParticles / 64),
+      dispatchWorkGroups: Math.ceil(state.compute.buffers.length / 64),
       type: "compute",
     },
     {
@@ -225,6 +205,16 @@ const recordRenderPass = async function (state: any) {
       type: "draw",
     },
   ];
+}
+
+const recordRenderPass = async function (state: any) {
+  let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
+
+  renderPassDescriptor.colorAttachments[0].view = state.context
+    .getCurrentTexture()
+    .createView();
+
+  const commandEncoder = device.createCommandEncoder();
 
   state.renderPasses.forEach(function render(_) {
     let passEncoder =
@@ -233,7 +223,6 @@ const recordRenderPass = async function (state: any) {
         : commandEncoder.beginRenderPass(renderPassDescriptor);
 
         if (_.texture) updateTexture(_);
-
 
     passEncoder.setPipeline(_.pipeline);
 
@@ -252,11 +241,6 @@ const recordRenderPass = async function (state: any) {
   device.queue.submit([commandEncoder.finish()]); //async
   t++
 };
-
-//state.drawCalls
-//def recordREnderPass
-//state.drawCalls.forEach
-
 function updateUniforms(state: any) {
   let { data, device } = state;
 
@@ -549,6 +533,7 @@ async function init(options: any) {
   state.shader = makeShaderModule(state, options.shader);
 
   state.pipeline = await makePipeline(state);
+  createRenderPasses(state)
   function draw(newData: any) {
     newData.time = performance.now();
     updateTexture(state);
