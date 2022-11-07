@@ -1,4 +1,7 @@
 import { init } from "../../lib/main";
+import updateSpritesWGSL from "../shaders/updateSprites.wgsl?raw";
+import spriteWGSLFS from '../shaders/sprite_fs.wgsl?raw';
+import spriteWGSLVS from '../shaders/sprite_vs.wgsl?raw';
 
 //should be two draw calls
 //drawCompute()
@@ -14,7 +17,9 @@ let data = {}
 const options = {
   data: {},
   compute: {
-  shader: '',
+  vs: spriteWGSLVS,
+  fs: spriteWGSLFS,
+  cs: updateSpritesWGSL,
    simParams:{
       deltaT: 0.04,
       rule1Distance: 0.1,

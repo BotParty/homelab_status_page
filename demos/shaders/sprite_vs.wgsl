@@ -11,8 +11,3 @@ fn main_vertex(
   );
   return vec4(pos + a_particlePos, 0.0, 1.0);
 }
-
-@fragment
-fn main_fragment() -> @location(0) vec4<f32> {
-  return vec4(0., 1.0, .5, 1.0);
-}

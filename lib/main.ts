@@ -3,9 +3,6 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
-import updateSpritesWGSL from "./updateSprites.wgsl?raw";
-import spriteWGSL from './sprite.wgsl?raw';
-
 let makeCompute = (state) => {
   let {device} = state
 
@@ -66,7 +63,7 @@ let makeCompute = (state) => {
     layout: 'auto',
     compute: {
       module: device.createShaderModule({
-        code: updateSpritesWGSL,
+        code: state.compute.cs,
       }),
       entryPoint: 'main_vertex',
     },
@@ -187,7 +184,7 @@ const recordRenderPass = async function (state: any) {
     .createView();
 
   const commandEncoder = device.createCommandEncoder();
-  if (! hasMadeCompute) {
+  if (! hasMadeCompute && state.compute) {
     hasMadeCompute = true
     makeCompute(state)
   }
@@ -201,6 +198,7 @@ let{ computePipeline, particleBindGroups, numParticles
   //     colorFormats: ['rgb10a2unorm']
   //   } 
 
+  if (hasMadeCompute)
   {
     const passEncoder = commandEncoder.beginComputePass();
     passEncoder.setPipeline(computePipeline);
@@ -255,7 +253,7 @@ async function makePipeline(state) {
   let pipelineDesc = {
     layout: "auto",
     vertex: {
-      module: state.shader,
+      module: state?.shader?.vs || state.shader,
       entryPoint: "main_vertex",
       buffers: [
         {
@@ -394,7 +392,9 @@ async function makePipeline(state) {
   return pipeline;
 }
 
-function makeShaderModule(device: any, data: any, source: any) {
+function makeShaderModule(state, source: any) {
+  console.log(state)
+  const {device, data} = state
   if (!source) source = defaultShader;
   validateData(data);
 
@@ -449,7 +449,8 @@ function makeShaderModule(device: any, data: any, source: any) {
 
   //add actual vertex attributes for the quad positions
 //  return device.createShaderModule({ code });
-  const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
+console.log( state.compute.vs , state.compute.fs)
+  const spriteShaderModule = device.createShaderModule({ code: state.compute.vs +  state.compute.fs});
 
   return spriteShaderModule
 }
@@ -482,6 +483,7 @@ async function init(options: any) {
   const state = {
     renderPassDescriptor: {},
     data: Object.assign(defaultData, options.data),
+    compute: options.compute
   };
 
   addMouseEvents(canvas, state.data);
@@ -506,7 +508,7 @@ async function init(options: any) {
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
-  state.shader = makeShaderModule(device, state.data, options.shader);
+  state.shader = makeShaderModule(state, options.shader);
 
   state.pipeline = await makePipeline(state);
   function draw(newData: any) {

@@ -27,7 +27,6 @@ import physics from "./webgl/physics";
 
 let defaultDemo = 'physics';
 let data = {}
-console.log(version)
 let stuff 
 function then(stream) {
   const context = new AudioContext();
