@@ -25,7 +25,7 @@ import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl
 
 import physics from "./webgl/physics";
 
-let defaultDemo = 'physics';
+let defaultDemo = 'rings';
 let data = {}
 let stuff 
 function then(stream) {
@@ -57,7 +57,7 @@ async function start_loop_static(options) {
   requestAnimationFrame(function test() {
     if (stuff) data.texture = stuff()
     draw(data);
-      requestAnimationFrame(test)
+      //requestAnimationFrame(test)
       //setTimeout(test, 500)
   });
 }

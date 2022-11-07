@@ -184,6 +184,7 @@ const recordRenderPass = async function (state: any) {
     .createView();
 
   const commandEncoder = device.createCommandEncoder();
+
   if (! hasMadeCompute && state.compute) {
     hasMadeCompute = true
     makeCompute(state)
@@ -217,8 +218,8 @@ let{ computePipeline, particleBindGroups, numParticles
   passEncoder.setPipeline(state.pipeline);
 
   passEncoder.setBindGroup(0, bindGroup);
-  passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
-  passEncoder.setVertexBuffer(1, spriteVertexBuffer);
+  if (state.compute) passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
+  if (state.compute) passEncoder.setVertexBuffer(1, spriteVertexBuffer);
   //passEncoder.draw(3 * 2, 1, 0, 0);
   passEncoder.draw(3, numParticles, 0, 0);
 
@@ -226,6 +227,11 @@ let{ computePipeline, particleBindGroups, numParticles
   passEncoder.end();
   device.queue.submit([commandEncoder.finish()]); //async
 };
+
+//state.drawCalls
+//def recordREnderPass
+    //state.drawCalls.forEach
+      //
 
 function updateUniforms(state: any) {
   let { data, device } = state;
@@ -236,7 +242,6 @@ function updateUniforms(state: any) {
   uniformsArray.set(values, 0);
 
 if (state.uniformsBuffer) {
-  //computeBoids#116
   device.queue.writeBuffer(state.uniformsBuffer, 0, uniformsArray.buffer, 0, 28);
   return state.uniformsBuffer
 } else {
@@ -256,38 +261,7 @@ async function makePipeline(state) {
       module: state?.shader?.vs || state.shader,
       entryPoint: "main_vertex",
       buffers: [
-        {
-          // instanced particles buffer
-          arrayStride: 4 * 4,
-          stepMode: 'instance',
-          attributes: [
-            {
-              // instance position
-              shaderLocation: 0,
-              offset: 0,
-              format: 'float32x2',
-            },
-            {
-              // instance velocity
-              shaderLocation: 1,
-              offset: 2 * 4,
-              format: 'float32x2',
-            },
-          ],
-        },
-        {
-          // vertex buffer
-          arrayStride: 2 * 4,
-          stepMode: 'vertex',
-          attributes: [
-            {
-              // vertex positions
-              shaderLocation: 2,
-              offset: 0,
-              format: 'float32x2',
-            },
-          ],
-        },
+       
       ],
     },
     fragment: {
@@ -301,6 +275,42 @@ async function makePipeline(state) {
     },
   } as GPURenderPipelineDescriptor;
 
+
+  if (state.compute) {
+    //@ts-ignore
+pipelineDesc.vertex.buffers.push( {
+  // instanced particles buffer
+  arrayStride: 4 * 4,
+  stepMode: 'instance',
+  attributes: [
+    {
+      // instance position
+      shaderLocation: 0,
+      offset: 0,
+      format: 'float32x2',
+    },
+    {
+      // instance velocity
+      shaderLocation: 1,
+      offset: 2 * 4,
+      format: 'float32x2',
+    },
+  ],
+},
+{
+  // vertex buffer
+  arrayStride: 2 * 4,
+  stepMode: 'vertex',
+  attributes: [
+    {
+      // vertex positions
+      shaderLocation: 2,
+      offset: 0,
+      format: 'float32x2',
+    },
+  ],
+},)
+  }
   const sampler = device.createSampler({
     magFilter: "linear",
     minFilter: "linear",
@@ -447,12 +457,14 @@ function makeShaderModule(state, source: any) {
   }
   ${source}`;
 
-  //add actual vertex attributes for the quad positions
-//  return device.createShaderModule({ code });
-console.log( state.compute.vs , state.compute.fs)
-  const spriteShaderModule = device.createShaderModule({ code: state.compute.vs +  state.compute.fs});
+ 
+ 
 
-  return spriteShaderModule
+  return  state.compute ?
+  device.createShaderModule({ code: state.compute.vs +  state.compute.fs})
+:
+  device.createShaderModule({ code });
+
 }
 
 let defaultData = {
