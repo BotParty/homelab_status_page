@@ -6,84 +6,8 @@ import defaultShader from "./default.wgsl?raw";
 import updateSpritesWGSL from "./updateSprites.wgsl?raw";
 import spriteWGSL from './sprite.wgsl?raw';
 
-let t = 0;
-
-
-let makeImgTexture = async () => {
-  const img = document.createElement("img");
-  const source = img;
-  source.width = innerWidth;
-  source.height = innerHeight;
-
-  img.src = "../test.png";
-  await img.decode();
-
-  return await createImageBitmap(img);
-}
-
-async function makeTexture(state) {
-  let cubeTexture = state.device.createTexture({
-    size: [256, 1, 1],
-    format: "rgba8unorm",
-    usage:
-      GPUTextureUsage.TEXTURE_BINDING |
-      GPUTextureUsage.COPY_DST |
-      GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-//  console.log(cubeTexture)
-  let imageBitmap = await makeImgTexture();
-    let music = new Float32Array(new Array(800)
-    .fill(5)
-    .map((d, i) => 
-    state.data.texture ? 
-    state.data.texture[i % state.data.texture.length] 
-    : Math.random() 
-    ));
-      
-      state.cubeTexture = cubeTexture
-      state.data.music = music
-
-    // state.device.queue.copyExternalImageToTexture(
-    //   { source: imageBitmap },
-    //   { texture: cubeTexture },
-    //   [imageBitmap.width, imageBitmap.height]
-    // );
-    state.cubeTexture = cubeTexture;
-    let data = new Uint8Array(new Array(256).fill(5).map((d, i) =>i / 25))
-
-
-  updateTexture(state)
- //let data = new Float32Array(music);
-  return cubeTexture
-}
-
-function updateTexture(state) { 
-
-  let data = new Uint8Array(new Array(1024).fill(5).map((d, i) => 
-  state.data.texture ? 
-  state.data.texture[i % state.data.texture.length]
-  : Math.random() 
-  ))
-//console.log(state.data)
-  state.device.queue.writeTexture(
-     {texture: state.cubeTexture},
-    data.buffer,
-    {
-      bytesPerRow: 3200,
-      rowsPerImage: 600,
-    },
-    [256, 1]
-  );
-}
-
-const recordRenderPass = async function (state: any) {
-  let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
-
-  renderPassDescriptor.colorAttachments[0].view = state.context
-    .getCurrentTexture()
-    .createView();
-
-  const commandEncoder = device.createCommandEncoder();
+let makeCompute = (state) => {
+  let {device} = state
 
     // prettier-ignore
     const vertexBufferData = new Float32Array([
@@ -178,6 +102,99 @@ const recordRenderPass = async function (state: any) {
     }
 
 
+Object.assign(state, {computePipeline, particleBindGroups, numParticles,
+particleBuffers, spriteVertexBuffer
+})
+    
+}
+
+
+let t = 0;
+
+let hasMadeCompute= false
+let makeImgTexture = async () => {
+  const img = document.createElement("img");
+  const source = img;
+  source.width = innerWidth;
+  source.height = innerHeight;
+
+  img.src = "../test.png";
+  await img.decode();
+
+  return await createImageBitmap(img);
+}
+
+async function makeTexture(state) {
+  let cubeTexture = state.device.createTexture({
+    size: [256, 1, 1],
+    format: "rgba8unorm",
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+//  console.log(cubeTexture)
+  let imageBitmap = await makeImgTexture();
+    let music = new Float32Array(new Array(800)
+    .fill(5)
+    .map((d, i) => 
+    state.data.texture ? 
+    state.data.texture[i % state.data.texture.length] 
+    : Math.random() 
+    ));
+      
+      state.cubeTexture = cubeTexture
+      state.data.music = music
+
+    // state.device.queue.copyExternalImageToTexture(
+    //   { source: imageBitmap },
+    //   { texture: cubeTexture },
+    //   [imageBitmap.width, imageBitmap.height]
+    // );
+    state.cubeTexture = cubeTexture;
+    let data = new Uint8Array(new Array(256).fill(5).map((d, i) =>i / 25))
+
+
+  updateTexture(state)
+ //let data = new Float32Array(music);
+  return cubeTexture
+}
+
+function updateTexture(state) { 
+
+  let data = new Uint8Array(new Array(1024).fill(5).map((d, i) => 
+  state.data.texture ? 
+  state.data.texture[i % state.data.texture.length]
+  : Math.random() 
+  ))
+
+  state.device.queue.writeTexture(
+     {texture: state.cubeTexture},
+    data.buffer,
+    {
+      bytesPerRow: 3200,
+      rowsPerImage: 600,
+    },
+    [256, 1]
+  );
+}
+
+const recordRenderPass = async function (state: any) {
+  let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
+
+  renderPassDescriptor.colorAttachments[0].view = state.context
+    .getCurrentTexture()
+    .createView();
+
+  const commandEncoder = device.createCommandEncoder();
+  if (! hasMadeCompute) {
+    hasMadeCompute = true
+    makeCompute(state)
+  }
+   
+let{ computePipeline, particleBindGroups, numParticles
+
+, particleBuffers, spriteVertexBuffer} = state
 
   // if (! stuff.renderBundle)
   //   passEncoder = device.creacteRenderBundleEncoder({
@@ -221,6 +238,7 @@ function updateUniforms(state: any) {
   uniformsArray.set(values, 0);
 
 if (state.uniformsBuffer) {
+  //computeBoids#116
   device.queue.writeBuffer(state.uniformsBuffer, 0, uniformsArray.buffer, 0, 28);
   return state.uniformsBuffer
 } else {
@@ -504,5 +522,9 @@ async function init(options: any) {
   draw.canvas = canvas;
   return draw;
 }
-init.version = '0.5.9'
-export { init };
+
+const version =  '0.6.0'
+export { 
+  init ,
+  version,
+};

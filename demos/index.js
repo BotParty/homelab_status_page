@@ -1,6 +1,6 @@
 import shapeTransition from "./webgl/shape-transition";
 import audioTexture from "./webgl/breath";
-import { init } from "../lib/main";
+import { init, version} from "../lib/main";
 import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
@@ -27,7 +27,7 @@ import physics from "./webgl/physics";
 
 let defaultDemo = 'physics';
 let data = {}
-
+console.log(version)
 let stuff 
 function then(stream) {
   const context = new AudioContext();
