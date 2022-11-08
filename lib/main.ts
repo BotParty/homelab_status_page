@@ -216,8 +216,10 @@ const recordRenderPass = async function (state: any) {
   const commandEncoder = device.createCommandEncoder();
 
   state.renderPasses.forEach(function render(_) {
-    let passEncoder =
-      _.type === "compute"
+    let isCompute = _.type === "compute"
+
+    let passEncoder =isCompute
+      
         ? commandEncoder.beginComputePass()
         : commandEncoder.beginRenderPass(renderPassDescriptor);
 
@@ -232,8 +234,10 @@ const recordRenderPass = async function (state: any) {
         passEncoder.setVertexBuffer(i, vertexBuffer);
       });
     if (_.numVertices) passEncoder.draw(3, _.numVertices, 0, 0);
+    else ! isCompute && _.type===passEncoder.draw(3 * 2, 1, 0, 0);
     if (_.dispatchWorkGroups)
       passEncoder.dispatchWorkgroups(_.dispatchWorkGroups);
+     
 
     passEncoder.end();
   });
@@ -471,7 +475,7 @@ function makeShaderModule(state, source: any) {
   }
   ${source}`;
 
-  console.log(code)
+
   return state.compute
     ? device.createShaderModule({ code: state.compute.vs + state.compute.fs })
     : device.createShaderModule({ code });

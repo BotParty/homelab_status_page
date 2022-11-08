@@ -1,5 +1,4 @@
 import shapeTransition from "./webgl/shape-transition";
-import audioTexture from "./webgl/breath";
 import { init, version} from "../lib/main";
 import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
@@ -72,12 +71,12 @@ function textureDemo() {
   }); 
 }
 let demoTitles = [
-  'shapeTransition', 'audioTexture', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
+  'shapeTransition', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
   'four', 'five', 'music', 'six', 'seven', 'light', 'physics'
 ]
 
 let demos = [
-   shapeTransition, audioTexture, stripes, rings, checkerboard, one, mouse, texture, sky,
+   shapeTransition, stripes, rings, checkerboard, one, mouse, texture, sky,
 
    four, five, music, six, seven, light, physics
 ]
