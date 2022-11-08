@@ -16,7 +16,7 @@ fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {
   }
 
   if (fragCoord.x > .5) {color = 1.; }
-  return vec4<f32>(.5, 0., color, 1.);
+  return vec4<f32>(1.5, 0., color, 1.);
 };
 
 fn main(uv: vec2<f32>) -> vec4<f32> {
@@ -46,4 +46,5 @@ fn main_fragment(@location(0) fragUV: vec2<f32>,
 
   
       return color;
+      
 }

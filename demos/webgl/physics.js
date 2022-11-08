@@ -20,8 +20,6 @@ for (let i = 0; i < numParticles; ++i) {
   initialParticleData[4 * i + 2] = 2 * (Math.random() - 0.5) * 0.1;
   initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
 }
-
-
 let draw1 = {
   attributes: [],
   uniforms: [],
@@ -50,26 +48,18 @@ const options = {
 
 //let draw = await init(options);
 /// let compute = await init(options);
-
-
 //regl.frame(function () {
 //  draw()
 // compute()
 //})
-
-
 ///  simulation computeDrawCall
 ///  simulation computeDrawCall
 //   blur computeDrawCall
 /// one view
-//
-
 //rename draw to render
 //[render, compute] = init(vertexBuffers,shaders...etc)
 //render(uniforms)
-
 //compute = init({})
-//
 
 async function physics() {
   options.data = options.data  //extend 

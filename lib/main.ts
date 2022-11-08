@@ -5,6 +5,7 @@ import defaultShader from "./default.wgsl?raw";
 
 let makeCompute = (state) => {
   let { device } = state;
+
   // prettier-ignore
   const vertexBufferData = new Float32Array([
       -0.01, -0.02, 0.01,
@@ -133,16 +134,11 @@ async function makeTexture(state) {
 
   state.cubeTexture = cubeTexture;
   state.data.music = music;
-  // state.device.queue.copyExternalImageToTexture(
-  //   { source: imageBitmap },
-  //   { texture: cubeTexture },
-  //   [imageBitmap.width, imageBitmap.height]
-  // );
+ 
   state.cubeTexture = cubeTexture;
   let data = new Uint8Array(new Array(256).fill(5).map((d, i) => i / 25));
 
   updateTexture(state);
-  //let data = new Float32Array(music);
   return cubeTexture;
 }
 let t = 0;
@@ -188,23 +184,26 @@ function createRenderPasses(state) {
   //   }
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
-  state.renderPasses = [
-    {
-      pipeline: computePipeline,
-      bindGroup: particleBindGroups,
-      dispatchWorkGroups: Math.ceil(state.compute.buffers.length / 64),
-      type: "compute",
-    },
-    {
-      renderPassDescriptor: state.renderPassDescriptor,
-      texture: state.texture,
-      pipeline: state.pipeline,
-      bindGroup: bindGroup,
-      numVertices: state.numParticles,
-      vertexBuffers: [particleBuffers[0], spriteVertexBuffer],
-      type: "draw",
-    },
-  ];
+  state.renderPasses = []
+  if (state.compute) state.renderPasses.push(  {
+    pipeline: computePipeline,
+    bindGroup: particleBindGroups,
+    dispatchWorkGroups: Math.ceil(state.compute.buffers.length / 64),
+    type: "compute",
+  },)
+
+  const mainRenderPass =  {
+    renderPassDescriptor: state.renderPassDescriptor,
+    texture: state.texture,
+    pipeline: state.pipeline,
+    bindGroup: bindGroup,
+    
+    type: "draw",
+  }
+  if (state.compute) mainRenderPass.numVertices =  state.compute.buffers.length / 4
+  if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
+  state.renderPasses.push(mainRenderPass)
+
 }
 
 const recordRenderPass = async function (state: any) {
@@ -238,6 +237,7 @@ const recordRenderPass = async function (state: any) {
 
     passEncoder.end();
   });
+
   device.queue.submit([commandEncoder.finish()]); //async
   t++
 };
@@ -366,7 +366,7 @@ async function makePipeline(state) {
     colorAttachments: [
       {
         view: void 0,
-        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        clearValue: { r: .5, g: 0.5, b: 0.5, a: 1.0 },
         loadOp: "clear",
         storeOp: "store",
       },
@@ -471,6 +471,7 @@ function makeShaderModule(state, source: any) {
   }
   ${source}`;
 
+  console.log(code)
   return state.compute
     ? device.createShaderModule({ code: state.compute.vs + state.compute.fs })
     : device.createShaderModule({ code });
@@ -536,6 +537,7 @@ async function init(options: any) {
   createRenderPasses(state)
   function draw(newData: any) {
     newData.time = performance.now();
+
     updateTexture(state);
     Object.assign(state.data, newData);
     updateUniforms(state);
