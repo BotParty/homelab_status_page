@@ -15,10 +15,10 @@ import spriteWGSLVS from '../shaders/sprite_vs.wgsl?raw';
 const numParticles = 1500;
 const initialParticleData = new Float32Array(numParticles * 4);
 for (let i = 0; i < numParticles; ++i) {
-  initialParticleData[4 * i + 0] = 2 * (Math.random() - 0.5);
-  initialParticleData[4 * i + 1] = 2 * (Math.random() - 0.5);
-  initialParticleData[4 * i + 2] = 2 * (Math.random() - 0.5) * 0.1;
-  initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
+  initialParticleData[4 * i + 0] = 5 * (Math.random() - 0.5);
+  initialParticleData[4 * i + 1] = 5 * (Math.random() - 0.5);
+  initialParticleData[4 * i + 2] = 20 * (Math.random() - 0.5) * 0.1;
+  initialParticleData[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
 }
 let draw1 = {
   attributes: [],

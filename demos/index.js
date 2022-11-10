@@ -21,10 +21,11 @@ import seven from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/seven.wgsl
 
 import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl?raw'
 
+//import halfBaked from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/halfBaked.wgsl?raw'
 
 import physics from "./webgl/physics";
 
-let defaultDemo = 'stripes';
+let defaultDemo = 'physics';
 let data = {}
 let stuff 
 function then(stream) {

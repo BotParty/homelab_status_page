@@ -65,6 +65,10 @@ let makeCompute = (state) => {
     particleBindGroups[i] = device.createBindGroup({
       layout: computePipeline.getBindGroupLayout(0),
       entries: [
+        // {
+        //   binding: 0,
+
+        // },
         {
           binding: 0,
           resource: {
@@ -237,8 +241,7 @@ const recordRenderPass = async function (state: any) {
     else ! isCompute && _.type===passEncoder.draw(3 * 2, 1, 0, 0);
     if (_.dispatchWorkGroups)
       passEncoder.dispatchWorkgroups(_.dispatchWorkGroups);
-     
-
+    
     passEncoder.end();
   });
 
