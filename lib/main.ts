@@ -540,7 +540,8 @@ function makeShaderModule(state, source: any) {
   }
   ${source}`;
 
-console.log(123123)
+console.log(123123);
+console.log(code)
   return state.compute
     ? device.createShaderModule({ code: state.compute.vs + state.compute.fs })
     : device.createShaderModule({ code });
