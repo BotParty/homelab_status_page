@@ -31,7 +31,6 @@ let makeCompute = (state) => {
     rule3Scale: 0.005,
   };
 
-
   const particleBuffers: GPUBuffer[] = new Array(2);
   const particleBindGroups: GPUBindGroup[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
@@ -47,13 +46,15 @@ let makeCompute = (state) => {
   }
 
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
-  const simParamBuffer = device.createBuffer({
+  state.simParamBuffer = device.createBuffer({
     size: simParamBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
 
   const computePipeline = device.createComputePipeline({
-    layout: "auto",
+    // layout: device.createPipelineLayout({
+    //   bindGroupLayouts: [state.bindGroupLayout]
+    // }),
     compute: {
       module: device.createShaderModule({
         code: state.compute.cs,
@@ -61,24 +62,46 @@ let makeCompute = (state) => {
       entryPoint: "main_vertex",
     },
   });
+  
+  // const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
+  // const simParamBuffer = device.createBuffer({
+  //   size: simParamBufferSize,
+  //   usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  // });
+
+  device.queue.writeBuffer(
+    state.simParamBuffer,
+    0,
+    new Float32Array([
+      simParams.deltaT,
+      simParams.rule1Distance,
+      simParams.rule2Distance,
+      simParams.rule3Distance,
+      simParams.rule1Scale,
+      simParams.rule2Scale,
+      simParams.rule3Scale,
+    ])
+  );
+
+
   for (let i = 0; i < 2; ++i) {
     particleBindGroups[i] = device.createBindGroup({
       layout: computePipeline.getBindGroupLayout(0),
-      entries: [
+      entries: [ 
         // {
         //   binding: 0,
-
+        //   resource: { buffer: state.uniformsBuffer },
         // },
         {
           binding: 0,
           resource: {
-            buffer: simParamBuffer,
+            buffer: state.simParamBuffer, //particlePos //rename to make generic
           },
         },
         {
           binding: 1,
           resource: {
-            buffer: particleBuffers[i],
+            buffer: particleBuffers[i],//paricleVel //rename to make generic
             offset: 0,
             size: state.compute.buffers.byteLength,
           },
@@ -86,11 +109,12 @@ let makeCompute = (state) => {
         {
           binding: 2,
           resource: {
-            buffer: particleBuffers[(i + 1) % 2],
+            buffer: particleBuffers[(i + 1) % 2], //a_pos
             offset: 0,
             size: state.compute.buffers.byteLength,
           },
         },
+    
       ],
     });
   }
@@ -104,13 +128,16 @@ let makeCompute = (state) => {
 };
 
 let hasMadeCompute = false;
-let makeImgTexture = async () => {
+let makeImgTexture = async (state) => {
   const img = document.createElement("img");
   const source = img;
   source.width = innerWidth;
   source.height = innerHeight;
+  //console.log(state.data.texture);
+  //console.log(img)
+  img.src = state.data.texture
+  console.log(img.src);
 
-  img.src = "../test.png";
   await img.decode();
 
   return await createImageBitmap(img);
@@ -125,7 +152,8 @@ async function makeTexture(state) {
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  let imageBitmap = await makeImgTexture();
+  let imageBitmap = await makeImgTexture(state);
+
   let music = new Float32Array(
     new Array(800)
       .fill(5)
@@ -135,6 +163,8 @@ async function makeTexture(state) {
           : Math.random()
       )
   );
+  
+  
 
   state.cubeTexture = cubeTexture;
   state.data.music = music;
@@ -201,7 +231,6 @@ function createRenderPasses(state) {
     texture: state.texture,
     pipeline: state.pipeline,
     bindGroup: bindGroup,
-    
     type: "draw",
   }
   if (state.compute) mainRenderPass.numVertices =  state.compute.buffers.length / 4
@@ -339,11 +368,14 @@ async function makePipeline(state) {
     mipmapFilter: "nearest",
   });
 
+
+  
+
   const bindGroupLayout = device.createBindGroupLayout({
-    entries: [
+    entries: [ 
       {
         binding: 0,
-        visibility: GPUShaderStage.FRAGMENT,
+        visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
         buffer: {
           type: "uniform",
           minBindingSize: 4 * 7,
@@ -351,15 +383,17 @@ async function makePipeline(state) {
       },
       {
         binding: 1,
-        visibility: GPUShaderStage.FRAGMENT,
+        visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
         type: "sampler",
         sampler,
       },
       {
         binding: 2,
-        visibility: GPUShaderStage.FRAGMENT,
+        visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
         texture: {},
       },
+      
+      
     ],
   });
 
@@ -387,6 +421,31 @@ async function makePipeline(state) {
     layout: pipelineLayout,
   });
 
+  // let bindGroupLayout = device.createBindGroupLayout({
+  //   entries: [ 
+  //     {
+  //       binding: 0,
+  //       visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
+  //       buffer: {
+  //         type: "uniform",
+  //         minBindingSize: 4 * 7,
+  //       },
+  //     },
+  //     {
+  //       binding: 1,
+  //       visibility: GPUShaderStage.FRAGMENT,
+  //       type: "sampler",
+  //       sampler,
+  //     },
+  //     {
+  //       binding: 2,
+  //       visibility: GPUShaderStage.FRAGMENT,
+  //       texture: {},
+  //     },
+      
+  //   ],
+  // });
+
   let cubeTexture = await makeTexture(state);
   state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
@@ -395,6 +454,7 @@ async function makePipeline(state) {
         binding: 0,
         resource: { buffer: state.uniformsBuffer },
       },
+      
       {
         binding: 1,
         resource: sampler,
@@ -469,6 +529,8 @@ function makeShaderModule(state, source: any) {
       vec2(0.0, 0.0),
     );
 
+
+    
     var output : VertexOutput;
     output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
     output.fragUV = uv[VertexIndex];
@@ -557,5 +619,5 @@ async function init(options: any) {
   return draw;
 }
 
-const version = "0.6.0";
+init.version = '0.6.0';
 export { init, version };

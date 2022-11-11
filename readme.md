@@ -1,6 +1,43 @@
 - SIMPLE WEBGPU COMPUTE - 
 simplest GPGPU compute library ever
 
+transpiler, shadergraph, ui for that, 
+
+
+[{ binding: 0, visibility: ShaderStage::Compute,
+ buffer: { type: BufferBindingType::Uniform, 
+ hasDynamicOffset: 0, minBindingSize: 28 } }, 
+ { binding: 1, visibility: ShaderStage::Compute, 
+ buffer: { type: BufferBindingType::ReadOnlyStorage, hasDynamicOffset: 0, minBindingSize: 16 } },
+  { binding: 2, visibility: ShaderStage::Compute, 
+  buffer: { type: BufferBindingType::Storage, 
+  hasDynamicOffset: 0, minBindingSize: 16 } 
+  
+  }]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

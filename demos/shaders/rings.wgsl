@@ -54,7 +54,9 @@ fn smoothStep(edge0:f32, edge1:f32, x:f32) -> f32 {
   fn main_fragment( @location(0) fragUV: vec2<f32>,
       @location(1) fragPosition: vec4<f32>) 
   -> @location(0) vec4<f32> {
-    return main(fragUV) - vec4<f32>(.8);
+    return main(fragUV) - vec4<f32>(.0001);
+    
+    //vec4<f32>(0., sin(u.time * .001), sin(u.time * .001) ,1.) ;
   }
   
 
