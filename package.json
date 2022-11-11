@@ -1,6 +1,6 @@
 {
   "name": "simple-webgpu",
-  "version": "0.6.6",
+  "version": "0.7.1",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
