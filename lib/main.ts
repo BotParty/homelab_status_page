@@ -507,6 +507,7 @@ function makeShaderModule(state, source: any) {
     @location(0) fragUV : vec2<f32>,
     @location(1) fragPosition: vec4<f32>,
   }
+  
   @vertex
   fn main_vertex(
     @builtin(vertex_index) VertexIndex : u32,
