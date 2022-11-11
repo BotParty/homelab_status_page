@@ -3,7 +3,7 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
-let makeCompute = (state) => {
+let makeCompute = (state:any) => {
   let { device } = state;
 
   // prettier-ignore
@@ -128,22 +128,22 @@ let makeCompute = (state) => {
 };
 
 let hasMadeCompute = false;
-let makeImgTexture = async (state) => {
-  const img = document.createElement("img");
-  const source = img;
-  source.width = innerWidth;
-  source.height = innerHeight;
-  //console.log(state.data.texture);
-  //console.log(img)
-  img.src = state.data.texture
-  console.log(img.src);
+// let makeImgTexture = async (state:any) => {
+//   const img = document.createElement("img");
+//   const source = img;
+//   source.width = innerWidth;
+//   source.height = innerHeight;
+//   //console.log(state.data.texture);
+//   //console.log(img)
+//   img.src = state.data.texture
+//   console.log(img.src);
 
-  await img.decode();
+//   await img.decode();
 
-  return await createImageBitmap(img);
-};
+//   return await createImageBitmap(img);
+// };
 
-async function makeTexture(state) {
+async function makeTexture(state:any) {
   let cubeTexture = state.device.createTexture({
     size: [256, 1, 1],
     format: "rgba8unorm",
@@ -152,15 +152,18 @@ async function makeTexture(state) {
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  let imageBitmap = await makeImgTexture(state);
+  //
+//  let imageBitmap = await makeImgTexture(state);
 
   let music = new Float32Array(
     new Array(800)
       .fill(5)
-      .map((d, i) =>
+      .map((d:any, i) =>
+      
         state.data.texture
-          ? state.data.texture[i % state.data.texture.length]
+          ? state.data.texture[i % state.data.texture.length + (d)]
           : Math.random()
+
       )
   );
   
@@ -170,21 +173,23 @@ async function makeTexture(state) {
   state.data.music = music;
  
   state.cubeTexture = cubeTexture;
-  let data = new Uint8Array(new Array(256).fill(5).map((d, i) => i / 25));
+//  let data = new Uint8Array(new Array(256).fill(5).map((d, i) => i / 25));
 
   updateTexture(state);
   return cubeTexture;
 }
 let t = 0;
 
-function updateTexture(state) {
+function updateTexture(state:any) {
   let data = new Uint8Array(
     new Array(1024)
       .fill(5)
-      .map((d, i) =>
-        state.data.texture
+      .map((d, i) => {
+        console.log(d)
+       return  state.data.texture
           ? state.data.texture[i % state.data.texture.length]
           : Math.random()
+      }
       )
   );
 
@@ -199,7 +204,7 @@ function updateTexture(state) {
   );
 }
 
-function createRenderPasses(state) {
+function createRenderPasses(state:any) {
   if (!hasMadeCompute && state.compute) {
     hasMadeCompute = true;
     makeCompute(state);
@@ -233,14 +238,16 @@ function createRenderPasses(state) {
     bindGroup: bindGroup,
     type: "draw",
   }
+    //@ts-ignore
   if (state.compute) mainRenderPass.numVertices =  state.compute.buffers.length / 4
+    //@ts-ignore
   if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
   state.renderPasses.push(mainRenderPass)
 
 }
 
 const recordRenderPass = async function (state: any) {
-  let { vertexBuffer, device, pipeline, renderPassDescriptor } = state;
+  let { device, renderPassDescriptor } = state;
 
   renderPassDescriptor.colorAttachments[0].view = state.context
     .getCurrentTexture()
@@ -248,7 +255,7 @@ const recordRenderPass = async function (state: any) {
 
   const commandEncoder = device.createCommandEncoder();
 
-  state.renderPasses.forEach(function render(_) {
+  state.renderPasses.forEach(function render(_:any) {
     let isCompute = _.type === "compute"
 
     let passEncoder =isCompute
@@ -263,7 +270,7 @@ const recordRenderPass = async function (state: any) {
     passEncoder.setBindGroup(0, Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup);
 
     if (_.vertexBuffers)
-      _.vertexBuffers.forEach(function (vertexBuffer, i) {
+      _.vertexBuffers.forEach(function (vertexBuffer:any, i:any) {
         passEncoder.setVertexBuffer(i, vertexBuffer);
       });
     if (_.numVertices) passEncoder.draw(3, _.numVertices, 0, 0);
@@ -304,7 +311,7 @@ function updateUniforms(state: any) {
     ));
   }
 }
-async function makePipeline(state) {
+async function makePipeline(state:any) {
   let { device } = state;
 
   let pipelineDesc = {
@@ -484,7 +491,7 @@ async function makePipeline(state) {
   return pipeline;
 }
 
-function makeShaderModule(state, source: any) {
+function makeShaderModule(state:any, source: any) {
   const { device, data } = state;
   if (!source) source = defaultShader;
   validateData(data);
@@ -602,8 +609,10 @@ async function init(options: any) {
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
+  //@ts-ignore
   state.shader = makeShaderModule(state, options.shader);
 
+    //@ts-ignore
   state.pipeline = await makePipeline(state);
   createRenderPasses(state)
   function draw(newData: any) {
@@ -622,4 +631,4 @@ async function init(options: any) {
 }
 
 init.version = '0.6.0';
-export { init, version };
+export { init };

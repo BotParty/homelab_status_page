@@ -13,9 +13,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types"]
+    "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types"],
+    "allowJs": true
 
   },
   "include": ["lib"],
-  "files": ["lib/main.js"],
+  "files": ["lib/main.ts"],
 }

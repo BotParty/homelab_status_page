@@ -1,5 +1,5 @@
 import shapeTransition from "./webgl/shape-transition";
-import { init, version} from "../lib/main";
+import { init} from "../lib/main";
 import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
 import checkerboard from './shaders/checkerboard.wgsl?raw';
