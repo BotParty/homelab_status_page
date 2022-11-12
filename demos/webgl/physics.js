@@ -31,6 +31,9 @@ const options = {
     dispatchWorkGroups: () => {
       return Math.ceil(initialParticleData.length / 64)
     },
+    numVertices: () => {
+      return initialParticleData.length / 4
+    },
     buffers: [initialParticleData, initialParticleData],
     vertexBufferData,
     

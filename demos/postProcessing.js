@@ -12,6 +12,7 @@ const options = {
   shader: stripes,
   compute: {
     shader: blur,
+
     dispatchWorkGroups: () => {
       return [
         Math.ceil(800 / blockDim),

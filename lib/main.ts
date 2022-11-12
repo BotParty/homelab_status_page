@@ -28,7 +28,7 @@ let makeCompute = (state:any) => {
     rule3Scale: 0.005,
   };
 
-  let stuff = state.compute.buffers.map((userTypedArray:any) => {
+  const particleBuffers = state.compute.buffers.map((userTypedArray:any) => {
     console.log(userTypedArray.byteLength)
     let buffer = device.createBuffer({
       size: userTypedArray.byteLength,
@@ -42,10 +42,7 @@ let makeCompute = (state:any) => {
     return buffer
   })
 
-  const particleBuffers = stuff
-  console.log(particleBuffers)
   const particleBindGroups: GPUBindGroup[] = new Array(2);
-  
 
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
   state.simParamBuffer = device.createBuffer({
@@ -243,7 +240,7 @@ function createRenderPasses(state:any) {
     type: "draw",
   }
     //@ts-ignore
-  if (state.compute) mainRenderPass.numVertices =  state.compute.buffers[0].length / 4
+  if (state?.compute.numVertices) mainRenderPass.numVertices =  state.compute.numVertices()
     //@ts-ignore
   if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
   state.renderPasses.push(mainRenderPass)
