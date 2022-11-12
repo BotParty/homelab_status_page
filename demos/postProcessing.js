@@ -1,12 +1,20 @@
 import { init } from "../lib/main";
 import stripes from '../demos/shaders/stripes.wgsl?raw'
-import blur from '../demos/webgl/blur.wgsl?raw'
+
+
+//change uniforms
+//make data available in all shaders
+//
+//2 stages, compute and screen
+
 
 const options = {
   data: {},
+  texture: '../data.png',
   shader: stripes,
   compute: {
-    shader: blur
+    shader: blur,
+    
   }  
 //   compute: { //optional
 //    simParams:{

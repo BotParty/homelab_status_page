@@ -1,17 +1,19 @@
 import { init } from "../../lib/main";
 import updateSpritesWGSL from "../shaders/updateSprites.wgsl?raw";
-import spriteWGSLFS from '../shaders/sprite_fs.wgsl?raw';
-import spriteWGSLVS from '../shaders/sprite_vs.wgsl?raw';
+import spriteWGSLFS from "../shaders/sprite_fs.wgsl?raw";
+import spriteWGSLVS from "../shaders/sprite_vs.wgsl?raw";
 
 //should be two draw calls
 //drawCompute()
 //drawScreen()
 
-//draw() - schedules a draw to happen in the next frame 
-//in main_run_loop 
-  //renderPipelines.exec()
+//draw() - schedules a draw to happen in the next frame
+//in main_run_loop
+//renderPipelines.exec()
 //water = init(options)
-
+const vertexBufferData = new Float32Array([
+  -0.01, -0.02, 0.01, -0.02, 0.0, 0.02,
+]);
 const numParticles = 1500;
 const initialParticleData = new Float32Array(numParticles * 4);
 for (let i = 0; i < numParticles; ++i) {
@@ -23,18 +25,20 @@ for (let i = 0; i < numParticles; ++i) {
 let draw1 = {
   attributes: [],
   uniforms: [],
-  shader: []
-}
+  shader: [],
+};
 
-let data = {}
+let data = {};
 const options = {
   data: {},
-  compute: { //optional
-  buffers: [initialParticleData, initialParticleData],
-  vs: spriteWGSLVS,
-  fs: spriteWGSLFS,
-  cs: updateSpritesWGSL,
-   simParams:{
+  compute: {
+    //optional
+    buffers: [initialParticleData, initialParticleData],
+    vertexBufferData,
+    vs: spriteWGSLVS,
+    fs: spriteWGSLFS,
+    cs: updateSpritesWGSL,
+    simParams: {
       deltaT: 0.04,
       rule1Distance: 0.1,
       rule2Distance: 0.025,
@@ -43,8 +47,8 @@ const options = {
       rule2Scale: 0.05,
       rule3Scale: 0.005,
     },
-  }
-}
+  },
+};
 
 //let draw = await init(options);
 /// let compute = await init(options);
@@ -62,25 +66,25 @@ const options = {
 //compute = init({})
 
 async function physics() {
-  options.data = options.data  //extend 
-  console.log('start draw loop')
+  options.data = options.data; //extend
+  console.log("start draw loop");
 
   let draw = await init(options);
   draw(data);
-  
-// particle buffer
-// physics simulation 
-//  each particle has a position and velocity
-//  every frame, add velocity to position
-//        add stuff to velocity based on distance to mouse or vector field based on image
-//          or based on every other particles position
-//  
+
+  // particle buffer
+  // physics simulation
+  //  each particle has a position and velocity
+  //  every frame, add velocity to position
+  //        add stuff to velocity based on distance to mouse or vector field based on image
+  //          or based on every other particles position
+  //
 
   requestAnimationFrame(function test() {
     draw(data);
-      requestAnimationFrame(test)
-      //setTimeout(test, 500)
+    requestAnimationFrame(test);
+    //setTimeout(test, 500)
   });
-  }
-  
-  export default physics;
+}
+
+export default physics;

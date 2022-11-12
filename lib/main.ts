@@ -5,15 +5,12 @@ import defaultShader from "./default.wgsl?raw";
 
 let makeCompute = (state:any) => {
   let { device } = state;
-
-  // prettier-ignore
   const vertexBufferData = new Float32Array([
-      -0.01, -0.02, 0.01,
-      -0.02, 0.0, 0.02,
-    ]);
-
+    -0.01, -0.02, 0.01, -0.02, 0.0, 0.02,
+  ]);
+  // prettier-ignore
   const spriteVertexBuffer = device.createBuffer({
-    size: vertexBufferData.byteLength,
+    size: state.compute.vertexBufferData.byteLength,
     usage: GPUBufferUsage.VERTEX,
     mappedAtCreation: true,
   });
@@ -229,12 +226,22 @@ function createRenderPasses(state:any) {
 
   
 
+  const tileDim = 128;//why is tileDim 128?
+  const batch = [4, 4]; // why is it 4,4?
+  // dispatchWorkGroups
+  //api -> compile -> render passes -> comandEncoder.submit()
+  //commands resources
+  //
+
 
   state.renderPasses = []
   if (state.compute) state.renderPasses.push(  {
     pipeline: computePipeline,
     bindGroup: particleBindGroups,
     dispatchWorkGroups: Math.ceil(state.compute.buffers[0].length / 64),
+    // (Math.ceil(srcWidth / blockDim),
+    // Math.ceil(srcHeight / batch[1]))
+
     type: "compute",
   },)
 

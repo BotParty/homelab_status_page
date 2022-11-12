@@ -25,7 +25,7 @@ import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl
 
 import physics from "./webgl/physics";
 
-import blur from "./blur";
+import postProcessing from "./postProcessing";
 
 let defaultDemo = 'physics';
 let data = {}
@@ -76,13 +76,13 @@ function textureDemo() {
 let demoTitles = [
   'shapeTransition', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
    'four', 'five', 'music', 'six', 'seven', 'light', 'physics', 
-   'blur'
+   'postProcessing'
 ]
 
 let demos = [
    shapeTransition, stripes, rings, checkerboard, one, mouse, texture, sky,
 
-   four, five, music, six, seven, light, physics, blur
+   four, five, music, six, seven, light, physics, postProcessing
   //  carrots
 ]
 function select(name) {
