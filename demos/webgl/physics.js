@@ -32,6 +32,8 @@ let draw1 = {
 let data = {};
 const options = {
   data: {},
+  vs: spriteWGSLVS,
+  shader: spriteWGSLFS,
   compute: {
     //optional
     dispatchWorkGroups: () => {
@@ -39,8 +41,8 @@ const options = {
     },
     buffers: [initialParticleData, initialParticleData],
     vertexBufferData,
-    vs: spriteWGSLVS,
-    fs: spriteWGSLFS,
+    
+   
     cs: updateSpritesWGSL,
     simParams: {
       deltaT: 0.04,

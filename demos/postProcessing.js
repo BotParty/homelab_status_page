@@ -4,6 +4,7 @@ import stripes from '../demos/shaders/stripes.wgsl?raw'
 const tileDim = 128;
 const batch = [4, 4];
 
+console.log()
 const options = {
   data: {},
   texture: '../data.png',

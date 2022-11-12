@@ -130,20 +130,19 @@ let makeCompute = (state:any) => {
 };
 
 let hasMadeCompute = false;
-// let makeImgTexture = async (state:any) => {
-//   const img = document.createElement("img");
-//   const source = img;
-//   source.width = innerWidth;
-//   source.height = innerHeight;
-//   //console.log(state.data.texture);
-//   //console.log(img)
-//   img.src = state.data.texture
-//   console.log(img.src);
+let makeImgTexture = async (state:any) => {
+  const img = document.createElement("img");
+  const source = img;
+  source.width = innerWidth;
+  source.height = innerHeight;
 
-//   await img.decode();
+  img.src = state.data.texture
+  console.log(img.src);
 
-//   return await createImageBitmap(img);
-// };
+  await img.decode();
+
+  return await createImageBitmap(img);
+};
 
 async function makeTexture(state:any) {
   let cubeTexture = state.device.createTexture({
@@ -168,14 +167,12 @@ async function makeTexture(state:any) {
 
       )
   );
-  
-  
+
 
   state.cubeTexture = cubeTexture;
   state.data.music = music;
  
   state.cubeTexture = cubeTexture;
-//  let data = new Uint8Array(new Array(256).fill(5).map((d, i) => i / 25));
 
   updateTexture(state);
   return cubeTexture;
@@ -218,10 +215,7 @@ function createRenderPasses(state:any) {
     spriteVertexBuffer,
     device, 
   } = state;
-  // if (! stuff.renderBundle)
-  //   passEncoder = device.createRenderBundleEncoder({
-  //     colorFormats: ['rgb10a2unorm']
-  //   }
+  
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
   
@@ -233,7 +227,7 @@ function createRenderPasses(state:any) {
   //
 
   state.renderPasses = []
-  console.log(state.compute);
+  //console.log(state.compute);
 
   if (state.compute) state.renderPasses.push(  {
     pipeline: computePipeline,
@@ -241,7 +235,6 @@ function createRenderPasses(state:any) {
     dispatchWorkGroups: state.compute.dispatchWorkGroups(),
     // (Math.ceil(srcWidth / blockDim),
     // Math.ceil(srcHeight / batch[1]))
-
     type: "compute",
   },)
 
@@ -276,7 +269,7 @@ const recordRenderPass = async function (state: any) {
         ? commandEncoder.beginComputePass()
         : commandEncoder.beginRenderPass(renderPassDescriptor);
 
-        if (_.texture) updateTexture(_);
+    if (_.texture) updateTexture(_);
 
     passEncoder.setPipeline(_.pipeline);
 
@@ -409,8 +402,6 @@ async function makePipeline(state:any) {
         visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
         texture: {},
       },
-      
-      
     ],
   });
 
@@ -437,31 +428,6 @@ async function makePipeline(state:any) {
     ...pipelineDesc,
     layout: pipelineLayout,
   });
-
-  // let bindGroupLayout = device.createBindGroupLayout({
-  //   entries: [ 
-  //     {
-  //       binding: 0,
-  //       visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
-  //       buffer: {
-  //         type: "uniform",
-  //         minBindingSize: 4 * 7,
-  //       },
-  //     },
-  //     {
-  //       binding: 1,
-  //       visibility: GPUShaderStage.FRAGMENT,
-  //       type: "sampler",
-  //       sampler,
-  //     },
-  //     {
-  //       binding: 2,
-  //       visibility: GPUShaderStage.FRAGMENT,
-  //       texture: {},
-  //     },
-      
-  //   ],
-  // });
 
   let cubeTexture = await makeTexture(state);
   state.bindGroupDescriptor = {
@@ -546,9 +512,6 @@ function makeShaderModule(state:any, source: any) {
       vec2(0.0, 1.0),
       vec2(0.0, 0.0),
     );
-
-
-    
     var output : VertexOutput;
     output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
     output.fragUV = uv[VertexIndex];
@@ -559,7 +522,7 @@ function makeShaderModule(state:any, source: any) {
   ${source}`;
 
   return state.compute
-    ? device.createShaderModule({ code: state.compute.vs + state.compute.fs })
+    ? device.createShaderModule({ code: state.options.vs + state.options.shader })
     : device.createShaderModule({ code });
 }
 
@@ -587,10 +550,10 @@ const addMouseEvents = function (canvas: any, data: any) {
 };
 
 async function init(options: any) {
-
   let canvas = options.canvas || utils.createCanvas();
   const state = {
     renderPassDescriptor: {},
+    options,
     data: Object.assign(defaultData, options.data), //user data
     compute: options.compute, //user data
     renderPasses: [], //internal state
