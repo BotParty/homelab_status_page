@@ -198,9 +198,6 @@ function createRenderPasses(state:any) {
   
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
-  
-  
-
   state.renderPasses = []
 
   if (state.compute) state.renderPasses.push(  {
@@ -218,7 +215,7 @@ function createRenderPasses(state:any) {
     type: "draw",
   }
     //@ts-ignore
-  if (state?.compute.numVertices) mainRenderPass.numVertices =  state.compute.numVertices()
+  if (state?.compute?.numVertices) mainRenderPass.numVertices =  state.compute.numVertices()
     //@ts-ignore
   if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
   state.renderPasses.push(mainRenderPass)
@@ -247,7 +244,6 @@ const recordRenderPass = async function (state: any) {
     passEncoder.setPipeline(_.pipeline);
 
     passEncoder.setBindGroup(0, Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup);
-
     if (_.vertexBuffers)
       _.vertexBuffers.forEach(function (vertexBuffer:any, i:any) {
         passEncoder.setVertexBuffer(i, vertexBuffer);
@@ -255,15 +251,10 @@ const recordRenderPass = async function (state: any) {
     if (_.numVertices) passEncoder.draw(3, _.numVertices, 0, 0);
     else ! isCompute && _.type===passEncoder.draw(3 * 2, 1, 0, 0);
     if (_.dispatchWorkGroups) {
-      //debugger
       if (Array.isArray(_.dispatchWorkGroups))
       passEncoder.dispatchWorkgroups(..._.dispatchWorkGroups)
       else passEncoder.dispatchWorkgroups( _.dispatchWorkGroups)
-      
-
      }
-
-    
     passEncoder.end();
   });
 
