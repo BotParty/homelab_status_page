@@ -31,19 +31,24 @@ let makeCompute = (state:any) => {
     rule3Scale: 0.005,
   };
 
-  const particleBuffers: GPUBuffer[] = new Array(2);
-  const particleBindGroups: GPUBindGroup[] = new Array(2);
-  for (let i = 0; i < 2; ++i) {
-    particleBuffers[i] = device.createBuffer({
-      size: state.compute.buffers.byteLength,
+  let stuff = state.compute.buffers.map((userTypedArray:any) => {
+    console.log(userTypedArray.byteLength)
+    let buffer = device.createBuffer({
+      size: userTypedArray.byteLength,
       usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
       mappedAtCreation: true,
     });
-    new Float32Array(particleBuffers[i].getMappedRange()).set(
-      state.compute.buffers
+    new Float32Array(buffer.getMappedRange()).set(
+      userTypedArray
     );
-    particleBuffers[i].unmap();
-  }
+    buffer.unmap();
+    return buffer
+  })
+
+  const particleBuffers = stuff
+  console.log(particleBuffers)
+  const particleBindGroups: GPUBindGroup[] = new Array(2);
+  
 
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
   state.simParamBuffer = device.createBuffer({
@@ -103,7 +108,7 @@ let makeCompute = (state:any) => {
           resource: {
             buffer: particleBuffers[i],//paricleVel //rename to make generic
             offset: 0,
-            size: state.compute.buffers.byteLength,
+            size: state.compute.buffers[0].byteLength,
           },
         },
         {
@@ -111,7 +116,7 @@ let makeCompute = (state:any) => {
           resource: {
             buffer: particleBuffers[(i + 1) % 2], //a_pos
             offset: 0,
-            size: state.compute.buffers.byteLength,
+            size: state.compute.buffers[1].byteLength,
           },
         },
     
@@ -185,7 +190,6 @@ function updateTexture(state:any) {
     new Array(1024)
       .fill(5)
       .map((d, i) => {
-        console.log(d)
        return  state.data.texture
           ? state.data.texture[i % state.data.texture.length]
           : Math.random()
@@ -223,11 +227,14 @@ function createRenderPasses(state:any) {
   //   }
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
+  
+
+
   state.renderPasses = []
   if (state.compute) state.renderPasses.push(  {
     pipeline: computePipeline,
     bindGroup: particleBindGroups,
-    dispatchWorkGroups: Math.ceil(state.compute.buffers.length / 64),
+    dispatchWorkGroups: Math.ceil(state.compute.buffers[0].length / 64),
     type: "compute",
   },)
 
@@ -239,7 +246,7 @@ function createRenderPasses(state:any) {
     type: "draw",
   }
     //@ts-ignore
-  if (state.compute) mainRenderPass.numVertices =  state.compute.buffers.length / 4
+  if (state.compute) mainRenderPass.numVertices =  state.compute.buffers[0].length / 4
     //@ts-ignore
   if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
   state.renderPasses.push(mainRenderPass)
@@ -548,8 +555,6 @@ function makeShaderModule(state:any, source: any) {
   }
   ${source}`;
 
-console.log(123123);
-console.log(code)
   return state.compute
     ? device.createShaderModule({ code: state.compute.vs + state.compute.fs })
     : device.createShaderModule({ code });

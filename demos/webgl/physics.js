@@ -30,7 +30,7 @@ let data = {}
 const options = {
   data: {},
   compute: { //optional
-  buffers: initialParticleData,
+  buffers: [initialParticleData, initialParticleData],
   vs: spriteWGSLVS,
   fs: spriteWGSLFS,
   cs: updateSpritesWGSL,
