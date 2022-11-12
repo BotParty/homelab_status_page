@@ -29,7 +29,6 @@ let makeCompute = (state:any) => {
   };
 
   const particleBuffers = state.compute.buffers.map((userTypedArray:any) => {
-    console.log(userTypedArray.byteLength)
     let buffer = device.createBuffer({
       size: userTypedArray.byteLength,
       usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
@@ -42,8 +41,6 @@ let makeCompute = (state:any) => {
     return buffer
   })
 
-  const particleBindGroups: GPUBindGroup[] = new Array(2);
-
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
   state.simParamBuffer = device.createBuffer({
     size: simParamBufferSize,
@@ -51,9 +48,6 @@ let makeCompute = (state:any) => {
   });
 
   const computePipeline = device.createComputePipeline({
-    // layout: device.createPipelineLayout({
-    //   bindGroupLayouts: [state.bindGroupLayout]
-    // }),
     compute: {
       module: device.createShaderModule({
         code: state.compute.cs,
@@ -61,12 +55,6 @@ let makeCompute = (state:any) => {
       entryPoint: "main_vertex",
     },
   });
-  
-  // const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
-  // const simParamBuffer = device.createBuffer({
-  //   size: simParamBufferSize,
-  //   usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-  // });
 
   device.queue.writeBuffer(
     state.simParamBuffer,
@@ -82,15 +70,10 @@ let makeCompute = (state:any) => {
     ])
   );
 
-
-  for (let i = 0; i < 2; ++i) {
-    particleBindGroups[i] = device.createBindGroup({
+  let particleBindGroups = state.compute.buffers.map(function (d, i) {
+    return device.createBindGroup({
       layout: computePipeline.getBindGroupLayout(0),
       entries: [ 
-        // {
-        //   binding: 0,
-        //   resource: { buffer: state.uniformsBuffer },
-        // },
         {
           binding: 0,
           resource: {
@@ -116,7 +99,7 @@ let makeCompute = (state:any) => {
     
       ],
     });
-  }
+  })
 
   Object.assign(state, {
     computePipeline,
@@ -216,12 +199,7 @@ function createRenderPasses(state:any) {
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
   
-  const tileDim = 128;//why is tileDim 128?
-  const batch = [4, 4]; // why is it 4,4?
-  // dispatchWorkGroups
-  //api -> compile -> render passes -> comandEncoder.submit()
-  //commands resources
-  //
+  
 
   state.renderPasses = []
 

@@ -5,7 +5,7 @@ const tileDim = 128;
 const batch = [4, 4];
 const blockDim = 15
 
-console.log()
+
 const options = {
   data: {},
   texture: '../data.png',
