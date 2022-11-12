@@ -227,14 +227,11 @@ function createRenderPasses(state:any) {
   //
 
   state.renderPasses = []
-  //console.log(state.compute);
 
   if (state.compute) state.renderPasses.push(  {
     pipeline: computePipeline,
     bindGroup: particleBindGroups,
     dispatchWorkGroups: state.compute.dispatchWorkGroups(),
-    // (Math.ceil(srcWidth / blockDim),
-    // Math.ceil(srcHeight / batch[1]))
     type: "compute",
   },)
 
@@ -250,6 +247,7 @@ function createRenderPasses(state:any) {
     //@ts-ignore
   if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
   state.renderPasses.push(mainRenderPass)
+
 }
 
 const recordRenderPass = async function (state: any) {
@@ -281,8 +279,15 @@ const recordRenderPass = async function (state: any) {
       });
     if (_.numVertices) passEncoder.draw(3, _.numVertices, 0, 0);
     else ! isCompute && _.type===passEncoder.draw(3 * 2, 1, 0, 0);
-    if (_.dispatchWorkGroups)
-      passEncoder.dispatchWorkgroups(_.dispatchWorkGroups);
+    if (_.dispatchWorkGroups) {
+      //debugger
+      if (Array.isArray(_.dispatchWorkGroups))
+      passEncoder.dispatchWorkgroups(..._.dispatchWorkGroups)
+      else passEncoder.dispatchWorkgroups( _.dispatchWorkGroups)
+      
+
+     }
+
     
     passEncoder.end();
   });
@@ -584,7 +589,7 @@ async function init(options: any) {
   //@ts-ignore
   state.shader = makeShaderModule(state, options.shader);
 
-    //@ts-ignore
+  //@ts-ignore
   state.pipeline = await makePipeline(state);
   createRenderPasses(state)
   function draw(newData: any) {

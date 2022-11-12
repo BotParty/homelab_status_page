@@ -3,14 +3,6 @@ import updateSpritesWGSL from "../shaders/updateSprites.wgsl?raw";
 import spriteWGSLFS from "../shaders/sprite_fs.wgsl?raw";
 import spriteWGSLVS from "../shaders/sprite_vs.wgsl?raw";
 
-//should be two draw calls
-//drawCompute()
-//drawScreen()
-
-//draw() - schedules a draw to happen in the next frame
-//in main_run_loop
-//renderPipelines.exec()
-//water = init(options)
 const vertexBufferData = new Float32Array([
   -0.01, -0.02, 0.01, -0.02, 0.0, 0.02,
 ]);
