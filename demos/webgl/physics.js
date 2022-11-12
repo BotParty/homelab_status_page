@@ -22,6 +22,7 @@ for (let i = 0; i < numParticles; ++i) {
   initialParticleData[4 * i + 2] = 20 * (Math.random() - 0.5) * 0.1;
   initialParticleData[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
 }
+
 let draw1 = {
   attributes: [],
   uniforms: [],
@@ -33,6 +34,9 @@ const options = {
   data: {},
   compute: {
     //optional
+    dispatchWorkGroups: () => {
+      return Math.ceil(initialParticleData.length / 64)
+    },
     buffers: [initialParticleData, initialParticleData],
     vertexBufferData,
     vs: spriteWGSLVS,

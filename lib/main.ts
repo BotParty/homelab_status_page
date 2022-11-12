@@ -225,7 +225,6 @@ function createRenderPasses(state:any) {
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
 
   
-
   const tileDim = 128;//why is tileDim 128?
   const batch = [4, 4]; // why is it 4,4?
   // dispatchWorkGroups
@@ -233,12 +232,13 @@ function createRenderPasses(state:any) {
   //commands resources
   //
 
-
   state.renderPasses = []
+  console.log(state.compute);
+
   if (state.compute) state.renderPasses.push(  {
     pipeline: computePipeline,
     bindGroup: particleBindGroups,
-    dispatchWorkGroups: Math.ceil(state.compute.buffers[0].length / 64),
+    dispatchWorkGroups: state.compute.dispatchWorkGroups(),
     // (Math.ceil(srcWidth / blockDim),
     // Math.ceil(srcHeight / batch[1]))
 
@@ -257,7 +257,6 @@ function createRenderPasses(state:any) {
     //@ts-ignore
   if (state.compute) mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
   state.renderPasses.push(mainRenderPass)
-
 }
 
 const recordRenderPass = async function (state: any) {
@@ -388,9 +387,6 @@ async function makePipeline(state:any) {
     minFilter: "linear",
     mipmapFilter: "nearest",
   });
-
-
-  
 
   const bindGroupLayout = device.createBindGroupLayout({
     entries: [ 
@@ -591,6 +587,7 @@ const addMouseEvents = function (canvas: any, data: any) {
 };
 
 async function init(options: any) {
+
   let canvas = options.canvas || utils.createCanvas();
   const state = {
     renderPassDescriptor: {},
