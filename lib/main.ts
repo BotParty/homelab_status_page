@@ -58,7 +58,8 @@ let makeCompute = (state: any) => {
     new Float32Array(Object.values(simParams))
   );
 
-  let particleBindGroups = state.compute.buffers.map(function (d, i) {
+  //@ts-ignore
+  let particleBindGroups = state.compute.buffers.map(function (d:any, i:any) {
     return device.createBindGroup({
       layout: computePipeline.getBindGroupLayout(0),
       entries: [
@@ -171,6 +172,7 @@ function updateTexture(state: any) {
   if (! state.texture) return 
   if ((state.data.texture)) {
   let data = new Uint8Array(
+    //@ts-ignore
     new Array(1024).fill(5).map((d, i) => {
       return state.data.texture
         ? state.data.texture[i % state.data.texture.length]
@@ -224,9 +226,11 @@ function createRenderPasses(state: any) {
   };
   //@ts-ignore
   if (state?.compute?.numVertices)
+    //@ts-ignore
     mainRenderPass.numVertices = state.compute.numVertices();
   //@ts-ignore
   if (state.compute && particleBuffers)
+    //@ts-ignore
     mainRenderPass.vertexBuffers = [
       particleBuffers[0],
       computeVertexBufferData,
@@ -515,7 +519,7 @@ function makeShaderModule(state: any, source: any) {
       })
     : device.createShaderModule({ code });
 }
-
+  //@ts-ignore
 async function compile(state, options) {
   //figures out what arguments to pass to makeBuffers and makeShaderModule
 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:3000/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="module" src="./simple shader demo_files/client"></script>
+
+    
+    <link rel="icon" type="image/svg+xml" href="http://localhost:3000/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>simple shader demo</title>
+    <link href="./simple shader demo_files/tailwind.min.css" rel="stylesheet">
+    <style>
+      body {
+        background: #333;
+      }
+      #container * {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+
+        width: 100%;
+        height: 100%;
+        padding: 25px;
+      }
+
+      canvas {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+
+      #embed {
+        opacity: 0.1;
+        height: 200px;
+        width: 200px;
+        padding-top: 50px;
+      }
+
+      #control-panel {
+        z-index: 124;
+        position: absolute;
+        border: 1px dotted aliceblue;
+      }
+      #control-panel {
+        background: steelblue;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 5px;
+        color: lightgray;
+      }
+
+      #control-panel label {
+        display: block;
+        
+      }
+      #control-panel label:hover {
+        background: pink;
+        
+      }
+      canvas {
+        z-index: 0;
+        position: absolute;
+        width: 500px;
+        height: 500px;
+      }
+      audio {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        z-index: 999;
+      }
+
+
+      
+    </style>
+    <script type="module" src="./simple shader demo_files/index.js"></script>
+  </head>
+  <body>
+
+    <template></template>
+    <div id="swap" class="mt-4">
+      <form name="stuff">
+        <fieldset>
+      <div id="control-panel" class="mt-2">
+      
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="signalvsNoise" value="signalvsNoise">
+        <span class="ml-2">signalvsNoise</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="stripes" value="stripes">
+        <span class="ml-2">stripes</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="rings" value="rings">
+        <span class="ml-2">rings</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="checkerboard" value="checkerboard">
+        <span class="ml-2">checkerboard</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="one" value="one">
+        <span class="ml-2">one</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="mouse" value="mouse">
+        <span class="ml-2">mouse</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="texture" value="texture">
+        <span class="ml-2">texture</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="sky" value="sky">
+        <span class="ml-2">sky</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="four" value="four">
+        <span class="ml-2">four</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="five" value="five">
+        <span class="ml-2">five</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="music" value="music">
+        <span class="ml-2">music</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="six" value="six">
+        <span class="ml-2">six</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="seven" value="seven">
+        <span class="ml-2">seven</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="light" value="light">
+        <span class="ml-2">light</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="physics" value="physics">
+        <span class="ml-2">physics</span>
+      </label>
+    
+
+      <label class="inline-flex items-center">
+        <input type="radio" class="form-radio" name="postProcessing" value="postProcessing">
+        <span class="ml-2">postProcessing</span>
+      </label>
+    </div>
+    </fieldset>
+      </form>
+
+    </div>
+  
+
+<canvas width="1530" height="588" style="width: 765px;"></canvas></body></html>

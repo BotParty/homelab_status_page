@@ -11,6 +11,18 @@ const createBuffer = (device, arr, usage) => {
   buffer.unmap();
   return buffer;
 };
+function validateData(data) {
+  if (typeof data.width !== "number")
+    throw new Error("bad data!!");
+}
+const addMouseEvents = function(canvas, data) {
+  canvas.addEventListener("mousemove", (event) => {
+    let x = event.pageX;
+    let y = event.pageY;
+    data.mouseX = x / event.target.clientWidth;
+    data.mouseY = y / event.target.clientHeight;
+  });
+};
 function createCanvas(width = innerWidth, height = innerHeight) {
   let dpi = devicePixelRatio;
   var canvas = document.createElement("canvas");
@@ -22,47 +34,35 @@ function createCanvas(width = innerWidth, height = innerHeight) {
 }
 var utils = {
   createBuffer,
-  createCanvas
+  createCanvas,
+  validateData,
+  addMouseEvents
 };
 var defaultShader = "// let size = 4.0;\n\n// let b = 0.3;		//size of the smoothed border\n\n//     fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {\n//       let aspect = iResolution.x/iResolution.y;\n//       let position = (fragCoord.xy) * aspect;\n//       let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));\n//       let offset=u.time * 000.0001;\n//       let conv=4.;\n//       let v=dist*4.-offset;\n//       let ringr=floor(v);\n      \n//       var stuff = 0.;\n//       if (v % 3. > .5) {\n//         stuff = 0.;\n//       }\n\n// 	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));\n//       if (ringr % 2. ==1.) {\n//        color=2.-color;\n//       }\n\n//     let distToMouseX = distance(u.mouseX, fragCoord.x);\n//     let distToMouseY = distance(u.mouseY, fragCoord.y);\n\n//     return vec4<f32>(\n//       distToMouseX, \n//       color, \n//       color, \n//       1.\n//       );\n//   };\n\n//   fn main(uv: vec2<f32>) -> vec4<f32> {\n//     let fragCoord = vec2<f32>(uv.x, uv.y);\n//     var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);\n//     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));\n//     return mainImage(fragCoord, vec2<f32>(u.width, u.height));\n//   }\n\n@fragment\n  fn main_fragment(in: VertexOutput) -> @location(0) vec4<f32> {\n    return vec4<f32>(.8);\n  }\n  ";
 let makeCompute = (state) => {
   let { device } = state;
-  const vertexBufferData = new Float32Array([
-    -0.01,
-    -0.02,
-    0.01,
-    -0.02,
-    0,
-    0.02
-  ]);
-  const spriteVertexBuffer = device.createBuffer({
-    size: vertexBufferData.byteLength,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true
-  });
-  new Float32Array(spriteVertexBuffer.getMappedRange()).set(vertexBufferData);
-  spriteVertexBuffer.unmap();
-  const simParams = {
-    deltaT: 0.04,
-    rule1Distance: 0.1,
-    rule2Distance: 0.025,
-    rule3Distance: 0.025,
-    rule1Scale: 0.02,
-    rule2Scale: 0.05,
-    rule3Scale: 5e-3
-  };
-  const particleBuffers = new Array(2);
-  const particleBindGroups = new Array(2);
-  for (let i = 0; i < 2; ++i) {
-    particleBuffers[i] = device.createBuffer({
-      size: state.compute.buffers.byteLength,
-      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
+  if (state.compute.vertexBufferData) {
+    state.computeVertexBufferData = device.createBuffer({
+      size: state.compute.vertexBufferData.byteLength,
+      usage: GPUBufferUsage.VERTEX,
       mappedAtCreation: true
     });
-    new Float32Array(particleBuffers[i].getMappedRange()).set(
-      state.compute.buffers
+    new Float32Array(state.computeVertexBufferData.getMappedRange()).set(
+      state.compute.vertexBufferData
     );
-    particleBuffers[i].unmap();
+    state.computeVertexBufferData.unmap();
+  }
+  if (state.compute.buffers) {
+    state.particleBuffers = state.compute.buffers.map((userTypedArray) => {
+      let buffer = device.createBuffer({
+        size: userTypedArray.byteLength,
+        usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
+        mappedAtCreation: true
+      });
+      new Float32Array(buffer.getMappedRange()).set(userTypedArray);
+      buffer.unmap();
+      return buffer;
+    });
   }
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
   state.simParamBuffer = device.createBuffer({
@@ -77,21 +77,14 @@ let makeCompute = (state) => {
       entryPoint: "main_vertex"
     }
   });
+  const simParams = state.options.compute.simParams;
   device.queue.writeBuffer(
     state.simParamBuffer,
     0,
-    new Float32Array([
-      simParams.deltaT,
-      simParams.rule1Distance,
-      simParams.rule2Distance,
-      simParams.rule3Distance,
-      simParams.rule1Scale,
-      simParams.rule2Scale,
-      simParams.rule3Scale
-    ])
+    new Float32Array(Object.values(simParams))
   );
-  for (let i = 0; i < 2; ++i) {
-    particleBindGroups[i] = device.createBindGroup({
+  let particleBindGroups = state.compute.buffers.map(function(d, i) {
+    return device.createBindGroup({
       layout: computePipeline.getBindGroupLayout(0),
       entries: [
         {
@@ -103,77 +96,105 @@ let makeCompute = (state) => {
         {
           binding: 1,
           resource: {
-            buffer: particleBuffers[i],
+            buffer: state.particleBuffers[i],
             offset: 0,
-            size: state.compute.buffers.byteLength
+            size: state.compute.buffers[0].byteLength
           }
         },
         {
           binding: 2,
           resource: {
-            buffer: particleBuffers[(i + 1) % 2],
+            buffer: state.particleBuffers[(i + 1) % 2],
             offset: 0,
-            size: state.compute.buffers.byteLength
+            size: state.compute.buffers[1].byteLength
           }
         }
       ]
     });
+  });
+  if (!particleBindGroups.length) {
+    particleBindGroups.push(
+      ...state.compute.bindGroups(device, computePipeline)
+    );
   }
   Object.assign(state, {
     computePipeline,
-    particleBindGroups,
-    particleBuffers,
-    spriteVertexBuffer
+    particleBindGroups
   });
 };
-let hasMadeCompute = false;
+let makeImgTexture = async (state) => {
+  const img = document.createElement("img");
+  const source = img;
+  source.width = innerWidth;
+  source.height = innerHeight;
+  img.src = state.data.texture;
+  await img.decode();
+  return await createImageBitmap(img);
+};
 async function makeTexture(state) {
-  let cubeTexture = state.device.createTexture({
-    size: [256, 1, 1],
-    format: "rgba8unorm",
-    usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
-  });
-  let music = new Float32Array(
-    new Array(800).fill(5).map(
-      (d, i) => state.data.texture ? state.data.texture[i % state.data.texture.length + d] : Math.random()
-    )
-  );
-  state.cubeTexture = cubeTexture;
-  state.data.music = music;
-  state.cubeTexture = cubeTexture;
-  updateTexture(state);
-  return cubeTexture;
+  if ("string" === typeof state.data.texture) {
+    let texture = state.device.createTexture({
+      size: [900, 900, 1],
+      format: "rgba8unorm",
+      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    });
+    let imageBitmap = await makeImgTexture(state);
+    state.device.queue.copyExternalImageToTexture(
+      { source: imageBitmap },
+      { texture },
+      [imageBitmap.width, imageBitmap.height]
+    );
+    state.texture = texture;
+    updateTexture(state);
+    return texture;
+  } else {
+    let texture = state.device.createTexture({
+      size: [256, 1, 1],
+      format: "rgba8unorm",
+      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    });
+    let music = new Float32Array(
+      new Array(800).fill(5).map(
+        (d, i) => state.data.texture ? state.data.texture[i % state.data.texture.length + d] : Math.random()
+      )
+    );
+    state.texture = texture;
+    state.data.music = music;
+    updateTexture(state);
+    return texture;
+  }
 }
 let t = 0;
 function updateTexture(state) {
-  let data = new Uint8Array(
-    new Array(1024).fill(5).map(
-      (d, i) => {
-        console.log(d);
+  if (!state.texture)
+    return;
+  if (state.data.texture) {
+    let data = new Uint8Array(
+      new Array(1024).fill(5).map((d, i) => {
         return state.data.texture ? state.data.texture[i % state.data.texture.length] : Math.random();
-      }
-    )
-  );
-  state.device.queue.writeTexture(
-    { texture: state.cubeTexture },
-    data.buffer,
-    {
-      bytesPerRow: 3200,
-      rowsPerImage: 600
-    },
-    [256, 1]
-  );
+      })
+    );
+    state.device.queue.writeTexture(
+      { texture: state.texture },
+      data.buffer,
+      {
+        bytesPerRow: 3200,
+        rowsPerImage: 600
+      },
+      [256, 1]
+    );
+  }
 }
 function createRenderPasses(state) {
-  if (!hasMadeCompute && state.compute) {
-    hasMadeCompute = true;
+  var _a;
+  if (state.compute) {
     makeCompute(state);
   }
   let {
     computePipeline,
     particleBindGroups,
     particleBuffers,
-    spriteVertexBuffer,
+    computeVertexBufferData,
     device
   } = state;
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
@@ -182,7 +203,7 @@ function createRenderPasses(state) {
     state.renderPasses.push({
       pipeline: computePipeline,
       bindGroup: particleBindGroups,
-      dispatchWorkGroups: Math.ceil(state.compute.buffers.length / 64),
+      dispatchWorkGroups: state.compute.dispatchWorkGroups(),
       type: "compute"
     });
   const mainRenderPass = {
@@ -192,10 +213,13 @@ function createRenderPasses(state) {
     bindGroup,
     type: "draw"
   };
-  if (state.compute)
-    mainRenderPass.numVertices = state.compute.buffers.length / 4;
-  if (state.compute)
-    mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer];
+  if ((_a = state == null ? void 0 : state.compute) == null ? void 0 : _a.numVertices)
+    mainRenderPass.numVertices = state.compute.numVertices();
+  if (state.compute && particleBuffers)
+    mainRenderPass.vertexBuffers = [
+      particleBuffers[0],
+      computeVertexBufferData
+    ];
   state.renderPasses.push(mainRenderPass);
 }
 const recordRenderPass = async function(state) {
@@ -206,9 +230,12 @@ const recordRenderPass = async function(state) {
     let isCompute = _.type === "compute";
     let passEncoder = isCompute ? commandEncoder.beginComputePass() : commandEncoder.beginRenderPass(renderPassDescriptor);
     if (_.texture)
-      updateTexture(_);
+      updateTexture(state);
     passEncoder.setPipeline(_.pipeline);
-    passEncoder.setBindGroup(0, Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup);
+    passEncoder.setBindGroup(
+      0,
+      Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup
+    );
     if (_.vertexBuffers)
       _.vertexBuffers.forEach(function(vertexBuffer, i) {
         passEncoder.setVertexBuffer(i, vertexBuffer);
@@ -217,8 +244,12 @@ const recordRenderPass = async function(state) {
       passEncoder.draw(3, _.numVertices, 0, 0);
     else
       !isCompute && _.type === passEncoder.draw(3 * 2, 1, 0, 0);
-    if (_.dispatchWorkGroups)
-      passEncoder.dispatchWorkgroups(_.dispatchWorkGroups);
+    if (_.dispatchWorkGroups) {
+      if (Array.isArray(_.dispatchWorkGroups))
+        passEncoder.dispatchWorkgroups(..._.dispatchWorkGroups);
+      else
+        passEncoder.dispatchWorkgroups(_.dispatchWorkGroups);
+    }
     passEncoder.end();
   });
   device.queue.submit([commandEncoder.finish()]);
@@ -249,12 +280,11 @@ function updateUniforms(state) {
   }
 }
 async function makePipeline(state) {
-  var _a;
   let { device } = state;
   let pipelineDesc = {
     layout: "auto",
     vertex: {
-      module: ((_a = state == null ? void 0 : state.shader) == null ? void 0 : _a.vs) || state.shader,
+      module: state.shader,
       entryPoint: "main_vertex",
       buffers: []
     },
@@ -346,7 +376,7 @@ async function makePipeline(state) {
     ...pipelineDesc,
     layout: pipelineLayout
   });
-  let cubeTexture = await makeTexture(state);
+  let texture = await makeTexture(state);
   state.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
@@ -360,7 +390,7 @@ async function makePipeline(state) {
       },
       {
         binding: 2,
-        resource: cubeTexture.createView({
+        resource: texture.createView({
           baseMipLevel: 0,
           mipLevelCount: 1
         }),
@@ -373,7 +403,7 @@ async function makePipeline(state) {
     ]
   };
   state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
-  state.bindGroupDescriptor.entries[2].resource = state.cubeTexture.createView({
+  state.bindGroupDescriptor.entries[2].resource = texture.createView({
     baseMipLevel: 0,
     mipLevelCount: 1
   });
@@ -383,7 +413,7 @@ function makeShaderModule(state, source) {
   const { device, data } = state;
   if (!source)
     source = defaultShader;
-  validateData(data);
+  utils.validateData(data);
   const uniforms = Object.keys(data).filter((name) => typeof data[name] === "number").map((name) => `${name}: f32,`).join("\n");
   const code = `
     struct Uniforms {
@@ -420,9 +450,6 @@ function makeShaderModule(state, source) {
       vec2(0.0, 1.0),
       vec2(0.0, 0.0),
     );
-
-
-    
     var output : VertexOutput;
     output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
     output.fragUV = uv[VertexIndex];
@@ -431,9 +458,14 @@ function makeShaderModule(state, source) {
     return output;
   }
   ${source}`;
-  console.log(123123);
-  console.log(code);
-  return state.compute ? device.createShaderModule({ code: state.compute.vs + state.compute.fs }) : device.createShaderModule({ code });
+  return state.compute ? device.createShaderModule({
+    code: state.options.vs + state.options.shader
+  }) : device.createShaderModule({ code });
+}
+async function compile(state, options) {
+  state.shader = makeShaderModule(state, options.shader);
+  state.pipeline = await makePipeline(state);
+  createRenderPasses(state);
 }
 let defaultData = {
   width: innerWidth,
@@ -444,27 +476,16 @@ let defaultData = {
   mouseY: 0,
   angle: 0
 };
-function validateData(data) {
-  if (typeof data.width !== "number")
-    throw new Error("bad data!!");
-}
-const addMouseEvents = function(canvas, data) {
-  canvas.addEventListener("mousemove", (event) => {
-    let x = event.pageX;
-    let y = event.pageY;
-    data.mouseX = x / event.target.clientWidth;
-    data.mouseY = y / event.target.clientHeight;
-  });
-};
 async function init(options) {
   let canvas = options.canvas || utils.createCanvas();
   const state = {
     renderPassDescriptor: {},
+    options,
     data: Object.assign(defaultData, options.data),
     compute: options.compute,
     renderPasses: []
   };
-  addMouseEvents(canvas, state.data);
+  utils.addMouseEvents(canvas, state.data);
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const device = await (adapter == null ? void 0 : adapter.requestDevice());
@@ -480,9 +501,6 @@ async function init(options) {
     alphaMode: "opaque",
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
   });
-  state.shader = makeShaderModule(state, options.shader);
-  state.pipeline = await makePipeline(state);
-  createRenderPasses(state);
   function draw(newData) {
     newData.time = performance.now();
     updateTexture(state);
@@ -492,7 +510,8 @@ async function init(options) {
     return draw;
   }
   draw.canvas = canvas;
+  compile(state, options);
   return draw;
 }
-init.version = "0.6.0";
+init.version = "0.9.0";
 export { init };
