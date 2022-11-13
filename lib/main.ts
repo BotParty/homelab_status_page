@@ -488,11 +488,11 @@ function makeShaderModule(state:any, source: any) {
   }
   ${source}`;
   
-return state.compute ? device.createShaderModule({ code: state.options.vs + state.options.shader })  : device.createShaderModule({ code })
+  return state.compute ? device.createShaderModule({ code: state.options.vs + state.options.shader })  : device.createShaderModule({ code })
 }
 
 async function compile(state, options) {
-  //figures out what argumnets to pass to makeBuffers and makeShaderModule 
+  //figures out what arguments to pass to makeBuffers and makeShaderModule 
   state.shader = makeShaderModule(state, options.shader);
   state.pipeline = await makePipeline(state);
   createRenderPasses(state)
