@@ -18,7 +18,8 @@ let makeCompute = (state:any) => {
     state.computeVertexBufferData.unmap();
   }
 
-  const particleBuffers = state.compute.buffers.map((userTypedArray:any) => {
+  if (state.compute.buffers) {
+  state.particleBuffers = state.compute.buffers.map((userTypedArray:any) => {
     let buffer = device.createBuffer({
       size: userTypedArray.byteLength,
       usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
@@ -31,7 +32,7 @@ let makeCompute = (state:any) => {
     buffer.unmap();
     return buffer
   })
-
+  }
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
   state.simParamBuffer = device.createBuffer({
     size: simParamBufferSize,
@@ -73,7 +74,7 @@ let makeCompute = (state:any) => {
         {
           binding: 1,
           resource: {
-            buffer: particleBuffers[i],//paricleVel //rename to make generic
+            buffer: state.particleBuffers[i],//paricleVel //rename to make generic
             offset: 0,
             size: state.compute.buffers[0].byteLength,
           },
@@ -81,7 +82,7 @@ let makeCompute = (state:any) => {
         {
           binding: 2,
           resource: {
-            buffer: particleBuffers[(i + 1) % 2], //a_pos
+            buffer: state.particleBuffers[(i + 1) % 2], //a_pos
             offset: 0,
             size: state.compute.buffers[1].byteLength,
           },
@@ -103,7 +104,6 @@ let makeCompute = (state:any) => {
   Object.assign(state, {
     computePipeline,
     particleBindGroups,
-    particleBuffers,
   });
 };
 
@@ -179,10 +179,8 @@ function updateTexture(state:any) {
 
 function createRenderPasses(state:any) {
   if (!hasMadeCompute && state.compute) {
-    hasMadeCompute = true;
     makeCompute(state);
   }
-
 
   let {
     computePipeline,
@@ -494,22 +492,17 @@ function makeShaderModule(state:any, source: any) {
     return output;
   }
   ${source}`;
+  
+return device.createShaderModule({ code });
 
-// 
-//
-return device.createShaderModule({ code: state.options.vs + state.options.shader });
-  // return state.compute
-  //   ? 
-  //   : device.createShaderModule({ code });
+//device.createShaderModule({ code: state.options.vs + state.options.shader });
 }
 
-function compile() {
-
-  //makeShaderModule()
-
-  //makeShaderModule()
-
-  
+async function compile(state, options) {
+  //figures out what argumnets to pass to makeBuffers and makeShaderModule 
+  state.shader = makeShaderModule(state, options.shader);
+  state.pipeline = await makePipeline(state);
+  createRenderPasses(state)
 }
 
 let defaultData = {
@@ -521,8 +514,6 @@ let defaultData = {
   mouseY: 0,
   angle: 0,
 };
-
-
 
 async function init(options: any) {
   let canvas = options.canvas || utils.createCanvas();
@@ -556,16 +547,7 @@ async function init(options: any) {
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
-  function compile() {
-
-  }
-
   //@ts-ignore
-  state.shader = makeShaderModule(state, options.shader);
-
-  //@ts-ignore
-  state.pipeline = await makePipeline(state);
-  createRenderPasses(state)
   function draw(newData: any) {
     newData.time = performance.now();
 
@@ -578,8 +560,11 @@ async function init(options: any) {
   }
 
   draw.canvas = canvas;
+
+  compile(state, options)
   return draw;
 }
 
 init.version = '0.9.0';
+
 export { init };
