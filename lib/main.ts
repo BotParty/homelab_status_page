@@ -6,15 +6,17 @@ import defaultShader from "./default.wgsl?raw";
 let makeCompute = (state:any) => {
   let { device } = state;
 
-  const spriteVertexBuffer = device.createBuffer({
-    size: state.compute.vertexBufferData.byteLength,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
+  if (state.compute.vertexBufferData) {
+    state.computeVertexBufferData = device.createBuffer({
+      size: state.compute.vertexBufferData.byteLength,
+      usage: GPUBufferUsage.VERTEX,
+      mappedAtCreation: true,
+    });
 
-  new Float32Array(spriteVertexBuffer.getMappedRange())
-  .set(state.compute.vertexBufferData);
-  spriteVertexBuffer.unmap();
+    new Float32Array(state.computeVertexBufferData.getMappedRange())
+    .set(state.compute.vertexBufferData);
+    state.computeVertexBufferData.unmap();
+  }
 
   const particleBuffers = state.compute.buffers.map((userTypedArray:any) => {
     let buffer = device.createBuffer({
@@ -35,8 +37,6 @@ let makeCompute = (state:any) => {
     size: simParamBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
-
-console.log(state)
 
   const computePipeline = device.createComputePipeline({
     compute: {
@@ -104,7 +104,6 @@ console.log(state)
     computePipeline,
     particleBindGroups,
     particleBuffers,
-    spriteVertexBuffer,
   });
 };
 
@@ -189,7 +188,7 @@ function createRenderPasses(state:any) {
     computePipeline,
     particleBindGroups,
     particleBuffers,
-    spriteVertexBuffer,
+    computeVertexBufferData,
     device, 
   } = state;
 
@@ -215,7 +214,7 @@ function createRenderPasses(state:any) {
   if (state?.compute?.numVertices) mainRenderPass.numVertices =  state.compute.numVertices()
     //@ts-ignore
   if (state.compute && particleBuffers)
-   mainRenderPass.vertexBuffers = [particleBuffers[0], spriteVertexBuffer]
+   mainRenderPass.vertexBuffers = [particleBuffers[0], computeVertexBufferData]
 
   state.renderPasses.push(mainRenderPass)
 }
