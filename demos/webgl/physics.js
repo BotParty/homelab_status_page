@@ -21,23 +21,24 @@ let draw1 = {
   shader: [],
 };
 
+// spriteWGSLVS
+// spriteW
+
 let data = {};
 const options = {
   data: {},
-  vs: spriteWGSLVS,
-  shader: spriteWGSLFS,
+  vs: spriteWGSLVS, // 
+  shader: spriteWGSLFS, //
   compute: {
     //optional
     dispatchWorkGroups: () => {
       return Math.ceil(initialParticleData.length / 64)
     },
-    numVertices: () => {
+        numVertices: () => {
       return initialParticleData.length / 4
     },
     buffers: [initialParticleData, initialParticleData],
     vertexBufferData,
-    
-   
     cs: updateSpritesWGSL,
     simParams: {
       deltaT: 0.04,
