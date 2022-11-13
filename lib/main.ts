@@ -98,9 +98,6 @@ let makeCompute = (state:any) => {
       ...state.compute.bindGroups(device, computePipeline));
   }
 
-
-  console.log('hello world, ', computePipeline)
-
   Object.assign(state, {
     computePipeline,
     particleBindGroups,
@@ -174,8 +171,6 @@ function updateTexture(state:any) {
     [256, 1]
   );
 }
-
-
 
 function createRenderPasses(state:any) {
   if (!hasMadeCompute && state.compute) {
@@ -493,9 +488,7 @@ function makeShaderModule(state:any, source: any) {
   }
   ${source}`;
   
-return device.createShaderModule({ code });
-
-//device.createShaderModule({ code: state.options.vs + state.options.shader });
+return state.compute ? device.createShaderModule({ code: state.options.vs + state.options.shader })  : device.createShaderModule({ code })
 }
 
 async function compile(state, options) {
