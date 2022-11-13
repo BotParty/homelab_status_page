@@ -111,7 +111,8 @@ let makeImgTexture = async (state:any) => {
   source.width = innerWidth;
   source.height = innerHeight;
 
-  img.src = state.data.texture
+  img.src = './data/static.jpg'
+  // img.src = state.data.texture
 
   await img.decode();
 
@@ -127,8 +128,10 @@ async function makeTexture(state:any) {
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  //
+
+//  console.log(cubeTexture)
 //  let imageBitmap = await makeImgTexture(state);
+
   let music = new Float32Array(
     new Array(800)
       .fill(5)
@@ -137,12 +140,11 @@ async function makeTexture(state:any) {
           ? state.data.texture[i % state.data.texture.length + (d)]
           : Math.random()
       )
-  );
+  );  
 
   state.cubeTexture = cubeTexture;
   state.data.music = music;
  
-  state.cubeTexture = cubeTexture;
 
   updateTexture(state);
   return cubeTexture;
@@ -160,7 +162,7 @@ function updateTexture(state:any) {
       }
       )
   );
-
+//console.log(state.cubeTexture)
   state.device.queue.writeTexture(
     { texture: state.cubeTexture },
     data.buffer,
@@ -497,7 +499,7 @@ async function compile(state, options) {
  
 
 
-  state.shader = makeShaderModule(state, options
+  state.shader = makeShaderModule(state, options.shader
     );
   state.pipeline = await makePipeline(state);
   createRenderPasses(state)

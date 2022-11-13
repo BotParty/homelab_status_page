@@ -27,7 +27,9 @@ import physics from "./webgl/physics";
 
 import postProcessing from "./postProcessing";
 
-let defaultDemo = 'physics';
+import signalvsNoise from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/signal.wgsl?raw'
+
+let defaultDemo = 'signal';
 let data = {}
 let stuff 
 function then(stream) {
@@ -58,6 +60,7 @@ async function start_loop_static(options) {
   
   requestAnimationFrame(function test() {
     if (stuff) data.texture = stuff()
+    // data.texture = './static.png'
     draw(data);
       requestAnimationFrame(test)
       //setTimeout(test, 500)
@@ -73,14 +76,15 @@ function textureDemo() {
     shader: textureShader,
   }); 
 }
+
 let demoTitles = [
-  'shapeTransition', 'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
+  'signalvsNoise',  'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
    'four', 'five', 'music', 'six', 'seven', 'light', 'physics', 
-   'postProcessing'
+   'postProcessing', 
 ]
 
 let demos = [
-   shapeTransition, stripes, rings, checkerboard, one, mouse, texture, sky,
+  signalvsNoise,  stripes, rings, checkerboard, one, mouse, texture, sky,
 
    four, five, music, six, seven, light, physics, postProcessing
   //  carrots
@@ -104,7 +108,7 @@ let controlpanel  =  document.querySelector('#control-panel');
 
 controlpanel.innerHTML += Object.keys(demos).map(
   title => template
-  .replace(/{replace_me}/g, demoTitles[title]))
+  .replace(/{template}/g, demoTitles[title]))
   .join('\n')
   
   document.querySelectorAll('input').forEach(e => {
@@ -128,11 +132,12 @@ function cleanup () {
 let choice = 0
 function choose (idx) {
   let input = document.querySelectorAll('input')
- 
+  
   if (idx) choice = idx
-  else  choice += 1;
+  // else  choice += 1;
 
-  input[choice].click()
+
+  input[ 0 ].click()
 }
 
 //setInterval(choose, 2500)
