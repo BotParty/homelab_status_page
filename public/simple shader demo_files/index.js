@@ -1,33 +1,33 @@
-import shapeTransition from "./webgl/shape-transition";
-import { init} from "../lib/main";
-import rings from './shaders/rings.wgsl?raw';
-import stripes from './shaders/stripes.wgsl?raw';
-import checkerboard from './shaders/checkerboard.wgsl?raw';
-import one from './shaders/one.wgsl?raw';
-import mouse from './shaders/mouse.wgsl?raw';
-import texture from './shaders/texture.wgsl?raw';
-import sky from './shaders/sky.wgsl?raw';
+import shapeTransition from "/demos/webgl/shape-transition.js";
+import { init} from "/lib/main.ts?t=1668331399592";
+import rings from '/demos/shaders/rings.wgsl?import&raw';
+import stripes from '/demos/shaders/stripes.wgsl?import&raw';
+import checkerboard from '/demos/shaders/checkerboard.wgsl?import&raw';
+import one from '/demos/shaders/one.wgsl?import&raw';
+import mouse from '/demos/shaders/mouse.wgsl?import&raw';
+import texture from '/demos/shaders/texture.wgsl?import&raw';
+import sky from '/demos/shaders/sky.wgsl?import&raw';
 
-import four from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/four.wgsl?raw'
+import four from  '/demos/shaders/four.wgsl?import&raw'
 
-import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?raw'
+import five from  '/demos/shaders/five.wgsl?import&raw'
 // import hello from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/morning.wgsl?raw'
-import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
+import music from  '/demos/shaders/music.wgsl?import&raw'
 
 
-import six from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/six.wgsl?raw'
+import six from  '/demos/shaders/six.wgsl?import&raw'
 
-import seven from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/seven.wgsl?raw'
+import seven from  '/demos/shaders/seven.wgsl?import&raw'
 
-import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl?raw'
+import light from  '/demos/shaders/light.wgsl?import&raw'
 
 //import halfBaked from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/halfBaked.wgsl?raw'
 
-import physics from "./webgl/physics";
+import physics from "/demos/webgl/physics.js?t=1668331399592";
 
-import postProcessing from "./postProcessing";
+import postProcessing from "/demos/postProcessing.js?t=1668331399592";
 
-import signalvsNoise from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/signal.wgsl?raw'
+import signalvsNoise from  '/demos/shaders/signal.wgsl?import&raw'
 
 let defaultDemo = 'signal';
 let data = {}
@@ -53,7 +53,7 @@ function then(stream) {
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   console.log('start draw loop')
-  options.data.texture = '../data/static.jpg'
+  //options.data.texture = '../data/static.jpg'
 
   let draw = await init(options);
   draw(data);
