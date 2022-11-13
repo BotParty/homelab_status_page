@@ -493,7 +493,12 @@ function makeShaderModule(state:any, source: any) {
 
 async function compile(state, options) {
   //figures out what arguments to pass to makeBuffers and makeShaderModule 
-  state.shader = makeShaderModule(state, options.shader);
+
+ 
+
+
+  state.shader = makeShaderModule(state, options
+    );
   state.pipeline = await makePipeline(state);
   createRenderPasses(state)
 }

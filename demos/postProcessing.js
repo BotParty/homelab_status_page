@@ -11,7 +11,7 @@ const options = {
   texture: '../data.png',
   compute: {
     shader: blur,
-  bindGroups: (device) => {
+    bindGroups: (device) => {
       const buffer0 = (() => {
         const buffer = device.createBuffer({
           size: 4,
@@ -85,12 +85,8 @@ const options = {
             },
           },
         ],
-
-
       });
 
-
-    
       const computeBindGroup2 = device.createBindGroup({
         layout: blurPipeline.getBindGroupLayout(1),
         entries: [
@@ -127,12 +123,9 @@ async function physics() {
   options.data = options.data  //extend 
   let draw = await init(options);
   draw({});
-
   requestAnimationFrame(function test() {
     draw({});
-      requestAnimationFrame(test)
-
+    requestAnimationFrame(test)
   });
   }
-  
   export default physics;
