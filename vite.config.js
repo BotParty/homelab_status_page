@@ -23,10 +23,6 @@ module.exports = defineConfig({
   }
 })
 
-
-
-
-
 // import vitePluginString from 'vite-plugin-string'
 // let options = {
 //     /* Default */
@@ -50,9 +46,6 @@ module.exports = defineConfig({
 //       return code.replace(/\n/g, '')
 //     }
 //   };
-  
-
-
 
 // export default {
 //   plugins: [
