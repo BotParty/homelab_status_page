@@ -53,7 +53,13 @@ function then(stream) {
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   console.log('start draw loop')
-  options.data.texture = '../data/static.jpg'
+  options.data.texture =  '../data/static.jpg';
+
+// await new Promise((resolve, reject) => {
+//   img.onload = () => resolve(img);
+//   img.onerror = () => reject(img);
+// });
+
 
   let draw = await init(options);
   draw(data);

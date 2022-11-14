@@ -108,16 +108,38 @@ let makeImgTexture = async (state: any) => {
   source.width = innerWidth;
   source.height = innerHeight;
 
-  //img.src = ''
   img.src = state.data.texture;
- 
+
   await img.decode();
 
   return await createImageBitmap(img);
 };
 
 async function makeTexture(state: any) {
-  if ("string" === typeof state.data.texture) {
+  if (HTMLImageElement === state?.data?.texture?.constructor) {
+    let img = state.data.texture;
+    console.log(123)
+    await img.decode();
+
+    await createImageBitmap(img);
+    let imageBitmap = await makeImgTexture(state);
+    let texture = state.device.createTexture({
+      size: [900, 900, 1],
+      format: "rgba8unorm",
+      usage:
+        GPUTextureUsage.TEXTURE_BINDING |
+        GPUTextureUsage.COPY_DST |
+        GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+    state.device.queue.copyExternalImageToTexture(
+      { source: imageBitmap },
+      { texture: texture },
+      [imageBitmap.width, imageBitmap.height]
+    );
+    state.texture = texture;
+    updateTexture(state);
+    return texture;
+  } else if ("string" === typeof state.data.texture) {
     let texture = state.device.createTexture({
       size: [900, 900, 1],
       format: "rgba8unorm",
@@ -155,8 +177,6 @@ async function makeTexture(state: any) {
             : Math.random()
         )
     );
-
-
 
     state.texture = texture
     state.data.music = music;
