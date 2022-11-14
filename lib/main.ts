@@ -47,9 +47,6 @@ let makeCompute = (state: any) => {
     },
   });
 
-  //createShaderModule()
-  //createShaderModule
-
   const simParams = state.options.compute.simParams;
 
   device.queue.writeBuffer(
@@ -118,9 +115,7 @@ let makeImgTexture = async (state: any) => {
 async function makeTexture(state: any) {
   if (HTMLImageElement === state?.data?.texture?.constructor) {
     let img = state.data.texture;
-    console.log(123)
     await img.decode();
-
     await createImageBitmap(img);
     let imageBitmap = await makeImgTexture(state);
     let texture = state.device.createTexture({

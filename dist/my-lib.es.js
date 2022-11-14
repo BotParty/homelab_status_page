@@ -514,6 +514,7 @@ async function init(options) {
     context,
     adapter
   });
+  
   context.configure({
     device,
     format: presentationFormat,

@@ -1,4 +1,4 @@
-import shapeTransition from "./webgl/shape-transition";
+
 import { init} from "../lib/main";
 import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
@@ -11,7 +11,6 @@ import sky from './shaders/sky.wgsl?raw';
 import four from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/four.wgsl?raw'
 
 import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?raw'
-// import hello from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/morning.wgsl?raw'
 import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
 
 
@@ -21,13 +20,13 @@ import seven from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/seven.wgsl
 
 import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl?raw'
 
-//import halfBaked from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/halfBaked.wgsl?raw'
 
 import physics from "./webgl/physics";
 
 import postProcessing from "./postProcessing";
 
 import signalvsNoise from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/signal.wgsl?raw'
+import { image } from "d3";
 
 let defaultDemo = 'signal';
 let data = {}
@@ -52,18 +51,19 @@ function then(stream) {
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
-  console.log('start draw loop')
-  options.data.texture =  '../data/static.jpg';
+ 
+  const img = new Image();
+  img.src = '../data/static.jpg';
 
-// await new Promise((resolve, reject) => {
-//   img.onload = () => resolve(img);
-//   img.onerror = () => reject(img);
-// });
+  options.data.texture =  img;
 
+await new Promise((resolve, reject) => {
+  img.onload = () => resolve(img);
+  img.onerror = () => reject(img);
+});
 
   let draw = await init(options);
   draw(data);
-  console.log('drawn')
   
   requestAnimationFrame(function test() {
     if (stuff) data.texture = stuff()

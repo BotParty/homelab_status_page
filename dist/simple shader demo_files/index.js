@@ -123,14 +123,12 @@ function customShader(options) {
 function cleanup () {
   document.querySelector(':checked').checked = null  
   let canvas = document.querySelector('canvas')
-  
   if (canvas) canvas.remove()
 }
 
 let choice = 0
 function choose (idx) {
   let input = document.querySelectorAll('input')
-
   if (idx) choice = idx
   input[ 0 ].click()
 }
@@ -141,7 +139,6 @@ choose(demoTitles.indexOf(defaultDemo))
 document.querySelectorAll('label').forEach((el, idx) =>
   el.addEventListener('mouseover', () => {
     cleanup() 
-
     choose(idx)
   })
 )

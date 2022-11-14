@@ -15,15 +15,6 @@ for (let i = 0; i < numParticles; ++i) {
   initialParticleData[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
 }
 
-let draw1 = {
-  attributes: [],
-  uniforms: [],
-  shader: [],
-};
-
-// spriteWGSLVS
-// spriteW
-
 let data = {};
 const options = {
   data: {},
@@ -51,36 +42,11 @@ const options = {
     },
   },
 };
-
-//let draw = await init(options);
-/// let compute = await init(options);
-//regl.frame(function () {
-//  draw()
-// compute()
-//})
-///  simulation computeDrawCall
-///  simulation computeDrawCall
-//   blur computeDrawCall
-/// one view
-//rename draw to render
-//[render, compute] = init(vertexBuffers,shaders...etc)
-//render(uniforms)
-//compute = init({})
-
 async function physics() {
   options.data = options.data; //extend
-  console.log("start draw loop");
 
   let draw = await init(options);
   draw(data);
-
-  // particle buffer
-  // physics simulation
-  //  each particle has a position and velocity
-  //  every frame, add velocity to position
-  //        add stuff to velocity based on distance to mouse or vector field based on image
-  //          or based on every other particles position
-  //
 
   requestAnimationFrame(function test() {
     draw(data);
