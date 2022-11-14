@@ -8,7 +8,7 @@
     var p = fragUV;
     var q = (p.x % 25. * 2.0 < 25.) == (p.y % 25. * 2.0 < 25.);
     var o = f32(q);
-    var cubemapVec = f ragPosition.xy;
+    var cubemapVec = fragPosition.xy;
 
     var time = sin(u.time * .0001);
     // var hi = textureSample(myTexture, mySampler, cubemapVec);

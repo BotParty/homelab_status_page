@@ -52,15 +52,16 @@ function then(stream) {
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
  
-  const img = new Image();
-  img.src = '../data/static.jpg';
+  options.data.texture = '../data/static.jpg';
+//   const img = new Image();
+//   img.src = '../data/static.jpg';
 
-  options.data.texture =  img;
+//   options.data.texture =  img;
 
-await new Promise((resolve, reject) => {
-  img.onload = () => resolve(img);
-  img.onerror = () => reject(img);
-});
+// await new Promise((resolve, reject) => {
+//   img.onload = () => resolve(img);
+//   img.onerror = () => reject(img);
+// });
 
   let draw = await init(options);
   draw(data);
