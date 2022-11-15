@@ -139,7 +139,7 @@ async function makeTexture(state) {
     await createImageBitmap(img);
     let imageBitmap = await makeImgTexture(state);
     let texture = state.device.createTexture({
-      size: [900, 900, 1],
+      size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
@@ -153,7 +153,7 @@ async function makeTexture(state) {
     return texture;
   } else if ("string" === typeof state.data.texture) {
     let texture = state.device.createTexture({
-      size: [900, 900, 1],
+      size: [900, 500, 1],
       format: "rgba8unorm",
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
@@ -514,7 +514,6 @@ async function init(options) {
     context,
     adapter
   });
-  
   context.configure({
     device,
     format: presentationFormat,
@@ -533,5 +532,5 @@ async function init(options) {
   compile(state, options);
   return draw;
 }
-init.version = "0.9.0";
+init.version = "0.9.5";
 export { init };
