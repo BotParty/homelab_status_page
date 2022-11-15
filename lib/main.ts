@@ -3,11 +3,12 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
-
 let makeCompute = (state: any) => {
   let { device } = state;
 
+
   if (state.compute.vertexBufferData) {
+    console.log(state.compute.vertexBufferData)
     state.computeVertexBufferData = device.createBuffer({
       size: state.compute.vertexBufferData.byteLength,
       usage: GPUBufferUsage.VERTEX,
@@ -42,22 +43,31 @@ let makeCompute = (state: any) => {
   const computePipeline = device.createComputePipeline({
     compute: {
       module: device.createShaderModule({
-        code: state.compute.cs,
+        code: state.compute.shader,
       }),
       entryPoint: "main_vertex",
     },
   });
-
+if (state.options.compute.simParams) {
   const simParams = state.options.compute.simParams;
 
   device.queue.writeBuffer(
     state.simParamBuffer,
     0,
     new Float32Array(Object.values(simParams))
-  );
+  );}
 
+  console.log(state.compute.buffers, 555);
   //@ts-ignore
-  let particleBindGroups = state.compute.buffers.map(function (d:any, i:any) {
+  if (state.compute.buffers) {
+    console.log(12313)
+
+  }
+
+
+
+if (state.compute.buffers) {
+  state.particleBindGroups = state.compute.buffers.map(function (d:any, i:any) {
     return device.createBindGroup({
       layout: computePipeline.getBindGroupLayout(0),
       entries: [
@@ -86,16 +96,17 @@ let makeCompute = (state: any) => {
       ],
     });
   });
+}
 
-  if (!particleBindGroups.length) {
-    particleBindGroups.push(
+  if (! state.particleBindGroups.length) {
+    state.particleBindGroups.push(
       ...state.compute.bindGroups(device, computePipeline)
     );
   }
 
   Object.assign(state, {
     computePipeline,
-    particleBindGroups,
+    
   });
 };
 
@@ -114,12 +125,12 @@ let makeImgTexture = async (state: any) => {
 };
 
 async function makeTexture(state: any) {
-  console.log('123')
+
   if (HTMLImageElement === state?.data?.texture?.constructor) {
     let img = state.data.texture;
     await img.decode();
     await createImageBitmap(img);
-    console.log('herro')
+
     await img.decode();
     let imageBitmap =  await createImageBitmap(img); 
 

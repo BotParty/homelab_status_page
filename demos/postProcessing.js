@@ -47,6 +47,7 @@ const options = {
         });
       });
 
+     
       const computeBindGroup0 = device.createBindGroup({
         layout: blurPipeline.getBindGroupLayout(1),
         entries: [

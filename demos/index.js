@@ -57,6 +57,8 @@ async function start_loop_static(options) {
   const img = new Image();
   img.src = '../data/static.jpg';
 
+
+
   options.data.texture =  img;
 //   options.data.texture =  img;
 
@@ -64,6 +66,9 @@ await new Promise((resolve, reject) => {
   img.onload = () => resolve(img);
   img.onerror = () => reject(img);
 });
+
+
+
   let draw = await init(options);
   draw(data);
   
@@ -143,7 +148,6 @@ function choose (idx) {
   
   if (idx) choice = idx
   // else  choice += 1;
-
 
   input[ 0 ].click()
 }

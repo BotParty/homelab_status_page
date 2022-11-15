@@ -30,7 +30,7 @@ const options = {
     },
     buffers: [initialParticleData, initialParticleData],
     vertexBufferData,
-    cs: updateSpritesWGSL,
+    shader: updateSpritesWGSL,
     simParams: {
       deltaT: 0.04,
       rule1Distance: 0.1,
