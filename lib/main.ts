@@ -102,22 +102,26 @@ let hasMadeCompute = false;
 let makeImgTexture = async (state: any) => {
   const img = document.createElement("img");
   const source = img;
-  source.width = innerWidth;
-  source.height = innerHeight;
 
   img.src = state.data.texture;
 
   await img.decode();
-
+  
   return await createImageBitmap(img);
 };
+
+
 
 async function makeTexture(state: any) {
   if (HTMLImageElement === state?.data?.texture?.constructor) {
     let img = state.data.texture;
+    console.log('hello')
+    //await img.decode();
+    console.log('hello')
+
     await img.decode();
-    await createImageBitmap(img);
-    let imageBitmap = await makeImgTexture(state);
+  
+    let imageBitmap = await createImageBitmap(img);
     let texture = state.device.createTexture({
       size: [900, 900, 1],
       format: "rgba8unorm",
@@ -126,13 +130,16 @@ async function makeTexture(state: any) {
         GPUTextureUsage.COPY_DST |
         GPUTextureUsage.RENDER_ATTACHMENT,
     });
+
     state.device.queue.copyExternalImageToTexture(
       { source: imageBitmap },
       { texture: texture },
       [imageBitmap.width, imageBitmap.height]
     );
+
     state.texture = texture;
     updateTexture(state);
+
     return texture;
   } else if ("string" === typeof state.data.texture) {
     let texture = state.device.createTexture({
@@ -194,7 +201,8 @@ function updateTexture(state: any) {
         : Math.random();
     })
   );
-
+  console.log(555)
+  console.log('123');
   state.device.queue.writeTexture(
     { texture: state.texture },
     data.buffer,
@@ -205,6 +213,7 @@ function updateTexture(state: any) {
     [256, 1]
   );
   }
+  console.log(121231)
 }
 
 function createRenderPasses(state: any) {
