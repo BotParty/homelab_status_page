@@ -114,12 +114,16 @@ let makeImgTexture = async (state: any) => {
 };
 
 async function makeTexture(state: any) {
-  console.log('herro')
+  console.log('123')
   if (HTMLImageElement === state?.data?.texture?.constructor) {
     let img = state.data.texture;
     await img.decode();
     await createImageBitmap(img);
-    let imageBitmap = await makeImgTexture(state);
+    console.log('herro')
+    await img.decode();
+    let imageBitmap =  await createImageBitmap(img); 
+
+
     let texture = state.device.createTexture({
       size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
