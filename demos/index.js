@@ -53,14 +53,9 @@ async function start_loop_static(options) {
   options.data = options.data || data; //extend 
  
   options.data.texture = '../data/static.jpg';
-  const img = new Image();
-  img.src = '../data/static.jpg';
-  options.data.texture =  img;
-
-  await new Promise((resolve, reject) => {
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(img);
-  });
+  // const img = new Image();
+  // img.src = '../data/static.jpg';
+  // options.data.texture =  img;
 
   let draw = await init(options);
   draw(data);
