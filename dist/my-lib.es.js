@@ -124,9 +124,6 @@ let makeCompute = (state) => {
 };
 let makeImgTexture = async (state) => {
   const img = document.createElement("img");
-  const source = img;
-  source.width = innerWidth;
-  source.height = innerHeight;
   img.src = state.data.texture;
   await img.decode();
   return await createImageBitmap(img);
@@ -136,10 +133,9 @@ async function makeTexture(state) {
   if (HTMLImageElement === ((_b = (_a = state == null ? void 0 : state.data) == null ? void 0 : _a.texture) == null ? void 0 : _b.constructor)) {
     let img = state.data.texture;
     await img.decode();
-    await createImageBitmap(img);
-    let imageBitmap = await makeImgTexture(state);
+    let imageBitmap = await createImageBitmap(img);
     let texture = state.device.createTexture({
-      size: [900, 900, 1],
+      size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
@@ -514,7 +510,6 @@ async function init(options) {
     context,
     adapter
   });
-  
   context.configure({
     device,
     format: presentationFormat,

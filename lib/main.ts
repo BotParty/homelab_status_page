@@ -101,7 +101,6 @@ let makeCompute = (state: any) => {
 let hasMadeCompute = false;
 let makeImgTexture = async (state: any) => {
   const img = document.createElement("img");
-  const source = img;
 
   img.src = state.data.texture;
 
@@ -115,15 +114,13 @@ let makeImgTexture = async (state: any) => {
 async function makeTexture(state: any) {
   if (HTMLImageElement === state?.data?.texture?.constructor) {
     let img = state.data.texture;
-    console.log('hello')
     //await img.decode();
-    console.log('hello')
 
     await img.decode();
   
     let imageBitmap = await createImageBitmap(img);
     let texture = state.device.createTexture({
-      size: [900, 900, 1],
+      size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
       usage:
         GPUTextureUsage.TEXTURE_BINDING |
@@ -201,8 +198,8 @@ function updateTexture(state: any) {
         : Math.random();
     })
   );
-  console.log(555)
-  console.log('123');
+
+
   state.device.queue.writeTexture(
     { texture: state.texture },
     data.buffer,
@@ -213,7 +210,7 @@ function updateTexture(state: any) {
     [256, 1]
   );
   }
-  console.log(121231)
+
 }
 
 function createRenderPasses(state: any) {
