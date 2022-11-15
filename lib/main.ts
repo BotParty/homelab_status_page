@@ -119,7 +119,7 @@ async function makeTexture(state: any) {
     await createImageBitmap(img);
     let imageBitmap = await makeImgTexture(state);
     let texture = state.device.createTexture({
-      size: [900, 900, 1],
+      size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
       usage:
         GPUTextureUsage.TEXTURE_BINDING |
@@ -135,8 +135,9 @@ async function makeTexture(state: any) {
     updateTexture(state);
     return texture;
   } else if ("string" === typeof state.data.texture) {
+    
     let texture = state.device.createTexture({
-      size: [900, 900, 1],
+      size: [900, 500, 1],
       format: "rgba8unorm",
       usage:
         GPUTextureUsage.TEXTURE_BINDING |
