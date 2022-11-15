@@ -3,6 +3,7 @@ import utils from "./utils";
 // @ts-ignore
 import defaultShader from "./default.wgsl?raw";
 
+
 let makeCompute = (state: any) => {
   let { device } = state;
 
@@ -113,6 +114,7 @@ let makeImgTexture = async (state: any) => {
 };
 
 async function makeTexture(state: any) {
+  console.log('herro')
   if (HTMLImageElement === state?.data?.texture?.constructor) {
     let img = state.data.texture;
     await img.decode();
@@ -604,6 +606,6 @@ async function init(options: any) {
   return draw;
 }
 
-init.version = "0.9.5";
+init.version = "0.9.6";
 
 export { init };
