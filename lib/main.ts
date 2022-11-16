@@ -229,9 +229,11 @@ const recordRenderPass = async function (state: any) {
       0,
       Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup
     );
+
     if (_.vertexBuffers)
       _.vertexBuffers.forEach(function (vertexBuffer: any, i: any) {
         passEncoder.setVertexBuffer(i, vertexBuffer);
+    
       });
     if (_.numVertices) passEncoder.draw(3, _.numVertices, 0, 0);
     else !isCompute && _.type === passEncoder.draw(3 * 2, 1, 0, 0);
@@ -479,10 +481,8 @@ function makeShaderModule(state: any, source: any) {
   }
   ${source}`;
 
-
   if (state.options.vs) {
     code = state.options.vs + state.options.shader
-    console.log(code)
   }
   return device.createShaderModule({ code });
 }
