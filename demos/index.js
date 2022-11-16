@@ -104,15 +104,11 @@ function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
- // document.querySelector(':checked').checked  = false
-//console.log(demos)
-//  cleanup() 
-  //document.querySelectorAll('input')[idx].checked = true
-  //if (typeof demo === 'function') demo()
-  // else {
+  if (typeof demo === 'string' )
     customShader({
       shader: demo,
     }); 
-  
-  // }
+    else demo()
 }
+
+select(document.querySelector(':checked').value)

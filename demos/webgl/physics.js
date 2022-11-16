@@ -15,6 +15,15 @@ for (let i = 0; i < numParticles; ++i) {
   initialParticleData[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
 }
 
+const initialParticleData2 = new Float32Array(numParticles * 4);
+
+for (let i = 0; i < numParticles; ++i) {
+  initialParticleData2[4 * i + 0] = 5 * (Math.random() - 0.5);
+  initialParticleData2[4 * i + 1] = 5 * (Math.random() - 0.5);
+  initialParticleData2[4 * i + 2] = 20 * (Math.random() - 0.5) * 0.1;
+  initialParticleData2[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
+}
+
 let data = {};
 const options = {
   data: {},
@@ -28,7 +37,7 @@ const options = {
         numVertices: () => {
       return initialParticleData.length / 4
     },
-    buffers: [initialParticleData, initialParticleData],
+    buffers: [initialParticleData, initialParticleData2],
     vertexBufferData,
     shader: updateSpritesWGSL,
     simParams: {
@@ -42,10 +51,11 @@ const options = {
     },
   },
 };
+
 async function physics() {
   options.data = options.data; //extend
 
-  let draw = await init(options);
+  const draw = await init(options);
   draw(data);
 
   requestAnimationFrame(function test() {

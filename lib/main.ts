@@ -221,11 +221,11 @@ const recordRenderPass = async function (state: any) {
 
     passEncoder.setPipeline(_.pipeline);
 
+
     passEncoder.setBindGroup(
       0,
       Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup
     );
-
     if (_.vertexBuffers)
       _.vertexBuffers.forEach(function (vertexBuffer: any, i: any) {
         passEncoder.setVertexBuffer(i, vertexBuffer);
@@ -243,6 +243,7 @@ const recordRenderPass = async function (state: any) {
 
   device.queue.submit([commandEncoder.finish()]); //async
   t++;
+
 };
 
 function updateUniforms(state: any) {
@@ -261,7 +262,7 @@ function updateUniforms(state: any) {
       0,
       uniformsArray.buffer,
       0,
-      28
+      4 * uniformsArray.length
     );
     return state.uniformsBuffer;
   } else {
@@ -527,6 +528,8 @@ function makeComputePass(state) {
     });
   }
   
+
+
     if (state.computeBindGroups?.length) {
       state.particleBindGroups.push(
         ...state.compute.bindGroups(state.device, computePipeline)
