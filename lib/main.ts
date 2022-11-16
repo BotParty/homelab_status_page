@@ -8,7 +8,6 @@ let makeCompute = (state: any) => {
 
 
   if (state.compute.vertexBufferData) {
-    console.log(state.compute.vertexBufferData)
     state.computeVertexBufferData = device.createBuffer({
       size: state.compute.vertexBufferData.byteLength,
       usage: GPUBufferUsage.VERTEX,
@@ -39,75 +38,20 @@ let makeCompute = (state: any) => {
     size: simParamBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
-
-  const computePipeline = device.createComputePipeline({
-    compute: {
-      module: device.createShaderModule({
-        code: state.compute.shader,
-      }),
-      entryPoint: "main_vertex",
-    },
-  });
+  
 if (state.options.compute.simParams) {
   const simParams = state.options.compute.simParams;
-
   device.queue.writeBuffer(
     state.simParamBuffer,
     0,
     new Float32Array(Object.values(simParams))
-  );}
-
-  console.log(state.compute.buffers, 555);
+  );
+}
   //@ts-ignore
   if (state.compute.buffers) {
     console.log(12313)
-
   }
-
-
-
-if (state.compute.buffers) {
-  state.particleBindGroups = state.compute.buffers.map(function (d:any, i:any) {
-    return device.createBindGroup({
-      layout: computePipeline.getBindGroupLayout(0),
-      entries: [
-        {
-          binding: 0,
-          resource: {
-            buffer: state.simParamBuffer, //particlePos //rename to make generic
-          },
-        },
-        {
-          binding: 1,
-          resource: {
-            buffer: state.particleBuffers[i], //paricleVel //rename to make generic
-            offset: 0,
-            size: state.compute.buffers[0].byteLength,
-          },
-        },
-        {
-          binding: 2,
-          resource: {
-            buffer: state.particleBuffers[(i + 1) % 2], //a_pos
-            offset: 0,
-            size: state.compute.buffers[1].byteLength,
-          },
-        },
-      ],
-    });
-  });
-}
-
-  if (! state.particleBindGroups.length) {
-    state.particleBindGroups.push(
-      ...state.compute.bindGroups(device, computePipeline)
-    );
-  }
-
-  Object.assign(state, {
-    computePipeline,
-    
-  });
+  
 };
 
 let hasMadeCompute = false;
@@ -231,24 +175,12 @@ function createRenderPasses(state: any) {
   }
 
   let {
-    computePipeline,
-    particleBindGroups,
     particleBuffers,
     computeVertexBufferData,
     device,
   } = state;
 
   const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
-
-  state.renderPasses = [];
-
-  if (state.compute)
-    state.renderPasses.push({
-      pipeline: computePipeline,
-      bindGroup: particleBindGroups,
-      dispatchWorkGroups: state.compute.dispatchWorkGroups(),
-      type: "compute",
-    });
 
   const mainRenderPass = {
     renderPassDescriptor: state.renderPassDescriptor,
@@ -257,6 +189,7 @@ function createRenderPasses(state: any) {
     bindGroup: bindGroup,
     type: "draw",
   };
+
   //@ts-ignore
   if (state?.compute?.numVertices)
     //@ts-ignore
@@ -502,7 +435,7 @@ function makeShaderModule(state: any, source: any) {
     .map((name) => `${name}: f32,`)
     .join("\n");
 
-  const code = `
+  let code = `
     struct Uniforms {
      ${uniforms}
    }
@@ -546,17 +479,84 @@ function makeShaderModule(state: any, source: any) {
   }
   ${source}`;
 
-  return state.compute
-    ? device.createShaderModule({
-        code: state.options.vs + state.options.shader,
-      })
-    : device.createShaderModule({ code });
+
+  if (state.options.vs) {
+    code = state.options.vs + state.options.shader
+    console.log(code)
+  }
+  return device.createShaderModule({ code });
+}
+
+function makeComputePass(state) {
+  let device = state.device;
+  let shader = makeShaderModule(state, state.compute.cs);
+  
+    const computePipeline = state.device.createComputePipeline({
+      compute: {
+        module: state.device.createShaderModule({
+          code: state.compute.shader,
+        }),
+        entryPoint: "main_vertex",
+      },
+    });
+  if (state.compute.buffers) {
+    state.particleBindGroups = state.compute.buffers.map(function (d:any, i:any) {
+      return device.createBindGroup({
+        layout: computePipeline.getBindGroupLayout(0),
+        entries: [
+          {
+            binding: 0,
+            resource: {
+              buffer: state.simParamBuffer, //particlePos //rename to make generic
+            },
+          },
+          {
+            binding: 1,
+            resource: {
+              buffer: state.particleBuffers[i], //paricleVel //rename to make generic
+              offset: 0,
+              size: state.compute.buffers[0].byteLength,
+            },
+          },
+          {
+            binding: 2,
+            resource: {
+              buffer: state.particleBuffers[(i + 1) % 2], //a_pos
+              offset: 0,
+              size: state.compute.buffers[1].byteLength,
+            },
+          },
+        ],
+      });
+    });
+  }
+  
+    if (state.computeBindGroups?.length) {
+      state.particleBindGroups.push(
+        ...state.compute.bindGroups(state.device, computePipeline)
+      );
+    }
+  
+
+    return {
+      pipeline: computePipeline,
+      bindGroup: state.particleBindGroups,
+      dispatchWorkGroups: state.compute.dispatchWorkGroups(),
+      type: "compute",
+    }
+
 }
   //@ts-ignore
 async function compile(state, options) {
-  //figures out what arguments to pass to makeBuffers and makeShaderModule
+  state.renderPasses = []
+  if (state.compute) {
+    if (state.compute.cs)
+     state.renderPasses.push(makeComputePass(state))
+  }
 
-  state.shader = makeShaderModule(state, options.shader);
+  let shaderCode = state.options.shader
+
+  state.shader = makeShaderModule(state, shaderCode);
   state.pipeline = await makePipeline(state);
   createRenderPasses(state);
 }

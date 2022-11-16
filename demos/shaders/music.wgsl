@@ -5,7 +5,7 @@ fn map( value:f32,  low1:f32,  high1:f32,  low2:f32,  high2:f32) -> f32 {
    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
 }
 @fragment
-fn main_fragment(   @location(0) fragUV: vec2<f32>,
+fn main_fragment( @location(0) fragUV: vec2<f32>,
         @location(1) fragPosition: vec4<f32> ) -> @location(0) vec4<f32>
 {
 
@@ -45,33 +45,6 @@ var i = 0;
         return fragColor +
         vec4<f32>(.0, .5, .5, 1.) + 1. * vec4<f32>(textureSample(myTexture, mySampler, cubemapVec / 10.).rgb, 1.);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 fn smoothStep(edge0:f32, edge1:f32, x:f32) -> f32 {
   if (x < edge0) {return 0.;}
