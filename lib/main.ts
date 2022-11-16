@@ -74,10 +74,8 @@ async function makeTexture(state: any) {
     let img = state.data.texture;
     await img.decode();
     await createImageBitmap(img);
-
     await img.decode();
     let imageBitmap =  await createImageBitmap(img); 
-
 
     let texture = state.device.createTexture({
       size: [imageBitmap.width, imageBitmap.height, 1],
@@ -96,7 +94,6 @@ async function makeTexture(state: any) {
     updateTexture(state);
     return texture;
   } else if ("string" === typeof state.data.texture) {
-    
     let texture = state.device.createTexture({
       size: [900, 500, 1],
       format: "rgba8unorm",
@@ -138,7 +135,6 @@ async function makeTexture(state: any) {
     state.texture = texture
     state.data.music = music;
     updateTexture(state);
-
 
     return texture;
   }
@@ -585,9 +581,7 @@ async function init(options: any) {
 
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
   const adapter = (await navigator.gpu.requestAdapter()) as GPUAdapter;
-
   const device = (await adapter?.requestDevice()) as GPUDevice;
-
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
   Object.assign(state, {
