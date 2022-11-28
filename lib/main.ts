@@ -63,7 +63,7 @@ let makeImgTexture = async (state: any) => {
 
   img.src = state.data.texture;
 
-  await img.decode();
+  await img.make();
 
   return await createImageBitmap(img);
 };
@@ -74,7 +74,7 @@ async function makeTexture(state: any) {
     let img = state.data.texture;
     await img.decode();
     await createImageBitmap(img);
-    await img.decode();
+
     let imageBitmap =  await createImageBitmap(img); 
 
     let texture = state.device.createTexture({

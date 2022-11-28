@@ -1,4 +1,18 @@
 
+// import particles from './abc'
+// function createCanvas (width=innerWidth, height=innerHeight) {
+//   let dpi = devicePixelRatio;
+//     var canvas = document.createElement("canvas");
+//     canvas.width = dpi * width;
+//     canvas.height = dpi * height;
+//     canvas.style.width = width + "px";
+//     document.body.appendChild(canvas)
+//     return canvas;
+//   }
+
+// particles(
+//   createCanvas()
+// )
 import { init} from "../lib/main";
 import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
@@ -8,23 +22,27 @@ import mouse from './shaders/mouse.wgsl?raw';
 import texture from './shaders/texture.wgsl?raw';
 import sky from './shaders/sky.wgsl?raw';
 
-import four from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/four.wgsl?raw'
+import four from  './shaders/four.wgsl?raw'
 
-import five from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/five.wgsl?raw'
-import music from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/music.wgsl?raw'
+import five from  './shaders/five.wgsl?raw'
+import music from  './shaders/music.wgsl?raw'
 
-import six from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/six.wgsl?raw'
+import six from  './shaders/six.wgsl?raw'
 
-import seven from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/seven.wgsl?raw'
+import seven from  './shaders/seven.wgsl?raw'
 
-import light from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/light.wgsl?raw'
+import light from  './shaders/light.wgsl?raw'
 
 import physics from "./webgl/physics";
 
 import postProcessing from "./postProcessing";
 
-import signalvsNoise from  '/Users/awahab/Simple-webgpu-compute/demos/shaders/signal.wgsl?raw'
-import { image } from "d3";
+import signalvsNoise from  './shaders/signal.wgsl?raw'
+//import { image } from "d3";
+
+
+console.log(123)
+
 
 let defaultDemo = 'physics';
 let data = {}
@@ -32,12 +50,12 @@ let data = {}
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
  
-  options.data.texture = '../data/static.jpg';
-  //options.data.texture = '../data/static.jpg';
-  const img = new Image();
-  img.src = '../data/static.jpg';
+  // options.data.texture = '../data/static.jpg';
 
-  options.data.texture =  img
+  // const img = new Image();
+  // img.src = '../data/static.jpg';
+
+  // options.data.texture =  img
 
   let draw = await init(options);
   draw(data);
