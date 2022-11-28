@@ -618,6 +618,6 @@ async function init(options: any) {
   return draw;
 }
 
-init.version = "0.9.9";
+init.version = "1.0.0";
 
 export { init };
