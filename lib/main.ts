@@ -6,13 +6,13 @@ import defaultShader from "./default.wgsl?raw";
 let makeCompute = (state: any) => {
   let { device } = state;
 
-
   if (state.compute.vertexBufferData) {
     state.computeVertexBufferData = device.createBuffer({
       size: state.compute.vertexBufferData.byteLength,
       usage: GPUBufferUsage.VERTEX,
       mappedAtCreation: true,
     });
+    
 
     new Float32Array(state.computeVertexBufferData.getMappedRange()).set(
       state.compute.vertexBufferData
@@ -51,7 +51,6 @@ if (state.options.compute.simParams) {
   if (state.compute.buffers) {
     console.log(12313)
   }
-  
 };
 
 let hasMadeCompute = false;
@@ -191,6 +190,7 @@ function createRenderPasses(state: any) {
     //@ts-ignore
     mainRenderPass.numVertices = state.compute.numVertices();
   //@ts-ignore
+  
   if (state.compute && particleBuffers)
     //@ts-ignore
     mainRenderPass.vertexBuffers = [

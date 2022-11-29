@@ -6,9 +6,12 @@ const tileDim = 128;
 const batch = [4, 4];
 const blockDim = 15
 
+
+
 const options = {
   data: {},
   texture: '../data.png',
+  
   compute: {
     shader: blur,
     bindGroups: (device) => {

@@ -1,3 +1,7 @@
+
+//uniforms
+
+
 - SIMPLE WEBGPU COMPUTE - 
 simplest GPGPU compute library ever
 

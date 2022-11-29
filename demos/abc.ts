@@ -2,10 +2,24 @@ import { mat4, vec3 } from 'gl-matrix';
 
 import particleWGSL from './particle.wgsl?raw';
 import probabilityMapWGSL from './probabilityMap.wgsl?raw';
+import rings from './shaders/rings.wgsl?raw';
 
-const numParticles = 10000;
+
+  function createCanvas (width=innerWidth, height=innerHeight) {
+    let dpi = devicePixelRatio;
+      var canvas = document.createElement("canvas");
+      canvas.width = dpi * width;
+      canvas.height = dpi * height;
+      canvas.style.width = width + "px";
+      document.body.appendChild(canvas)
+      return canvas;
+    }
+
+
+
+const numParticles = 1e6;
 const particlePositionOffset = 0;
-const particleColorOffset = 4 * 4;
+const particleColorOffset =  4 * 4;
 const particleInstanceByteSize =
   3 * 4 + // position
   1 * 4 + // lifetime
@@ -16,11 +30,11 @@ const particleInstanceByteSize =
 
 const pageState = {active: true }
 
-const init = async ( canvas ) => {
+const init = async (  ) => {
+  const canvas = createCanvas()
   const adapter = await navigator.gpu.requestAdapter();
   const device = await adapter.requestDevice();
 
-  if (!pageState.active) return;
   const context = canvas.getContext('webgpu') as GPUCanvasContext;
 
   const devicePixelRatio = window.devicePixelRatio || 1;
@@ -37,6 +51,7 @@ const init = async ( canvas ) => {
     alphaMode: 'opaque',
   });
 
+  
 
   const particlesBuffer = device.createBuffer({
     size: numParticles * particleInstanceByteSize,
@@ -132,7 +147,7 @@ const init = async ( canvas ) => {
     3 * 4 + // up : vec3<f32>
     4 + // padding
     0;
-  const uniformBuEffer = device.createBuffer({
+  const uniformBuffer = device.createBuffer({
     size: uniformBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
@@ -153,7 +168,7 @@ const init = async ( canvas ) => {
     colorAttachments: [
       {
         view: undefined, // Assigned later
-        clearValue: { r: 0.5, g: 0.0, b: 0.5, a: 1.0 },
+        clearValue: { r: 0.5, g: .5, b: 0.5, a: 1.0 },
         loadOp: 'clear',
         storeOp: 'store',
       },
@@ -321,7 +336,7 @@ const init = async ( canvas ) => {
   //////////////////////////////////////////////////////////////////////////////
   const simulationParams = {
     simulate: true,
-    deltaTime: 0.04,
+    deltaTime: 0.14,
   };
 
   const simulationUBOBufferSize =
@@ -378,9 +393,6 @@ const init = async ( canvas ) => {
   mat4.perspective(projection, (2 * Math.PI) / 5, aspect, 1, 100.0);
 
   function frame() {
-    // Sample is no longer the active page.
-    if (!pageState.active) return;
-
     device.queue.writeBuffer(
       simulationUBOBuffer,
       0,
@@ -450,4 +462,4 @@ const init = async ( canvas ) => {
   requestAnimationFrame(frame);
 };
 
-export default init
+ export default init
