@@ -19,7 +19,7 @@ import rings from './shaders/rings.wgsl?raw';
 
 const numParticles = 1e6;
 const particlePositionOffset = 0;
-const particleColorOffset =  4 * 4;
+const particleColorOffset =  1 * 4;
 const particleInstanceByteSize =
   3 * 4 + // position
   1 * 4 + // lifetime

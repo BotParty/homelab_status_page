@@ -1,7 +1,7 @@
 import abc from './abc';
 import seven from  './shaders/stripes.wgsl?raw'
 
- abc()
+ //abc()
 
 
 
@@ -34,12 +34,11 @@ import { init } from "../lib/main";
 
 // let defaultDemo = 'physics';
  let data = {}
- //start_loop_static({shader: seven})
+ start_loop_static({shader: seven})
+ 
 async function start_loop_static(options) {
   options.data = options.data || data; 
-  console.log(555)
 
-  console.log(888)
   // options.data.texture = '../data/static.jpg';
 
   // const img = new Image();
