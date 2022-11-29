@@ -25,7 +25,7 @@ const particleInstanceByteSize =
   1 * 4 + // lifetime
   4 * 4 + // color
   3 * 4 + // velocity
-  5 * 4 + // padding
+  1 * 4 + // padding
   0;
 
 const pageState = {active: true }

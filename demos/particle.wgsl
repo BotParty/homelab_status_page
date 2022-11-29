@@ -30,9 +30,9 @@ struct VertexOutput {
 @vertex
 fn vs_main(in : VertexInput) -> VertexOutput {
   var quad_pos = mat2x3<f32>(render_params.right, render_params.up) * in.quad_pos;
-  var position = in.position + quad_pos * 0.11;
+  var position = in.position + quad_pos * .11;
   var out : VertexOutput;
-  out.position = render_params.modelViewProjectionMatrix * vec4<f32>(position, 1.0);
+  out.position = render_params.modelViewProjectionMatrix * vec4<f32>(position, 3.0);
   out.color = in.color;
   out.quad_pos = in.quad_pos;
   return out;
@@ -115,12 +115,12 @@ fn simulate(
     //   coord.y = coord.y + select(0, 1, any(mask.zw)); // z  w
     // }
     let uv = vec2<f32>(coord) / vec2<f32>(textureDimensions(texture));
-    particle.position = vec3<f32>((uv - 0.5) * 3.0 * vec2<f32>(1.0, -1.0), 0.0);
+    //particle.position = vec3<f32>((uv - 0.5) * 3.0 * vec2<f32>(1.0, -1.0), 0.0);
     //particle.color = textureLoad(texture, coord, 0);
-    particle.velocity.x = (rand() - 0.5) * 0.1;
-    particle.velocity.y = (rand() - 0.5) * 0.1;
-    particle.velocity.z = rand() * 0.3;
-    particle.lifetime = .9 + rand() * 2.0;
+    //particle.velocity.x = (rand() - 0.5) * 0.1;
+    //particle.velocity.y = (rand() - 0.5) * 0.1;
+    //particle.velocity.z = rand() * 0.3;
+    //particle.lifetime = .5 + rand() * 2.0;
   }
 
   // Store the new particle value
