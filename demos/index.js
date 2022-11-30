@@ -3,8 +3,6 @@ import seven from  './shaders/stripes.wgsl?raw'
 
  //abc()
 
-
-
 import { init } from "../lib/main";
 
 // import stripes from './shaders/stripes.wgsl?raw';
@@ -33,12 +31,14 @@ import { init } from "../lib/main";
 
 
 // let defaultDemo = 'physics';
- let data = {}
+ let data = {
+ 
+ }
  start_loop_static({shader: seven})
  
 async function start_loop_static(options) {
   options.data = options.data || data; 
-
+options.clearValue =  { r: 0.0, g: 0.0, b: 0.0, a: 1.0 }
   // options.data.texture = '../data/static.jpg';
 
   // const img = new Image();

@@ -291,7 +291,7 @@ async function makePipeline(state: any) {
     },
 
     primitive: {
-      topology: "triangle-list",
+      topology: "point-list",
     },
   } as GPURenderPipelineDescriptor;
 
@@ -372,7 +372,7 @@ async function makePipeline(state: any) {
     colorAttachments: [
       {
         view: void 0,
-        clearValue: { r: 0.5, g: 0.5, b: 0.5, a: 1.0 },
+        clearValue: state.options.clearValue || { r: 0.5, g: 0.5, b: 0.5, a: 1.0 },
         loadOp: "clear",
         storeOp: "store",
       },
@@ -453,12 +453,12 @@ function makeShaderModule(state: any, source: any) {
     @builtin(vertex_index) VertexIndex : u32,
   ) -> VertexOutput {
     const pos = array(
-      vec2( 1.0,  1.0),
-      vec2( 1.0, -1.0),
-      vec2(-1.0, -1.0),
-      vec2( 1.0,  1.0),
-      vec2(-1.0, -1.0),
-      vec2(-1.0,  1.0),
+      vec2( .0, .0),
+      vec2( .0, .0),
+      vec2(.0, .0),
+      vec2( .0,  .0),
+      vec2(.0, .0),
+      vec2(.0,  .0),
     );
   
     const uv = array(
