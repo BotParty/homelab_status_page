@@ -190,4 +190,4 @@ Many examples use creative commons or public domain artwork for illustrative pur
 * Normal map (normaltexture.jpg) by [rubberduck](http://opengameart.org/node/21219). CC0 license.
 
 
-#credit to zoox and stream 
+#credit to stream 

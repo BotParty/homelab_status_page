@@ -1,6 +1,9 @@
 import abc from './abc';
 import seven from  './shaders/stripes.wgsl?raw'
 
+
+import particles from  './particle'
+
  //abc()
 
 import { init } from "../lib/main";
@@ -8,7 +11,7 @@ import { init } from "../lib/main";
 // import stripes from './shaders/stripes.wgsl?raw';
 // import checkerboard from './shaders/checkerboard.wgsl?raw';
 // import one from './shaders/one.wgsl?raw';
-// import mouse from './shaders/mouse.wgsl?raw';
+// XSEXSimport mouse from './shaders/mouse.wgsl?raw';
 // import texture from './shaders/texture.wgsl?raw';
 // import sky from './shaders/sky.wgsl?raw';
 
@@ -35,7 +38,7 @@ import { init } from "../lib/main";
  
  }
  start_loop_static({shader: seven})
- 
+ particles()
 async function start_loop_static(options) {
   options.data = options.data || data; 
 options.clearValue =  { r: 0.0, g: 0.0, b: 0.0, a: 1.0 }

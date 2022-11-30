@@ -92,7 +92,7 @@ const init = async (  ) => {
           attributes: [
             {
               // vertex positions
-              shaderLocation: 2,
+              shaEderLocation: 2,
               offset: 0,
               format: 'float32x2',
             },
@@ -255,7 +255,7 @@ const init = async (  ) => {
       },
     });
 
-    const probabilityMapUBOBufferSize =
+    const probabilityMapUBOBufferSize =E
       1 * 4 + // stride
       3 * 4 + // padding
       0;

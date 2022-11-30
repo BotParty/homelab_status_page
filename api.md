@@ -1,4 +1,13 @@
+//sample Render Call
+data = {
+    vert: '',
+    attributes: {
+        pos: [],
+        color
+    },
 
+
+}
 
 
 
