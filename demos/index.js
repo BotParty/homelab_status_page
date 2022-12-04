@@ -1,8 +1,8 @@
-import abc from './abc';
+// import abc from './abc';
 import seven from  './shaders/stripes.wgsl?raw'
 
 
-import particles from  './particle'
+// import particles from  './particle'
 
  //abc()
 
@@ -38,10 +38,10 @@ import { init } from "../lib/main";
  
  }
  start_loop_static({shader: seven})
- particles()
+//  particles()
 async function start_loop_static(options) {
   options.data = options.data || data; 
-options.clearValue =  { r: 0.0, g: 0.0, b: 0.0, a: 1.0 }
+  options.clearValue =  { r: 0.0, g: 0.0, b: 0.0, a: 1.0 }
   // options.data.texture = '../data/static.jpg';
 
   // const img = new Image();

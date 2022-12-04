@@ -454,11 +454,17 @@ function makeShaderModule(state: any, source: any) {
   ) -> VertexOutput {
     const pos = array(
       vec2( .0, .0),
-      vec2( .0, .0),
-      vec2(.0, .0),
-      vec2( .0,  .0),
-      vec2(.0, .0),
-      vec2(.0,  .0),
+      vec2( .01, .01),
+      vec2(.03, .03),
+      vec2( .05,  .05),
+      vec2(.07, .07),
+      vec2(.09, .09),
+      vec2(.1,  .1),
+      vec2( .08, .08),
+      vec2(.06, .06),
+      vec2( .04,  .04),
+      vec2(.02, .02),
+      vec2(.1,  .1),
     );
   
     const uv = array(
