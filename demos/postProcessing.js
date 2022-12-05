@@ -1,4 +1,4 @@
-import { init } from "../lib/main";
+import simpleWebGPU from "../lib/main";
 import stripes from '../demos/shaders/stripes.wgsl?raw'
 import blur from './webgl/blur.wgsl?raw'
 

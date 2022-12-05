@@ -646,4 +646,11 @@ async function init(options: any) {
 
 init.version = "1.0.0";
 
-export { init };
+function frame (fn) {
+  requestAnimationFrame(function loop() {
+    fn() //pass in time from last call 
+    setTimeout(fn, 150)
+  })
+}
+
+export default { init , frame};

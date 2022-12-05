@@ -1,9 +1,6 @@
 //import simpleWebGPU from ''
-import { init } from "../lib/main";
+import simpleWebGPU from "../lib/main";
 
-let simpleWebGPU = {init, frame: function (fn) {
-  setInterval(fn, 200)
-}}
 let data = {
   width: 500,
   height: 500,
