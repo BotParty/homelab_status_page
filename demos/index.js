@@ -41,7 +41,7 @@ import { init } from "../lib/main";
 //  particles()
 async function start_loop_static(options) {
   options.data = options.data || data; 
-  options.clearValue =  { r: 0.0, g: 0.0, b: 0.0, a: 1.0 }
+  options.clearValue =  { r: 0.1, g: 0.1, b: 0.1, a: 1.0 }
   // options.data.texture = '../data/static.jpg';
 
   // const img = new Image();
