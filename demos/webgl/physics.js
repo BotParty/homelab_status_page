@@ -1,4 +1,4 @@
-import { init } from "../../lib/main";
+import simpleWebGPU from "../../lib/main";
 import updateSpritesWGSL from "../shaders/updateSprites.wgsl?raw";
 import spriteWGSLFS from "../shaders/sprite_fs.wgsl?raw";
 import spriteWGSLVS from "../shaders/sprite_vs.wgsl?raw";
@@ -52,10 +52,10 @@ const options = {
   },
 };
 
-async function physics() {
+async function init() {
   options.data = options.data; //extend
 
-  const draw = await init(options);
+  const draw = await simpleWebGPU.init(options);
   draw(data);
 
   requestAnimationFrame(function test() {
@@ -65,4 +65,4 @@ async function physics() {
   });
 }
 
-export default physics;
+export default {init};

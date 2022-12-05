@@ -1,11 +1,10 @@
-import { init } from "../lib/main";
+import simpleWebGPU from "../lib/main";
 import stripes from '../demos/shaders/stripes.wgsl?raw'
 import blur from './webgl/blur.wgsl?raw'
 
 const tileDim = 128;
 const batch = [4, 4];
 const blockDim = 15
-
 
 
 const options = {

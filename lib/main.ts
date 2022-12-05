@@ -62,7 +62,7 @@ let makeImgTexture = async (state: any) => {
 
   img.src = state.data.texture;
 
-  await img.make();
+  await img.makeTexture();
 
   return await createImageBitmap(img);
 };
@@ -197,9 +197,12 @@ function createRenderPasses(state: any) {
       particleBuffers[0],
       computeVertexBufferData,
     ];
+    else mainRenderPass.vertexBuffers = [
+      state.cubeVertices
+    ]
 
   state.renderPasses.push(mainRenderPass);
-}
+  } 
 
 const recordRenderPass = async function (state: any) {
   let { device, renderPassDescriptor } = state;
@@ -243,7 +246,6 @@ const recordRenderPass = async function (state: any) {
 
   device.queue.submit([commandEncoder.finish()]); //async
   t++;
-
 };
 
 function updateUniforms(state: any) {
@@ -277,12 +279,43 @@ function updateUniforms(state: any) {
 async function makePipeline(state: any) {
   let { device } = state;
 
+  const cubeVertexArray = new Float32Array(
+    new Array(10000).fill(5).map((_, i) => {
+      let n = i / 1000;
+      if (i % 2 === 1) return n % 1
+      if (i % 2 === 0) return n / 10
+    })
+   );
+ //x coordinate should be 0 to 1 .1 * n % 1
+ //y coordinates should be 0 till 100 then
+
+   const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
+
+  const verticesBuffer = device.createBuffer({
+    size: cubeVertexArray.byteLength,
+    usage: GPUBufferUsage.VERTEX,
+    mappedAtCreation: true,
+  });
+  new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
+  verticesBuffer.unmap();
+  state.cubeVertices= verticesBuffer
+
+
   let pipelineDesc = {
     layout: "auto",
     vertex: {
       module: state.shader,
       entryPoint: "main_vertex",
-      buffers: [],
+      buffers: [
+  {
+    arrayStride: cubeVertexSize,
+    attributes: [{
+      shaderLocation: 0,
+      offset: 0,
+      format: 'float32x4',
+    }]
+  }
+      ],
     },
     fragment: {
       module: state.shader,
@@ -450,22 +483,9 @@ function makeShaderModule(state: any, source: any) {
   
   @vertex
   fn main_vertex(
+    @location(0) position : vec4<f32>,
     @builtin(vertex_index) VertexIndex : u32,
   ) -> VertexOutput {
-    const pos = array(
-      vec2( .0, .0),
-      vec2( .01, .01),
-      vec2(.03, .03),
-      vec2( .05,  .05),
-      vec2(.07, .07),
-      vec2(.09, .09),
-      vec2(.1,  .1),
-      vec2( .08, .08),
-      vec2(.06, .06),
-      vec2( .04,  .04),
-      vec2(.02, .02),
-      vec2(.1,  .1),
-    );
   
     const uv = array(
       vec2(1.0, 0.0),
@@ -476,7 +496,7 @@ function makeShaderModule(state: any, source: any) {
       vec2(0.0, 0.0),
     );
     var output : VertexOutput;
-    output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+    output.Position = vec4<f32>(position.xy, 0.0, 1.0);
     output.fragUV = uv[VertexIndex];
     output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
     output.fragPosition.g = 1.5 - output.fragPosition.g;
@@ -626,4 +646,11 @@ async function init(options: any) {
 
 init.version = "1.0.0";
 
-export { init };
+function frame (fn) {
+  requestAnimationFrame(function loop() {
+    fn() //pass in time from last call 
+    setTimeout(fn, 150)
+  })
+}
+
+export default { init , frame};

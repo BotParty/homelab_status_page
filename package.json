@@ -1,7 +1,6 @@
 {
   "name": "simple-webgpu-2",
   "version": "1.0.5",
-
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -25,6 +24,7 @@
     "vite": "^2.6.13"
   },
   "dependencies": {
-    "@webgpu/types": "^0.1.7"
+    "@webgpu/types": "^0.1.7",
+    "gl-matrix": "^3.4.3"
   }
 }
