@@ -278,14 +278,14 @@ function updateUniforms(state: any) {
 
 async function makePipeline(state: any) {
   let { device } = state;
- const cubeVertexArray = new Float32Array(
-  new Array(10000).fill(5).map((_, i) => {
-    let n = i / 1000;
-    if (i % 2 === 1) return n % 1
-    if (i % 2 === 0) return n / 10
-  })
- );
-//console.log(cubeVertexArray)
+
+  const cubeVertexArray = new Float32Array(
+    new Array(10000).fill(5).map((_, i) => {
+      let n = i / 1000;
+      if (i % 2 === 1) return n % 1
+      if (i % 2 === 0) return n / 10
+    })
+   );
  //x coordinate should be 0 to 1 .1 * n % 1
  //y coordinates should be 0 till 100 then
 
