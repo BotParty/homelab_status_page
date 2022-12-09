@@ -1,31 +1,58 @@
 - SIMPLE WEBGPU COMPUTE - 
 simplest GPGPU compute library ever
 
-transpiler, shadergraph, ui for that, 
+
+<a href="https://d3js.org">
+<img src="./demos/webgpu.png" align="left" hspace="10" vspace="6">
+</a>
 
 
-[{ binding: 0, visibility: ShaderStage::Compute,
- buffer: { type: BufferBindingType::Uniform, 
- hasDynamicOffset: 0, minBindingSize: 28 } }, 
- { binding: 1, visibility: ShaderStage::Compute, 
- buffer: { type: BufferBindingType::ReadOnlyStorage, hasDynamicOffset: 0, minBindingSize: 16 } },
-  { binding: 2, visibility: ShaderStage::Compute, 
-  buffer: { type: BufferBindingType::Storage, 
-  hasDynamicOffset: 0, minBindingSize: 16 } 
-  
-  }]
+Features 
+1. Simple Particle Renderer 
+2. Simple Compute engine
+3. Functional Data-Fall Through Declarative Api
+4. Auto Adding Uniforms 
 
 
+This library is for making cool diagrams in notebooks like jupyter, observable, and static websites like vue.js, react and so on. 
 
-
-mental models made visual
-
+With Simple WebGPU COmpute you can describe data visualizations in a JSON format.
 
 
 
 
 
 
+//audience: join d3 people and webgpu/gl people
+//Uniforms are constants that are data-bound from the user to the shader 
+
+
+
+
+import simpleWebGPU from ''
+
+
+init -> init returns a draw call
+
+draw -> renders to a rendertarget or a texture
+
+loop
+
+
+
+
+
+
+
+init ({
+  frag: 'url/string',
+  vert: 'url/string',
+  attributes: {
+    position: new TypedArray()
+  },
+  uniforms: {}
+  count: 3
+})
 
 
 
@@ -43,18 +70,30 @@ mental models made visual
 
 
 
-//get test suite working
-//add one more compute example
-//one render pass and one compute per draw call
 
-//3 days 
-//boid simulation -> sheep or pokemon -> existing ismulation and add a image texture 
-//image processing -> blur 
-//falling box (if position > 0, dont fall)
 
-//10 days
-//gravity simulation -> convert from rickkyreusser
-//water simulation -> convert from madebyevan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -64,35 +103,13 @@ mental models made visual
 //eye tracking for focus game
 //render output to screen as colors???
 
-
-
 //this is for 
 //book of simulations and image processing 
 //physics of information theory
 
-//erosion scene
-
-//assume only one draw call and one compute call
-//
-
-
 //visualizations that change the way you see the world
 //https://bost.ocks.org/mike/algorithms/
 //https://pudding.cool/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # simple-webgpu-compute
@@ -100,61 +117,22 @@ mental models made visual
 ## Designed specifically for Biotech, Robotics, and Simulation Games
 
 
+# why simple WebGPUCompute
+* simplicity
+* correctness
+* performance
+* minimalism
+* stability
+
+# 
+http://stack.gl/
+
 catalog of useful shader functions and patterns similar to stackGL but for webgpu
 
 module for using webgpu for data visualization and more
 make compute shaders as simple as possible
 minimalist runtime for using webgpu shaders in nb/static website
 
-requirements:
-  textures
-  compute shaders(image processing)
-
-
-
-
-
-
-```
- import {init} from "https://cdn.skypack.dev/simple-data-texture/"
-
-
-let options = {}
-
-let draw = init(options)
-
-let uniformData = {}
-
-draw(uniformData)
-
-```
-
-
-
-```
- import {init, Texture} from "https://cdn.skypack.dev/simple-data-texture/"
-
-
-let catTexture = Texture('http://giphy.com/cat_pic.png');
-let dogTexture = Texture('http://giphy.com/dog.png');
-
-let draw = init({
-  data: {time: 123, texture:catTexture}
-})
-
-draw({texture: dogTexture})
-
-cat.subImage({
-  width: 200, height: 200,
-  data: dogTexture.read({x:5,y:5,w:200,h: 200})
-}, 1,1)
-```
-//todo make api easier
-//todo make textures stream and pipe through compute
-
-```
-
-```
 
 
 
@@ -172,23 +150,45 @@ Texture
 2. check canvas 
 3. if neither 1,2 default to 900x500
 
-* References
-http://vis.stanford.edu/files/2013-imMens-EuroVis.pdf
 (what is the right name for data-cubes/megatextures/virtual-streaming-textures/etc??)
-https://observablehq.com/@observablehq/downloading-and-embedding-notebooks
 
 
-techniques for faster load time
-(start with lossy to load instantly, fill in with accurate data as user gets closer adjusting level of detail )
-png/jpeg
-https://developers.google.com/protocol-buffers
-column-based data-stores like arrow/cassandra
-mega-textures from id-engine-5 (virtual-streaming textures )
-immens / nanocubes
-https://nanocubes.net/
-https://www1.nyc.gov/site/doitt/initiatives/3d-building.page
-https://explorer.morphocode.com/map
 
 
-## Thank you to Firefox Nightly and Microsoft Edge and Safari and Chrome Canary 
+License
+All code (c) 2016 MIT License
 
+Development supported by the Freeman Lab and the Howard Hughes Medical Institute (@freeman-lab on GitHub)
+
+Asset licenses
+Many examples use creative commons or public domain artwork for illustrative purposes. These assets are not included in any of the redistributable packages of regl.
+
+Peppers test image for cube comparison is public domain
+Test video (doggie-chromakey.ogv) by L0ckergn0me, used under creative commons license
+Cube maps (posx.jpeg, negx.jpeg, posy.jpeg, negy.jpeg, posz.jpeg, negz.jpeg) by Humus, used under creative commons 3 license
+Environment map of Oregon (ogd-oregon-360.jpg) due to Max Ogden (@maxogd on GitHub)
+DDS test images (alpine_cliff_a, alpine_cliff_a_norm, alpine_cliff_a_spec) taken from the CC0 license 0-AD texture pack by Wildfire games
+Tile set for tile mapping demo (tiles.png) from CC0 licensed cobblestone paths pack
+Audio track for audio.js example is "Bamboo Cactus" by 8bitpeoples. CC BY-ND-NC 1.0 license
+Matcap (spheretexture.jpg) by Ben Simonds. CC 3 license.
+Normal map (normaltexture.jpg) by rubberduck. CC0 license.
+
+## [License](LICENSE)
+
+All code (c) 2016 MIT License
+
+Development supported by the [Freeman Lab](https://www.janelia.org/lab/freeman-lab) and the Howard Hughes Medical Institute ([@freeman-lab](https://github.com/freeman-lab) on GitHub)
+
+#### Asset licenses
+
+Many examples use creative commons or public domain artwork for illustrative purposes.  These assets are not included in any of the redistributable packages of regl.
+
+* Peppers test image for cube comparison is public domain
+* Test video (doggie-chromakey.ogv) by [L0ckergn0me](https://archive.org/details/L0ckergn0me-PixieGreenScreen446), used under creative commons license
+* Cube maps (posx.jpeg, negx.jpeg, posy.jpeg, negy.jpeg, posz.jpeg, negz.jpeg) by [Humus](http://www.humus.name/index.php?page=Textures), used under creative commons 3 license
+* Environment map of Oregon (ogd-oregon-360.jpg) due to Max Ogden ([@maxogd](https://github.com/maxogden) on GitHub)
+* DDS test images (alpine_cliff_a, alpine_cliff_a_norm, alpine_cliff_a_spec) taken from the CC0 license [0-AD texture pack by Wildfire games](http://opengameart.org/content/0-ad-textures)
+* Tile set for tile mapping demo (tiles.png) from CC0 licensed [cobblestone paths pack](http://opengameart.org/content/rpg-tiles-cobble-stone-paths-town-objects)
+* Audio track for `audio.js` example is "[Bamboo Cactus](https://archive.org/details/8bp033)" by [8bitpeoples](https://archive.org/details/8bitpeoples).  CC BY-ND-NC 1.0 license
+* Matcap (spheretexture.jpg) by [Ben Simonds](https://bensimonds.com/2010/07/30/matcap-generator/). CC 3 license.
+* Normal map (normaltexture.jpg) by [rubberduck](http://opengameart.org/node/21219). CC0 license.
