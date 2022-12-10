@@ -209,7 +209,12 @@ const recordRenderPass = async function (state: any) {
     .createView();
 
   const commandEncoder = device.createCommandEncoder();
+  //each has separate state? no
+  //init, draw calls share same state because different uniforms but same canvas context
 
+  //renders to whatever is in bindgroup
+
+  //look at all webgpu examples on net, see how they are used and diagram and then separate draw calls 
   state.renderPasses.forEach(function render(_: any) {
     let isCompute = _.type === "compute";
 
