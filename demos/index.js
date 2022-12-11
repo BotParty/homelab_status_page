@@ -103,10 +103,10 @@ let demos = [
 // }
 
 function cleanup () {
-  // document.querySelector(':checked').checked = null  
-  // let canvas = document.querySelector('canvas')
+  document.querySelector(':checked').checked = null  
+  let canvas = document.querySelector('canvas')
   
-  // if (canvas) canvas.remove()
+  if (canvas) canvas.remove()
 }
 
 function customShader(options) {
@@ -123,6 +123,7 @@ function select(name) {
       shader: demo,
     }); 
     else demo()
+    
 }
 
 select(document.querySelector(':checked').value)
