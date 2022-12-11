@@ -6,7 +6,6 @@ import defaultShader from "./default.wgsl?raw";
 let makeCompute = (state: any) => {
   let { device } = state;
 
-
   if (state.compute.vertexBufferData) {
     state.computeVertexBufferData = device.createBuffer({
       size: state.compute.vertexBufferData.byteLength,

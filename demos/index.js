@@ -33,7 +33,7 @@ import seven from  './shaders/seven.wgsl?raw'
 
 import light from  './shaders/light.wgsl?raw'
 
-import physics from "./webgl/physics";
+import physics from "./physics";
 
 import postProcessing from "./postProcessing";
 
