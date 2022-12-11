@@ -38,7 +38,6 @@ import physics from "./physics";
 import postProcessing from "./postProcessing";
 
 import signalvsNoise from  './shaders/signal.wgsl?raw'
-import { image } from "d3";
 
 let defaultDemo = 'physics';
 let data = {}
