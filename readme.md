@@ -7,6 +7,21 @@ simplest GPGPU compute library ever
 </a>
 
 
+
+how to run locally 
+``` 
+yarn install 
+yarn run dev
+```
+
+how to open a pull request
+```
+make a new branch
+username/feature
+use this template
+```
+
+
 Features 
 1. Simple Particle Renderer 
 2. Simple Compute engine
@@ -16,7 +31,7 @@ Features
 
 This library is for making cool diagrams in notebooks like jupyter, observable, and static websites like vue.js, react and so on. 
 
-With Simple WebGPU COmpute you can describe data visualizations in a JSON format.
+With Simple WebGPU Compute you can describe data visualizations in a JSON format.
 
 
 
@@ -175,7 +190,7 @@ Normal map (normaltexture.jpg) by rubberduck. CC0 license.
 
 ## [License](LICENSE)
 
-All code (c) 2016 MIT License
+All code (c) 2022 BSD License
 
 Development supported by the [Freeman Lab](https://www.janelia.org/lab/freeman-lab) and the Howard Hughes Medical Institute ([@freeman-lab](https://github.com/freeman-lab) on GitHub)
 
@@ -194,9 +209,6 @@ Many examples use creative commons or public domain artwork for illustrative pur
 * Normal map (normaltexture.jpg) by [rubberduck](http://opengameart.org/node/21219). CC0 license.
 
 
-Diamond Sponsors 
+Sponsors 
 Zoox 
-
-Platinum Sponsors 
-big 5
 

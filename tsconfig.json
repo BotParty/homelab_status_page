@@ -18,5 +18,5 @@
 
   },
   "include": ["lib"],
-  "files": ["lib/main.ts"],
+  "files": ["lib/main.js"],
 }
