@@ -20,7 +20,7 @@ make a new branch
 username/feature
 use this template
 ```
-
+designed to mimic stackgpu and regl
 
 Features 
 1. Simple Particle Renderer 
