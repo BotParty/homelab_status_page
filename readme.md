@@ -28,7 +28,7 @@
     </a>
     <span> | </span>
     <a href="https://gitter.im/mikolalysenko/regl">
-      Chat
+      Regl Chat
     </a>
     <span> | </span>
     <a href="https://npmcdn.com/simple-webgpu/dist/simple-webgpu.js">
