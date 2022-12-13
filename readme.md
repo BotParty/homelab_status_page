@@ -154,7 +154,7 @@ You can also use `simple-webgpu` as a standalone script if you are really stubbo
 There are some difference when using `simple-webgpu` in standalone.  Because script tags don't assume any sort of module system, the standalone scripts inject a global constructor function which is equivalent to the `module.exports` of `simple-webgpu`:
 
 
-Preferred way
+For vanilla HTML in modern browsers, import D3 from jsDelivr:
 
 ```html
 <!DOCTYPE html>
