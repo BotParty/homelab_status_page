@@ -167,7 +167,7 @@ Preferred way
   </body>
   <script language="javascript" src="https://npmcdn.com/shelbernstein/dist/simple-webgpu.js"></script>
   <script language="javascript" type="module">
-    import webgpu from 'simple-webgpu'
+  import webgpu from "https://cdn.jsdelivr.net/npm/simple-webgpu/+esm";
     let webgpu = webgpu.init()
 
     webgpu.frame(function () {
