@@ -164,10 +164,10 @@ There are some difference when using `simple-webgpu` in standalone.  Because scr
   </body>
   <script language="javascript" src="https://npmcdn.com/shelbernstein/dist/simple-webgpu.js"></script>
   <script language="javascript">
-    let webgpu = simplewebgpu.init()
+    let webgpu = simpleWebgpu.init()
 
-    simplewebgpu.frame(function () {
-      simplewebgpu.clear({
+    simpleWebgpu.frame(function () {
+      simpleWebgpu.clear({
         color: [0, 0, 0, 1]
       })
     })
