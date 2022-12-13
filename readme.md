@@ -114,9 +114,9 @@ webgpu.frame(({time}) => {
 })
 ```
 
-See this example [live](http://simple-webgpu.com/examples/)
+See this example [live](http://simple-webgpu.com/)
 
-### [More examples](http://simple-webgpu.com/examples/)
+### [More examples](http://simple-webgpu.com/)
 
 Check out the [gallery](http://simple-webgpu.com/examples/). The source code of all the gallery examples can be found [here](https://github.com/shelbernstein/Simple-webgpu).
 
