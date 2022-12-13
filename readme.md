@@ -52,7 +52,7 @@ To define a command you specify a mixture of static and dynamic data for the obj
 
 ```js
 // Calling the regl module with no arguments creates a full screen canvas and
-// WebGL context, and then uses this context to initialize a new REGL instance
+// WebGPU context, and then uses this context to initialize a new REGL instance
 const webgpu = require('simple-webgpu')
 
 // Calling regl() creates a new partially evaluated draw command
@@ -182,7 +182,7 @@ There are some difference when using `simple-webgpu` in standalone.  Because scr
 * **Simplicity** The interface is concise and emphasizes separation of concerns.  Removing shared state helps localize the effects and interactions of code, making it easier to reason about.
 * **Correctness** `simple-webgpu` has more than 30,000 unit tests and above 95% code coverage. In development mode, `regl` performs strong validation and sanity checks on all input data to help you catch errors faster.
 * **Performance**  `simple-webgpu` uses  partial evaluation to remove almost all overhead.
-* **Minimalism** `simple-webgpu` just wraps WebGPU.  It is not a game engine and doesn't have opinions about scene graphs or vector math libraries.   Any feature in WebGL is accessible, including advanced extensions like TODO
+* **Minimalism** `simple-webgpu` just wraps WebGPU.  It is not a game engine and doesn't have opinions about scene graphs or vector math libraries.   Any feature in WebGPU is accessible, including advanced extensions like TODO
 * **Stability** `simple-webgpu` takes interface compatibility and semantic versioning seriously, making it well suited for long lived applications that must be supported for months or years down the road.  It also has no dependencies limiting exposure to risky or unplanned updates.
 
 ### [Benchmarks](https://regl-project.github.io/regl/www/bench-results/bench-result-8ea4a7e806beed0b9732)
