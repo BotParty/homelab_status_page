@@ -154,7 +154,7 @@ You can also use `simple-webgpu` as a standalone script if you are really stubbo
 There are some difference when using `simple-webgpu` in standalone.  Because script tags don't assume any sort of module system, the standalone scripts inject a global constructor function which is equivalent to the `module.exports` of `simple-webgpu`:
 
 
-<!-- Preferred way
+Preferred way
 
 ```html
 <!DOCTYPE html>
@@ -167,33 +167,11 @@ There are some difference when using `simple-webgpu` in standalone.  Because scr
   </body>
   <script language="javascript" src="https://npmcdn.com/shelbernstein/dist/simple-webgpu.js"></script>
   <script language="javascript" type="module">
-    let webgpu = simpleWebgpu.init()
+    import webgpu from 'simple-webgpu'
+    let webgpu = webgpu.init()
 
-    simpleWebgpu.frame(function () {
-      simpleWebgpu.clear({
-        color: [0, 0, 0, 1]
-      })
-    })
-  </script>
-</html>
-``` -->
-
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-    <meta charset=utf-8>
-  </head>
-  <body>
-  </body>
-  <script language="javascript" src="https://npmcdn.com/shelbernstein/dist/simple-webgpu.js"></script>
-  <script language="javascript">
-    let webgpu = simpleWebgpu.init()
-
-    simpleWebgpu.frame(function () {
-      simpleWebgpu.clear({
+    webgpu.frame(function () {
+      webgpu.clear({
         color: [0, 0, 0, 1]
       })
     })
