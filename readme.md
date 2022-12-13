@@ -182,7 +182,7 @@ There are some difference when using `simple-webgpu` in standalone.  Because scr
 * **Simplicity** The interface is concise and emphasizes separation of concerns.  Removing shared state helps localize the effects and interactions of code, making it easier to reason about.
 * **Correctness** `simple-webgpu` has more than 30,000 unit tests and above 95% code coverage. In development mode, `regl` performs strong validation and sanity checks on all input data to help you catch errors faster.
 * **Performance**  `simple-webgpu` uses  partial evaluation to remove almost all overhead.
-* **Minimalism** `simple-webgpu` just wraps WebGPU.  It is not a game engine and doesn't have opinions about scene graphs or vector math libraries.   Any feature in WebGL is accessible, including advanced extensions like [multiple render targets](https://github.com/regl-project/regl/blob/gh-pages/example/deferred_shading.js) or [instancing](https://github.com/regl-project/regl/blob/gh-pages/example/instance-triangle.js).
+* **Minimalism** `simple-webgpu` just wraps WebGPU.  It is not a game engine and doesn't have opinions about scene graphs or vector math libraries.   Any feature in WebGL is accessible, including advanced extensions like TODO
 * **Stability** `simple-webgpu` takes interface compatibility and semantic versioning seriously, making it well suited for long lived applications that must be supported for months or years down the road.  It also has no dependencies limiting exposure to risky or unplanned updates.
 
 ### [Benchmarks](https://regl-project.github.io/regl/www/bench-results/bench-result-8ea4a7e806beed0b9732)
@@ -243,3 +243,6 @@ Many examples use creative commons or public domain artwork for illustrative pur
 * Audio track for `audio.js` example is "[Bamboo Cactus](https://archive.org/details/8bp033)" by [8bitpeoples](https://archive.org/details/8bitpeoples).  CC BY-ND-NC 1.0 license
 * Matcap (spheretexture.jpg) by [Ben Simonds](https://bensimonds.com/2010/07/30/matcap-generator/). CC 3 license.
 * Normal map (normaltexture.jpg) by [rubberduck](http://opengameart.org/node/21219). CC0 license.
+
+#### Regl Homage
+Simple-webgpu is an intentional homage of my favorite WebGL library,  [click here to view the original](https://github.com/regl-project/regl)
