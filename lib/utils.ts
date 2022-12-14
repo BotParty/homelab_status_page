@@ -33,6 +33,7 @@ const createBuffer = (device:any, arr:any, usage:any,) => {
   };
 
   function createCanvas (width=innerWidth, height=innerHeight) {
+    console.log('5555')
   let dpi = devicePixelRatio;
     var canvas = document.createElement("canvas");
     canvas.width = dpi * width;

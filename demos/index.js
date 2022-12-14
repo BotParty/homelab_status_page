@@ -1,18 +1,5 @@
 
 import particles from './abc'
-function createCanvas (width=innerWidth, height=innerHeight) {
-  let dpi = devicePixelRatio;
-    var canvas = document.createElement("canvas");
-    canvas.width = dpi * width;
-    canvas.height = dpi * height;
-    canvas.style.width = width + "px";
-    document.body.appendChild(canvas)
-    return canvas;
-  }
-
-// particles(
-//   createCanvas()
-// )
 import { init} from "../lib/main";
 import rings from './shaders/rings.wgsl?raw';
 import stripes from './shaders/stripes.wgsl?raw';
@@ -44,6 +31,7 @@ let data = {}
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
+  options.canvas = document.querySelector('canvas')
  
   options.data.texture = '../data/static.jpg';
   //options.data.texture = '../data/static.jpg';
