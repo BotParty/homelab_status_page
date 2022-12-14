@@ -1,33 +1,28 @@
 
-import particles from './abc'
-import { init} from "../lib/main";
-import rings from './shaders/rings.wgsl?raw';
-import stripes from './shaders/stripes.wgsl?raw';
-import checkerboard from './shaders/checkerboard.wgsl?raw';
-import one from './shaders/one.wgsl?raw';
-import mouse from './shaders/mouse.wgsl?raw';
-import texture from './shaders/texture.wgsl?raw';
-import sky from './shaders/sky.wgsl?raw';
-
-import four from  './shaders/four.wgsl?raw'
-
-import five from  './shaders/five.wgsl?raw'
-import music from  './shaders/music.wgsl?raw'
-
-import six from  './shaders/six.wgsl?raw'
-
-import seven from  './shaders/seven.wgsl?raw'
-
-import light from  './shaders/light.wgsl?raw'
+import { init } from "../lib/main";
+import rings from '../shaders/rings.wgsl?raw';
+import stripes from '../shaders/stripes.wgsl?raw';
+import checkerboard from '../shaders/checkerboard.wgsl?raw';
+import one from '../shaders/one.wgsl?raw';
+import mouse from '../shaders/mouse.wgsl?raw';
+import texture from '../shaders/texture.wgsl?raw';
+import sky from '../shaders/sky.wgsl?raw';
+import four from  '../shaders/four.wgsl?raw'
+import five from  '../shaders/five.wgsl?raw'
+import music from  '../shaders/music.wgsl?raw'
+import six from  '../shaders/six.wgsl?raw'
+import seven from  '../shaders/seven.wgsl?raw'
+import light from  '../shaders/light.wgsl?raw'
+import signalvsNoise from  '../shaders/signal.wgsl?raw'
 
 import physics from "./physics";
-
 import postProcessing from "./postProcessing";
-
-import signalvsNoise from  './shaders/signal.wgsl?raw'
 
 let defaultDemo = 'physics';
 let data = {}
+
+
+console.log(123)
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 

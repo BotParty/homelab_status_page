@@ -1,6 +1,6 @@
 import { init } from "../lib/main";
-import stripes from '../demos/shaders/stripes.wgsl?raw'
-import blur from './webgl/blur.wgsl?raw'
+import stripes from '../shaders/stripes.wgsl?raw'
+import blur from '../shaders/blur.wgsl?raw'
 
 const tileDim = 128;
 const batch = [4, 4];

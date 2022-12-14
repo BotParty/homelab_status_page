@@ -1,4 +1,4 @@
-import { init } from "../lib/main";
+import { init } from "../../lib/main";
 import updateSpritesWGSL from "./shaders/updateSprites.wgsl?raw";
 import spriteWGSLFS from "./shaders/sprite_fs.wgsl?raw";
 import spriteWGSLVS from "./shaders/sprite_vs.wgsl?raw";
