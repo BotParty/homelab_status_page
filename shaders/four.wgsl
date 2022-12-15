@@ -5,13 +5,14 @@
     var color = vec4<f32>(1., 1., 0., 1.);
     var e = 0.0;
     var i = 3.0;
+    var time = u.time * .001;
     loop {
       if i >= 5.0 { break; }
       e += 
       
-      0.23/abs((i/65.) + sin((.05 * u.time/1.0) + 3.95*i*(fragUV.x)
+      0.23/abs((i/65.) + sin((.05 * time/1.0) + 3.95*i*(fragUV.x)
         * 
-        (cos(i/4.0 + (.5 * u.time / 1.0) + fragUV.x*2.2) ) ) 
+        (cos(i/4.0 + (.5 * time / 1.0) + fragUV.x*2.2) ) ) 
         + 4.5 * fragUV.y);
       i+= 1.0;
     } 
@@ -34,7 +35,7 @@ fn main_fragment(
         @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32>{
 
-    if (fragUV.x > sin(u.time * .0005)  * .005) {
+    if (fragUV.x > sin(u.time * .000000005)  * .005) {
         return a(fragUV);
         }
     else { 

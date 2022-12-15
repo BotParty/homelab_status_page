@@ -43,6 +43,7 @@ const addMouseEvents = function(canvas, data) {
   });
 };
 function createCanvas(width = innerWidth, height = innerHeight) {
+  console.log("5555");
   let dpi = devicePixelRatio;
   var canvas = document.createElement("canvas");
   canvas.width = dpi * width;
@@ -90,9 +91,8 @@ let makeCompute = (state) => {
     const simParams = state.options.compute.simParams;
     device.queue.writeBuffer(state.simParamBuffer, 0, new Float32Array(Object.values(simParams)));
   }
-  if (state.compute.buffers) {
-    console.log(12313);
-  }
+  if (state.compute.buffers)
+    ;
 };
 let makeImgTexture = async (state) => {
   const img = document.createElement("img");
