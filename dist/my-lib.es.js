@@ -505,6 +505,8 @@ async function init(options) {
     renderPasses: []
   };
   utils.addMouseEvents(canvas, state.data);
+  if (!navigator.gpu)
+    return console.log("Error: webgpu is not available. Please install canary!!!");
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const device = await (adapter == null ? void 0 : adapter.requestDevice());
