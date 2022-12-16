@@ -22,7 +22,7 @@ let defaultDemo = 'physics';
 let data = {}
 
 
-console.log(123)
+
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
@@ -36,7 +36,8 @@ async function start_loop_static(options) {
   options.data.texture =  img
 
   let draw = await init(options);
-  draw(data);
+  if (! draw) return alert('webgpu not defined - please insteall chrome canary, go to chrome://flags, search for canary')
+  draw(data)
   
   requestAnimationFrame(function test() {
     //if (stuff) data.texture = stuff()
