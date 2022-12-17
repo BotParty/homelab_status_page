@@ -51,14 +51,14 @@
 To define a command you specify a mixture of static and dynamic data for the object. Once this is done, `simple-webgpu` takes this description and then compiles it into optimized JavaScript code.  For example, here is a simple `simple-webgpu` program to draw a triangle:
 
 ```js
-// Calling the regl module with no arguments creates a full screen canvas and
-// WebGPU context, and then uses this context to initialize a new REGL instance
+// importing the webgpu module creates a full screen canvas and
+// WebGPU context, and then uses this context to initialize a new webgpu instance
 const webgpu = require('simple-webgpu')
 
-// Calling regl() creates a new partially evaluated draw command
+// Calling simplewebgpu.init() creates a new partially evaluated draw command
 const drawTriangle = webgpu.init({
 
-  // Shaders in regl are just strings.  You can use glslify or whatever you want
+  // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
     precision mediump float;
@@ -76,13 +76,13 @@ const drawTriangle = webgpu.init({
 
   // Here we define the vertex attributes for the above shader
   attributes: {
-    // regl.buffer creates a new array buffer object
+    // simplewebgpu.buffer creates a new array buffer object
     position: webgpu.buffer([
-      [-2, -2],   // no need to flatten nested arrays, regl automatically
+      [-2, -2],   // no need to flatten nested arrays, simpleWebgpu automatically
       [4, -2],    // unrolls them into a typedarray (default Float32)
       [4,  4]
     ])
-    // regl automatically infers sane defaults for the vertex attribute pointers
+    // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
 
   uniforms: {
@@ -90,11 +90,11 @@ const drawTriangle = webgpu.init({
     color: webgpu.prop('color')
   },
 
-  // This tells regl the number of vertices to draw in this command
+  // This tells simpleWebgpu the number of vertices to draw in this command
   count: 3
 })
 
-// regl.frame() wraps requestAnimationFrame and also handles viewport changes
+// webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 webgpu.frame(({time}) => {
   // clear contents of the drawing buffer
   webgpu.clear({
