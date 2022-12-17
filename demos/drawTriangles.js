@@ -1,6 +1,6 @@
-const webgpu = require('simple-webgpu')
+//const webgpu = require('simple-webgpu')
 
-//import simpleWebgpu from "../../lib/main";
+import simpleWebgpu from "../../lib/main";
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 const drawTriangle = simpleWebgpu.init({
@@ -42,20 +42,34 @@ const drawTriangle = simpleWebgpu.init({
 })
 
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
-simpleWebgpu.frame(({time}) => {
-  // clear contents of the drawing buffer
-  simpleWebgpu.clear({
-    color: [0, 0, 0, 0],
-    depth: 1
-  })
 
-  // draw a triangle using the command defined above
-  drawTriangle({
-    color: [
-      Math.cos(time * 0.001),
-      Math.sin(time * 0.0008),
-      Math.cos(time * 0.003),
-      1
-    ]
-  })
-})
+function drawTrianglesDemo () {
+    drawTriangle({
+        color: [
+          Math.cos(time * 0.001),
+          Math.sin(time * 0.0008),
+          Math.cos(time * 0.003),
+          1
+        ]
+      })
+}
+
+export default drawTrianglesDemo
+
+// simpleWebgpu.frame(({time}) => {
+//   // clear contents of the drawing buffer
+//   simpleWebgpu.clear({
+//     color: [0, 0, 0, 0],
+//     depth: 1
+//   })
+
+//   // draw a triangle using the command defined above
+//   drawTriangle({
+//     color: [
+//       Math.cos(time * 0.001),
+//       Math.sin(time * 0.0008),
+//       Math.cos(time * 0.003),
+//       1
+//     ]
+//   })
+// })

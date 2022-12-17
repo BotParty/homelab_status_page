@@ -20,12 +20,11 @@ import postProcessing from "./postProcessing";
 
 //import simpleShaderDemo from "./simpleShaderDemo";
 
+//import drawTrianglesDemo from "./drawTriangles";
+
 
 let defaultDemo = 'physics';
 let data = {}
-
-
-
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
