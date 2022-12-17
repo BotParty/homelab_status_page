@@ -18,6 +18,9 @@ import signalvsNoise from  '../shaders/signal.wgsl?raw'
 import physics from "./physics";
 import postProcessing from "./postProcessing";
 
+//import simpleShaderDemo from "./simpleShaderDemo";
+
+
 let defaultDemo = 'physics';
 let data = {}
 
