@@ -1,9 +1,11 @@
-//const webgpu = require('simple-webgpu')
-
-import simpleWebgpu from "../../lib/main";
+//import simpleWebgpu from "../lib/main";
+import simpleWebgpu from '../lib/main';
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
-const drawTriangle = simpleWebgpu.init({
+let webgpu = await simpleWebgpu.init()
+//console.log(webgpu)
+
+const draw = webgpu({
 
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
@@ -24,7 +26,7 @@ const drawTriangle = simpleWebgpu.init({
   // Here we define the vertex attributes for the above shader
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
-    position: simpleWebgpu.buffer([
+    position: webgpu.buffer([
       [-2, -2],   // no need to flatten nested arrays, simpleWebgpu automatically
       [4, -2],    // unrolls them into a typedarray (default Float32)
       [4,  4]
@@ -34,7 +36,7 @@ const drawTriangle = simpleWebgpu.init({
 
   uniforms: {
     // This defines the color of the triangle to be a dynamic variable
-    color: simpleWebgpu.prop('color')
+    color: webgpu.prop('color')
   },
 
   // This tells simpleWebgpu the number of vertices to draw in this command
@@ -43,8 +45,10 @@ const drawTriangle = simpleWebgpu.init({
 
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
-function drawTrianglesDemo () {
-    drawTriangle({
+function drawTriangle () {
+  let time = 0
+  //console.log('123', draw)
+    draw({
         color: [
           Math.cos(time * 0.001),
           Math.sin(time * 0.0008),
@@ -54,7 +58,7 @@ function drawTrianglesDemo () {
       })
 }
 
-export default drawTrianglesDemo
+export default drawTriangle
 
 // simpleWebgpu.frame(({time}) => {
 //   // clear contents of the drawing buffer
