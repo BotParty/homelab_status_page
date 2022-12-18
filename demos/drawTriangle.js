@@ -10,18 +10,24 @@ const draw = webgpu({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
-    precision mediump float;
-    uniform vec4 color;
-    void main() {
-      gl_FragColor = color;
-    }`,
+  @fragment
+  fn main() -> @location(0) vec4<f32> {
+    return vec4(1.0, 0.0, 0.0, 1.0);
+  }`,
 
   vert: `
-    precision mediump float;
-    attribute vec2 position;
-    void main() {
-      gl_Position = vec4(position, 0, 1);
-    }`,
+  @vertex
+  fn main(
+    @builtin(vertex_index) VertexIndex : u32
+  ) -> @builtin(position) vec4<f32> {
+    var pos = array<vec2<f32>, 3>(
+      vec2(0.0, 0.5),
+      vec2(-0.5, -0.5),
+      vec2(0.5, -0.5)
+    );
+  
+    return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+  }`,
 
   // Here we define the vertex attributes for the above shader
   attributes: {
