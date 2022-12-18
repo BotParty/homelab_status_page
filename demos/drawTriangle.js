@@ -4,9 +4,8 @@ import simpleWebgpu from '../lib/main';
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
 //console.log(webgpu)
-
-const draw = webgpu({
-
+//module thinks this is a draw call but its actually an init draw call
+const draw = webgpu.initDrawCall({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
@@ -53,8 +52,17 @@ const draw = webgpu({
 
 function drawTriangle () {
   let time = 0
-  //console.log('123', draw)
-    draw({
+  console.log('draw Triangle', webgpu)
+  webgpu.draw({
+        color: [
+          Math.cos(time * 0.001),
+          Math.sin(time * 0.0008),
+          Math.cos(time * 0.003),
+          1
+        ]
+      })
+
+      webgpu.draw({
         color: [
           Math.cos(time * 0.001),
           Math.sin(time * 0.0008),
