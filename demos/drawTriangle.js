@@ -11,7 +11,7 @@ const draw = webgpu.initDrawCall({
   frag: `
   @fragment
   fn main() -> @location(0) vec4<f32> {
-    return vec4(1.0, 0.0, 0.0, 1.0);
+    return vec4(1.0, 0.0, 1.0, 1.0);
   }`,
 
   vert: `
@@ -52,7 +52,7 @@ const draw = webgpu.initDrawCall({
 
 function drawTriangle () {
   let time = 0
-  console.log('draw Triangle', webgpu)
+  //console.log('draw Triangle', webgpu)
   webgpu.draw({
         color: [
           Math.cos(time * 0.001),
