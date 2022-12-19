@@ -20,7 +20,7 @@
 
 //import simpleShaderDemo from "./simpleShaderDemo";
 
-import drawTriangle from "./drawTriangle";
+import basic from "./basic";
 
 
 let defaultDemo = 'physics';
@@ -53,14 +53,14 @@ let demoTitles = [
   // 'signalvsNoise',  'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
   // 'four', 'five', 'music', 'six', 'seven', 'light', 'physics', 
   // 'postProcessing',
-  'drawTriangle' 
+  'basic' 
 ]
 
 let demos = [
   // signalvsNoise,  stripes, rings, checkerboard, one, mouse, texture, sky,
 
   //  four, five, music, six, seven, light, physics, postProcessing
-  drawTriangle
+  basic
 ]
 
 
