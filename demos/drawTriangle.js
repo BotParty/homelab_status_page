@@ -5,7 +5,7 @@ import simpleWebgpu from '../lib/main';
 let webgpu = await simpleWebgpu.init()
 //console.log(webgpu)
 //module thinks this is a draw call but its actually an init draw call
-const draw = webgpu.initDrawCall({
+const draw = await webgpu.initDrawCall({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
