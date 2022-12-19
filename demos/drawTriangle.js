@@ -52,7 +52,7 @@ const draw = webgpu.initDrawCall({
 function drawTriangle () {
   let time = 0
   //console.log('draw Triangle', webgpu)
-  webgpu.draw({
+  draw({
         color: [
           Math.cos(time * 0.001),
           Math.sin(time * 0.0008),
@@ -61,7 +61,7 @@ function drawTriangle () {
         ]
       })
 
-      webgpu.draw({
+      draw({
         color: [
           Math.cos(time * 0.001),
           Math.sin(time * 0.0008),

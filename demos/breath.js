@@ -1,68 +1,78 @@
-import { init } from "../lib/main";
-import updateSpritesWGSL from "./shaders/updateSprites.wgsl?raw";
-import spriteWGSLFS from "./shaders/sprite_fs.wgsl?raw";
-import spriteWGSLVS from "./shaders/sprite_vs.wgsl?raw";
+*/
+/* global AudioContext */
+const regl = require('../regl')()
 
-const vertexBufferData = new Float32Array([
-  -0.01, -0.02, 0.01, -0.02, 0.0, 0.02,
-]);
-const numParticles = 1500;
-const initialParticleData = new Float32Array(numParticles * 4);
-for (let i = 0; i < numParticles; ++i) {
-  initialParticleData[4 * i + 0] = 5 * (Math.random() - 0.5);
-  initialParticleData[4 * i + 1] = 5 * (Math.random() - 0.5);
-  initialParticleData[4 * i + 2] = 20 * (Math.random() - 0.5) * 0.1;
-  initialParticleData[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
-}
+// First we need to get permission to use the microphone
+require('getusermedia')({audio: true}, function (err, stream) {
+  if (err) {
+    return
+  }
 
-const initialParticleData2 = new Float32Array(numParticles * 4);
+  // Next we create an analyser node to intercept data from the mic
+  const context = new AudioContext()
+  const analyser = context.createAnalyser()
 
-for (let i = 0; i < numParticles; ++i) {
-  initialParticleData2[4 * i + 0] = 5 * (Math.random() - 0.5);
-  initialParticleData2[4 * i + 1] = 5 * (Math.random() - 0.5);
-  initialParticleData2[4 * i + 2] = 20 * (Math.random() - 0.5) * 0.1;
-  initialParticleData2[4 * i + 3] = 20 * (Math.random() - 0.5) * 0.1;
-}
+  // And then we connect them together
+  context.createMediaStreamSource(stream).connect(analyser)
 
-let data = {};
-const options = {
-  data: {},
-  vs: spriteWGSLVS, // 
-  shader: spriteWGSLFS, //
-  compute: {
-    //optional
-    dispatchWorkGroups: () => {
-      return Math.ceil(initialParticleData.length / 64)
+  // Here we preallocate buffers for streaming audio data
+  const fftSize = analyser.frequencyBinCount
+  const frequencies = new Uint8Array(fftSize)
+  const fftBuffer = regl.buffer({
+    length: fftSize,
+    type: 'uint8',
+    usage: 'dynamic'
+  })
+
+  // This command draws the spectrogram
+  const drawSpectrum = regl({
+    vert: `
+    precision mediump float;
+    #define FFT_SIZE ${fftSize}
+    #define PI ${Math.PI}
+    attribute float index, frequency;
+    void main() {
+      float theta = 2.0 * PI * index / float(FFT_SIZE);
+      gl_Position = vec4(
+        0.5 * cos(theta) * (1.0 + frequency),
+        0.5 * sin(theta) * (1.0 + frequency),
+        0,
+        1);
+    }`,
+
+    frag: `
+    void main() {
+      gl_FragColor = vec4(1, 1, 1, 1);
+    }`,
+
+    attributes: {
+      index: Array(fftSize).fill().map((_, i) => i),
+      frequency: {
+        buffer: fftBuffer,
+        normalized: true
+      }
     },
-        numVertices: () => {
-      return initialParticleData.length / 4
-    },
-    buffers: [initialParticleData, initialParticleData2],
-    vertexBufferData,
-    shader: updateSpritesWGSL,
-    simParams: {
-      deltaT: 0.04,
-      rule1Distance: 0.1,
-      rule2Distance: 0.025,
-      rule3Distance: 0.025,
-      rule1Scale: 0.02,
-      rule2Scale: 0.05,
-      rule3Scale: 0.005,
-    },
-  },
-};
+    elements: null,
+    instances: -1,
+    lineWidth: 1,
+    depth: {enable: false},
+    count: fftSize,
+    primitive: 'line loop'
+  })
 
-async function physics() {
-  options.data = options.data; //extend
+  regl.frame(({tick}) => {
+    // Clear draw buffer
+    regl.clear({
+      color: [0, 0, 0, 1],
+      depth: 1
+    })
 
-  const draw = await init(options);
-  draw(data);
+    // Poll microphone data
+    analyser.getByteFrequencyData(frequencies)
 
-  requestAnimationFrame(function test() {
-    draw(data);
-    requestAnimationFrame(test);
-    //setTimeout(test, 500)
-  });
-}
+    // Here we use .subdata() to update the buffer in place
+    fftBuffer.subdata(frequencies)
 
-export default physics;
+    // Draw the spectrum
+    drawSpectrum()
+  })
