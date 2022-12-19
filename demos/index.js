@@ -26,8 +26,6 @@ import drawTriangle from "./drawTriangle";
 let defaultDemo = 'physics';
 let data = {}
 
-
-
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   options.canvas = document.querySelector('canvas')
