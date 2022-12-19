@@ -19,9 +19,7 @@ const createBuffer = (device:any, arr:any, usage:any,) => {
     return buffer;
   };
 
-  function validateData(data: any) {
-    if (typeof data.width !== "number") throw new Error("bad data!!");
-  }
+
   
   const addMouseEvents = function (canvas: any, data: any) {
     canvas.addEventListener("mousemove", (event: any) => {
@@ -33,7 +31,7 @@ const createBuffer = (device:any, arr:any, usage:any,) => {
   };
 
   function createCanvas (width=innerWidth, height=innerHeight) {
-    console.log('5555')
+
   let dpi = devicePixelRatio;
     var canvas = document.createElement("canvas");
     canvas.width = dpi * width;
@@ -43,6 +41,8 @@ const createBuffer = (device:any, arr:any, usage:any,) => {
     return canvas;
   }
 
+  
+
   export default {
-      createBuffer,  createCanvas, validateData, addMouseEvents
+      createBuffer,  createCanvas, addMouseEvents
   }

@@ -1,30 +1,36 @@
-const webgpu = require('simple-webgpu')
-
-//import simpleWebgpu from "../../lib/main";
+//import simpleWebgpu from "../lib/main";
+import simpleWebgpu from '../lib/main';
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
-const drawTriangle = simpleWebgpu.init({
-
+let webgpu = await simpleWebgpu.init()
+//console.log(webgpu)
+//module thinks this is a draw call but its actually an init draw call
+const draw = webgpu.initDrawCall({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
-    precision mediump float;
-    uniform vec4 color;
-    void main() {
-      gl_FragColor = color;
-    }`,
+  @fragment
+  fn main_fragment() -> @location(0) vec4<f32> {
+    return vec4(1.0, 0.0, 0.0, 1.0);
+  }`,
 
   vert: `
-    precision mediump float;
-    attribute vec2 position;
-    void main() {
-      gl_Position = vec4(position, 0, 1);
-    }`,
+  @vertex
+  fn main_vertex(
+    @builtin(vertex_index) VertexIndex : u32
+  ) -> @builtin(position) vec4<f32> {
+    var pos = array<vec2<f32>, 3>(
+      vec2(0.0, 0.5),
+      vec2(-0.5, -0.5),
+      vec2(0.5, -0.5));
+  
+    return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+  }`,
 
   // Here we define the vertex attributes for the above shader
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
-    position: simpleWebgpu.buffer([
+    position: webgpu.buffer([
       [-2, -2],   // no need to flatten nested arrays, simpleWebgpu automatically
       [4, -2],    // unrolls them into a typedarray (default Float32)
       [4,  4]
@@ -34,7 +40,7 @@ const drawTriangle = simpleWebgpu.init({
 
   uniforms: {
     // This defines the color of the triangle to be a dynamic variable
-    color: simpleWebgpu.prop('color')
+    color: webgpu.prop('color')
   },
 
   // This tells simpleWebgpu the number of vertices to draw in this command
@@ -42,20 +48,45 @@ const drawTriangle = simpleWebgpu.init({
 })
 
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
-simpleWebgpu.frame(({time}) => {
-  // clear contents of the drawing buffer
-  simpleWebgpu.clear({
-    color: [0, 0, 0, 0],
-    depth: 1
-  })
 
-  // draw a triangle using the command defined above
-  drawTriangle({
-    color: [
-      Math.cos(time * 0.001),
-      Math.sin(time * 0.0008),
-      Math.cos(time * 0.003),
-      1
-    ]
-  })
-})
+function drawTriangle () {
+  let time = 0
+  //console.log('draw Triangle', webgpu)
+  webgpu.draw({
+        color: [
+          Math.cos(time * 0.001),
+          Math.sin(time * 0.0008),
+          Math.cos(time * 0.003),
+          1
+        ]
+      })
+
+      webgpu.draw({
+        color: [
+          Math.cos(time * 0.001),
+          Math.sin(time * 0.0008),
+          Math.cos(time * 0.003),
+          1
+        ]
+      })
+}
+
+export default drawTriangle
+
+// simpleWebgpu.frame(({time}) => {
+//   // clear contents of the drawing buffer
+//   simpleWebgpu.clear({
+//     color: [0, 0, 0, 0],
+//     depth: 1
+//   })
+
+//   // draw a triangle using the command defined above
+//   drawTriangle({
+//     color: [
+//       Math.cos(time * 0.001),
+//       Math.sin(time * 0.0008),
+//       Math.cos(time * 0.003),
+//       1
+//     ]
+//   })
+// })

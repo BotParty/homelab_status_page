@@ -248,4 +248,8 @@ Many examples use creative commons or public domain artwork for illustrative pur
 * Normal map (normaltexture.jpg) by [rubberduck](http://opengameart.org/node/21219). CC0 license.
 
 #### Regl Homage
-Simple-webgpu is an intentional homage of my favorite WebGL library,  [click here to view the original](https://github.com/regl-project/regl)
+Simple-webgpu is an intentional homage of my favorite WebGL module,  [click here to view the original](https://github.com/regl-project/regl). My goal with this module was to keep the essence of regl and make it possible to translate the demos with minimal transpilation of just shader code.
+
+
+### Platinum Sonsors
+[Zoox Logo](data/data/ZOOX_LOGO_blk_large.png)
