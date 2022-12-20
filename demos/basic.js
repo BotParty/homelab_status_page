@@ -5,18 +5,24 @@ import simpleWebgpu from '../lib/main';
 let webgpu = await simpleWebgpu.init()
 //console.log(webgpu)
 //module thinks this is a draw call but its actually an init draw call
-const draw = webgpu.initDrawCall({
+const draw = await webgpu.initDrawCall({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
   @fragment
-  fn main_fragment() -> @location(0) vec4<f32> {
-    return vec4(1.0, 0.0, 0.0, 1.0);
+  fn main() -> @location(0) vec4<f32> {
+    return vec4(.5, 0.0, 0.5, 1.0);
   }`,
 
   vert: `
+
+
+  struct VertexOutput {
+    @builtin(position) Position : vec4<f32>,
+  }
+
   @vertex
-  fn main_vertex(
+  fn main                                                           (
     @builtin(vertex_index) VertexIndex : u32
   ) -> @builtin(position) vec4<f32> {
     var pos = array<vec2<f32>, 3>(
@@ -52,7 +58,7 @@ const draw = webgpu.initDrawCall({
 function drawTriangle () {
   let time = 0
   //console.log('draw Triangle', webgpu)
-  webgpu.draw({
+  draw({
         color: [
           Math.cos(time * 0.001),
           Math.sin(time * 0.0008),
@@ -61,7 +67,7 @@ function drawTriangle () {
         ]
       })
 
-      webgpu.draw({
+      draw({
         color: [
           Math.cos(time * 0.001),
           Math.sin(time * 0.0008),
