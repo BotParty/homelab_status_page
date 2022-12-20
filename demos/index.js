@@ -22,7 +22,7 @@
 
 import basic from "./basic";
 
-
+console.log(123)
 let defaultDemo = 'physics';
 let data = {}
 

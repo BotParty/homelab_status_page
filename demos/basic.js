@@ -11,7 +11,7 @@ const draw = await webgpu.initDrawCall({
   frag: `
   @fragment
   fn main() -> @location(0) vec4<f32> {
-    return vec4(.5, 0.0, 0.5, 1.0);
+    return vec4(.5, 0.0, .9, 1.0);
   }`,
 
   vert: `
@@ -39,9 +39,9 @@ const draw = await webgpu.initDrawCall({
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
     position: webgpu.buffer([
-      [-2, -2],   // no need to flatten nested arrays, simpleWebgpu automatically
-      [4, -2],    // unrolls them into a typedarray (default Float32)
-      [4,  4]
+      [0.0, 0.5],   // no need to flatten nested arrays, simpleWebgpu automatically
+      [-0.5, -0.5],    // unrolls them into a typedarray (default Float32)
+      [.5,  -.5]
     ])
     // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
