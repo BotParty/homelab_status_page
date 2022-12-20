@@ -6,13 +6,13 @@ var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
+  for (var prop2 in b || (b = {}))
+    if (__hasOwnProp.call(b, prop2))
+      __defNormalProp(a, prop2, b[prop2]);
   if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
+    for (var prop2 of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop2))
+        __defNormalProp(a, prop2, b[prop2]);
     }
   return a;
 };
@@ -23,17 +23,13 @@ const createBuffer = (device, arr, usage) => {
     usage,
     mappedAtCreation: true
   };
-  let buffer = device.createBuffer(desc);
+  let buffer2 = device.createBuffer(desc);
   arr[5] = Date.now();
-  const writeArray = arr instanceof Uint16Array ? new Uint16Array(buffer.getMappedRange()) : new Float32Array(buffer.getMappedRange());
+  const writeArray = arr instanceof Uint16Array ? new Uint16Array(buffer2.getMappedRange()) : new Float32Array(buffer2.getMappedRange());
   writeArray.set(arr);
-  buffer.unmap();
-  return buffer;
+  buffer2.unmap();
+  return buffer2;
 };
-function validateData(data) {
-  if (typeof data.width !== "number")
-    throw new Error("bad data!!");
-}
 const addMouseEvents = function(canvas, data) {
   canvas.addEventListener("mousemove", (event) => {
     let x = event.pageX;
@@ -43,7 +39,6 @@ const addMouseEvents = function(canvas, data) {
   });
 };
 function createCanvas(width = innerWidth, height = innerHeight) {
-  console.log("5555");
   let dpi = devicePixelRatio;
   var canvas = document.createElement("canvas");
   canvas.width = dpi * width;
@@ -55,180 +50,133 @@ function createCanvas(width = innerWidth, height = innerHeight) {
 var utils = {
   createBuffer,
   createCanvas,
-  validateData,
   addMouseEvents
 };
-var defaultShader = "// let size = 4.0;\n\n// let b = 0.3;		//size of the smoothed border\n\n//     fn mainImage(fragCoord: vec2<f32>, iResolution: vec2<f32>) -> vec4<f32> {\n//       let aspect = iResolution.x/iResolution.y;\n//       let position = (fragCoord.xy) * aspect;\n//       let dist = distance(position, vec2<f32>(aspect*0.5, 0.5));\n//       let offset=u.time * 000.0001;\n//       let conv=4.;\n//       let v=dist*4.-offset;\n//       let ringr=floor(v);\n      \n//       var stuff = 0.;\n//       if (v % 3. > .5) {\n//         stuff = 0.;\n//       }\n\n// 	var color=smoothStep(-b, b, abs(dist- (ringr+stuff+offset)/conv));\n//       if (ringr % 2. ==1.) {\n//        color=2.-color;\n//       }\n\n//     let distToMouseX = distance(u.mouseX, fragCoord.x);\n//     let distToMouseY = distance(u.mouseY, fragCoord.y);\n\n//     return vec4<f32>(\n//       distToMouseX, \n//       color, \n//       color, \n//       1.\n//       );\n//   };\n\n//   fn main(uv: vec2<f32>) -> vec4<f32> {\n//     let fragCoord = vec2<f32>(uv.x, uv.y);\n//     var base = vec4<f32>(cos(u.time * .000001), .5, sin(u.time * 0.000001), 1.);\n//     let dist = distance( fragCoord, vec2<f32>(u.mouseX,  u.mouseY));\n//     return mainImage(fragCoord, vec2<f32>(u.width, u.height));\n//   }\n\n@fragment\n  fn main_fragment(in: VertexOutput) -> @location(0) vec4<f32> {\n    return vec4<f32>(.8);\n  }\n  ";
-let makeCompute = (state) => {
-  let { device } = state;
-  if (state.compute.vertexBufferData) {
-    state.computeVertexBufferData = device.createBuffer({
-      size: state.compute.vertexBufferData.byteLength,
-      usage: GPUBufferUsage.VERTEX,
-      mappedAtCreation: true
-    });
-    new Float32Array(state.computeVertexBufferData.getMappedRange()).set(state.compute.vertexBufferData);
-    state.computeVertexBufferData.unmap();
-  }
-  if (state.compute.buffers) {
-    state.particleBuffers = state.compute.buffers.map((userTypedArray) => {
-      let buffer = device.createBuffer({
-        size: userTypedArray.byteLength,
-        usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
-        mappedAtCreation: true
-      });
-      new Float32Array(buffer.getMappedRange()).set(userTypedArray);
-      buffer.unmap();
-      return buffer;
-    });
-  }
-  const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
-  state.simParamBuffer = device.createBuffer({
-    size: simParamBufferSize,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-  });
-  if (state.options.compute.simParams) {
-    const simParams = state.options.compute.simParams;
-    device.queue.writeBuffer(state.simParamBuffer, 0, new Float32Array(Object.values(simParams)));
-  }
-  if (state.compute.buffers)
-    ;
-};
-let makeImgTexture = async (state) => {
+let makeImgTexture = async (state2) => {
   const img = document.createElement("img");
   const source = img;
   source.width = innerWidth;
   source.height = innerHeight;
-  img.src = state.data.texture;
+  img.src = state2.data.texture;
   await img.decode();
   return await createImageBitmap(img);
 };
-async function makeTexture(state) {
+async function makeTexture(state2) {
   var _a, _b;
-  if (HTMLImageElement === ((_b = (_a = state == null ? void 0 : state.data) == null ? void 0 : _a.texture) == null ? void 0 : _b.constructor)) {
-    let img = state.data.texture;
+  if (HTMLImageElement === ((_b = (_a = state2 == null ? void 0 : state2.data) == null ? void 0 : _a.texture) == null ? void 0 : _b.constructor)) {
+    let img = state2.data.texture;
     await img.decode();
     await createImageBitmap(img);
     await img.decode();
     let imageBitmap = await createImageBitmap(img);
-    let texture = state.device.createTexture({
+    let texture = state2.device.createTexture({
       size: [imageBitmap.width, imageBitmap.height, 1],
       format: "rgba8unorm",
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
-    state.device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture }, [imageBitmap.width, imageBitmap.height]);
-    state.texture = texture;
-    updateTexture(state);
+    state2.device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture }, [imageBitmap.width, imageBitmap.height]);
+    state2.texture = texture;
+    updateTexture(state2);
     return texture;
-  } else if (typeof state.data.texture === "string") {
-    let texture = state.device.createTexture({
+  } else if (typeof state2.data.texture === "string") {
+    let texture = state2.device.createTexture({
       size: [900, 500, 1],
       format: "rgba8unorm",
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
-    let imageBitmap = await makeImgTexture(state);
-    state.device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture }, [imageBitmap.width, imageBitmap.height]);
-    state.texture = texture;
-    updateTexture(state);
+    let imageBitmap = await makeImgTexture(state2);
+    state2.device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture }, [imageBitmap.width, imageBitmap.height]);
+    state2.texture = texture;
+    updateTexture(state2);
     return texture;
   } else {
-    let texture = state.device.createTexture({
+    let texture = state2.device.createTexture({
       size: [256, 1, 1],
       format: "rgba8unorm",
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
-    let music = new Float32Array(new Array(800).fill(5).map((d, i) => state.data.texture ? state.data.texture[i % state.data.texture.length + d] : Math.random()));
-    state.texture = texture;
-    state.data.music = music;
-    updateTexture(state);
+    let music = new Float32Array(new Array(800).fill(5).map((d, i) => state2.data.texture ? state2.data.texture[i % state2.data.texture.length + d] : Math.random()));
+    state2.texture = texture;
+    state2.data.music = music;
+    updateTexture(state2);
     return texture;
   }
 }
-let t = 0;
-function updateTexture(state) {
-  if (!state.texture)
+function updateTexture(state2) {
+  if (!state2.texture)
     return;
-  if (state.data.texture) {
+  if (state2.data.texture) {
     let data = new Uint8Array(new Array(1024).fill(5).map((d, i) => {
-      return state.data.texture ? state.data.texture[i % state.data.texture.length] : Math.random();
+      return state2.data.texture ? state2.data.texture[i % state2.data.texture.length] : Math.random();
     }));
-    state.device.queue.writeTexture({ texture: state.texture }, data.buffer, {
+    state2.device.queue.writeTexture({ texture: state2.texture }, data.buffer, {
       bytesPerRow: 3200,
       rowsPerImage: 600
     }, [256, 1]);
   }
 }
-function createRenderPasses(state) {
-  var _a;
-  if (state.compute) {
-    makeCompute(state);
+function updateUniforms(state2) {
+  let { data, device } = state2;
+  let values = Object.values(data).filter((val) => typeof val !== "object");
+  let uniformsArray = new Float32Array(values.length);
+  uniformsArray.set(values, 0);
+  if (state2.uniformsBuffer) {
+    device.queue.writeBuffer(state2.uniformsBuffer, 0, uniformsArray.buffer, 0, 4 * uniformsArray.length);
+    return state2.uniformsBuffer;
+  } else {
+    return state2.uniformsBuffer = utils.createBuffer(device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
   }
+}
+function createRenderPasses(state2) {
+  var _a;
   let {
     particleBuffers,
     computeVertexBufferData,
     device
-  } = state;
-  const bindGroup = device.createBindGroup(state.bindGroupDescriptor);
+  } = state2;
+  const bindGroup = device.createBindGroup(state2.bindGroupDescriptor);
   const mainRenderPass = {
-    renderPassDescriptor: state.renderPassDescriptor,
-    texture: state.texture,
-    pipeline: state.pipeline,
+    renderPassDescriptor: state2.renderPassDescriptor,
+    texture: state2.texture,
+    pipeline: state2.pipeline,
     bindGroup,
     type: "draw"
   };
-  if ((_a = state == null ? void 0 : state.compute) == null ? void 0 : _a.numVertices)
-    mainRenderPass.numVertices = state.compute.numVertices();
-  if (state.compute && particleBuffers)
+  if ((_a = state2 == null ? void 0 : state2.compute) == null ? void 0 : _a.numVertices)
+    mainRenderPass.numVertices = state2.compute.numVertices();
+  if (state2.compute && particleBuffers)
     mainRenderPass.vertexBuffers = [
       particleBuffers[0],
       computeVertexBufferData
     ];
-  state.renderPasses.push(mainRenderPass);
+  state2.renderPasses.push(mainRenderPass);
 }
-const recordRenderPass = async function(state) {
-  let { device, renderPassDescriptor } = state;
-  renderPassDescriptor.colorAttachments[0].view = state.context.getCurrentTexture().createView();
+const recordRenderPass = async function(state2) {
+  let { device, renderPassDescriptor } = state2;
+  renderPassDescriptor.colorAttachments[0].view = state2.context.getCurrentTexture().createView();
   const commandEncoder = device.createCommandEncoder();
-  state.renderPasses.forEach(function render(_) {
-    let isCompute = _.type === "compute";
-    let passEncoder = isCompute ? commandEncoder.beginComputePass() : commandEncoder.beginRenderPass(renderPassDescriptor);
-    if (_.texture)
-      updateTexture(state);
-    passEncoder.setPipeline(_.pipeline);
-    passEncoder.setBindGroup(0, Array.isArray(_.bindGroup) ? _.bindGroup[t % 2] : _.bindGroup);
-    if (_.vertexBuffers)
-      _.vertexBuffers.forEach(function(vertexBuffer, i) {
-        passEncoder.setVertexBuffer(i, vertexBuffer);
-      });
-    if (_.numVertices)
-      passEncoder.draw(3, _.numVertices, 0, 0);
-    else
-      !isCompute && _.type === passEncoder.draw(3 * 2, 1, 0, 0);
-    if (_.dispatchWorkGroups) {
-      if (Array.isArray(_.dispatchWorkGroups))
-        passEncoder.dispatchWorkgroups(..._.dispatchWorkGroups);
-      else
-        passEncoder.dispatchWorkgroups(_.dispatchWorkGroups);
-    }
-    passEncoder.end();
+  let _ = state2.renderPasses[0];
+  if (!_)
+    return console.log("no worky");
+  let cubeVertexArray = new Float32Array(state2.options.attributes.position.array.flat());
+  console.log(cubeVertexArray, state2.options.attributes.position);
+  const verticesBuffer = device.createBuffer({
+    size: cubeVertexArray.byteLength,
+    usage: GPUBufferUsage.VERTEX,
+    mappedAtCreation: true
   });
+  new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
+  verticesBuffer.unmap();
+  let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+  passEncoder.setPipeline(_.pipeline);
+  passEncoder.setBindGroup(0, _.bindGroup);
+  passEncoder.setVertexBuffer(0, verticesBuffer);
+  passEncoder.draw(3 * 2, 1, 0, 0);
+  passEncoder.end();
   device.queue.submit([commandEncoder.finish()]);
-  t++;
 };
-function updateUniforms(state) {
-  let { data, device } = state;
-  let values = Object.values(data).filter((val) => typeof val !== "object");
-  let uniformsArray = new Float32Array(values.length);
-  uniformsArray.set(values, 0);
-  if (state.uniformsBuffer) {
-    device.queue.writeBuffer(state.uniformsBuffer, 0, uniformsArray.buffer, 0, 4 * uniformsArray.length);
-    return state.uniformsBuffer;
-  } else {
-    return state.uniformsBuffer = utils.createBuffer(device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
-  }
-}
-async function makePipeline(state) {
-  let { device } = state;
+async function makePipeline(state2) {
+  let { device } = state2;
   const cubeVertexArray = new Float32Array(new Array(1e4).fill(5).map((_, i) => {
     let n = i / 1e3;
     if (i % 2 === 1)
@@ -243,24 +191,39 @@ async function makePipeline(state) {
   });
   new Float32Array(verticesBuffer.getMappedRange()).set(cubeVertexArray);
   verticesBuffer.unmap();
-  state.cubeVertices = verticesBuffer;
+  state2.cubeVertices = verticesBuffer;
   let pipelineDesc = {
     layout: "auto",
     vertex: {
-      module: state.shader,
-      entryPoint: "main_vertex",
-      buffers: []
+      module: device.createShaderModule({
+        code: state2.options.vert
+      }),
+      entryPoint: "main",
+      buffers: [
+        {
+          arrayStride: 8,
+          attributes: [
+            {
+              shaderLocation: 0,
+              offset: 0,
+              format: "float32x2"
+            }
+          ]
+        }
+      ]
     },
     fragment: {
-      module: state.shader,
-      entryPoint: "main_fragment",
+      module: device.createShaderModule({
+        code: state2.options.frag
+      }),
+      entryPoint: "main",
       targets: [{ format: "bgra8unorm" }]
     },
     primitive: {
       topology: "triangle-list"
     }
   };
-  if (state.compute) {
+  if (state2.compute) {
     pipelineDesc.vertex.buffers.push({
       arrayStride: 4 * 4,
       stepMode: "instance",
@@ -319,8 +282,8 @@ async function makePipeline(state) {
   const pipelineLayout = device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout]
   });
-  state.bindGroupLayout = bindGroupLayout;
-  updateUniforms(state);
+  state2.bindGroupLayout = bindGroupLayout;
+  updateUniforms(state2);
   const renderPassDescriptor = {
     colorAttachments: [
       {
@@ -331,17 +294,17 @@ async function makePipeline(state) {
       }
     ]
   };
-  state.renderPassDescriptor = renderPassDescriptor;
+  state2.renderPassDescriptor = renderPassDescriptor;
   let pipeline = device.createRenderPipeline(__spreadProps(__spreadValues({}, pipelineDesc), {
     layout: pipelineLayout
   }));
-  let texture = await makeTexture(state);
-  state.bindGroupDescriptor = {
+  let texture = await makeTexture(state2);
+  state2.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
       {
         binding: 0,
-        resource: { buffer: state.uniformsBuffer }
+        resource: { buffer: state2.uniformsBuffer }
       },
       {
         binding: 1,
@@ -361,130 +324,17 @@ async function makePipeline(state) {
       }
     ]
   };
-  state.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state);
-  state.bindGroupDescriptor.entries[2].resource = texture.createView({
+  state2.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state2);
+  state2.bindGroupDescriptor.entries[2].resource = texture.createView({
     baseMipLevel: 0,
     mipLevelCount: 1
   });
   return pipeline;
 }
-function makeShaderModule(state, source) {
-  const { device, data } = state;
-  if (!source)
-    source = defaultShader;
-  utils.validateData(data);
-  const uniforms = Object.keys(data).filter((name) => typeof data[name] === "number").map((name) => `${name}: f32,`).join("\n");
-  let code = `
-    struct Uniforms {
-     ${uniforms}
-   }
-  @binding(0) @group(0) var<uniform> u: Uniforms;
-  @binding(1) @group(0) var mySampler: sampler;
-  @binding(2) @group(0) var myTexture: texture_2d<f32>;
-
-  struct VertexOutput {
-    @builtin(position) Position : vec4<f32>,
-    @location(0) fragUV : vec2<f32>,
-    @location(1) fragPosition: vec4<f32>,
-  }
-  
-  @vertex
-  fn main_vertex(
-    @builtin(vertex_index) VertexIndex : u32,
-  ) -> VertexOutput {
-    const pos = array(
-      vec2( 1.0,  1.0),
-      vec2( 1.0, -1.0),
-      vec2(-1.0, -1.0),
-      vec2( 1.0,  1.0),
-      vec2(-1.0, -1.0),
-      vec2(-1.0,  1.0),
-    );
-  
-    const uv = array(
-      vec2(1.0, 0.0),
-      vec2(1.0, 1.0),
-      vec2(0.0, 1.0),
-      vec2(1.0, 0.0),
-      vec2(0.0, 1.0),
-      vec2(0.0, 0.0),
-    );
-    var output : VertexOutput;
-    output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
-    output.fragUV = uv[VertexIndex];
-    output.fragPosition = (output.Position + vec4<f32>(1.0, 1.0, 1.0, 1.0));
-    output.fragPosition.g = 1.5 - output.fragPosition.g;
-    return output;
-  }
-  ${source}`;
-  if (state.options.vs) {
-    code = state.options.vs + state.options.shader;
-  }
-  return device.createShaderModule({ code });
-}
-function makeComputePass(state) {
-  var _a;
-  let device = state.device;
-  makeShaderModule(state, state.compute.cs);
-  const computePipeline = state.device.createComputePipeline({
-    compute: {
-      module: state.device.createShaderModule({
-        code: state.compute.shader
-      }),
-      entryPoint: "main_vertex"
-    }
-  });
-  if (state.compute.buffers) {
-    state.particleBindGroups = state.compute.buffers.map(function(d, i) {
-      return device.createBindGroup({
-        layout: computePipeline.getBindGroupLayout(0),
-        entries: [
-          {
-            binding: 0,
-            resource: {
-              buffer: state.simParamBuffer
-            }
-          },
-          {
-            binding: 1,
-            resource: {
-              buffer: state.particleBuffers[i],
-              offset: 0,
-              size: state.compute.buffers[0].byteLength
-            }
-          },
-          {
-            binding: 2,
-            resource: {
-              buffer: state.particleBuffers[(i + 1) % 2],
-              offset: 0,
-              size: state.compute.buffers[1].byteLength
-            }
-          }
-        ]
-      });
-    });
-  }
-  if ((_a = state.computeBindGroups) == null ? void 0 : _a.length) {
-    state.particleBindGroups.push(...state.compute.bindGroups(state.device, computePipeline));
-  }
-  return {
-    pipeline: computePipeline,
-    bindGroup: state.particleBindGroups,
-    dispatchWorkGroups: state.compute.dispatchWorkGroups(),
-    type: "compute"
-  };
-}
-async function compile(state, options) {
-  state.renderPasses = [];
-  if (state.compute) {
-    if (state.compute.cs)
-      state.renderPasses.push(makeComputePass(state));
-  }
-  let shaderCode = state.options.shader;
-  state.shader = makeShaderModule(state, shaderCode);
-  state.pipeline = await makePipeline(state);
-  createRenderPasses(state);
+async function compile(state2, options) {
+  state2.options.shader;
+  state2.pipeline = await makePipeline(state2);
+  createRenderPasses(state2);
 }
 let defaultData = {
   width: innerWidth,
@@ -495,23 +345,23 @@ let defaultData = {
   mouseY: 0,
   angle: 0
 };
-async function init(options) {
+async function init(options = {}) {
   let canvas = options.canvas || utils.createCanvas();
-  const state = {
+  const state2 = {
     renderPassDescriptor: {},
     options,
     data: Object.assign(defaultData, options.data),
     compute: options.compute,
     renderPasses: []
   };
-  utils.addMouseEvents(canvas, state.data);
+  utils.addMouseEvents(canvas, state2.data);
   if (!navigator.gpu)
     return console.log("Error: webgpu is not available. Please install canary!!!");
   const context = canvas.getContext("webgpu");
   const adapter = await navigator.gpu.requestAdapter();
   const device = await (adapter == null ? void 0 : adapter.requestDevice());
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
-  Object.assign(state, {
+  Object.assign(state2, {
     device,
     context,
     adapter
@@ -522,17 +372,47 @@ async function init(options) {
     alphaMode: "opaque",
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
   });
-  function draw(newData) {
-    newData.time = performance.now();
-    updateTexture(state);
-    Object.assign(state.data, newData);
-    updateUniforms(state);
-    recordRenderPass(state);
+  function draw(newScope) {
+    console.log("am i being drawn?");
+    if (Array.isArray(newScope))
+      return newScope.map((scope) => draw(scope));
+    updateTexture(state2);
+    updateUniforms(state2);
+    recordRenderPass(state2);
     return draw;
   }
   draw.canvas = canvas;
-  compile(state);
-  return draw;
+  draw.prop = prop;
+  draw.buffer = buffer;
+  draw.initDrawCall = initDrawCall;
+  draw.state = state2;
+  draw.draw = draw;
+  return {
+    initDrawCall,
+    buffer,
+    prop,
+    clear
+  };
+  async function initDrawCall(options2) {
+    state2.options = options2;
+    await compile(state2, state2.options);
+    return draw;
+  }
 }
-init.version = "0.9.9";
-export { init };
+function clear(options) {
+  state.clearValue.r = options.color[0];
+  state.clearValue.g = options.color[1];
+  state.clearValue.b = options.color[2];
+}
+function buffer(array) {
+  if (!(this instanceof buffer))
+    return new buffer(array);
+  this.array = array;
+}
+function prop(name) {
+  return () => {
+    return state.uniforms.color;
+  };
+}
+var main = { init };
+export { main as default };

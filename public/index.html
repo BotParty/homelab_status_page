@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>simple shader demo</title>
+    <title>Simple-WebGPU Graphics Engine</title>
     <link
       href="./data/tailwind.min.css"
       rel="stylesheet"
@@ -72,7 +72,9 @@
       }
 
     </style>
-    <script type="module" src="../demos/index.js"></script>
+    
+    <script type="module" src="./my-lib.es.js"></script>
+    <script type="module" src="./basic.js"></script>
   </head>
   <body>
 
@@ -81,21 +83,21 @@
         <fieldset>
       <div id="control-panel" class="mt-2">
                   <label class="inline-flex items-center">
-          stripes
+          basic
                             <input
                             type="radio"
                             class="form-radio"
-                            name="stripes"
-                            value="stripes"
+                            name="basic"
+                            value="basic"
                           />
                           </label>
                           <label class="inline-flex items-center">
-          rings
+          hello
                           <input
                           type="radio"
                           class="form-radio"
-                          name="rings"
-                          value="rings"
+                          name="hello"
+                          value="hello"
                           checked
                         />
                       </label>
