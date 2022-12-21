@@ -58,17 +58,16 @@
         background: pink;
         
       }
-      canvas {
-        z-index: 0;
-        position: absolute;
-        width: 500px;
-        height: 500px;
-      }
+
       audio {
         position: absolute;
         top: 50px;
         left: 50px;
         z-index: 999;
+      }
+
+      canvas {
+        margin-left: 500px
       }
 
     </style>
@@ -90,26 +89,17 @@
         value="particles"
       />
     </label>
-      <label class="inline-flex items-center">
-        line-primitives
-        <input
-        type="radio"
-        class="form-radio"
-        name="line-primitives"
-        value="line-primitives"
-        />
-      </label>
 
         <label class="inline-flex items-center">
-        scope
-        <input
-        type="radio"
-        class="form-radio"
-        name="scope"
-        value="scope"
-
-        />
-        </label>    
+          texture
+          <input
+          type="radio"
+          class="form-radio"
+          name="texture"
+          value="texture"
+          />
+      </label>
+         
         <label class="inline-flex items-center">
           basic
           <input
@@ -130,19 +120,38 @@
     value="postProcessing"
     />
     </label> -->
+          <!-- <label class="inline-flex items-center">
+        line-primitives
+        <input
+        type="radio"
+        class="form-radio"
+        name="line-primitives"
+        value="line-primitives"
+        /> 
+       </label>  
+      -->
       </div>
     </fieldset>
       </form>
-      <!-- <canvas height="500" width="960"></canvas> -->
+      <!-- <canvas height="500" width="100"></canvas> -->
 
-      <div class=" font-white bg-purple-700">
-        <a link="https://github.com/shelbernstein/Simple-webgpu/blob/main/readme.md">
+      <div class=" text-white bg-purple-800 mt-96 m-auto">
+        <h1>declarative and stateless WebGPU</h1>
+        <p>
+          Simple-Webgpu is a new functional abstraction for WebGPU.
+          
+          using simple-webgpu is easier than writing raw webGPU code because you don't need to manage state or binding. 
+          it's also lighter and faster and has less overhead than many existing 3d frameworks. 
+          and it has a functional data-driven style inspired by react.
+          
+          check out the sections below to learn more!</p>
+        <a class=" font-white" href="https://github.com/shelbernstein/Simple-webgpu/blob/main/readme.md">
           Readme
         </a>
-        <a link="https://github.com/shelbernstein/Simple-webgpu/blob/main/API.md">
+        <a href="https://github.com/shelbernstein/Simple-webgpu/blob/main/API.md">
           API
         </a>
-        <a link="/https://github.com/shelbernstein/Simple-webgpu">
+        <a href="/https://github.com/shelbernstein/Simple-webgpu">
           GitHub
         </a>
       </div>

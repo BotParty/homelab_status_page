@@ -10,36 +10,45 @@ const draw = await webgpu.initDrawCall({
   // to define them.  No need to manually create shader objects.
   frag: `
   @fragment
-  fn main() -> @location(0) vec4<f32> {
-    return vec4(.5, 0.0, 0.5, 1.0);
+  fn main(
+    //@location(0) position: vec4<f32>,
+    //@location(1) color: vec4<f32>,
+  ) -> @location(0) vec4<f32> {
+    //return color;
+    return vec4(.5, 0.0, .9, 1.0);
   }`,
 
   vert: `
-
-
   struct VertexOutput {
     @builtin(position) Position : vec4<f32>,
+   // Color: vec3<f32>,
   }
 
   @vertex
-  fn main                                                           (
-    @builtin(vertex_index) VertexIndex : u32
-  ) -> @builtin(position) vec4<f32> {
-    var pos = array<vec2<f32>, 3>(
-      vec2(0.0, 0.5),
-      vec2(-0.5, -0.5),
-      vec2(0.5, -0.5));
-  
-    return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+  fn main (
+    @builtin(vertex_index) VertexIndex : u32,
+    @location(0) position : vec2<f32>,
+    @location(1) color : vec3<f32>,
+  ) -> VertexOutput {
+
+  var output: VertexOutput;
+  //output.Color = color;
+
+  output.Position = vec4<f32>(position.xy, 0.0, 1.0);
+  return output;
   }`,
 
   // Here we define the vertex attributes for the above shader
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
     position: webgpu.buffer([
-      [-2, -2],   // no need to flatten nested arrays, simpleWebgpu automatically
-      [4, -2],    // unrolls them into a typedarray (default Float32)
-      [4,  4]
+      [.0, .5],   // no need to flatten nested arrays, simpleWebgpu automatically
+      [-0.5, -0.5],    // unrolls them into a typedarray (default Float32)
+      [.5,  -.5]
+    ]), color: webgpu.buffer([
+      [1,0,0],
+      [0,1,0],
+      [1,0,1],
     ])
     // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
@@ -55,7 +64,7 @@ const draw = await webgpu.initDrawCall({
 
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
-function drawTriangle () {
+function basic () {
   let time = 0
   //console.log('draw Triangle', webgpu)
   draw({
@@ -77,7 +86,7 @@ function drawTriangle () {
       })
 }
 
-export default drawTriangle
+export default basic
 
 // simpleWebgpu.frame(({time}) => {
 //   // clear contents of the drawing buffer
