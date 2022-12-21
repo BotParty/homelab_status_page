@@ -10,26 +10,32 @@ const draw = await webgpu.initDrawCall({
   // to define them.  No need to manually create shader objects.
   frag: `
   @fragment
-  fn main() -> @location(0) vec4<f32> {
+  fn main(
+    //@location(0) position: vec4<f32>,
+    //@location(1) color: vec4<f32>,
+  ) -> @location(0) vec4<f32> {
+    //return color;
     return vec4(.5, 0.0, .9, 1.0);
   }`,
 
   vert: `
   struct VertexOutput {
     @builtin(position) Position : vec4<f32>,
-    Color: vec3<f32>,
+   // Color: vec3<f32>,
   }
 
   @vertex
   fn main (
     @builtin(vertex_index) VertexIndex : u32,
     @location(0) position : vec2<f32>,
-  //  @location(1) color : vec3<f32>,
-  ) -> @builtin(position) vec4<f32> {
+    @location(1) color : vec3<f32>,
+  ) -> VertexOutput {
 
   var output: VertexOutput;
-   return vec4<f32>(position.xy, 0.0, 1.0);
-       // output.color = color;
+  //output.Color = color;
+
+  output.Position = vec4<f32>(position.xy, 0.0, 1.0);
+  return output;
   }`,
 
   // Here we define the vertex attributes for the above shader
