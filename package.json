@@ -1,6 +1,8 @@
 {
   "name": "simple-webgpu",
   "version": "0.9.9",
+  "description": "WebGPU is a fast functional WebGPU framework.",
+
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -26,5 +28,23 @@
   },
   "dependencies": {
   
-  }
+  },
+  "keywords": [
+    "webgpu",
+    "stackgl",
+    "regl",
+    "gl",
+    "graphics",
+    "computer graphics",
+    "opengl",
+    "wgsl",
+    "data",
+    "flow",
+    "reactive",
+    "functional"
+  ],"license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adnanwahab/simple-webgpu/issues"
+  },
+  "homepage": "https://simple-webgpu.com"
 }
