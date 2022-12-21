@@ -18,7 +18,7 @@
 // import physics from "./physics";
 // import postProcessing from "./postProcessing";
 
-//import simpleShaderDemo from "./simpleShaderDemo";
+import particles from "./particles";
 
 import basic from "./basic";
 
@@ -53,14 +53,14 @@ let demoTitles = [
   // 'signalvsNoise',  'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
   // 'four', 'five', 'music', 'six', 'seven', 'light', 'physics', 
   // 'postProcessing',
-  'basic' 
+  'basic' , 'particles'
 ]
 
 let demos = [
   // signalvsNoise,  stripes, rings, checkerboard, one, mouse, texture, sky,
 
   //  four, five, music, six, seven, light, physics, postProcessing
-  basic
+  basic, particles
 ]
 
 
@@ -105,6 +105,7 @@ function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
+  console.log(demo)
   if (typeof demo === 'string' )
     customShader({
       shader: demo,
