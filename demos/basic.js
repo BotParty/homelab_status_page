@@ -26,22 +26,17 @@ const draw = await webgpu.initDrawCall({
     @location(0) position : vec2<f32>,
   //  @location(1) color : vec3<f32>,
   ) -> @builtin(position) vec4<f32> {
-    var pos = array<vec2<f32>, 3>(
-      vec2(0.0, 0.5),
-      vec2(-0.5, -0.5),
-      vec2(0.5, -0.5));
+
   var output: VertexOutput;
-    //return vec4<f32>(position, 0.0, 1.0)
-    //+ vec4<f32>(0, 0, 0.0, 1.0);
+   return vec4<f32>(position.xy, 0.0, 1.0);
        // output.color = color;
-    return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
   }`,
 
   // Here we define the vertex attributes for the above shader
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
     position: webgpu.buffer([
-      [0.0, 0.5],   // no need to flatten nested arrays, simpleWebgpu automatically
+      [.0, .5],   // no need to flatten nested arrays, simpleWebgpu automatically
       [-0.5, -0.5],    // unrolls them into a typedarray (default Float32)
       [.5,  -.5]
     ]), color: webgpu.buffer([
