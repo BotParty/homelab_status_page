@@ -15,23 +15,25 @@ const draw = await webgpu.initDrawCall({
   }`,
 
   vert: `
-
-
   struct VertexOutput {
     @builtin(position) Position : vec4<f32>,
+    Color: vec3<f32>,
   }
 
   @vertex
-  fn main                                                           (
+  fn main (
     @builtin(vertex_index) VertexIndex : u32,
     @location(0) position : vec2<f32>,
-
+    @location(1) color : vec3<f32>,
   ) -> @builtin(position) vec4<f32> {
     var pos = array<vec2<f32>, 3>(
       vec2(0.0, 0.5),
       vec2(-0.5, -0.5),
       vec2(0.5, -0.5));
-  
+  var output: VertexOutput;
+    //return vec4<f32>(position, 0.0, 1.0);
+    //+ vec4<f32>(0, 0, 0.0, 1.0);
+       // output.color = color;
     return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
   }`,
 
@@ -42,6 +44,10 @@ const draw = await webgpu.initDrawCall({
       [0.0, 0.5],   // no need to flatten nested arrays, simpleWebgpu automatically
       [-0.5, -0.5],    // unrolls them into a typedarray (default Float32)
       [.5,  -.5]
+    ]), color: webgpu.buffer([
+      [1,0,0],
+      [0,1,0],
+      [1,0,1],
     ])
     // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
@@ -57,7 +63,7 @@ const draw = await webgpu.initDrawCall({
 
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
-function drawTriangle () {
+function basic () {
   let time = 0
   //console.log('draw Triangle', webgpu)
   draw({
@@ -79,7 +85,7 @@ function drawTriangle () {
       })
 }
 
-export default drawTriangle
+export default basic
 
 // simpleWebgpu.frame(({time}) => {
 //   // clear contents of the drawing buffer
