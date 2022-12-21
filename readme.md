@@ -23,7 +23,7 @@
 
 <div align="center">
   <h3>
-    <a href="https://github.com/shel-bernstein/simple-webgpu/blob/gh-pages/API.md">
+    <a href="https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/API.md">
       Docs
     </a>
     <span> | </span>
@@ -118,7 +118,7 @@ See this example [live](http://simple-webgpu.com/)
 
 ### [More examples](http://simple-webgpu.com/)
 
-Check out the [gallery](http://simple-webgpu.com/examples/). The source code of all the gallery examples can be found [here](https://github.com/shelbernstein/Simple-webgpu).
+Check out the [gallery](http://simple-webgpu.com/examples/). The source code of all the gallery examples can be found [here](https://github.com/adnanwahab/Simple-webgpu).
 
 ## Setup
 
@@ -165,7 +165,7 @@ For vanilla HTML in modern browsers, import D3 from jsDelivr:
   </head>
   <body>
   </body>
-  <script language="javascript" src="https://npmcdn.com/shelbernstein/dist/simple-webgpu.js"></script>
+  <script language="javascript" src="https://npmcdn.com/adnanwahab/dist/simple-webgpu.js"></script>
   <script language="javascript" type="module">
   import webgpu from "https://cdn.jsdelivr.net/npm/simple-webgpu/+esm";
     let webgpu = webgpu.init()
@@ -200,7 +200,7 @@ here.](https://regl-project.github.io/regl/www/bench-results/bench-result-db4b76
 TODO
 
 These measurements were taken using our custom scripts `bench-history` and
-`bench-graph`. You can read more about them in [the development guide](https://github.com/shelbernstein/simple-webgpu/blob/gh-pages/DEVELOPING.md).
+`bench-graph`. You can read more about them in [the development guide](https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/DEVELOPING.md).
 
 ### Projects using simple-webgpu
 
@@ -210,21 +210,21 @@ The following is an incomplete list of projects using regl:
 * [visualize mind magic](https://visualize-mind-magic.org)
 
 
-If you have a project using regl that isn't on this list that you would like to see added, [please send us a pull request!](https://github.com/shelbernstein/simple-webgpu/edit/main/README.md)
+If you have a project using regl that isn't on this list that you would like to see added, [please send us a pull request!](https://github.com/adnanwahab/simple-webgpu/edit/main/README.md)
 
-## [Help Wanted](https://github.com/shelbernstein/simple-webgpu//issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+## [Help Wanted](https://github.com/adnanwahab/simple-webgpu//issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
 
-simple-webgpu is still under active developement, and anyone willing to contribute is very much welcome to do so. Right now, what we need the most is for people to write examples and demos with the framework. This will allow us to find bugs and deficiencies in the API. We have a list of examples we would like to be implemented [here](https://github.com/shelbernstein/simple-webgpu/issues?q=is%3Aopen+is%3Aissue+label%3Aexample), but you are of course welcome to come up with your own examples. To add an example to our gallery of examples, [please send us a pull request!](https://github.com/shelbernstein/simple-webgpu/pulls)
+simple-webgpu is still under active developement, and anyone willing to contribute is very much welcome to do so. Right now, what we need the most is for people to write examples and demos with the framework. This will allow us to find bugs and deficiencies in the API. We have a list of examples we would like to be implemented [here](https://github.com/adnanwahab/simple-webgpu/issues?q=is%3Aopen+is%3Aissue+label%3Aexample), but you are of course welcome to come up with your own examples. To add an example to our gallery of examples, [please send us a pull request!](https://github.com/adnanwahab/simple-webgpu/pulls)
 
-## [API docs](https://github.com/shelbernstein/simple-webgpu/blob/gh-pages/API.md)
+## [API docs](https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/API.md)
 
-`simple-webgpu` has extensive API documentation.  You can browse the [docs online here](https://github.com/shelbernstein/simple-webgpu/blob/gh-pages/API.md).
+`simple-webgpu` has extensive API documentation.  You can browse the [docs online here](https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/API.md).
 
-## [Development](https://github.com/shelbernstein/simple-webgpu/blob/gh-pages/DEVELOPING.md)
+## [Development](https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/DEVELOPING.md)
 
-The latest changes in `simple-webgpu` can be found in the [CHANGELOG](https://github.com/shelbernstein/simple-webgpu/blob/gh-pages/CHANGES.md).
+The latest changes in `simple-webgpu` can be found in the [CHANGELOG](https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/CHANGES.md).
 
-[For info on how to build and test headless, see the contributing guide here](https://github.com/shelbernstein/simple-webgpu/blob/gh-pages/DEVELOPING.md)
+[For info on how to build and test headless, see the contributing guide here](https://github.com/adnanwahab/simple-webgpu/blob/gh-pages/DEVELOPING.md)
 
 ## [License](LICENSE)
 
