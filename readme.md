@@ -251,5 +251,5 @@ Many examples use creative commons or public domain artwork for illustrative pur
 Simple-webgpu is an intentional homage of my favorite WebGL module,  [click here to view the original](https://github.com/regl-project/regl). My goal with this module was to keep the essence of regl and make it possible to translate the demos with minimal transpilation of just shader code.
 
 
-### Platinum Sonsors
-[Zoox Logo](data/data/ZOOX_LOGO_blk_large.png)
+# Platinum Sonsors
+<img src="data/data/ZOOX_LOGO_blk_large.png" align="left" hspace="10" vspace="6">

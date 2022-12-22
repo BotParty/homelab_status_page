@@ -1,68 +1,33 @@
 
-// import { init } from "../lib/main";
-// import rings from '../shaders/rings.wgsl?raw';
-// import stripes from '../shaders/stripes.wgsl?raw';
-// import checkerboard from '../shaders/checkerboard.wgsl?raw';
-// import one from '../shaders/one.wgsl?raw';
-// import mouse from '../shaders/mouse.wgsl?raw';
-// import texture from '../shaders/texture.wgsl?raw';
-// import sky from '../shaders/sky.wgsl?raw';
-// import four from  '../shaders/four.wgsl?raw'
-// import five from  '../shaders/five.wgsl?raw'
-// import music from  '../shaders/music.wgsl?raw'
-// import six from  '../shaders/six.wgsl?raw'
-// import seven from  '../shaders/seven.wgsl?raw'
-// import light from  '../shaders/light.wgsl?raw'
-// import signalvsNoise from  '../shaders/signal.wgsl?raw'
-
-// import physics from "./physics";
-// import postProcessing from "./postProcessing";
-
-//import simpleShaderDemo from "./simpleShaderDemo";
+import particles from "./particles";
 
 import basic from "./basic";
 
-console.log(123)
 let defaultDemo = 'physics';
 let data = {}
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
   options.canvas = document.querySelector('canvas')
- 
-  options.data.texture = '../data/static.jpg';
-  //options.data.texture = '../data/static.jpg';
-  const img = new Image();
-  img.src = '../data/static.jpg';
-
-  options.data.texture =  img
+  options.data.texture = img
 
   let draw = await init(options);
-  if (! draw) return alert('webgpu not defined - please insteall chrome canary, go to chrome://flags, search for canary')
+  if (! draw) return alert('webgpu not defined - please install chrome canary, go to chrome://flags, search for WebGPU')
   draw(data)
   
   requestAnimationFrame(function test() {
-    //if (stuff) data.texture = stuff()
     draw(data);
-      requestAnimationFrame(test)
-      //setTimeout(test, 500)
+    requestAnimationFrame(test)
   });
 }
 
 let demoTitles = [
-  // 'signalvsNoise',  'stripes', 'rings', 'checkerboard', 'one', 'mouse', 'texture', 'sky', 
-  // 'four', 'five', 'music', 'six', 'seven', 'light', 'physics', 
-  // 'postProcessing',
-  'basic' 
+  'basic' , 'particles'
 ]
 
 let demos = [
-  // signalvsNoise,  stripes, rings, checkerboard, one, mouse, texture, sky,
-
-  //  four, five, music, six, seven, light, physics, postProcessing
-  basic
+  basic, particles
 ]
-
 
   document.querySelectorAll('input').forEach(e => {
    e.addEventListener('click', (event) => {
@@ -70,12 +35,9 @@ let demos = [
     })
   })
 
-
-
 // function select(name) {
 //   let idx = demoTitles.indexOf(name);
 //   let demo = demos[idx];
-
 //   cleanup() 
 //   customShader({
 //     shader: demo
@@ -89,7 +51,7 @@ let demos = [
 //   // }
 // }
 
-function cleanup () {
+function cleanup() {
   document.querySelector(':checked').checked = null  
   let canvas = document.querySelector('canvas')
   
@@ -105,6 +67,7 @@ function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
+  cleanup()
   if (typeof demo === 'string' )
     customShader({
       shader: demo,
