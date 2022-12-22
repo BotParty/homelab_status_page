@@ -252,4 +252,4 @@ Simple-webgpu is an intentional homage of my favorite WebGL module,  [click here
 
 
 # Platinum Sonsors
-<img src="data/ZOOX_LOGO.pngg" align="left" hspace="10" vspace="6">
+<img src="./data/ZOOX_LOGO.png" align="left" hspace="10" vspace="6">
