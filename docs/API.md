@@ -2897,3 +2897,6 @@ Adjust WebGL arguments to webGPU
 Add BindGroups PassThrough Info
 Add any other webGPU info
 adjust ShaderLanguage to webgpuShaderLanguage
+
+auto-create bindGroups and bindGRoupLayouts w/ passthrough 
+add a backdoor
