@@ -38,7 +38,7 @@ const addMouseEvents = function(canvas, data) {
     data.mouseY = y / event.target.clientHeight;
   });
 };
-function createCanvas(width = innerWidth, height = innerHeight) {
+function createCanvas(width = 500, height = 500) {
   let dpi = devicePixelRatio;
   var canvas = document.createElement("canvas");
   canvas.width = dpi * width;
@@ -159,7 +159,6 @@ const recordRenderPass = async function(state2) {
   if (!_)
     return console.log("no worky");
   let cubeVertexArray = new Float32Array(state2.options.attributes.position.array.flat());
-  console.log(cubeVertexArray, state2.options.attributes.position);
   const verticesBuffer = device.createBuffer({
     size: cubeVertexArray.byteLength,
     usage: GPUBufferUsage.VERTEX,
@@ -171,7 +170,7 @@ const recordRenderPass = async function(state2) {
   passEncoder.setPipeline(_.pipeline);
   passEncoder.setBindGroup(0, _.bindGroup);
   passEncoder.setVertexBuffer(0, verticesBuffer);
-  passEncoder.draw(3 * 2, 1, 0, 0);
+  passEncoder.draw(3, 1, 0, 0);
   passEncoder.end();
   device.queue.submit([commandEncoder.finish()]);
 };
@@ -201,10 +200,15 @@ async function makePipeline(state2) {
       entryPoint: "main",
       buffers: [
         {
-          arrayStride: 8,
+          arrayStride: 2 * 4,
           attributes: [
             {
               shaderLocation: 0,
+              offset: 0,
+              format: "float32x2"
+            },
+            {
+              shaderLocation: 1,
               offset: 0,
               format: "float32x2"
             }
@@ -224,32 +228,7 @@ async function makePipeline(state2) {
     }
   };
   if (state2.compute) {
-    pipelineDesc.vertex.buffers.push({
-      arrayStride: 4 * 4,
-      stepMode: "instance",
-      attributes: [
-        {
-          shaderLocation: 0,
-          offset: 0,
-          format: "float32x2"
-        },
-        {
-          shaderLocation: 1,
-          offset: 2 * 4,
-          format: "float32x2"
-        }
-      ]
-    }, {
-      arrayStride: 2 * 4,
-      stepMode: "vertex",
-      attributes: [
-        {
-          shaderLocation: 2,
-          offset: 0,
-          format: "float32x2"
-        }
-      ]
-    });
+    applyCompute(pipeline.vertexBuffers);
   }
   const sampler = device.createSampler({
     magFilter: "linear",
@@ -373,7 +352,6 @@ async function init(options = {}) {
     usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
   });
   function draw(newScope) {
-    console.log("am i being drawn?");
     if (Array.isArray(newScope))
       return newScope.map((scope) => draw(scope));
     updateTexture(state2);
@@ -391,8 +369,16 @@ async function init(options = {}) {
     initDrawCall,
     buffer,
     prop,
-    clear
+    clear,
+    frame,
+    version: "0.10.0"
   };
+  function frame(cb) {
+    requestAnimationFrame(function anon() {
+      cb();
+      requestAnimationFrame(anon);
+    });
+  }
   async function initDrawCall(options2) {
     state2.options = options2;
     await compile(state2, state2.options);

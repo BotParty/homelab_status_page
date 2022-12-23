@@ -67,7 +67,7 @@ function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
-  cleanup()
+  //cleanup()
   if (typeof demo === 'string' )
     customShader({
       shader: demo,
