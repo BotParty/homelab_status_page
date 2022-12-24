@@ -6,7 +6,6 @@ let webgpu = await simpleWebgpu.init()
 //console.log(webgpu)
 //module thinks this is a draw call but its actually an init draw call
 
-
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
 function basic () {

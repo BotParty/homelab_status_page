@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "TZ=America/Los_Angeles mocha 'test/**/*-test.js' && eslint src test"
   },
   "files": [
     "dist"
@@ -24,11 +25,11 @@
     "regl": "^2.1.0",
     "typescript": "^4.4.4",
     "vite": "^2.6.13",
-    "gl-matrix": "^3.4.3"
+    "gl-matrix": "^3.4.3",
+    "mocha": "9"
+
   },
-  "dependencies": {
-  
-  },
+  "dependencies": {  },
   "keywords": [
     "webgpu",
     "stackgl",

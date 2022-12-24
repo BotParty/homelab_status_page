@@ -1,13 +1,10 @@
 //import simpleWebgpu from "../lib/main";
 import simpleWebgpu from '../lib/main';
 
-
-const time = 0;
 async function basic () {
-
-  // Calling simplewebgpu.init() creates a new partially evaluated draw command
+  let time = 0
+ // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
-
  webgpu.initDrawCall({
     // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
     // to define them.  No need to manually create shader objects.
@@ -18,7 +15,7 @@ let webgpu = await simpleWebgpu.init()
       //@location(1) color: vec4<f32>,
     ) -> @location(0) vec4<f32> {
       //return color;
-      return vec4(${Math.random()}, 0.0, 0, 1.0);
+      return vec4(${Math.random()}, 0.0, .9, 1.0);
     }`,
   
     vert: `
@@ -45,9 +42,18 @@ let webgpu = await simpleWebgpu.init()
     attributes: {
       // simplewebgpu.buffer creates a new array buffer object
       position: webgpu.buffer([
-        [-1, 0],
-        [0, -1],
-        [1, 1]
+        [.0, .0],  
+        [-0.3, -0.3],    
+        [.3,  -.3],
+
+        [.0, .0],  
+        [-0.3, -0.3],    
+        [.3,  -.3],
+
+        [.3,  -.3],
+        [.3,  -.0],
+        [0, 0]
+
       ]), color: webgpu.buffer([
         [1,0,0],
         [0,1,0],
@@ -62,7 +68,8 @@ let webgpu = await simpleWebgpu.init()
     },
   
     // This tells simpleWebgpu the number of vertices to draw in this command
-    count: 3
+    count: 3,
+    primitive: 'triangle'
   }).then(draw => {
     draw({
       color: [

@@ -1,32 +1,39 @@
 
+//TODO put directly in HTML 
+//use import map to import the demos
+//use import to import all 100 and 
+//use unique {demo_title}.html for SEO which imports JS file and module from CDN for reusable Template
+//add demo.js to each index.html that just calls the imported DEMO
+
+
 import particles from "./particles";
 
 import basic from "./basic";
+
+import hexagon from "./h3-hexagon";
 
 let defaultDemo = 'physics';
 let data = {}
 
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
-  options.canvas = document.querySelector('canvas')
-  options.data.texture = img
 
   let draw = await init(options);
   if (! draw) return alert('webgpu not defined - please install chrome canary, go to chrome://flags, search for WebGPU')
   draw(data)
   
-  requestAnimationFrame(function test() {
-    draw(data);
-    requestAnimationFrame(test)
-  });
+  // requestAnimationFrame(function test() {
+  //   draw(data);
+  //   requestAnimationFrame(test)
+  // });
 }
 
 let demoTitles = [
-  'basic' , 'particles'
+  'basic' , 'particles', 'hexagon'
 ]
 
 let demos = [
-  basic, particles
+  basic, particles, hexagon
 ]
 
   document.querySelectorAll('input').forEach(e => {
@@ -34,22 +41,6 @@ let demos = [
       select(event.target.value)
     })
   })
-
-// function select(name) {
-//   let idx = demoTitles.indexOf(name);
-//   let demo = demos[idx];
-//   cleanup() 
-//   customShader({
-//     shader: demo
-//   })
-//   // document.querySelectorAll('input')[idx].checked = true
-//   // if (typeof demo === 'function') demo()
-//   // else {
-//   //   customShader({
-//   //     shader: demo,
-//   //   }); 
-//   // }
-// }
 
 function cleanup() {
   document.querySelector(':checked').checked = null  
@@ -67,13 +58,14 @@ function select(name) {
   let idx = demoTitles.indexOf(name);
   let demo = demos[idx];
 
-  //cleanup()
-  if (typeof demo === 'string' )
-    customShader({
-      shader: demo,
-    }); 
-    else demo()
-    
+  cleanup()
+
+  window.location.hash = name;
+
+ demo()
+ 
 }
 
-select(document.querySelector(':checked').value)
+
+
+select(window.location.hash.slice(1))
