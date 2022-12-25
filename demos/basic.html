@@ -6,75 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple-WebGPU Graphics Engine</title>
     <link
-      href="./data/tailwind.min.css"
+      href="../data/tailwind.min.css"
       rel="stylesheet"
     />
-    <style>
-      body {
-        background: #333;
-      }
-      
-      #container * {
-        position: absolute;
-        top: 0px;
-        left: 0px;
+    <link
+    href="../data/index.css"
+    rel="stylesheet"
+  />
+    <script type="module" src="../dist/my-lib.es.js"></script>
+    <script type="module">
+      import demo from './basic'
 
-        width: 100%;
-        height: 100%;
-        padding: 25px;
-      }
-
-      canvas {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-      }
-
-      #embed {
-        opacity: 0.1;
-        height: 200px;
-        width: 200px;
-        padding-top: 50px;
-      }
-
-      #control-panel {
-        z-index: 124;
-        position: absolute;
-      }
-      #control-panel {
-        background: steelblue;
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        padding: 5px;
-        color: lightgray;
-      }
-
-      #control-panel label {
-        display: block;
-        
-      }
-      #control-panel label:hover {
-        background: pink;
-        
-      }
-      canvas {
-        z-index: 0;
-        position: absolute;
-        width: 500px;
-        height: 500px;
-      }
-      audio {
-        position: absolute;
-        top: 50px;
-        left: 50px;
-        z-index: 999;
-      }
-
-    </style>
-    
-    <script type="module" src="./my-lib.es.js"></script>
-    <script type="module" src="./basic.js"></script>
+      demo()
+    </script>
   </head>
   <body>
 
