@@ -1,6 +1,13 @@
 //import simpleWebgpu from "../lib/main";
 import simpleWebgpu from '../lib/main';
 
+
+// webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
+
+async function basic () {
+  let time = 0
+  console.log('draw Triangle', Math.random())
+
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
 //console.log(webgpu)
@@ -15,7 +22,7 @@ const draw = await webgpu.initDrawCall({
     //@location(1) color: vec4<f32>,
   ) -> @location(0) vec4<f32> {
     //return color;
-    return vec4(2., 0.0, .9, 1.0);
+    return vec4(2., 1.0, .9, 1.0);
   }`,
 
   vert: `
@@ -42,9 +49,9 @@ const draw = await webgpu.initDrawCall({
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
     position: webgpu.buffer([
-      [.0, .5],   // no need to flatten nested arrays, simpleWebgpu automatically
-      [-0.5, -0.5],    // unrolls them into a typedarray (default Float32)
-      [.5,  -.5]
+      [-1, 0],
+      [0, -1],
+      [1, 1]
     ]), color: webgpu.buffer([
       [1,0,0],
       [0,1,0],
@@ -62,11 +69,7 @@ const draw = await webgpu.initDrawCall({
   count: 3
 })
 
-// webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
-function basic () {
-  let time = 0
-  console.log('draw Triangle', Math.random())
   draw({
         color: [
           Math.cos(time * 0.001),

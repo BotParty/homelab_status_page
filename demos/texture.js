@@ -1,13 +1,17 @@
 //import simpleWebgpu from "../lib/main";
 import simpleWebgpu from '../lib/main';
 
-
-const time = 0;
-async function basic () {
-
-  // Calling simplewebgpu.init() creates a new partially evaluated draw command
+// Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
+//console.log(webgpu)
+//module thinks this is a draw call but its actually an init draw call
 
+
+// webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
+
+function basic () {
+  let time = 0
+ 
  webgpu.initDrawCall({
     // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
     // to define them.  No need to manually create shader objects.
@@ -18,7 +22,7 @@ let webgpu = await simpleWebgpu.init()
       //@location(1) color: vec4<f32>,
     ) -> @location(0) vec4<f32> {
       //return color;
-      return vec4(${Math.random()}, 0.0, 0, 1.0);
+      return vec4(${Math.random()}, 0.0, .9, 1.0);
     }`,
   
     vert: `
@@ -45,9 +49,9 @@ let webgpu = await simpleWebgpu.init()
     attributes: {
       // simplewebgpu.buffer creates a new array buffer object
       position: webgpu.buffer([
-        [-1, 0],
-        [0, -1],
-        [1, 1]
+        [.0, .5],   // no need to flatten nested arrays, simpleWebgpu automatically
+        [-0.5, -0.5],    // unrolls them into a typedarray (default Float32)
+        [.5,  -.5]
       ]), color: webgpu.buffer([
         [1,0,0],
         [0,1,0],

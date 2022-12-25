@@ -58,25 +58,24 @@
         background: pink;
         
       }
+
       canvas {
         z-index: 0;
         position: absolute;
         width: 500px;
         height: 500px;
       }
+
       audio {
         position: absolute;
         top: 50px;
         left: 50px;
         z-index: 999;
       }
-
     </style>
     
     <script type="module" src="./my-lib.es.js"></script>
     <script type="module">
-      //import simpleWebgpu from "../lib/main";
-import simpleWebgpu from '../lib/main';
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
@@ -141,6 +140,7 @@ function basic () {
       // This defines the color of the triangle to be a dynamic variable
       color: webgpu.prop('color')
     },
+  
     // This tells simpleWebgpu the number of vertices to draw in this command
     count: 3
   }).then(draw => {
@@ -164,26 +164,57 @@ function basic () {
   })
 }
 
-basic()
+export default basic
 
-// simpleWebgpu.frame(({time}) => {
-//   // clear contents of the drawing buffer
-//   simpleWebgpu.clear({
-//     color: [0, 0, 0, 0],
-//     depth: 1
-//   })
 
-//   // draw a triangle using the command defined above
-//   drawTriangle({
-//     color: [
-//       Math.cos(time * 0.001),
-//       Math.sin(time * 0.0008),
-//       Math.cos(time * 0.003),
-//       1
-//     ]
-//   })
-// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
+  
+</script>
   </head>
   <body>
 
