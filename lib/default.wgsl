@@ -39,8 +39,5 @@
 //     return mainImage(fragCoord, vec2<f32>(u.width, u.height));
 //   }
 
-@fragment
-  fn main_fragment(in: VertexOutput) -> @location(0) vec4<f32> {
-    return vec4<f32>(.5, 0, .5, 1);
-  }
+
   

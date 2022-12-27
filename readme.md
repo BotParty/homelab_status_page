@@ -169,7 +169,6 @@ For vanilla HTML in modern browsers, import D3 from jsDelivr:
   </head>
   <body>
   </body>
-  <script language="javascript" src="https://npmcdn.com/adnanwahab/dist/simple-webgpu.js"></script>
   <script language="javascript" type="module">
   import webgpu from "https://cdn.jsdelivr.net/npm/simple-webgpu/+esm";
     let webgpu = webgpu.init()
@@ -258,4 +257,32 @@ Simple-webgpu is an intentional homage of my favorite WebGL module,  [click here
 
 # TODO
 
-use rollup directly since vite is for applications
+
+- [ ] use vite locally and rollup to build bundle 
+- [ ] import module in jupyter notebook (double users, plotly)
+- [ ] autocreate bindgroups
+- [ ] implement regl api
+- [ ] implement reactive constructors in javascript (maybe, vue)
+- [ ] use d3 in demos to set pattern for uniforms for now
+- [ ] https://bost.ocks.org/mike/join - uniforms/attributes
+
+
+# Development 
+when developing locally, use npm run dev - change the module import from
+
+```js
+  import webgpu from "https://cdn.jsdelivr.net/npm/simple-webgpu/+esm";
+```
+
+to import simpleWebGpu from 
+
+```js
+  import webgpu from "../lib/main";
+```
+
+process is
+make demo
+add scaffolding
+make demo
+take away scaffolding and grow engine upward
+grow till handwriting, map and glass of water with duck 
