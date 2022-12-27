@@ -126,7 +126,11 @@ Check out the [gallery](http://simple-webgpu.com/examples/). The source code of 
 
 ### Live editing
 
-To try out simple-webgpu right away, you can use the live editor in the [gallery](http://regl.party/examples).
+just use observablehq.com and 
+
+``` js
+require('simple-webgpu')
+```
 
 ### npm
 
@@ -228,9 +232,7 @@ The latest changes in `simple-webgpu` can be found in the [CHANGELOG](https://gi
 
 ## [License](LICENSE)
 
-All code (c) 2022 MIT License
-
-Development supported by [Zoox Labs](https://zoox.com) and the Amazon Web Services([AWS](https://amazon.com) on GitHub)
+All code (c) 2022 BSD License
 
 #### Asset licenses
 TODO
@@ -251,5 +253,9 @@ Many examples use creative commons or public domain artwork for illustrative pur
 Simple-webgpu is an intentional homage of my favorite WebGL module,  [click here to view the original](https://github.com/regl-project/regl), and also d3. My goal with this module was to keep the essence of regl and make it possible to translate the demos with minimal transpilation of just shader code, while keeping the data-fallthrough elements of d3.
 
 
-# Platinum Sonsors
+# Platinum Sp onsors
 <img src="./data/ZOOX_LOGO.png" align="left" hspace="10" vspace="6">
+
+# TODO
+
+use rollup directly since vite is for applications
