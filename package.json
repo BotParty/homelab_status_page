@@ -1,6 +1,6 @@
 {
   "name": "simple-webgpu",
-  "version": "0.9.9",
+  "version": "0.10.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
 
   "scripts": {

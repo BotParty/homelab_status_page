@@ -5,7 +5,7 @@ typeof define === 'function' && define.amd ? define(['exports'], factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.d3 = global.d3 || {}));
 })(this, (function (exports) { 'use strict';
 
-var version = "0.9.9";
+var version = "0.10.0";
 
 console.log('hello world');
 
