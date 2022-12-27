@@ -9,9 +9,8 @@
     "preview": "vite preview",
     "test": "TZ=America/Los_Angeles mocha 'test/**/*-test.js' && eslint src test",
     "compile": "rollup -c -w",
-    "run": "rollup -c -w && serve ",
-    "postpublish": "git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3/dist/d3.js d3.v${npm_package_version%%.*}.js && cp ../d3/dist/d3.min.js d3.v${npm_package_version%%.*}.min.js && git add d3.v${npm_package_version%%.*}.js d3.v${npm_package_version%%.*}.min.js && git commit -m \"d3 ${npm_package_version}\" && git push && cd -"
-  },
+    "run": "rollup -c -w && serve "
+    },
   "files": [
     "dist"
   ],
