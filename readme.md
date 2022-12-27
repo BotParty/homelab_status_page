@@ -285,4 +285,6 @@ make demo
 add scaffolding
 make demo
 take away scaffolding and grow engine upward
-grow till handwriting, map and glass of water with duck 
+build till handwriting, map and glass of water with duck 
+
+eutopia is close. its our job to construct it.
