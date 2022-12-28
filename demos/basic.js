@@ -1,10 +1,11 @@
 //import simpleWebgpu from "../lib/main";
-import simpleWebgpu from '../lib/main';
+//import simpleWebgpu from '../lib/main';
+import simpleWebgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 
 
 const time = 0;
 async function basic () {
-
+console.log(simpleWebgpu)
   // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
 

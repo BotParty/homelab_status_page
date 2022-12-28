@@ -61,11 +61,11 @@ function select(name) {
   cleanup()
 
   window.location.hash = name;
-
+console.log(idx)
  demo()
  
 }
 
 
 
-select(window.location.hash.slice(1))
+select(document.querySelector(':checked').value)

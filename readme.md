@@ -271,7 +271,7 @@ Simple-webgpu is an intentional homage of my favorite WebGL module,  [click here
 when developing locally, use npm run dev - change the module import from
 
 ```js
-  import webgpu from "https://cdn.jsdelivr.net/npm/simple-webgpu/+esm";
+  import webgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 ```
 
 to import simpleWebGpu from 
@@ -287,4 +287,22 @@ make demo
 take away scaffolding and grow engine upward
 build till handwriting, map and glass of water with duck 
 
-eutopia is close. its our job to construct it.
+import Simple-sentiment-analysis from JScdn
+
+content = document.querySelector('gmail.body.messageContent').textContent
+
+//analyzed corpus
+output = simpleWebGpu.simpleSentimentAnalysis(content) 
+//returns array with markings and emotional valence 
+//[{text: 'hello how are you', style: 'orange', emotion:'question']
+output.map(d => {
+  return <span style="background-color:${orange}" />${d.text}</span>
+}) 
+
+
+//remove spans using regexp or textContent from all the gmail cells
+window.addEventListener('keydown', () => {
+
+})
+
+//might want to use an actual js editor component instead of script injection into gmail do both to prototype in editor then do gmail. test technology in two github applications

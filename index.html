@@ -11,72 +11,7 @@
     />
     <link href="./data/index.css" rel="stylesheet">
   
-    <script type="module" src="./demos/index.js"></script>
-    <script>
-      import particles from "./particles";
-
-import basic from "./basic";
-
-import hexagon from "./h3-hexagon";
-
-let defaultDemo = 'physics';
-let data = {}
-
-async function start_loop_static(options) {
-  options.data = options.data || data; //extend 
-
-  let draw = await init(options);
-  if (! draw) return alert('webgpu not defined - please install chrome canary, go to chrome://flags, search for WebGPU')
-  draw(data)
-  
-  // requestAnimationFrame(function test() {
-  //   draw(data);
-  //   requestAnimationFrame(test)
-  // });
-}
-
-let demoTitles = [
-  'basic' , 'particles', 'hexagon'
-]
-
-let demos = [
-  basic, particles, hexagon
-]
-
-  document.querySelectorAll('input').forEach(e => {
-   e.addEventListener('click', (event) => {
-      select(event.target.value)
-    })
-  })
-
-function cleanup() {
-  document.querySelector(':checked').checked = null  
-  let canvas = document.querySelector('canvas')
-  
-  if (canvas) canvas.remove()
-}
-
-function customShader(options) {
-  let start = window.location.host === "localhost:3000" ? start_loop_static : start_loop_nb;
-  start(options);
-}
-
-function select(name) {
-  let idx = demoTitles.indexOf(name);
-  let demo = demos[idx];
-
-  cleanup()
-
-  window.location.hash = name;
-
- demo()
- 
-}
-
-
-
-select(window.location.hash.slice(1))
-
+    <script type="module" src="./demos/index.js">
     </script>
   </head>
   <body class=" bg-gray-600">
