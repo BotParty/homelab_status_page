@@ -90,13 +90,16 @@ const cube = async ()=> {
     const device = await adapter.requestDevice();
   
     const canvas = document.createElement('canvas')
+    canvas.width = 500
+    canvas.height = 500
     const context = canvas.getContext('webgpu');
-  
+    
     const devicePixelRatio = window.devicePixelRatio || 1;
     const presentationSize = [
-      canvas.clientWidth * devicePixelRatio,
-      canvas.clientHeight * devicePixelRatio,
+      500,
+      500,
     ];
+ 
     const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
   
     context.configure({

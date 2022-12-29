@@ -118,16 +118,6 @@ function getTransformationMatrix() {
   mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
   return modelViewProjectionMatrix
 }
-// webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
-
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, ms)
-  })
-}
-
 async function basic () {
   let time = 0
   console.log('draw Triangle', Math.random());
@@ -137,7 +127,7 @@ let webgpu = await simpleWebgpu.init()
 let img = new Image();
 img.src = './data/october.png'
 document.body.appendChild(img)
-await sleep(50)
+
 await img.decode();
 
 //module thinks this is a draw call but its actually an init draw call
@@ -155,7 +145,7 @@ const drawCube = await webgpu.initDrawCall({
   ) -> @location(0) vec4<f32> {
 
     //return vec4<f32>(1., 1., 2., 1.);
-    return textureSample(myTexture, mySampler, fragUV) * fragPosition;
+    return textureSample(myTexture, mySampler, fragUV) * fragPosition + vec4<f32>(1.,0., 1., 1.);
   }`,
 
   vert: `
@@ -178,7 +168,7 @@ const drawCube = await webgpu.initDrawCall({
     var output : VertexOutput;
     output.Position = uniforms.modelViewProjectionMatrix * position;
     output.fragUV = uv;
-    output.fragPosition = 0.1 * (position + vec4(1.0, 1.0, 1.0, 1.0));
+    output.fragPosition = 0.001 * (position + vec4(1.0, 1.0, 1.0, 1.0));
     return output;
   }`,
 
