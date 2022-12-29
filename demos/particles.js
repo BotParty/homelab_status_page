@@ -1,92 +1,201 @@
 //import simpleWebgpu from "../lib/main";
 import simpleWebgpu from '../lib/main';
+import { mat4, vec3 } from 'gl-matrix';
 
 
+const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
+const cubePositionOffset = 0;
+const cubeColorOffset = 4 * 4; // Byte offset of cube vertex color attribute.
+const cubeUVOffset = 4 * 8;
+const cubeVertexCount = 36;
+
+// prettier-ignore
+const cubeVertexArray = new Float32Array([
+  // float4 position, float4 color, float2 uv,
+  1, -1, 1, 1,   1, 0, 1, 1,  1, 1,
+  -1, -1, 1, 1,  0, 0, 1, 1,  0, 1,
+  -1, -1, -1, 1, 0, 0, 0, 1,  0, 0,
+  1, -1, -1, 1,  1, 0, 0, 1,  1, 0,
+  1, -1, 1, 1,   1, 0, 1, 1,  1, 1,
+  -1, -1, -1, 1, 0, 0, 0, 1,  0, 0,
+
+  1, 1, 1, 1,    1, 1, 1, 1,  1, 1,
+  1, -1, 1, 1,   1, 0, 1, 1,  0, 1,
+  1, -1, -1, 1,  1, 0, 0, 1,  0, 0,
+  1, 1, -1, 1,   1, 1, 0, 1,  1, 0,
+  1, 1, 1, 1,    1, 1, 1, 1,  1, 1,
+  1, -1, -1, 1,  1, 0, 0, 1,  0, 0,
+
+  -1, 1, 1, 1,   0, 1, 1, 1,  1, 1,
+  1, 1, 1, 1,    1, 1, 1, 1,  0, 1,
+  1, 1, -1, 1,   1, 1, 0, 1,  0, 0,
+  -1, 1, -1, 1,  0, 1, 0, 1,  1, 0,
+  -1, 1, 1, 1,   0, 1, 1, 1,  1, 1,
+  1, 1, -1, 1,   1, 1, 0, 1,  0, 0,
+
+  -1, -1, 1, 1,  0, 0, 1, 1,  1, 1,
+  -1, 1, 1, 1,   0, 1, 1, 1,  0, 1,
+  -1, 1, -1, 1,  0, 1, 0, 1,  0, 0,
+  -1, -1, -1, 1, 0, 0, 0, 1,  1, 0,
+  -1, -1, 1, 1,  0, 0, 1, 1,  1, 1,
+  -1, 1, -1, 1,  0, 1, 0, 1,  0, 0,
+
+  1, 1, 1, 1,    1, 1, 1, 1,  1, 1,
+  -1, 1, 1, 1,   0, 1, 1, 1,  0, 1,
+  -1, -1, 1, 1,  0, 0, 1, 1,  0, 0,
+  -1, -1, 1, 1,  0, 0, 1, 1,  0, 0,
+  1, -1, 1, 1,   1, 0, 1, 1,  1, 0,
+  1, 1, 1, 1,    1, 1, 1, 1,  1, 1,
+
+  1, -1, -1, 1,  1, 0, 0, 1,  1, 1,
+  -1, -1, -1, 1, 0, 0, 0, 1,  0, 1,
+  -1, 1, -1, 1,  0, 1, 0, 1,  0, 0,
+  1, 1, -1, 1,   1, 1, 0, 1,  1, 0,
+  1, -1, -1, 1,  1, 0, 0, 1,  1, 1,
+  -1, 1, -1, 1,  0, 1, 0, 1,  0, 0,
+]);
+
+var cubePosition = [
+  [-0.5, +0.5, +0.5], [+0.5, +0.5, +0.5], [+0.5, -0.5, +0.5], [-0.5, -0.5, +0.5], // positive z face.
+  [+0.5, +0.5, +0.5], [+0.5, +0.5, -0.5], [+0.5, -0.5, -0.5], [+0.5, -0.5, +0.5], // positive x face
+  [+0.5, +0.5, -0.5], [-0.5, +0.5, -0.5], [-0.5, -0.5, -0.5], [+0.5, -0.5, -0.5], // negative z face
+  [-0.5, +0.5, -0.5], [-0.5, +0.5, +0.5], [-0.5, -0.5, +0.5], [-0.5, -0.5, -0.5], // negative x face.
+  [-0.5, +0.5, -0.5], [+0.5, +0.5, -0.5], [+0.5, +0.5, +0.5], [-0.5, +0.5, +0.5], // top face
+  [-0.5, -0.5, -0.5], [+0.5, -0.5, -0.5], [+0.5, -0.5, +0.5], [-0.5, -0.5, +0.5]  // bottom face
+]
+
+var cubeUv = [
+  [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // positive z face.
+  [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // positive x face.
+  [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // negative z face.
+  [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // negative x face.
+  [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], // top face
+  [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]  // bottom face
+]
+
+const cubeElements = [
+  [2, 1, 0], [2, 0, 3],       // positive z face.
+  [6, 5, 4], [6, 4, 7],       // positive x face.
+  [10, 9, 8], [10, 8, 11],    // negative z face.
+  [14, 13, 12], [14, 12, 15], // negative x face.
+  [18, 17, 16], [18, 16, 19], // top face.
+  [20, 21, 22], [23, 20, 22]  // bottom face
+]
+
+function getTransformationMatrix() {
+  const presentationSize = [500, 500]
+  const aspect = presentationSize[0] / presentationSize[1];
+  const projectionMatrix = mat4.create();
+  mat4.perspective(projectionMatrix, (2 * Math.PI) / 5, aspect, 1, 100.0);
+
+  const viewMatrix = mat4.create();
+  mat4.translate(viewMatrix, viewMatrix, vec3.fromValues(0, 0, -4));
+  const now = Date.now() / 1000;
+  mat4.rotate(
+    viewMatrix,
+    viewMatrix,
+    1,
+    vec3.fromValues(Math.sin(now), Math.cos(now), 0)
+  );
+
+  const modelViewProjectionMatrix = mat4.create();
+  mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
+  return modelViewProjectionMatrix
+}
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
 async function basic () {
   let time = 0
-  console.log('draw Triangle', Math.random())
+  console.log('draw Triangle', Math.random());
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
-//console.log(webgpu)
+let img = new Image();
+img.src= './data/october.png'
+document.body.appendChild(img)
+await img.decode();
+
 //module thinks this is a draw call but its actually an init draw call
-const draw = await webgpu.initDrawCall({
+const drawCube = await webgpu.initDrawCall({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
+  @group(0) @binding(1) var mySampler: sampler;
+  @group(0) @binding(2) var myTexture: texture_2d<f32>;
+  
   @fragment
   fn main(
-    //@location(0) position: vec4<f32>,
-    //@location(1) color: vec4<f32>,
+    @location(0) fragUV: vec2<f32>,
+    @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32> {
-    //return color;
-    return vec4(2., 1.0, .9, 1.0);
+
+    //return vec4<f32>(1., 1., 2., 1.);
+    return textureSample(myTexture, mySampler, fragUV) * fragPosition;
   }`,
 
   vert: `
+  struct Uniforms {
+    modelViewProjectionMatrix : mat4x4<f32>,
+  }
+  @binding(0) @group(0) var<uniform> uniforms : Uniforms;
+  
   struct VertexOutput {
     @builtin(position) Position : vec4<f32>,
-   // Color: vec3<f32>,
+    @location(0) fragUV : vec2<f32>,
+    @location(1) fragPosition: vec4<f32>,
   }
-
+  
   @vertex
-  fn main (
-    @builtin(vertex_index) VertexIndex : u32,
-    @location(0) position : vec2<f32>,
-    @location(1) color : vec3<f32>,
+  fn main(
+    @location(0) position : vec4<f32>,
+    @location(1) uv : vec2<f32>
   ) -> VertexOutput {
-
-  var output: VertexOutput;
-  //output.Color = color;
-
-  output.Position = vec4<f32>(position.xy, 0.0, 1.0);
-  return output;
+    var output : VertexOutput;
+    output.Position = uniforms.modelViewProjectionMatrix * position;
+    output.fragUV = uv;
+    output.fragPosition = 0.5 * (position + vec4(1.0, 1.0, 1.0, 1.0));
+    return output;
   }`,
 
   // Here we define the vertex attributes for the above shader
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
-    position: webgpu.buffer([
-      [-1, 0],
-      [0, -1],
-      [1, 1]
-    ]), color: webgpu.buffer([
-      [1,0,0],
-      [0,1,0],
-      [1,0,1],
-    ])
+    position: webgpu.buffer(cubePosition), uv: webgpu.buffer(cubeUv)
     // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
+  elements: cubeElements,
 
   uniforms: {
-    // This defines the color of the triangle to be a dynamic variable
-    color: webgpu.prop('color')
+    modelViewProjectionMatrix: getTransformationMatrix,
+  //   view: ({tick}) => {
+  //     const t = 0.01 * tick
+  //     return mat4.lookAt([],
+  //                        [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
+  //                        [0, 0.0, 0],
+  //                        [0, 1, 0])
+  //   },
+  //   projection: ({viewportWidth, viewportHeight}) =>
+  //   mat4.perspective([],
+  //                    Math.PI / 4,
+  //                    viewportWidth / viewportHeight,
+  //                    0.01,
+  //                    10),
+   texture: img,
   },
 
   // This tells simpleWebgpu the number of vertices to draw in this command
-  count: 3
+  count: cubePosition.length
 })
+ 
 
-
-  draw({
-        color: [
-          Math.cos(time * 0.001),
-          Math.sin(time * 0.0008),
-          Math.cos(time * 0.003),
-          1
-        ]
-      })
-
-      draw({
-        color: [
-          Math.cos(time * 0.001),
-          Math.sin(time * 0.0008),
-          Math.cos(time * 0.003),
-          1
-        ]
-      })
+setInterval(
+  function () {
+    drawCube({
+      texture: img
+    })
+  }, 50
+)
+  
 }
 
 export default basic
