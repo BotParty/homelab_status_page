@@ -10,7 +10,7 @@ const cubeUVOffset = 4 * 8;
 const cubeVertexCount = 36;
 
 // prettier-ignore
-const cubeVertexArray = new Float32Array([
+const cubeVertexArray = ([
   //float4 position, float4 color, float2 uv,
   1, -1, 1, 1,   1, 0, 1, 1,  1, 1,
   -1, -1, 1, 1,  0, 0, 1, 1,  0, 1,
@@ -116,11 +116,10 @@ function getTransformationMatrix() {
 
   const modelViewProjectionMatrix = mat4.create();
   mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
+
   return modelViewProjectionMatrix
 }
 async function basic () {
-  let time = 0
-  console.log('draw Triangle', Math.random());
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
@@ -168,17 +167,17 @@ const drawCube = await webgpu.initDrawCall({
     var output : VertexOutput;
     output.Position = uniforms.modelViewProjectionMatrix * position;
     output.fragUV = uv;
-    output.fragPosition = 0.001 * (position + vec4(1.0, 1.0, 1.0, 1.0));
+    output.fragPosition = 0.51 * (position + vec4(1.0, 1.0, 1.0, 1.0));
     return output;
   }`,
 
   // Here we define the vertex attributes for the above shader
   attributes: {
     // simplewebgpu.buffer creates a new array buffer object
-    position: webgpu.buffer(cubePosition), uv: webgpu.buffer(cubeUv)
+    position: webgpu.buffer(cubeVertexArray)
     // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
-  elements: cubeElements,
+  //elements: cubeElements,
 
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,
@@ -199,7 +198,7 @@ const drawCube = await webgpu.initDrawCall({
   },
 
   // This tells simpleWebgpu the number of vertices to draw in this command
-  count: cubePosition.length
+  count: cubeVertexCount
 })
  
 

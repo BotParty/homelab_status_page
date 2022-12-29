@@ -63,7 +63,6 @@ function select(name) {
   cleanup()
 
   window.location.hash = name;
-console.log(idx)
  demo()
  
 }
