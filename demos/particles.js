@@ -11,7 +11,7 @@ const cubeVertexCount = 36;
 
 // prettier-ignore
 const cubeVertexArray = new Float32Array([
-  // float4 position, float4 color, float2 uv,
+  //float4 position, float4 color, float2 uv,
   1, -1, 1, 1,   1, 0, 1, 1,  1, 1,
   -1, -1, 1, 1,  0, 0, 1, 1,  0, 1,
   -1, -1, -1, 1, 0, 0, 0, 1,  0, 0,
@@ -82,6 +82,22 @@ const cubeElements = [
   [20, 21, 22], [23, 20, 22]  // bottom face
 ]
 
+//cube is probably scaled too big so only showing one triangle strip
+//might be two bugs, too big and not enough vertices 
+
+//try regl method of multiply matrices in shader : tradeoff complicates upload of vertices
+//try austin-eng's vertices - dont do 
+
+//not using elements
+//use austin
+
+
+//TODO
+//use austin eng's code and ignore regl code but use api as is because works for trangle
+//fix texture by using 2nd set of UV coordinates 
+//not uploading uv coordinates
+//was hardcoding-uv coordinates in shader before
+
 function getTransformationMatrix() {
   const presentationSize = [500, 500]
   const aspect = presentationSize[0] / presentationSize[1];
@@ -104,6 +120,14 @@ function getTransformationMatrix() {
 }
 // webgpu.frame() wraps requestAnimationFrame and also handles viewport changes
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, ms)
+  })
+}
+
 async function basic () {
   let time = 0
   console.log('draw Triangle', Math.random());
@@ -111,8 +135,9 @@ async function basic () {
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpu.init()
 let img = new Image();
-img.src= './data/october.png'
+img.src = './data/october.png'
 document.body.appendChild(img)
+await sleep(50)
 await img.decode();
 
 //module thinks this is a draw call but its actually an init draw call
@@ -153,7 +178,7 @@ const drawCube = await webgpu.initDrawCall({
     var output : VertexOutput;
     output.Position = uniforms.modelViewProjectionMatrix * position;
     output.fragUV = uv;
-    output.fragPosition = 0.5 * (position + vec4(1.0, 1.0, 1.0, 1.0));
+    output.fragPosition = 0.1 * (position + vec4(1.0, 1.0, 1.0, 1.0));
     return output;
   }`,
 
