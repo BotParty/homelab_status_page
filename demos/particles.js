@@ -82,21 +82,6 @@ const cubeElements = [
   [20, 21, 22], [23, 20, 22]  // bottom face
 ]
 
-//cube is probably scaled too big so only showing one triangle strip
-//might be two bugs, too big and not enough vertices 
-
-//try regl method of multiply matrices in shader : tradeoff complicates upload of vertices
-//try austin-eng's vertices - dont do 
-
-//not using elements
-//use austin
-
-
-//TODO
-//use austin eng's code and ignore regl code but use api as is because works for trangle
-//fix texture by using 2nd set of UV coordinates 
-//not uploading uv coordinates
-//was hardcoding-uv coordinates in shader before
 
 function getTransformationMatrix() {
   const presentationSize = [500, 500]
@@ -181,19 +166,6 @@ const drawCube = await webgpu.initDrawCall({
 
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,
-  //   view: ({tick}) => {
-  //     const t = 0.01 * tick
-  //     return mat4.lookAt([],
-  //                        [5 * Math.cos(t), 2.5 * Math.sin(t), 5 * Math.sin(t)],
-  //                        [0, 0.0, 0],
-  //                        [0, 1, 0])
-  //   },
-  //   projection: ({viewportWidth, viewportHeight}) =>
-  //   mat4.perspective([],
-  //                    Math.PI / 4,
-  //                    viewportWidth / viewportHeight,
-  //                    0.01,
-  //                    10),
    texture: img,
   },
 
