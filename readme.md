@@ -170,7 +170,7 @@ For vanilla HTML in modern browsers, import D3 from jsDelivr:
   <body>
   </body>
   <script language="javascript" type="module">
-  import webgpu from "https://cdn.jsdelivr.net/npm/simple-webgpu/+esm";
+  import webgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
     let webgpu = webgpu.init()
 
     webgpu.frame(function () {
