@@ -47,7 +47,7 @@
     "reactive",
     "functional"
   ],
-  "license": "MIT",
+  "license": "BSD",
   "bugs": {
     "url": "https://github.com/adnanwahab/simple-webgpu/issues"
   },

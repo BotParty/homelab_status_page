@@ -134,8 +134,8 @@ const drawCube = await webgpu.initDrawCall({
   // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
   // to define them.  No need to manually create shader objects.
   frag: `
-  // @group(0) @binding(1) var mySampler: sampler;
-  // @group(0) @binding(2) var myTexture: texture_2d<f32>;
+  @group(0) @binding(1) var mySampler: sampler;
+  @group(0) @binding(2) var myTexture: texture_2d<f32>;
   
   @fragment
   fn main(
@@ -143,9 +143,8 @@ const drawCube = await webgpu.initDrawCall({
     @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32> {
 
-    return fragPosition;
     //return vec4<f32>(1., 1., 2., 1.);
-    //return textureSample(myTexture, mySampler, fragUV) * fragPosition + vec4<f32>(1.,0., 1., 1.);
+    return textureSample(myTexture, mySampler, fragUV) * fragPosition + vec4<f32>(1.,0., 1., 1.);
   }`,
 
   vert: `
