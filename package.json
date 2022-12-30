@@ -1,8 +1,7 @@
 {
   "name": "simple-gpu",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
-
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,7 +9,7 @@
     "test": "TZ=America/Los_Angeles mocha 'test/**/*-test.js' && eslint src test",
     "compile": "rollup -c -w",
     "run": "rollup -c -w && serve "
-    },
+  },
   "files": [
     "dist"
   ],
@@ -33,7 +32,7 @@
     "@rollup/plugin-json": "6",
     "@rollup/plugin-node-resolve": "15"
   },
-  "dependencies": {  },
+  "dependencies": {},
   "keywords": [
     "webgpu",
     "stackgl",
@@ -47,7 +46,8 @@
     "flow",
     "reactive",
     "functional"
-  ],"license": "MIT",
+  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/adnanwahab/simple-webgpu/issues"
   },
