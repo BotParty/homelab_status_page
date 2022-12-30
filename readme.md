@@ -302,7 +302,12 @@ output.map(d => {
 
 //remove spans using regexp or textContent from all the gmail cells
 window.addEventListener('keydown', () => {
-
 })
 
+type in an observable-input then wrap it in a span depending on sentiment analysis
+
 //might want to use an actual js editor component instead of script injection into gmail do both to prototype in editor then do gmail. test technology in two github applications
+
+TODO
+- [] design shader abstraction for observableHQ
+- [] design more visualizations and put them in observablehq
