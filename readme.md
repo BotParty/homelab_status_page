@@ -311,3 +311,8 @@ type in an observable-input then wrap it in a span depending on sentiment analys
 TODO
 - [] design shader abstraction for observableHQ
 - [] design more visualizations and put them in observablehq
+
+# developing locally
+```bash
+npm run dev
+```
