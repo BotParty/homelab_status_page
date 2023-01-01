@@ -1,10 +1,10 @@
 {
-  "name": "regpu5",
-  "version": "0.36.0",
+  "name": "regpu7",
+  "version": "0.37.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
-    "build": "rollup -c "
+    "build": "rm -rf dist && rollup -c "
   },
   "files": [
     "dist/**/*.js",
