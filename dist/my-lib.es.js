@@ -232,7 +232,6 @@ async function makePipeline(state2) {
       }
     ]
   };
-  state2.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state2);
   return pipeline;
 }
 async function compile(state2, options) {
@@ -294,7 +293,7 @@ async function init(options = {}) {
     prop,
     clear,
     frame,
-    version: "0.10.0"
+    version: "0.17.0"
   };
   function frame(cb) {
     requestAnimationFrame(function anon() {
@@ -329,5 +328,5 @@ function prop(name) {
     return state.uniforms[name];
   };
 }
-var main = { init, version: "0.15.0" };
+var main = { init, version: "0.17.0" };
 export { main as default };
