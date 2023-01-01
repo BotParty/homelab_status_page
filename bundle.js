@@ -3,7 +3,7 @@ export * from "./lib/index.js";
 //const hello = 'hello'
 //const world = 'world'
 //export {hello,world} 
-const version = '0.38.0'
+const version = '0.39.0'
 export {version}
 //treeshaking is deleting my version ?!?!?
 //new versions arent updating in notebook!
