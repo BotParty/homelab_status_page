@@ -1,6 +1,6 @@
 {
   "name": "regpu2",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
