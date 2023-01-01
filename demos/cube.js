@@ -1,8 +1,7 @@
 //import simpleWebgpu from "../lib/main";
-import simpleWebgpu from '../lib/main';
+import simpleWebgpuInit from '../lib/main';
 import { mat4, vec3 } from 'gl-matrix';
 
-console.log(simpleWebgpu)
 const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
 const cubePositionOffset = 0;
 const cubeColorOffset = 4 * 4; // Byte offset of cube vertex color attribute.
@@ -79,7 +78,7 @@ function getTransformationMatrix() {
 async function basic () {
 
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
-let webgpu = await simpleWebgpu.init()
+let webgpu = await simpleWebgpuInit()
 let img = new Image();
 img.src = './data/october.png'
 document.body.appendChild(img)
@@ -91,30 +90,23 @@ const drawCube = await webgpu.initDrawCall({
 frag: `
   @group(0) @binding(1) var mySampler: sampler;
   @group(0) @binding(2) var myTexture: texture_2d<f32>;
-  
   @fragment
   fn main(
     @location(0) fragUV: vec2<f32>,
     @location(1) fragPosition: vec4<f32>
   ) -> @location(0) vec4<f32> {
-
       return fragPosition;
-    //return vec4<f32>(1., 1., 2., 1.);
-    //return textureSample(myTexture, mySampler, fragUV) * fragPosition + vec4<f32>(1.,0., 1., 1.);
   }`,
-
   vert: `
   struct Uniforms {
     modelViewProjectionMatrix : mat4x4<f32>,
   }
   @binding(0) @group(0) var<uniform> uniforms : Uniforms;
-  
   struct VertexOutput {
     @builtin(position) Position : vec4<f32>,
     @location(0) fragUV : vec2<f32>,
     @location(1) fragPosition: vec4<f32>,
-  }
-  
+  }  
   @vertex
   fn main(
     @location(0) position : vec4<f32>,
@@ -126,22 +118,15 @@ frag: `
     output.fragPosition = position;
     return output;
   }`,
-
-  // Here we define the vertex attributes for the above shader
   attributes: {
-    // simplewebgpu.buffer creates a new array buffer object
     position: webgpu.buffer(cubeVertexArray)
-    // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
   },
-  //elements: cubeElements,
-
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,
    texture: img,
   },
   count: 36
 })
- 
 
 setInterval(
   function () {
