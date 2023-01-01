@@ -1,11 +1,11 @@
 {
   "name": "regpu4",
-  "version": "0.29.0",
+  "version": "0.30.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
     "build": "rollup -c "
-    },
+  },
   "files": [
     "dist/**/*.js",
     "lib/**/*.js"
