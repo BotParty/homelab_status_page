@@ -2,7 +2,7 @@
 import simpleWebgpu from '../lib/main';
 import { mat4, vec3 } from 'gl-matrix';
 
-
+console.log(simpleWebgpu)
 const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
 const cubePositionOffset = 0;
 const cubeColorOffset = 4 * 4; // Byte offset of cube vertex color attribute.
@@ -88,7 +88,7 @@ await img.decode();
 
 //module thinks this is a draw call but its actually an init draw call
 const drawCube = await webgpu.initDrawCall({
-  frag: `
+frag: `
   @group(0) @binding(1) var mySampler: sampler;
   @group(0) @binding(2) var myTexture: texture_2d<f32>;
   
