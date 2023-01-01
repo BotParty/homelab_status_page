@@ -14,6 +14,9 @@ import hexagon from "./h3-hexagon";
 
 import cube from "./cube";
 
+import light from "./light";
+
+
 let defaultDemo = 'physics';
 let data = {}
 
@@ -31,11 +34,11 @@ async function start_loop_static(options) {
 }
 
 let demoTitles = [
-  'basic' , 'particles', 'hexagon', 'cube'
+  'basic' , 'particles', 'hexagon', 'cube', 'light'
 ]
 
 let demos = [
-  basic, particles, hexagon, cube
+  basic, particles, hexagon, cube, light
 ]
 
   document.querySelectorAll('input').forEach(e => {
