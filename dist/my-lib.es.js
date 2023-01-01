@@ -1,6 +1,4 @@
 var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -16,7 +14,6 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 const createBuffer = (device, arr, usage) => {
   let desc = {
     size: arr.byteLength + 3 & ~3,
@@ -52,76 +49,26 @@ var utils = {
   createCanvas,
   addMouseEvents
 };
-let makeImgTexture = async (state2) => {
-  const img = document.createElement("img");
-  const source = img;
-  source.width = innerWidth;
-  source.height = innerHeight;
-  img.src = state2.data.texture;
-  await img.decode();
-  return await createImageBitmap(img);
-};
-async function makeTexture(state2) {
-  var _a, _b;
-  if (HTMLImageElement === ((_b = (_a = state2 == null ? void 0 : state2.data) == null ? void 0 : _a.texture) == null ? void 0 : _b.constructor)) {
-    let img = state2.data.texture;
-    await img.decode();
-    await createImageBitmap(img);
-    await img.decode();
-    let imageBitmap = await createImageBitmap(img);
-    let texture = state2.device.createTexture({
-      size: [imageBitmap.width, imageBitmap.height, 1],
-      format: "rgba8unorm",
-      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
-    });
-    state2.device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture }, [imageBitmap.width, imageBitmap.height]);
-    state2.texture = texture;
-    updateTexture(state2);
-    return texture;
-  } else if (typeof state2.data.texture === "string") {
-    let texture = state2.device.createTexture({
-      size: [900, 500, 1],
-      format: "rgba8unorm",
-      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
-    });
-    let imageBitmap = await makeImgTexture(state2);
-    state2.device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture }, [imageBitmap.width, imageBitmap.height]);
-    state2.texture = texture;
-    updateTexture(state2);
-    return texture;
-  } else {
-    let texture = state2.device.createTexture({
-      size: [256, 1, 1],
-      format: "rgba8unorm",
-      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
-    });
-    let music = new Float32Array(new Array(800).fill(5).map((d, i) => state2.data.texture ? state2.data.texture[i % state2.data.texture.length + d] : Math.random()));
-    state2.texture = texture;
-    state2.data.music = music;
-    updateTexture(state2);
-    return texture;
-  }
+async function updateTexture(state2) {
+  let { device } = state2;
+  if (!state2.options.uniforms.texture)
+    return console.log("no texture bound");
+  const imageBitmap = await createImageBitmap(state2.options.uniforms.texture);
+  let cubeTexture = device.createTexture({
+    size: [imageBitmap.width, imageBitmap.height, 1],
+    format: "rgba8unorm",
+    usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+  });
+  device.queue.copyExternalImageToTexture({ source: imageBitmap }, { texture: cubeTexture }, [imageBitmap.width, imageBitmap.height]);
+  return cubeTexture;
 }
-function updateTexture(state2) {
-  if (!state2.texture)
-    return;
-  if (state2.data.texture) {
-    let data = new Uint8Array(new Array(1024).fill(5).map((d, i) => {
-      return state2.data.texture ? state2.data.texture[i % state2.data.texture.length] : Math.random();
-    }));
-    state2.device.queue.writeTexture({ texture: state2.texture }, data.buffer, {
-      bytesPerRow: 3200,
-      rowsPerImage: 600
-    }, [256, 1]);
-  }
-}
-function updateUniforms(state2) {
+function updateUniforms(state2, modelViewProjectionMatrix = new Float32Array(16)) {
   let { data, device } = state2;
-  let values = Object.values(data).filter((val) => typeof val !== "object");
-  let uniformsArray = new Float32Array(values.length);
-  uniformsArray.set(values, 0);
+  Object.values(data).filter((val) => typeof val !== "object");
+  let uniformsArray = new Float32Array(16);
+  uniformsArray.set(modelViewProjectionMatrix, 0);
   if (state2.uniformsBuffer) {
-    device.queue.writeBuffer(state2.uniformsBuffer, 0, uniformsArray.buffer, 0, 4 * uniformsArray.length);
+    device.queue.writeBuffer(state2.uniformsBuffer, 0, uniformsArray.buffer, 0, 28);
     return state2.uniformsBuffer;
   } else {
     return state2.uniformsBuffer = utils.createBuffer(device, uniformsArray, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
@@ -158,6 +105,10 @@ const recordRenderPass = async function(state2) {
   let _ = state2.renderPasses[0];
   if (!_)
     return console.log("no worky");
+  if (state2.options.uniforms.modelViewProjectionMatrix) {
+    const transformationMatrix = state2.options.uniforms.modelViewProjectionMatrix();
+    device.queue.writeBuffer(state2.uniformBuffer, 0, transformationMatrix.buffer, transformationMatrix.byteOffset, transformationMatrix.byteLength);
+  }
   let cubeVertexArray = new Float32Array(state2.options.attributes.position.array.flat());
   const verticesBuffer = device.createBuffer({
     size: cubeVertexArray.byteLength,
@@ -170,7 +121,7 @@ const recordRenderPass = async function(state2) {
   passEncoder.setPipeline(_.pipeline);
   passEncoder.setBindGroup(0, _.bindGroup);
   passEncoder.setVertexBuffer(0, verticesBuffer);
-  passEncoder.draw(3, 1, 0, 0);
+  passEncoder.draw(state2.options.count, 1, 0, 0);
   passEncoder.end();
   device.queue.submit([commandEncoder.finish()]);
 };
@@ -200,16 +151,16 @@ async function makePipeline(state2) {
       entryPoint: "main",
       buffers: [
         {
-          arrayStride: 2 * 4,
+          arrayStride: 4 * 10,
           attributes: [
             {
               shaderLocation: 0,
               offset: 0,
-              format: "float32x2"
+              format: "float32x4"
             },
             {
               shaderLocation: 1,
-              offset: 0,
+              offset: 4 * 8,
               format: "float32x2"
             }
           ]
@@ -224,45 +175,29 @@ async function makePipeline(state2) {
       targets: [{ format: "bgra8unorm" }]
     },
     primitive: {
-      topology: "triangle-list"
+      topology: "triangle-list",
+      cullMode: "back"
+    },
+    depthStencil: {
+      depthWriteEnabled: true,
+      depthCompare: "less",
+      format: "depth24plus"
     }
   };
   if (state2.compute) {
     applyCompute(pipeline.vertexBuffers);
   }
-  const sampler = device.createSampler({
+  device.createSampler({
     magFilter: "linear",
     minFilter: "linear",
     mipmapFilter: "nearest"
   });
-  const bindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
-        buffer: {
-          type: "uniform",
-          minBindingSize: 4 * 7
-        }
-      },
-      {
-        binding: 1,
-        visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
-        type: "sampler",
-        sampler
-      },
-      {
-        binding: 2,
-        visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
-        texture: {}
-      }
-    ]
-  });
-  const pipelineLayout = device.createPipelineLayout({
-    bindGroupLayouts: [bindGroupLayout]
-  });
-  state2.bindGroupLayout = bindGroupLayout;
   updateUniforms(state2);
+  const depthTexture = device.createTexture({
+    size: [500 * devicePixelRatio, 500 * devicePixelRatio],
+    format: "depth24plus",
+    usage: GPUTextureUsage.RENDER_ATTACHMENT
+  });
   const renderPassDescriptor = {
     colorAttachments: [
       {
@@ -271,43 +206,33 @@ async function makePipeline(state2) {
         loadOp: "clear",
         storeOp: "store"
       }
-    ]
+    ],
+    depthStencilAttachment: {
+      view: depthTexture.createView(),
+      depthClearValue: 1,
+      depthLoadOp: "clear",
+      depthStoreOp: "store"
+    }
   };
   state2.renderPassDescriptor = renderPassDescriptor;
-  let pipeline = device.createRenderPipeline(__spreadProps(__spreadValues({}, pipelineDesc), {
-    layout: pipelineLayout
-  }));
-  let texture = await makeTexture(state2);
+  let pipeline = device.createRenderPipeline(__spreadValues({}, pipelineDesc));
+  const uniformBufferSize = 4 * 16;
+  const uniformBuffer = device.createBuffer({
+    size: uniformBufferSize,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+  });
+  state2.uniformBuffer = uniformBuffer;
+  await updateTexture(state2);
   state2.bindGroupDescriptor = {
     layout: pipeline.getBindGroupLayout(0),
     entries: [
       {
         binding: 0,
-        resource: { buffer: state2.uniformsBuffer }
-      },
-      {
-        binding: 1,
-        resource: sampler
-      },
-      {
-        binding: 2,
-        resource: texture.createView({
-          baseMipLevel: 0,
-          mipLevelCount: 1
-        }),
-        texture: {
-          sampleType: "float",
-          viewDimension: "2d",
-          multisampled: 0
-        }
+        resource: { buffer: uniformBuffer }
       }
     ]
   };
   state2.bindGroupDescriptor.entries[0].resource.buffer = updateUniforms(state2);
-  state2.bindGroupDescriptor.entries[2].resource = texture.createView({
-    baseMipLevel: 0,
-    mipLevelCount: 1
-  });
   return pipeline;
 }
 async function compile(state2, options) {
@@ -348,14 +273,12 @@ async function init(options = {}) {
   context.configure({
     device,
     format: presentationFormat,
-    alphaMode: "opaque",
-    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    alphaMode: "opaque"
   });
   function draw(newScope) {
     if (Array.isArray(newScope))
       return newScope.map((scope) => draw(scope));
-    updateTexture(state2);
-    updateUniforms(state2);
+    updateUniforms(state2, state2.options.uniforms.modelViewProjectionMatrix());
     recordRenderPass(state2);
     return draw;
   }
@@ -397,8 +320,14 @@ function buffer(array) {
 }
 function prop(name) {
   return () => {
-    return state.uniforms.color;
+    let context = {
+      viewportWidth: 500,
+      viewportHeight: 500,
+      tick: Performance.now()
+    };
+    typeof state.uniforms[name] === "function" ? state.uniforms[name](context) : state.uniforms[name];
+    return state.uniforms[name];
   };
 }
-var main = { init };
+var main = { init, version: "0.15.0" };
 export { main as default };
