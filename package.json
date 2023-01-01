@@ -1,6 +1,6 @@
 {
   "name": "simple-gpu",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "test": "TZ=America/Los_Angeles mocha 'test/**/*-test.js' && eslint src test",
     "compile": "rollup -c -w",
     "publish": "rollup -c"
-    },
+  },
   "files": [
     "dist"
   ],
