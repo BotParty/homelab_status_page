@@ -193,8 +193,10 @@ async function makePipeline(state2) {
     mipmapFilter: "nearest"
   });
   updateUniforms(state2);
+  const canvas = state2.canvas;
+  console.log(canvas.offsetWidth, canvas.offsetHeight);
   const depthTexture = device.createTexture({
-    size: [500 * devicePixelRatio, 500 * devicePixelRatio],
+    size: [(canvas.offsetWidth || 300) * devicePixelRatio, (canvas.offsetHeight || 150) * devicePixelRatio],
     format: "depth24plus",
     usage: GPUTextureUsage.RENDER_ATTACHMENT
   });
@@ -255,7 +257,8 @@ async function init(options = {}) {
     options,
     data: Object.assign(defaultData, options.data),
     compute: options.compute,
-    renderPasses: []
+    renderPasses: [],
+    canvas
   };
   utils.addMouseEvents(canvas, state2.data);
   if (!navigator.gpu)
@@ -292,8 +295,7 @@ async function init(options = {}) {
     buffer,
     prop,
     clear,
-    frame,
-    version: "0.17.0"
+    frame
   };
   function frame(cb) {
     requestAnimationFrame(function anon() {
@@ -328,5 +330,5 @@ function prop(name) {
     return state.uniforms[name];
   };
 }
-var main = { init, version: "0.17.0" };
+var main = { init };
 export { main as default };
