@@ -1,5 +1,8 @@
 export {version} from "./package.json";
 export * from "./lib/index.js";
+const hello = 'hello'
+const world = 'world'
+export {hello,world} 
 //treeshaking is deleting my version ?!?!?
 //new versions arent updating in notebook!
 //learn how to develop modules !

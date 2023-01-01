@@ -1,23 +1,21 @@
 {
-  "name": "regpu3",
+  "name": "regpu4",
   "version": "0.29.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "TZ=America/Los_Angeles mocha 'test/**/*-test.js' && eslint src test",
-    "compile": "rollup -c -w",
-    "publish": "rollup -c"
-  },
+    "build": "rollup -c "
+    },
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "lib/**/*.js"
   ],
-  "main": "./dist/my-lib.umd.js",
-  "module": "./dist/my-lib.es.js",
+  "module": "dist/regpu4.js",
+  "main": "dist/regpu4.js",
+  "jsdelivr": "dist/regpu4.js",
   "exports": {
     ".": {
-      "import": "./dist/my-lib.es.js",
+      "umd": "./dist/my-lib.es.js",
       "require": "./dist/my-lib.umd.js"
     }
   },
