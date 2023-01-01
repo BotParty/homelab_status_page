@@ -1,5 +1,5 @@
 {
-  "name": "simple-gpu",
+  "name": "regpu2",
   "version": "0.18.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {

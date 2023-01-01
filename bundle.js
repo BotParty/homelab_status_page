@@ -4,7 +4,7 @@ export * from "./lib/index.js";
 //new versions arent updating in notebook!
 //learn how to develop modules !
 
-// make module work by friday
+// make module work by frida
 //get 3 cubes
 //one has a texture
 //one rescales with a slider
