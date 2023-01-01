@@ -8,8 +8,8 @@
     "preview": "vite preview",
     "test": "TZ=America/Los_Angeles mocha 'test/**/*-test.js' && eslint src test",
     "compile": "rollup -c -w",
-    "run": "rollup -c -w && serve "
-  },
+    "publish": "rollup -c"
+    },
   "files": [
     "dist"
   ],
