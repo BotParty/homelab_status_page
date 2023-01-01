@@ -88,8 +88,6 @@ await img.decode();
 
 //module thinks this is a draw call but its actually an init draw call
 const drawCube = await webgpu.initDrawCall({
-  // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
-  // to define them.  No need to manually create shader objects.
   frag: `
   @group(0) @binding(1) var mySampler: sampler;
   @group(0) @binding(2) var myTexture: texture_2d<f32>;
@@ -141,8 +139,6 @@ const drawCube = await webgpu.initDrawCall({
     modelViewProjectionMatrix: getTransformationMatrix,
    texture: img,
   },
-
-  // This tells simpleWebgpu the number of vertices to draw in this command
   count: 36
 })
  
