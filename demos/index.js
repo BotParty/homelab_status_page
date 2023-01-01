@@ -16,6 +16,8 @@ import cube from "./cube";
 
 import light from "./light";
 
+import postProcessing from "./postProcessing";
+
 
 let defaultDemo = 'physics';
 let data = {}
@@ -34,11 +36,11 @@ async function start_loop_static(options) {
 }
 
 let demoTitles = [
-  'basic' , 'particles', 'hexagon', 'cube', 'light'
+  'basic' , 'particles', 'hexagon', 'cube', 'light', 'postProcessing'
 ]
 
 let demos = [
-  basic, particles, hexagon, cube, light
+  basic, particles, hexagon, cube, light, postProcessing
 ]
 
   document.querySelectorAll('input').forEach(e => {
