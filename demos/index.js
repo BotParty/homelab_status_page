@@ -6,7 +6,6 @@
 //add demo.js to each index.html that just calls the imported DEMO
 
 
-import particles from "./particles";
 
 import basic from "./basic";
 
@@ -36,11 +35,11 @@ async function start_loop_static(options) {
 }
 
 let demoTitles = [
-  'basic' , 'particles', 'hexagon', 'cube', 'light', 'postProcessing'
+  'basic' , 'hexagon', 'cube', 'light', 'postProcessing'
 ]
 
 let demos = [
-  basic, particles, hexagon, cube, light, postProcessing
+  basic, hexagon, cube, light, postProcessing
 ]
 
   document.querySelectorAll('input').forEach(e => {
