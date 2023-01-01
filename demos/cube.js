@@ -84,8 +84,9 @@ img.src = './data/october.png'
 document.body.appendChild(img)
 
 await img.decode();
-
-//module thinks this is a draw call but its actually an init draw call
+//1/4, shader abstraction might get it to 1/10 or 1/5
+//goal: 10x easier than native w/ shader abstraction
+//15% way to full framework - last 2 months well spent 
 const drawCube = await webgpu.initDrawCall({
 frag: `
   @group(0) @binding(1) var mySampler: sampler;
