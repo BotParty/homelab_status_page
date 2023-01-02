@@ -1,5 +1,8 @@
 //import simpleWebgpu from "../lib/main";
-import simpleWebgpu from '../lib/main';
+// import simpleWebgpu from '../lib/main';
+import simpleWebGpuInit from '../lib/main'
+import simpleWebgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
+
 
 async function basic () {
   let time = 0
@@ -46,14 +49,10 @@ let webgpu = await simpleWebgpu.init()
         [-0.3, -0.3],    
         [.3,  -.3],
 
-        [.0, .0],  
-        [-0.3, -0.3],    
-        [.3,  -.3],
-
-        [.3,  -.3],
-        [.3,  -.0],
-        [0, 0]
-
+        [0.0,0.0],
+         [.3,  .3],
+        [-.3, .3],
+      []
       ]), color: webgpu.buffer([
         [1,0,0],
         [0,1,0],
@@ -68,7 +67,7 @@ let webgpu = await simpleWebgpu.init()
     },
   
     // This tells simpleWebgpu the number of vertices to draw in this command
-    count: 3,
+    count: 6,
     primitive: 'triangle'
   }).then(draw => {
     draw({

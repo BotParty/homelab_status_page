@@ -316,3 +316,10 @@ TODO
 ```bash
 npm run dev
 ```
+
+# Why WebGPU and not WebGL?
+Most applications are CPU-bound so async draw calls are useful for unblocking IO
+3.5x better performance for matrix multiplications 
+RayTracing 
+Compute Shaders for GPGPU
+security  

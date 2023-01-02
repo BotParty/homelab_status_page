@@ -73,4 +73,4 @@ function select(name) {
 
 
 
-select(document.querySelector(':checked').value)
+select(window.location.hash.slice(1) || document.querySelector(':checked').value)
