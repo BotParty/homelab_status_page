@@ -315,6 +315,7 @@ type in an observable-input then wrap it in a span depending on sentiment analys
 - [] original demos = glass of water, handwriting, sentiment analysis
 - [] PBR demo
 - [] matrix multiply demo https://milhidaka.github.io/webgpu-blas/ https://gpu.rocks/#/
+- [] write docs on auto-create bindgroups - dont hide complexity but consistent mental model resources+commands + passthrough bindgroups when necessary
 
 # developing locally
 ```bash
