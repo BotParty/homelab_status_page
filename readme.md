@@ -308,9 +308,13 @@ type in an observable-input then wrap it in a span depending on sentiment analys
 
 //might want to use an actual js editor component instead of script injection into gmail do both to prototype in editor then do gmail. test technology in two github applications
 
-TODO
+# TODO 
 - [] design shader abstraction for observableHQ
 - [] design more visualizations and put them in observablehq
+- [] fold-in Austin eng's demos and regl.party
+- [] original demos = glass of water, handwriting, sentiment analysis
+- [] PBR demo
+- [] matrix multiply demo https://milhidaka.github.io/webgpu-blas/ https://gpu.rocks/#/
 
 # developing locally
 ```bash

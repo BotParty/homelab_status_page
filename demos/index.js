@@ -13,6 +13,8 @@ import hexagon from "./h3-hexagon";
 
 import cube from "./cube";
 
+import texturedCube from "./texturedCube";
+
 import light from "./light";
 
 import postProcessing from "./postProcessing";
@@ -35,11 +37,11 @@ async function start_loop_static(options) {
 }
 
 let demoTitles = [
-  'basic' , 'hexagon', 'cube', 'light', 'postProcessing'
+  'basic' , 'hexagon', 'cube', 'light', 'postProcessing', 'texturedCube'
 ]
 
 let demos = [
-  basic, hexagon, cube, light, postProcessing
+  basic, hexagon, cube, light, postProcessing, texturedCube
 ]
 
   document.querySelectorAll('input').forEach(e => {
