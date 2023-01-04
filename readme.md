@@ -315,7 +315,10 @@ type in an observable-input then wrap it in a span depending on sentiment analys
 - [] original demos = glass of water, handwriting, sentiment analysis
 - [] PBR demo
 - [] matrix multiply demo https://milhidaka.github.io/webgpu-blas/ https://gpu.rocks/#/
-- [] write docs on auto-create bindgroups - dont hide complexity but consistent mental model resources+commands + passthrough bindgroups when necessary
+- [] write docs on auto-create bindgroups - dont hide complexity but consistent mental model resources
+- [] always render to a renderTarget not canvas because more composable ???
++commands + passthrough bindgroups when necessary
+use observablehq for progressively adding interactivity using sliders
 
 # developing locally
 ```bash
@@ -328,3 +331,9 @@ Most applications are CPU-bound so async draw calls are useful for unblocking IO
 RayTracing 
 Compute Shaders for GPGPU
 security  
+
+utopia: documenting the inevitability of success for 7 billion people in 4-7 years
+
+hand sketching itself as a collection of puzzle pieces that are drawn and redrawn live to larp-future-gapfinding-economy - warp in nexus/forge to create fusion
+
+visualize network turning rainbow from one creation + rainbow path

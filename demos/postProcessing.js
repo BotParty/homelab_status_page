@@ -1,8 +1,12 @@
 // import { init } from "../lib/main";
+import utils from '../lib/utils'
 
 const tileDim = 128;
 const batch = [4, 4];
 const blockDim = 15
+
+
+//change to sepia and blur and analyze and understand how worky
 
 const blurWGSL = `struct Params {
   filterDim : i32,
@@ -131,7 +135,7 @@ fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
 
 async function physics() {
 
-  const canvas = document.createElement('canvas')
+  const canvas = utils.createCanvas()
   const adapter = await navigator.gpu.requestAdapter();
   const device = await adapter.requestDevice();
 

@@ -7,6 +7,7 @@ import simpleWebGpuInit from '../lib/main'
 async function basic () {
   let time = 0
  // Calling simplewebgpu.init() creates a new partially evaluated draw command
+//let webgpu = await simpleWebGpuInit()
 let webgpu = await simpleWebGpuInit()
  webgpu.initDrawCall({
     // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
@@ -14,8 +15,8 @@ let webgpu = await simpleWebGpuInit()
     frag: `
     @fragment
     fn main(
-      //@location(0) position: vec4<f32>,
-      //@location(1) color: vec4<f32>,
+      @location(0) fragUV: vec4<f32>,
+      @location(1) fragPosition: vec4<f32>,
     ) -> @location(0) vec4<f32> {
       //return color;
       return vec4(${Math.random()}, 0.0, .9, 1.0);
@@ -24,20 +25,27 @@ let webgpu = await simpleWebGpuInit()
     vert: `
     struct VertexOutput {
       @builtin(position) Position : vec4<f32>,
-     // Color: vec3<f32>,
-    }
+      @location(0) fragUV : vec2<f32>,
+      @location(1) fragPosition: vec4<f32>,
+    }  
   
     @vertex
     fn main (
       @builtin(vertex_index) VertexIndex : u32,
       @location(0) position : vec2<f32>,
-      @location(1) color : vec3<f32>,
+      @location(1) uv : vec2<f32>,
     ) -> VertexOutput {
   
-    var output: VertexOutput;
-    //output.Color = color;
+    // var output: VertexOutput;
+    // //output.Color = color;
   
-    output.Position = vec4<f32>(position.xy, 0.0, 1.0);
+    // output.Position = vec4<f32>(position, 0.0, 1.0);
+    // return output;
+
+    var output : VertexOutput;
+    output.Position = vec4<f32>(position, 0, 1);
+   output.fragUV = uv;
+    output.fragPosition = vec4<f32>(position, 0, 1);
     return output;
     }`,
   

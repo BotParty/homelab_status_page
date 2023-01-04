@@ -1,6 +1,5 @@
 import { mat4, vec3 } from 'gl-matrix';
-
-
+import utils from '../lib/utils'
 //use dot products to apply blinn phong shading 
 //use a different image
 const particleWGSL = `////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +206,7 @@ async function demo() {
   const adapter = await navigator.gpu.requestAdapter();
   const device = await adapter.requestDevice();
 
-  const canvas = document.createElement('canvas')
+  const canvas = utils.createCanvas('canvas')
   canvas.style.width = canvas.style.height = '500px';
 
   const context = canvas.getContext('webgpu');

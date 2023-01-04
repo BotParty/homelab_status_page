@@ -1,13 +1,12 @@
 //import simpleWebgpu from "../lib/main";
 //import simpleWebgpu from '../lib/main';
-import simpleWebgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
+//import simpleWebgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 import simpleWebgpuInit from '../lib/main'
 
 const time = 0;
 async function basic () {
-console.log(simpleWebgpu)
   // Calling simplewebgpu.init() creates a new partially evaluated draw command
-let webgpu = await simpleWebgpu.init()
+let webgpu = await simpleWebgpuInit()
 
  webgpu.initDrawCall({
     // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
@@ -23,23 +22,26 @@ let webgpu = await simpleWebgpu.init()
     }`,
   
     vert: `
+    struct Uniforms {
+      modelViewProjectionMatrix : mat4x4<f32>,
+    }
+    @binding(0) @group(0) var<uniform> uniforms : Uniforms;
     struct VertexOutput {
       @builtin(position) Position : vec4<f32>,
-     // Color: vec3<f32>,
-    }
+      @location(0) fragUV : vec2<f32>,
+      @location(1) fragPosition: vec4<f32>,
+    }  
   
     @vertex
-    fn main (
-      @builtin(vertex_index) VertexIndex : u32,
-      @location(0) position : vec2<f32>,
-      @location(1) color : vec3<f32>,
+    fn main(
+      @location(0) position : vec4<f32>,
+      @location(1) uv : vec2<f32>
     ) -> VertexOutput {
-  
-    var output: VertexOutput;
-    //output.Color = color;
-  
-    output.Position = vec4<f32>(position.xy, 0.0, 1.0);
-    return output;
+      var output : VertexOutput;
+      output.Position = uniforms.modelViewProjectionMatrix * position;
+      output.fragUV = uv;
+      output.fragPosition = position;
+      return output;
     }`,
   
     // Here we define the vertex attributes for the above shader
