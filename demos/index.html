@@ -9,20 +9,145 @@
       href="./data/tailwind.min.css"
       rel="stylesheet"
     />
-    <link href="./data/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="./index.css" rel="stylesheet">
   
+
     <script type="module">
       import basic from './basic.js'
+      console.log(123)
       basic()
     </script>
   </head>
   <body class=" bg-gray-600">
-<ul>
-  <li>
-    <a href="/basic.html">basic.html</a>
-  </li>
-</ul>
-   
+ <body class=" bg-gray-600">
+
+    <div id="swap" class="mt-4">
+      <form name="stuff">
+        <fieldset>
+      <div id="control-panel" class="mt-2">
+    <!-- TODO tesselate hexagons for h3 uniform zoom level for hexagonal binning for data texture usage for 16 million complaints  -->
+
+    <!-- <label class="inline-flex items-center">
+      resizeCanvas
+    <input
+      type="radio"
+      class="form-radio"
+      name="resizeCanvas"
+      value="resizeCanvas"
+      checked
+    />
+  </label> -->
+          <!-- <label class="inline-flex items-center">
+            hexagon
+            <input
+            type="radio"
+            class="form-radio"
+            name="hexagon"
+            value="hexagon"
+          />
+        </label> -->
+        <label class="inline-flex items-center">
+          basic
+          <input
+          type="radio"
+          class="form-radio"
+          name="basic"
+          value="basic"
+        />
+      </label>
+
+    <label class="inline-flex items-center">
+      cube
+    <input
+      type="radio"
+      class="form-radio"
+      name="cube"
+      value="cube"
+      checked
+    />
+  </label>
+
+  <label class="inline-flex items-center">
+    texturedCube
+  <input
+    type="radio"
+    class="form-radio"
+    name="texturedCube"
+    value="texturedCube"
+    checked
+  />
+</label>
+
+  <label class="inline-flex items-center">
+    light
+    <input
+    type="radio"
+    class="form-radio"
+    name="light"
+    value="light"
+  />
+</label>
+
+<label class="inline-flex items-center">
+  postProcessing
+  <input
+  type="radio"
+  class="form-radio"
+  name="postProcessing"
+  value="postProcessing"
+/>
+</label>
+
+
+        <!-- <label class="inline-flex items-center">
+          texture
+          <input
+          type="radio"
+          class="form-radio"
+          name="texture"
+          value="texture"
+          
+          />
+      </label> -->
+
+
+        <!-- <label class="inline-flex items-center">
+          texture
+          <input
+          type="radio"
+          class="form-radio"
+          name="texture"
+          value="texture"
+          
+          />
+      </label> -->
+
+    <!-- <label class="inline-flex items-center">
+    postProcessing
+    <input
+    type="radio"
+    class="form-radio"
+    name="postProcessing"
+    value="postProcessing"
+    />
+    </label> -->
+          <!-- <label class="inline-flex items-center">
+        line-primitives
+        <input
+        type="radio"
+        class="form-radio"
+        name="line-primitives"
+        value="line-primitives"
+        /> 
+       </label>  
+      -->
+
+      
+      </div>
+    </fieldset>
+      </form>
       <!-- <canvas height="500" width="100"></canvas> -->
 
       <div class=" text-white bg-purple-800 mt-96 m-auto">

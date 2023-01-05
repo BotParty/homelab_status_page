@@ -71,10 +71,10 @@ function select(name) {
   cleanup()
 
   window.location.hash = name;
- demo()
- 
+  demo()
+  console.log(123)
 }
-
+console.log(123)
 
 
 select(window.location.hash.slice(1) || document.querySelector(':checked').value)

@@ -1,12 +1,11 @@
+
 //import simpleWebgpu from "../lib/main";
-//import simpleWebgpu from '../lib/main';
-//import simpleWebgpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
-import simpleWebgpuInit from '../lib/main'
+import simpleWebgpuInit from 'simple-webgpu'
 
 const time = 0;
 async function basic () {
   // Calling simplewebgpu.init() creates a new partially evaluated draw command
-let webgpu = await simpleWebgpuInit()
+let webgpu = await simpleWebgpu.init()
 
  webgpu.initDrawCall({
     // Shaders in simplewebgpu. are just strings.  You can use glslify or whatever you want
