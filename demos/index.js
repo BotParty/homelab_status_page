@@ -19,6 +19,8 @@ import light from "./light";
 
 import postProcessing from "./postProcessing";
 
+//import resizeCanvas from "./resizeCanvas";
+
 
 let defaultDemo = 'physics';
 let data = {}
