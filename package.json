@@ -1,6 +1,6 @@
 {
   "name": "regpu",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "description": "WebGPU is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
@@ -14,8 +14,8 @@
   "main": "lib/index.js",
   "jsdelivr": "dist/regpu.min.js",
   "exports": {
-      "umd": "./dist/regpu.min.js",
-      "default": "./src/index.js"
+    "umd": "./dist/regpu.min.js",
+    "default": "./src/index.js"
   },
   "devDependencies": {
     "d3": "^7.1.1",
