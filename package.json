@@ -1,7 +1,7 @@
 {
-  "name": "regpu",
+  "name": "simple-gpu",
   "version": "0.40.0",
-  "description": "WebGPU is a fast functional WebGPU framework.",
+  "description": "simple-gpu is a fast functional WebGPU framework.",
   "scripts": {
     "dev": "vite",
     "build": "rm -rf dist && rollup -c "
@@ -12,9 +12,9 @@
   ],
   "module": "lib/index.js",
   "main": "lib/index.js",
-  "jsdelivr": "dist/regpu.min.js",
+  "jsdelivr": "dist/simple-gpu.min.js",
   "exports": {
-    "umd": "./dist/regpu.min.js",
+    "umd": "./dist/simple-gpu.min.js",
     "default": "./src/index.js"
   },
   "devDependencies": {
