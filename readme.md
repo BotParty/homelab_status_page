@@ -3,11 +3,11 @@
   🦒
 </div>
 <h1 align="center">
-  simple-webgpu
+  simple-gpu
 </h1>
 
 <div align="center">
-  Fast functional WebGPU
+  Fast, functional webGPU
 </div>
 
 <br />
@@ -317,6 +317,7 @@ type in an observable-input then wrap it in a span depending on sentiment analys
 - [] matrix multiply demo https://milhidaka.github.io/webgpu-blas/ https://gpu.rocks/#/
 - [] write docs on auto-create bindgroups - dont hide complexity but consistent mental model resources
 - [] always render to a renderTarget not canvas because more composable ???
+- [ ] figure out typescript with rollup for module
 +commands + passthrough bindgroups when necessary
 use observablehq for progressively adding interactivity using sliders
 

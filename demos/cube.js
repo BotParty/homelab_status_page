@@ -3,7 +3,7 @@
 import { mat4, vec3 } from 'https://unpkg.com/gl-matrix@3.1.0/esm/index.js';
 import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 
-console.log('test')
+
 const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
 const cubePositionOffset = 0;
 const cubeColorOffset = 4 * 4; // Byte offset of cube vertex color attribute.
@@ -78,7 +78,6 @@ console.log('making matrix')
   return modelViewProjectionMatrix
 }
 async function basic () {
-console.log('hi')
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simplegpu.init()
 // let img = new Image();
