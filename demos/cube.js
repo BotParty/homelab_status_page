@@ -1,7 +1,9 @@
 //import simpleWebgpu from "../lib/main";
-import simpleWebgpuInit from '../lib/main';
-import { mat4, vec3 } from 'gl-matrix';
+//import simpleWebgpuInit from '../lib/main';
+import { mat4, vec3 } from 'https://unpkg.com/gl-matrix@3.1.0/esm/index.js';
+import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 
+console.log('test')
 const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
 const cubePositionOffset = 0;
 const cubeColorOffset = 4 * 4; // Byte offset of cube vertex color attribute.
@@ -72,18 +74,18 @@ function getTransformationMatrix() {
 
   const modelViewProjectionMatrix = mat4.create();
   mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
-
+console.log('making matrix')
   return modelViewProjectionMatrix
 }
 async function basic () {
-
+console.log('hi')
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
-let webgpu = await simpleWebgpuInit()
-let img = new Image();
-img.src = './data/october.png'
-document.body.appendChild(img)
+let webgpu = await simplegpu.init()
+// let img = new Image();
+// img.src = '../data/october.png'
+// document.body.appendChild(img)
 
-await img.decode();
+//await img.decode();
 //1/4, shader abstraction might get it to 1/10 or 1/5
 //goal: 10x easier than native w/ shader abstraction
 //15% way to full framework - last 2 months well spent 
@@ -124,7 +126,6 @@ frag: `
   },
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,
-   //texture: img,
   },
   count: 36
 })
@@ -132,7 +133,6 @@ frag: `
 setInterval(
   function () {
     drawCube({
-      texture: img
     })
   }, 50
 )
