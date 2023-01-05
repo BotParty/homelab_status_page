@@ -1,6 +1,6 @@
 
-import simplegpu from "../lib/main";
-//import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
+//import simplegpu from "../lib/main";
+import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 
 const time = 0;
 async function basic () {

@@ -19,6 +19,10 @@ import light from "./light";
 
 import postProcessing from "./postProcessing";
 
+
+import matrixMultiply from "./matrix-multiply";
+
+
 //import resizeCanvas from "./resizeCanvas";
 
 
@@ -39,11 +43,12 @@ async function start_loop_static(options) {
 }
 
 let demoTitles = [
-  'basic' , 'hexagon', 'cube', 'light', 'postProcessing', 'texturedCube'
+  'basic' , 'hexagon', 'cube',
+  'texturedCube', 'light', 'postProcessing', 'matrixMultiply', 
 ]
 
 let demos = [
-  basic, hexagon, cube, light, postProcessing, texturedCube
+basic, hexagon, cube, texturedCube, light, postProcessing,   matrixMultiply,
 ]
 
   document.querySelectorAll('input').forEach(e => {

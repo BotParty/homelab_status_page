@@ -62,7 +62,7 @@ fn main(
         samp,
         (vec2<f32>(loadIndex) + vec2<f32>(0.25, 0.25)) / vec2<f32>(dims),
         0.0
-      ).rgb;
+      ).gbr;
     }
   }
 
@@ -130,8 +130,6 @@ fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
   return textureSample(myTexture, mySampler, fragUV);
 }
 `
-
-
 
 async function physics() {
 

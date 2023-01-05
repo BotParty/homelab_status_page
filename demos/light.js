@@ -91,14 +91,14 @@ fn simulate(
   var particle = data.particles[idx];
 
   // Apply gravity
-  particle.velocity.z = particle.velocity.z - sim_params.deltaTime * 0.5;
+  particle.velocity.z = particle.velocity.z - sim_params.deltaTime * 0.2;
 
   // Basic velocity integration
   particle.position = particle.position + sim_params.deltaTime * particle.velocity;
 
   // Age each particle. Fade out before vanishing.
   particle.lifetime = particle.lifetime - sim_params.deltaTime;
-  particle.color.a = smoothstep(0.0, 0.5, particle.lifetime);
+  particle.color.a = smoothstep(0.0, 0.0, particle.lifetime);
 
   // If the lifetime has gone negative, then the particle is dead and should be
   // respawned.
@@ -128,7 +128,7 @@ fn simulate(
     particle.velocity.x = (rand() - 0.5) * 0.1;
     particle.velocity.y = (rand() - 0.5) * 0.1;
     particle.velocity.z = rand() * 0.3;
-    particle.lifetime = 0.5 + rand() * 2.0;
+    particle.lifetime =  rand() * 2.0;
   }
 
   // Store the new particle value
@@ -379,7 +379,7 @@ async function demo() {
   {
     const img = document.createElement('img');
     img.src = new URL(
-      '../data/webgpu.png',
+      '../data/texture.png',
       import.meta.url
     ).toString();
     await img.decode();
@@ -514,7 +514,7 @@ async function demo() {
   //////////////////////////////////////////////////////////////////////////////
   const simulationParams = {
     simulate: true,
-    deltaTime: 0.04,
+    deltaTime: 0.02,
   };
 
   const simulationUBOBufferSize =
