@@ -1,6 +1,6 @@
 
-//import simplegpu from "../lib/main";
-import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
+import simplegpu from "../lib/main";
+//import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 
 const time = 0;
 async function basic () {
@@ -12,7 +12,7 @@ let webgpu = await simplegpu()
     // to define them.  No need to manually create shader objects.
     frag: `
     @fragment
-    fn main(
+  fn main(
       //@location(0) position: vec4<f32>,
       //@location(1) color: vec4<f32>,
     ) -> @location(0) vec4<f32> {

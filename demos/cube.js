@@ -74,7 +74,6 @@ function getTransformationMatrix() {
 
   const modelViewProjectionMatrix = mat4.create();
   mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
-console.log('making matrix')
   return modelViewProjectionMatrix
 }
 async function basic () {
@@ -89,7 +88,8 @@ let webgpu = await simplegpu.init()
 //goal: 10x easier than native w/ shader abstraction
 //15% way to full framework - last 2 months well spent 
 const drawCube = await webgpu.initDrawCall({
-frag: `
+frag:
+`
   @group(0) @binding(1) var mySampler: sampler;
   @group(0) @binding(2) var myTexture: texture_2d<f32>;
   @fragment
