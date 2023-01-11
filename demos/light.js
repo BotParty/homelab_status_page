@@ -379,7 +379,7 @@ async function demo() {
   {
     const img = document.createElement('img');
     img.src = new URL(
-      '../data/texture.png',
+      '../data/webgpu.png',
       import.meta.url
     ).toString();
     await img.decode();
