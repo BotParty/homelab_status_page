@@ -124,7 +124,7 @@ frag: `
   },
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,
-   texture: img,
+   texture: webgpu.texture(img).data,
   },
   count: 36
 })
@@ -132,7 +132,7 @@ frag: `
 setInterval(
   function () {
     drawCube({
-      texture: img
+      texture: webgpu.texture(img)
     })
   }, 50
 )

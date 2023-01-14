@@ -1,12 +1,12 @@
-// import { init } from "../lib/main";
-import utils from '../lib/utils'
+import  webgpuInit  from "../lib/main";
 
 const tileDim = 128;
 const batch = [4, 4];
-const blockDim = 15
 
-
-//change to sepia and blur and analyze and understand how worky
+const time = 0;
+//change to sepia and glow and analyze and understand 
+//make draw call framework
+//make compute call framework
 
 const blurWGSL = `struct Params {
   filterDim : i32,
@@ -62,7 +62,7 @@ fn main(
         samp,
         (vec2<f32>(loadIndex) + vec2<f32>(0.25, 0.25)) / vec2<f32>(dims),
         0.0
-      ).gbr;
+      ).brg;
     }
   }
 
@@ -131,27 +131,9 @@ fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
 }
 `
 
-async function physics() {
-
-  const canvas = utils.createCanvas()
-  const adapter = await navigator.gpu.requestAdapter();
-  const device = await adapter.requestDevice();
-
-  const context = canvas.getContext('webgpu');
-
-  const devicePixelRatio = window.devicePixelRatio || 1;
-  const presentationSize = [
-    500,
-    500
-  ];
-  const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
-
-  context.configure({
-    device,
-    size: presentationSize,
-    format: presentationFormat,
-    alphaMode: 'opaque',
-  });
+async function postProcessing() {
+  let webgpu = await webgpuInit()
+  let context = webgpu.context, device = webgpu.device;
 
   const blurPipeline = device.createComputePipeline({
     layout: 'auto',
@@ -162,6 +144,17 @@ async function physics() {
       entryPoint: 'main',
     },
   });
+  webgpu.initComputeCall({
+    code: blurWGSL
+  })
+
+  webgpu.initDrawCall({
+    shader: { code: fullscreenTexturedQuadWGSL,
+              fragEntryPoint: "frag_main",
+              vertEntryPoint: "vert_main"
+    },
+  })
+
 
   const fullscreenQuadPipeline = device.createRenderPipeline({
     layout: 'auto',
@@ -178,7 +171,7 @@ async function physics() {
       entryPoint: 'frag_main',
       targets: [
         {
-          format: presentationFormat,
+          format: navigator.gpu.getPreferredCanvasFormat(),
         },
       ],
     },
@@ -192,28 +185,14 @@ async function physics() {
     minFilter: 'linear',
   });
 
-  const img = document.createElement('img');
-  img.src = new URL(
-    '../data/webgpu.png',
-    import.meta.url
-  ).toString();
+  let img = new Image();
+  img.src = '../data/webgpu.png',
+  document.body.appendChild(img)
+
   await img.decode();
   const imageBitmap = await createImageBitmap(img);
 
   const [srcWidth, srcHeight] = [imageBitmap.width, imageBitmap.height];
-  const cubeTexture = device.createTexture({
-    size: [srcWidth, srcHeight, 1],
-    format: 'rgba8unorm',
-    usage:
-      GPUTextureUsage.TEXTURE_BINDING |
-      GPUTextureUsage.COPY_DST |
-      GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-  device.queue.copyExternalImageToTexture(
-    { source: imageBitmap },
-    { texture: cubeTexture },
-    [imageBitmap.width, imageBitmap.height]
-  );
 
   const textures = [0, 1].map(() => {
     return device.createTexture({
@@ -228,6 +207,36 @@ async function physics() {
         GPUTextureUsage.TEXTURE_BINDING,
     });
   });
+
+
+  const showResultBindGroup = device.createBindGroup({
+    layout: fullscreenQuadPipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: sampler,
+      },
+      {
+        binding: 1,
+        resource: textures[1].createView(),
+      },
+    ],
+  });
+
+ 
+  const cubeTexture = device.createTexture({
+    size: [srcWidth, srcHeight, 1],
+    format: 'rgba8unorm',
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+  device.queue.copyExternalImageToTexture(
+    { source: imageBitmap },
+    { texture: cubeTexture },
+    [imageBitmap.width, imageBitmap.height]
+  );
 
   const buffer0 = (() => {
     const buffer = device.createBuffer({
@@ -332,23 +341,11 @@ async function physics() {
     ],
   });
 
-  const showResultBindGroup = device.createBindGroup({
-    layout: fullscreenQuadPipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: sampler,
-      },
-      {
-        binding: 1,
-        resource: textures[1].createView(),
-      },
-    ],
-  });
+
 
   const settings = {
     filterSize: 15,
-    iterations: 2,
+    iterations: 10,
   };
 
   let blockDim;
@@ -395,9 +392,8 @@ async function physics() {
         Math.ceil(srcWidth / batch[1])
       );
     }
-
     computePass.end();
-
+  
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [
         {
@@ -418,8 +414,6 @@ async function physics() {
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-  return document.body.appendChild(canvas)
-
 
   }
-  export default physics;
+  export default postProcessing;

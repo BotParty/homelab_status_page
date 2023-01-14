@@ -22,6 +22,7 @@ import postProcessing from "./postProcessing";
 
 import matrixMultiply from "./matrix-multiply";
 
+import points from "./points";
 
 //import resizeCanvas from "./resizeCanvas";
 
@@ -32,7 +33,7 @@ let data = {}
 async function start_loop_static(options) {
   options.data = options.data || data; //extend 
 
-  let draw = await init(options);
+let draw = await init(options);
   if (! draw) return alert('webgpu not defined - please install chrome canary, go to chrome://flags, search for WebGPU')
   draw(data)
   
@@ -44,11 +45,12 @@ async function start_loop_static(options) {
 
 let demoTitles = [
   'basic' , 'hexagon', 'cube',
-  'texturedCube', 'light', 'postProcessing', 'matrixMultiply', 
+  'texturedCube', 'light', 'postProcessing', 'matrixMultiply', 'points'
 ]
 
 let demos = [
 basic, hexagon, cube, texturedCube, light, postProcessing,   matrixMultiply,
+points
 ]
 
   document.querySelectorAll('input').forEach(e => {
