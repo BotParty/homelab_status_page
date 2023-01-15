@@ -203,6 +203,10 @@ const particleInstanceByteSize =
   1 * 4 + // padding
   0;
 async function demo() {
+  
+
+
+
   const adapter = await navigator.gpu.requestAdapter();
   const device = await adapter.requestDevice();
 

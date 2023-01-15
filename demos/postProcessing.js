@@ -2,12 +2,7 @@ import  webgpuInit  from "../lib/main";
 
 const tileDim = 128;
 const batch = [4, 4];
-
-const time = 0;
-//change to sepia and glow and analyze and understand 
-//make draw call framework
-//make compute call framework
-
+//change to sepia and glow
 const blurWGSL = `struct Params {
   filterDim : i32,
   blockDim : u32,
@@ -65,9 +60,7 @@ fn main(
       ).brg;
     }
   }
-
   workgroupBarrier();
-
   for (var r = 0; r < 4; r++) {
     for (var c = 0; c < 4; c++) {
       var writeIndex = baseIndex + vec2(c, r);
@@ -89,7 +82,6 @@ fn main(
     }
   }
 }
-
 `
 const fullscreenTexturedQuadWGSL = `@group(0) @binding(0) var mySampler : sampler;
 @group(0) @binding(1) var myTexture : texture_2d<f32>;
@@ -144,17 +136,10 @@ async function postProcessing() {
       entryPoint: 'main',
     },
   });
+
   webgpu.initComputeCall({
     code: blurWGSL
   })
-
-  webgpu.initDrawCall({
-    shader: { code: fullscreenTexturedQuadWGSL,
-              fragEntryPoint: "frag_main",
-              vertEntryPoint: "vert_main"
-    },
-  })
-
 
   const fullscreenQuadPipeline = device.createRenderPipeline({
     layout: 'auto',
@@ -180,20 +165,12 @@ async function postProcessing() {
     },
   });
 
-  const sampler = device.createSampler({
-    magFilter: 'linear',
-    minFilter: 'linear',
-  });
-
   let img = new Image();
-  img.src = '../data/webgpu.png',
-  document.body.appendChild(img)
+  img.src = '../data/webgpu.png'
+  let texture = await webgpu.texture(img)
+  const [srcWidth, srcHeight] = [texture.width, texture.height];
 
-  await img.decode();
-  const imageBitmap = await createImageBitmap(img);
-
-  const [srcWidth, srcHeight] = [imageBitmap.width, imageBitmap.height];
-
+  
   const textures = [0, 1].map(() => {
     return device.createTexture({
       size: {
@@ -208,20 +185,30 @@ async function postProcessing() {
     });
   });
 
-
-  const showResultBindGroup = device.createBindGroup({
+  const showResultBindGroupDescriptor = {
     layout: fullscreenQuadPipeline.getBindGroupLayout(0),
     entries: [
       {
         binding: 0,
-        resource: sampler,
+        resource: texture.sampler,
       },
       {
         binding: 1,
         resource: textures[1].createView(),
       },
     ],
-  });
+  }
+
+  const showResultBindGroup = device.createBindGroup(showResultBindGroupDescriptor);
+
+  webgpu.initDrawCall({
+    shader: { code: fullscreenTexturedQuadWGSL,
+              fragEntryPoint: "frag_main",
+              vertEntryPoint: "vert_main"
+    },
+    bindGroup: showResultBindGroupDescriptor
+  })
+
 
  
   const cubeTexture = device.createTexture({
@@ -233,9 +220,9 @@ async function postProcessing() {
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
   device.queue.copyExternalImageToTexture(
-    { source: imageBitmap },
+    { source: texture.imageBitmap },
     { texture: cubeTexture },
-    [imageBitmap.width, imageBitmap.height]
+    [texture.width, texture.height]
   );
 
   const buffer0 = (() => {
@@ -270,7 +257,7 @@ async function postProcessing() {
     entries: [
       {
         binding: 0,
-        resource: sampler,
+        resource: texture.sampler,
       },
       {
         binding: 1,
@@ -340,8 +327,6 @@ async function postProcessing() {
       },
     ],
   });
-
-
 
   const settings = {
     filterSize: 15,
