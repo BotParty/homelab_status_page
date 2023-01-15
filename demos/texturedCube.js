@@ -80,7 +80,7 @@ async function basic () {
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
 let webgpu = await simpleWebgpuInit()
 let img = new Image();
-img.src = './data/october.png'
+img.src = './data/webgpu.png'
 document.body.appendChild(img)
 
 await img.decode();
@@ -124,7 +124,7 @@ frag: `
   },
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,
-   texture: webgpu.texture(img).data,
+   texture: webgpu.texture(img),
   },
   count: 36
 })
