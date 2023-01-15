@@ -1,4 +1,5 @@
-import  webgpuInit  from "../lib/main";
+import webgpuInit from "../lib/main";
+import utils from '../lib/utils'
 
 const tileDim = 128;
 const batch = [4, 4];
@@ -199,6 +200,9 @@ async function postProcessing() {
     ],
   }
 
+  // utils.makeConstantsBindGroup(
+  //   textureSampler, textures[1].createView(), false, fullscreenQuadPipeline.getBindGroupLayout(0), 
+  // )
   const showResultBindGroup = device.createBindGroup(showResultBindGroupDescriptor);
 
   webgpu.initDrawCall({
@@ -209,8 +213,6 @@ async function postProcessing() {
     bindGroup: showResultBindGroupDescriptor
   })
 
-
- 
   const cubeTexture = device.createTexture({
     size: [srcWidth, srcHeight, 1],
     format: 'rgba8unorm',
@@ -219,6 +221,7 @@ async function postProcessing() {
       GPUTextureUsage.COPY_DST |
       GPUTextureUsage.RENDER_ATTACHMENT,
   });
+  
   device.queue.copyExternalImageToTexture(
     { source: texture.imageBitmap },
     { texture: cubeTexture },
@@ -252,81 +255,23 @@ async function postProcessing() {
     usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.UNIFORM,
   });
 
-  const computeConstants = device.createBindGroup({
-    layout: blurPipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: texture.sampler,
-      },
-      {
-        binding: 1,
-        resource: {
-          buffer: blurParamsBuffer,
-        },
-      },
-    ],
-  });
 
-  const computeBindGroup0 = device.createBindGroup({
-    layout: blurPipeline.getBindGroupLayout(1),
-    entries: [
-      {
-        binding: 1,
-        resource: cubeTexture.createView(),
-      },
-      {
-        binding: 2,
-        resource: textures[0].createView(),
-      },
-      {
-        binding: 3,
-        resource: {
-          buffer: buffer0,
-        },
-      },
-    ],
-  });
+  const computeConstants = 
+  device.createBindGroup(
+    utils.makeConstantsBindGroup(texture.sampler, blurParamsBuffer, false, blurPipeline.getBindGroupLayout(0))
+  )
 
-  const computeBindGroup1 = device.createBindGroup({
-    layout: blurPipeline.getBindGroupLayout(1),
-    entries: [
-      {
-        binding: 1,
-        resource: textures[0].createView(),
-      },
-      {
-        binding: 2,
-        resource: textures[1].createView(),
-      },
-      {
-        binding: 3,
-        resource: {
-          buffer: buffer1,
-        },
-      },
-    ],
-  });
+  const computeBindGroup0 = device.createBindGroup(
+    utils.makeBindGroup(cubeTexture.createView(), textures[0].createView(), buffer0, blurPipeline.getBindGroupLayout(1))
+  )
 
-  const computeBindGroup2 = device.createBindGroup({
-    layout: blurPipeline.getBindGroupLayout(1),
-    entries: [
-      {
-        binding: 1,
-        resource: textures[1].createView(),
-      },
-      {
-        binding: 2,
-        resource: textures[0].createView(),
-      },
-      {
-        binding: 3,
-        resource: {
-          buffer: buffer0,
-        },
-      },
-    ],
-  });
+  const computeBindGroup1 = device.createBindGroup(
+    utils.makeBindGroup(textures[0].createView(),  textures[1].createView(), buffer1, blurPipeline.getBindGroupLayout(1))
+  )
+
+  const computeBindGroup2 = device.createBindGroup(
+    utils.makeBindGroup(textures[1].createView(),  textures[0].createView(), buffer0, blurPipeline.getBindGroupLayout(1))
+  )
 
   const settings = {
     filterSize: 15,
