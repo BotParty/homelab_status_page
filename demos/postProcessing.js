@@ -123,7 +123,6 @@ fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
   return textureSample(myTexture, mySampler, fragUV);
 }
 `
-
 async function postProcessing() {
   let webgpu = await webgpuInit()
   let context = webgpu.context, device = webgpu.device;
@@ -170,7 +169,6 @@ async function postProcessing() {
   img.src = '../data/webgpu.png'
   let texture = await webgpu.texture(img)
   const [srcWidth, srcHeight] = [texture.width, texture.height];
-
   
   const textures = [0, 1].map(() => {
     return device.createTexture({
@@ -242,11 +240,9 @@ async function postProcessing() {
     usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.UNIFORM,
   });
 
+  const computeConstants = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(0), [texture.sampler, blurParamsBuffer]))
 
-  const computeConstants = device.createBindGroup(
-    utils.makeConstantsBindGroup(texture.sampler, blurParamsBuffer, false, blurPipeline.getBindGroupLayout(0))
-  )
-
+  utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [texture.sampler, blurParamsBuffer])
   const computeBindGroup0 = device.createBindGroup(
     utils.makeBindGroup(cubeTexture.createView(), textures[0].createView(), buffer0, blurPipeline.getBindGroupLayout(1))
   )
@@ -334,3 +330,5 @@ async function postProcessing() {
 
   }
   export default postProcessing;
+
+  //450
