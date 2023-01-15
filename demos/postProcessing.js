@@ -186,23 +186,10 @@ async function postProcessing() {
     });
   });
 
-  const showResultBindGroupDescriptor = {
-    layout: fullscreenQuadPipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: texture.sampler,
-      },
-      {
-        binding: 1,
-        resource: textures[1].createView(),
-      },
-    ],
-  }
-
-  // utils.makeConstantsBindGroup(
-  //   textureSampler, textures[1].createView(), false, fullscreenQuadPipeline.getBindGroupLayout(0), 
-  // )
+  const showResultBindGroupDescriptor = utils.makeBindGroupDescriptor(
+    fullscreenQuadPipeline.getBindGroupLayout(0), [texture.sampler, textures[1].createView()]
+  )
+ 
   const showResultBindGroup = device.createBindGroup(showResultBindGroupDescriptor);
 
   webgpu.initDrawCall({
@@ -256,14 +243,14 @@ async function postProcessing() {
   });
 
 
-  const computeConstants = 
-  device.createBindGroup(
+  const computeConstants = device.createBindGroup(
     utils.makeConstantsBindGroup(texture.sampler, blurParamsBuffer, false, blurPipeline.getBindGroupLayout(0))
   )
 
   const computeBindGroup0 = device.createBindGroup(
     utils.makeBindGroup(cubeTexture.createView(), textures[0].createView(), buffer0, blurPipeline.getBindGroupLayout(1))
   )
+
 
   const computeBindGroup1 = device.createBindGroup(
     utils.makeBindGroup(textures[0].createView(),  textures[1].createView(), buffer1, blurPipeline.getBindGroupLayout(1))
