@@ -19,20 +19,6 @@ struct Flip {
 }
 @group(1) @binding(3) var<uniform> flip : Flip;
 
-// This shader blurs the input texture in one direction, depending on whether
-// |flip.value| is 0 or 1.
-// It does so by running (128 / 4) threads per workgroup to load 128
-// texels into 4 rows of shared memory. Each thread loads a
-// 4 x 4 block of texels to take advantage of the texture sampling
-// hardware.
-// Then, each thread computes the blur result by averaging the adjacent texel values
-// in shared memory.
-// Because we're operating on a subset of the texture, we cannot compute all of the
-// results since not all of the neighbors are available in shared memory.
-// Specifically, with 128 x 128 tiles, we can only compute and write out
-// square blocks of size 128 - (filterSize - 1). We compute the number of blocks
-// needed in Javascript and dispatch that amount.
-
 var<workgroup> tile : array<array<vec3<f32>, 128>, 4>;
 
 @compute @workgroup_size(32, 1, 1)
@@ -137,9 +123,7 @@ async function postProcessing() {
     },
   });
 
-  webgpu.initComputeCall({
-    code: blurWGSL
-  })
+  
 
   const fullscreenQuadPipeline = device.createRenderPipeline({
     layout: 'auto',
@@ -181,7 +165,7 @@ async function postProcessing() {
  
   const showResultBindGroup = device.createBindGroup(showResultBindGroupDescriptor);
 
-  webgpu.initDrawCall({
+  const draw = await webgpu.initDrawCall({
     shader: { code: fullscreenTexturedQuadWGSL,
               fragEntryPoint: "frag_main",
               vertEntryPoint: "vert_main"
@@ -189,13 +173,21 @@ async function postProcessing() {
     bindGroup: showResultBindGroupDescriptor
   })
 
+  const blurParamsBuffer = utils.paramsBuffer(device)
+
   const buffer0 = utils.makeBuffer(device)
   const buffer1 = utils.makeBuffer(device)
-  const blurParamsBuffer = utils.paramsBuffer(device)
   const computeConstants = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(0), [cubeTexture.sampler, blurParamsBuffer]))
   const computeBindGroup0 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [cubeTexture.texture.createView(), textures[0].createView(), buffer0], 1))
   const computeBindGroup1 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[0].createView(),  textures[1].createView(), buffer1,], 1))
   const computeBindGroup2 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[1].createView(),  textures[0].createView(), buffer0,], 1))
+
+
+  const compute = webgpu.initComputeCall({
+    code: blurWGSL,
+    bindGroups: [computeConstants, computeBindGroup0, computeBindGroup1, computeBindGroup2]
+  })
+
 
   const settings = {
     filterSize: 15,
@@ -215,55 +207,57 @@ async function postProcessing() {
   updateSettings();
 
   function frame() {
-    const commandEncoder = device.createCommandEncoder();
+    compute()
+    draw()
+    // const commandEncoder = device.createCommandEncoder();
 
-    const computePass = commandEncoder.beginComputePass();
-    computePass.setPipeline(blurPipeline);
-    computePass.setBindGroup(0, computeConstants);
+    // const computePass = commandEncoder.beginComputePass();
+    // computePass.setPipeline(blurPipeline);
+    // computePass.setBindGroup(0, computeConstants);
 
-    computePass.setBindGroup(1, computeBindGroup0);
-    computePass.dispatchWorkgroups(
-      Math.ceil(srcWidth / blockDim),
-      Math.ceil(srcHeight / batch[1])
-    );
+    // computePass.setBindGroup(1, computeBindGroup0);
+    // computePass.dispatchWorkgroups(
+    //   Math.ceil(srcWidth / blockDim),
+    //   Math.ceil(srcHeight / batch[1])
+    // );
 
-    computePass.setBindGroup(1, computeBindGroup1);
-    computePass.dispatchWorkgroups(
-      Math.ceil(srcHeight / blockDim),
-      Math.ceil(srcWidth / batch[1])
-    );
+    // computePass.setBindGroup(1, computeBindGroup1);
+    // computePass.dispatchWorkgroups(
+    //   Math.ceil(srcHeight / blockDim),
+    //   Math.ceil(srcWidth / batch[1])
+    // );
 
-    for (let i = 0; i < settings.iterations - 1; ++i) {
-      computePass.setBindGroup(1, computeBindGroup2);
-      computePass.dispatchWorkgroups(
-        Math.ceil(srcWidth / blockDim),
-        Math.ceil(srcHeight / batch[1])
-      );
+    // for (let i = 0; i < settings.iterations - 1; ++i) {
+    //   computePass.setBindGroup(1, computeBindGroup2);
+    //   computePass.dispatchWorkgroups(
+    //     Math.ceil(srcWidth / blockDim),
+    //     Math.ceil(srcHeight / batch[1])
+    //   );
 
-      computePass.setBindGroup(1, computeBindGroup1);
-      computePass.dispatchWorkgroups(
-        Math.ceil(srcHeight / blockDim),
-        Math.ceil(srcWidth / batch[1])
-      );
-    }
-    computePass.end();
+    //   computePass.setBindGroup(1, computeBindGroup1);
+    //   computePass.dispatchWorkgroups(
+    //     Math.ceil(srcHeight / blockDim),
+    //     Math.ceil(srcWidth / batch[1])
+    //   );
+    // }
+    // computePass.end();
   
-    const passEncoder = commandEncoder.beginRenderPass({
-      colorAttachments: [
-        {
-          view: context.getCurrentTexture().createView(),
-          clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-          loadOp: 'clear',
-          storeOp: 'store',
-        },
-      ],
-    });
+    // const passEncoder = commandEncoder.beginRenderPass({
+    //   colorAttachments: [
+    //     {
+    //       view: context.getCurrentTexture().createView(),
+    //       clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+    //       loadOp: 'clear',
+    //       storeOp: 'store',
+    //     },
+    //   ],
+    // });
 
-    passEncoder.setPipeline(fullscreenQuadPipeline);
-    passEncoder.setBindGroup(0, showResultBindGroup);
-    passEncoder.draw(6, 1, 0, 0);
-    passEncoder.end();
-    device.queue.submit([commandEncoder.finish()]);
+    // passEncoder.setPipeline(fullscreenQuadPipeline);
+    // passEncoder.setBindGroup(0, showResultBindGroup);
+    // passEncoder.draw(6, 1, 0, 0);
+    // passEncoder.end();
+    // device.queue.submit([commandEncoder.finish()]);
 
     requestAnimationFrame(frame);
   }
@@ -272,4 +266,5 @@ async function postProcessing() {
   }
   export default postProcessing;
 
-  //450
+  //450 -> 2x = 225 -> 3x
+  //auto-create bind groups from shader 
