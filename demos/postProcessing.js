@@ -170,11 +170,10 @@ async function postProcessing() {
   let cubeTexture = await webgpu.texture(img)
   const [srcWidth, srcHeight] = [cubeTexture.width, cubeTexture.height];
  
-  const textures = [0, 1].map(() => {
-    return webgpu.texture([srcWidth, srcHeight])
-  });
-
-  console.log(textures)
+  const textures = [
+    (await webgpu.texture([srcWidth, srcHeight])).texture,
+    (await webgpu.texture([srcWidth, srcHeight])).texture,
+  ]
 
   const showResultBindGroupDescriptor = utils.makeBindGroupDescriptor(
     fullscreenQuadPipeline.getBindGroupLayout(0), [cubeTexture.sampler, textures[1].createView()]
