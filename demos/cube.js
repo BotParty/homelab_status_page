@@ -1,7 +1,7 @@
 //import simpleWebgpu from "../lib/main";
-//import simpleWebgpuInit from '../lib/main';
+import simpleWebgpuInit from '../lib/main';
 import { mat4, vec3 } from 'https://unpkg.com/gl-matrix@3.1.0/esm/index.js';
-import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
+//import simplegpu from "https://cdn.jsdelivr.net/npm/simple-gpu/+esm";
 
 
 const cubeVertexSize = 4 * 10; // Byte size of one cube vertex.
@@ -78,7 +78,7 @@ function getTransformationMatrix() {
 }
 async function basic () {
 // Calling simplewebgpu.init() creates a new partially evaluated draw command
-let webgpu = await simplegpu.init()
+let webgpu = await simpleWebgpuInit()
 // let img = new Image();
 // img.src = '../data/october.png'
 // document.body.appendChild(img)
@@ -121,7 +121,7 @@ frag:
     return output;
   }`,
   attributes: {
-    position: webgpu.buffer(cubeVertexArray)
+    position: cubeVertexArray
   },
   uniforms: {
     modelViewProjectionMatrix: getTransformationMatrix,

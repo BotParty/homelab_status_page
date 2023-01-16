@@ -167,25 +167,17 @@ async function postProcessing() {
 
   let img = new Image();
   img.src = '../data/webgpu.png'
-  let texture = await webgpu.texture(img)
-  const [srcWidth, srcHeight] = [texture.width, texture.height];
-  
+  let cubeTexture = await webgpu.texture(img)
+  const [srcWidth, srcHeight] = [cubeTexture.width, cubeTexture.height];
+ 
   const textures = [0, 1].map(() => {
-    return device.createTexture({
-      size: {
-        width: srcWidth,
-        height: srcHeight,
-      },
-      format: 'rgba8unorm',
-      usage:
-        GPUTextureUsage.COPY_DST |
-        GPUTextureUsage.STORAGE_BINDING |
-        GPUTextureUsage.TEXTURE_BINDING,
-    });
+    return webgpu.texture([srcWidth, srcHeight])
   });
 
+  console.log(textures)
+
   const showResultBindGroupDescriptor = utils.makeBindGroupDescriptor(
-    fullscreenQuadPipeline.getBindGroupLayout(0), [texture.sampler, textures[1].createView()]
+    fullscreenQuadPipeline.getBindGroupLayout(0), [cubeTexture.sampler, textures[1].createView()]
   )
  
   const showResultBindGroup = device.createBindGroup(showResultBindGroupDescriptor);
@@ -198,63 +190,13 @@ async function postProcessing() {
     bindGroup: showResultBindGroupDescriptor
   })
 
-  const cubeTexture = device.createTexture({
-    size: [srcWidth, srcHeight, 1],
-    format: 'rgba8unorm',
-    usage:
-      GPUTextureUsage.TEXTURE_BINDING |
-      GPUTextureUsage.COPY_DST |
-      GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-  
-  device.queue.copyExternalImageToTexture(
-    { source: texture.imageBitmap },
-    { texture: cubeTexture },
-    [texture.width, texture.height]
-  );
-
-  const buffer0 = (() => {
-    const buffer = device.createBuffer({
-      size: 4,
-      mappedAtCreation: true,
-      usage: GPUBufferUsage.UNIFORM,
-    });
-    new Uint32Array(buffer.getMappedRange())[0] = 0;
-    buffer.unmap();
-    return buffer;
-  })();
-
-  const buffer1 = (() => {
-    const buffer = device.createBuffer({
-      size: 4,
-      mappedAtCreation: true,
-      usage: GPUBufferUsage.UNIFORM,
-    });
-    new Uint32Array(buffer.getMappedRange())[0] = 1;
-    buffer.unmap();
-    return buffer;
-  })();
-
-  const blurParamsBuffer = device.createBuffer({
-    size: 8,
-    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.UNIFORM,
-  });
-
-  const computeConstants = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(0), [texture.sampler, blurParamsBuffer]))
-
-  utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [texture.sampler, blurParamsBuffer])
-  const computeBindGroup0 = device.createBindGroup(
-    utils.makeBindGroup(cubeTexture.createView(), textures[0].createView(), buffer0, blurPipeline.getBindGroupLayout(1))
-  )
-
-
-  const computeBindGroup1 = device.createBindGroup(
-    utils.makeBindGroup(textures[0].createView(),  textures[1].createView(), buffer1, blurPipeline.getBindGroupLayout(1))
-  )
-
-  const computeBindGroup2 = device.createBindGroup(
-    utils.makeBindGroup(textures[1].createView(),  textures[0].createView(), buffer0, blurPipeline.getBindGroupLayout(1))
-  )
+  const buffer0 = utils.makeBuffer(device)
+  const buffer1 = utils.makeBuffer(device)
+  const blurParamsBuffer = utils.paramsBuffer(device)
+  const computeConstants = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(0), [cubeTexture.sampler, blurParamsBuffer]))
+  const computeBindGroup0 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [cubeTexture.texture.createView(), textures[0].createView(), buffer0], 1))
+  const computeBindGroup1 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[0].createView(),  textures[1].createView(), buffer1,], 1))
+  const computeBindGroup2 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[1].createView(),  textures[0].createView(), buffer0,], 1))
 
   const settings = {
     filterSize: 15,
