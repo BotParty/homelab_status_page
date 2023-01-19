@@ -163,7 +163,6 @@ async function postProcessing() {
     fullscreenQuadPipeline.getBindGroupLayout(0), [cubeTexture.sampler, textures[1].createView()]
   )
  
-  const showResultBindGroup = device.createBindGroup(showResultBindGroupDescriptor);
 
   const draw = await webgpu.initDrawCall({
     shader: { code: fullscreenTexturedQuadWGSL,
@@ -207,58 +206,9 @@ async function postProcessing() {
   updateSettings();
 
   function frame() {
-    compute()
+   // compute()
     draw()
-    // const commandEncoder = device.createCommandEncoder();
-
-    // const computePass = commandEncoder.beginComputePass();
-    // computePass.setPipeline(blurPipeline);
-    // computePass.setBindGroup(0, computeConstants);
-
-    // computePass.setBindGroup(1, computeBindGroup0);
-    // computePass.dispatchWorkgroups(
-    //   Math.ceil(srcWidth / blockDim),
-    //   Math.ceil(srcHeight / batch[1])
-    // );
-
-    // computePass.setBindGroup(1, computeBindGroup1);
-    // computePass.dispatchWorkgroups(
-    //   Math.ceil(srcHeight / blockDim),
-    //   Math.ceil(srcWidth / batch[1])
-    // );
-
-    // for (let i = 0; i < settings.iterations - 1; ++i) {
-    //   computePass.setBindGroup(1, computeBindGroup2);
-    //   computePass.dispatchWorkgroups(
-    //     Math.ceil(srcWidth / blockDim),
-    //     Math.ceil(srcHeight / batch[1])
-    //   );
-
-    //   computePass.setBindGroup(1, computeBindGroup1);
-    //   computePass.dispatchWorkgroups(
-    //     Math.ceil(srcHeight / blockDim),
-    //     Math.ceil(srcWidth / batch[1])
-    //   );
-    // }
-    // computePass.end();
   
-    // const passEncoder = commandEncoder.beginRenderPass({
-    //   colorAttachments: [
-    //     {
-    //       view: context.getCurrentTexture().createView(),
-    //       clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-    //       loadOp: 'clear',
-    //       storeOp: 'store',
-    //     },
-    //   ],
-    // });
-
-    // passEncoder.setPipeline(fullscreenQuadPipeline);
-    // passEncoder.setBindGroup(0, showResultBindGroup);
-    // passEncoder.draw(6, 1, 0, 0);
-    // passEncoder.end();
-    // device.queue.submit([commandEncoder.finish()]);
-
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
