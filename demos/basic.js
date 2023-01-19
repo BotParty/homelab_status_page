@@ -46,15 +46,15 @@ let webgpu = await simplegpu()
     // Here we define the vertex attributes for the above shader
     attributes: {
       // simplewebgpu.buffer creates a new array buffer object
-      position: webgpu.buffer([
+      position: [
         [-1, 0],
         [0, -1],
         [1, 1]
-      ]), color: webgpu.buffer([
+      ], color: [
         [1,0,0],
         [0,1,0],
         [1,0,1],
-      ])
+      ]
       // simpleWebgpu automatically infers sane defaults for the vertex attribute pointers
     },
   

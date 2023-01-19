@@ -170,7 +170,7 @@ async function postProcessing() {
    updateSettings();
 
   function frame() {
-    compute()
+    //compute()
     draw()
   
     requestAnimationFrame(frame);
