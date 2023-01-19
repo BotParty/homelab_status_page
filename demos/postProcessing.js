@@ -70,8 +70,9 @@ fn main(
   }
 }
 `
-const fullscreenTexturedQuadWGSL = `@group(0) @binding(0) var mySampler : sampler;
-@group(0) @binding(1) var myTexture : texture_2d<f32>;
+const fullscreenTexturedQuadWGSL = `
+ @group(0) @binding(0) var mySampler : sampler;
+ @group(0) @binding(1) var myTexture : texture_2d<f32>;
 
 struct VertexOutput {
   @builtin(position) Position : vec4<f32>,
@@ -107,47 +108,12 @@ fn vert_main(@builtin(vertex_index) VertexIndex : u32) -> VertexOutput {
 @fragment
 fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
   return textureSample(myTexture, mySampler, fragUV);
+  //return vec4<f32>(1,0,1,1);
 }
 `
 async function postProcessing() {
   let webgpu = await webgpuInit()
   let context = webgpu.context, device = webgpu.device;
-
-  const blurPipeline = device.createComputePipeline({
-    layout: 'auto',
-    compute: {
-      module: device.createShaderModule({
-        code: blurWGSL,
-      }),
-      entryPoint: 'main',
-    },
-  });
-
-  
-
-  const fullscreenQuadPipeline = device.createRenderPipeline({
-    layout: 'auto',
-    vertex: {
-      module: device.createShaderModule({
-        code: fullscreenTexturedQuadWGSL,
-      }),
-      entryPoint: 'vert_main',
-    },
-    fragment: {
-      module: device.createShaderModule({
-        code: fullscreenTexturedQuadWGSL,
-      }),
-      entryPoint: 'frag_main',
-      targets: [
-        {
-          format: navigator.gpu.getPreferredCanvasFormat(),
-        },
-      ],
-    },
-    primitive: {
-      topology: 'triangle-list',
-    },
-  });
 
   let img = new Image();
   img.src = '../data/webgpu.png'
@@ -159,32 +125,30 @@ async function postProcessing() {
     (await webgpu.texture([srcWidth, srcHeight])).texture,
   ]
 
-  const showResultBindGroupDescriptor = utils.makeBindGroupDescriptor(
-    fullscreenQuadPipeline.getBindGroupLayout(0), [cubeTexture.sampler, textures[1].createView()]
-  )
- 
-
   const draw = await webgpu.initDrawCall({
     shader: { code: fullscreenTexturedQuadWGSL,
               fragEntryPoint: "frag_main",
               vertEntryPoint: "vert_main"
     },
-    bindGroup: showResultBindGroupDescriptor
+    bindGroup: function ({pipeline}) { 
+      return [pipeline.getBindGroupLayout(0), [cubeTexture.sampler, textures[1].createView()]]}
   })
 
   const blurParamsBuffer = utils.paramsBuffer(device)
 
-  const buffer0 = utils.makeBuffer(device)
-  const buffer1 = utils.makeBuffer(device)
-  const computeConstants = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(0), [cubeTexture.sampler, blurParamsBuffer]))
-  const computeBindGroup0 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [cubeTexture.texture.createView(), textures[0].createView(), buffer0], 1))
-  const computeBindGroup1 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[0].createView(),  textures[1].createView(), buffer1,], 1))
-  const computeBindGroup2 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[1].createView(),  textures[0].createView(), buffer0,], 1))
-
-
   const compute = webgpu.initComputeCall({
     code: blurWGSL,
-    bindGroups: [computeConstants, computeBindGroup0, computeBindGroup1, computeBindGroup2]
+    bindGroups: function (state, blurPipeline) {
+      const device = state.device;
+
+      const buffer0 = utils.makeBuffer(device)
+      const buffer1 = utils.makeBuffer(device)
+      const computeConstants = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(0), [cubeTexture.sampler, blurParamsBuffer]))
+      const computeBindGroup0 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [cubeTexture.texture.createView(), textures[0].createView(), buffer0], 1))
+      const computeBindGroup1 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[0].createView(),  textures[1].createView(), buffer1,], 1))
+      const computeBindGroup2 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[1].createView(),  textures[0].createView(), buffer0,], 1))
+    return [computeConstants, computeBindGroup0, computeBindGroup1, computeBindGroup2]
+    }
   })
 
 
@@ -203,10 +167,10 @@ async function postProcessing() {
     );
   };
 
-  updateSettings();
+   updateSettings();
 
   function frame() {
-   // compute()
+    compute()
     draw()
   
     requestAnimationFrame(frame);
@@ -216,5 +180,4 @@ async function postProcessing() {
   }
   export default postProcessing;
 
-  //450 -> 2x = 225 -> 3x
-  //auto-create bind groups from shader 
+  //450 -> 180
