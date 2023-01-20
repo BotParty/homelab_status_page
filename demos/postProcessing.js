@@ -138,8 +138,9 @@ async function postProcessing() {
 
   const compute = webgpu.initComputeCall({
     code: blurWGSL,
-    bindGroups: function (state, blurPipeline) {
+    bindGroups: function (state, computePipeline) {
       const device = state.device;
+      const blurPipeline = computePipeline
 
       const buffer0 = utils.makeBuffer(device)
       const buffer1 = utils.makeBuffer(device)
@@ -170,7 +171,7 @@ async function postProcessing() {
    updateSettings();
 
   function frame() {
-    //compute()
+    compute()
     draw()
   
     requestAnimationFrame(frame);
