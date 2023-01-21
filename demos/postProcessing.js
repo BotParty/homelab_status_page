@@ -107,7 +107,6 @@ fn vert_main(@builtin(vertex_index) VertexIndex : u32) -> VertexOutput {
 @fragment
 fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
   return textureSample(myTexture, mySampler, fragUV);
-  //return vec4<f32>(1,0,1,1);
 }
 `
 async function postProcessing() {
@@ -118,19 +117,22 @@ async function postProcessing() {
   img.src = '../data/webgpu.png'
   let cubeTexture = await webgpu.texture(img)
   const [srcWidth, srcHeight] = [cubeTexture.width, cubeTexture.height];
- console.log(srcWidth, srcHeight)
   const textures = [
     (await webgpu.texture([srcWidth, srcHeight])).texture,
     (await webgpu.texture([srcWidth, srcHeight])).texture,
   ]
 
   const draw = await webgpu.initDrawCall({
+    label: 'postprocess-draw',
     shader: { code: fullscreenTexturedQuadWGSL,
               fragEntryPoint: "frag_main",
               vertEntryPoint: "vert_main"
     },
     bindGroup: function ({pipeline}) { 
-      return [pipeline.getBindGroupLayout(0), [cubeTexture.sampler, textures[1].createView()]]}
+      return [pipeline.getBindGroupLayout(0), [cubeTexture.sampler, 
+        // textures[1].createView()
+        cubeTexture.texture.createView()
+      ]]}
   })
 
   const blurParamsBuffer = utils.paramsBuffer(device)
@@ -147,10 +149,9 @@ async function postProcessing() {
       const computeBindGroup0 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [cubeTexture.texture.createView(), textures[0].createView(), buffer0], 1))
       const computeBindGroup1 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[0].createView(),  textures[1].createView(), buffer1,], 1))
       const computeBindGroup2 = device.createBindGroup(utils.makeBindGroupDescriptor(blurPipeline.getBindGroupLayout(1), [textures[1].createView(),  textures[0].createView(), buffer0,], 1))
-    return [computeConstants, computeBindGroup0, computeBindGroup1, computeBindGroup2]
+      return [computeConstants, computeBindGroup0, computeBindGroup1, computeBindGroup2]
     }
   })
-
 
   const settings = {
     filterSize: 15,
