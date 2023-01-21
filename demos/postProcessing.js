@@ -119,7 +119,7 @@ async function postProcessing() {
   img.src = '../data/webgpu.png'
   let cubeTexture = await webgpu.texture(img)
   const [srcWidth, srcHeight] = [cubeTexture.width, cubeTexture.height];
- 
+ console.log(srcWidth, srcHeight)
   const textures = [
     (await webgpu.texture([srcWidth, srcHeight])).texture,
     (await webgpu.texture([srcWidth, srcHeight])).texture,
