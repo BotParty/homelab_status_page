@@ -2,7 +2,6 @@ import webgpuInit from "../lib/main";
 import utils from '../lib/utils'
 
 const tileDim = 128;
-const batch = [4, 4];
 //change to sepia and glow
 const blurWGSL = `struct Params {
   filterDim : i32,
