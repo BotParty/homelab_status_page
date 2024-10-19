@@ -28,10 +28,6 @@ hashirama.blog {
 		reverse_proxy localhost:8080
 	}
 
-	# route /cgi-tools/* {
-	# 	reverse_proxy localhost:8004
-	# }
-
 	route /ws/* {
 		reverse_proxy localhost:8080 {
 			transport http {
@@ -114,15 +110,15 @@ jupyter.hashirama.blog {
 	reverse_proxy localhost:8888
 }
 
-llama-tools.com {
-	tls {
-		dns porkbun pk1_db81d4b3634b90e44327d0d42d7fd5f46e3ca439a2ffe2587cd6a91ff9835aa3 sk1_dedb9466f623f54c717975473ac5c14a8a544f0a07b2f1266de20e55ffeafc70
-	}
-	#   /cgi/* { 
-	#reverse proxy to flux
-	respond "llama-tools"
+# llama-tools.com {
+# 	tls {
+# 		dns porkbun pk1_db81d4b3634b90e44327d0d42d7fd5f46e3ca439a2ffe2587cd6a91ff9835aa3 sk1_dedb9466f623f54c717975473ac5c14a8a544f0a07b2f1266de20e55ffeafc70
+# 	}
+# 	#   /cgi/* { 
+# 	#reverse proxy to flux
+# 	respond "llama-tools"
 
-	header Access-Control-Allow-Origin *
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type"
-}
+# 	header Access-Control-Allow-Origin *
+# 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+# 	header Access-Control-Allow-Headers "Content-Type"
+# }
