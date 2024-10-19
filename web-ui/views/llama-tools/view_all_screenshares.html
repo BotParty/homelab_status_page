@@ -137,6 +137,42 @@
         await room.connect(url, liveKit_data.token);
         window.room = room
 
+  async function startLiveKit() {
+    // ... existing code ...
+
+    await room.connect(url, liveKit_data.token);
+
+    // Add this function to log room participants and tracks
+    function logRoomParticipantsAndTracks() {
+      console.log("Room Participants and Tracks:");
+      
+      // Log local participant
+      console.log("Local Participant:", room.localParticipant.identity);
+      room.localParticipant.tracks.forEach(publication => {
+        console.log(`- Track: ${publication.trackSid}, Kind: ${publication.kind}, Name: ${publication.trackName}`);
+      });
+
+      // Log remote participants
+      room.participants.forEach((participant, sid) => {
+        console.log(`Remote Participant: ${participant.identity}`);
+        participant.tracks.forEach(publication => {
+          console.log(`- Track: ${publication.trackSid}, Kind: ${publication.kind}, Name: ${publication.trackName}`);
+        });
+      });
+    }
+
+    // Call the function immediately after connecting
+    logRoomParticipantsAndTracks();
+
+    // Add event listeners to update the log when participants or tracks change
+    room
+      .on(RoomEvent.ParticipantConnected, () => logRoomParticipantsAndTracks())
+      .on(RoomEvent.ParticipantDisconnected, () => logRoomParticipantsAndTracks())
+      .on(RoomEvent.TrackPublished, () => logRoomParticipantsAndTracks())
+      .on(RoomEvent.TrackUnpublished, () => logRoomParticipantsAndTracks());
+
+    // ... existing event listeners ...
+  }
 
 
         room
