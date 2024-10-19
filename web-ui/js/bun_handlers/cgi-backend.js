@@ -102,16 +102,7 @@ const routes = {
   // '/comment-visualizer-remover' : () => {
 
   // },
-  '/livekit_screenshare': () => {
-    console.log('livekit_screenshare')
 
-    /// view all 
-    return new Response("livekit_video", {
-      headers: {
-        "Content-Type": "text/html",
-      },
-    });
-  },
   '/voice_reactive_particles': () => {
     /// static html 
     return new Response("voice_reactive_particles", {

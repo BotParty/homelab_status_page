@@ -61,7 +61,7 @@ const routes = {
   "docs/": (req: Request) => response_404(req),
   "_outlier_agent": (req: Request) => serveOutlierAgent(req),
   "_optimizely_playwright_supervision": (req: Request) => serveOptimizelyPlaywrightSupervision(req),
-  "/livekit_connect": (req: Request) => handle_livekit_connect(req),
+  "/livekit_connect": (req: Request) => livekit_connect(req),
   "/robotics-odyssey": (req: Request) => serveRoboticsOdyssey(req),
   "/make_bun_cell": (req: Request) => serveMakeBunCell(req),
   "/make_deno_cell": (req: Request) => serveMakeDenoCell(req),
@@ -129,7 +129,8 @@ const response_404 = () => {
 
 
 async function proxy(req: Request) {
-   const url = new URL(req.url);    
+   const url = new URL(req.url);   
+   console.log('url', url.pathname)
     if (routes[url.pathname]) {
       return routes[url.pathname](req)
     }
@@ -158,13 +159,18 @@ console.log("Server running at http://localhost", port);
 //kapil says - depression - as opspsosed cmheical ----- find out change yoru min dfw 
 
 
-async function handle_livekit_connect(req: Request) { 
-  const identity = url.searchParams.get("identity");
+async function livekit_connect(req: Request) { 
+  //const identity = url.searchParams.get("identity");
+  //console.log('identity', identity)
+const jsonData = await req.json();
+console.log('Received JSON data:', jsonData);
+
+  const identity = jsonData.identity;
   if (!identity) {
     return new Response("Identity parameter is missing", { status: 400 });
   }
 
-  const json = await connect_to_livekit();
+  const json = await connect_to_livekit(jsonData);
   console.log(json, json);
     return new Response(JSON.stringify(json));
 }

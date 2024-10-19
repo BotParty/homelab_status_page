@@ -31,6 +31,37 @@ function livekit_speech_to_fn_call(req) {
 }
 
 const routes = {
+  '/livekit_screenshare': () => {
+
+    //let pathname = join(process.cwd(), 'views', 'llama-tools', 'screenshare.html')
+    const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/screenshare.html`
+    console.log('pathname', pathname)
+    const html = fs.readFileSync(pathname, 'utf8');
+
+    /// view all 
+    return new Response(html, {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
+
+  '/view_all_screenshares': () => {
+
+    //let pathname = join(process.cwd(), 'views', 'llama-tools', 'screenshare.html')
+    const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/view_all_screenshares.html`
+    console.log('pathname', pathname)
+    const html = fs.readFileSync(pathname, 'utf8');
+
+    /// view all 
+    return new Response(html, {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
+  "/_private_routes_for_local_host": livekit_speech_to_fn_call,
+
   "/livekit_speech_to_rpc": livekit_speech_to_fn_call,
   "/cognition_engine": () => new Response("blahblah"),
   "/replay_analyzer": () => new Response("blahblah"),
