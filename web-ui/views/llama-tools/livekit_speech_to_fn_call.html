@@ -1,197 +1,5 @@
 <head>
-  <style>
-    #memory-updated {
-      font-size: 20px;
-      font-weight: bold;
-      color: silver;
-      /* background: linear-gradient(45deg, silver, #ccc, silver);
-    background-size: 200% 200%;
-    animation: rotateGradient 5s linear infinite;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out; */
-    }
 
-    @keyframes rotateGradient {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 100% 50%;
-      }
-    }
-
-    #memory-updated:hover {
-      animation:
-        rainbow 3s infinite,
-        fadeInOut 3s forwards;
-    }
-
-    @keyframes rainbow {
-      0% {
-        color: red;
-      }
-      16% {
-        color: orange;
-      }
-      33% {
-        color: yellow;
-      }
-      50% {
-        color: green;
-      }
-      66% {
-        color: blue;
-      }
-      83% {
-        color: indigo;
-      }
-      100% {
-        color: violet;
-      }
-    }
-
-    @keyframes fadeInOut {
-      0% {
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
-    }
-  </style>
-  <style type="text/css">
-    [vaul-drawer] {
-      touch-action: none;
-      will-change: transform;
-      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-    [vaul-drawer][vaul-drawer-direction="bottom"] {
-      transform: translate3d(0, 100%, 0);
-    }
-    [vaul-drawer][vaul-drawer-direction="top"] {
-      transform: translate3d(0, -100%, 0);
-    }
-    [vaul-drawer][vaul-drawer-direction="left"] {
-      transform: translate3d(-100%, 0, 0);
-    }
-    [vaul-drawer][vaul-drawer-direction="right"] {
-      transform: translate3d(100%, 0, 0);
-    }
-    .vaul-dragging .vaul-scrollable [vault-drawer-direction="top"] {
-      overflow-y: hidden !important;
-    }
-    .vaul-dragging .vaul-scrollable [vault-drawer-direction="bottom"] {
-      overflow-y: hidden !important;
-    }
-    .vaul-dragging .vaul-scrollable [vault-drawer-direction="left"] {
-      overflow-x: hidden !important;
-    }
-    .vaul-dragging .vaul-scrollable [vault-drawer-direction="right"] {
-      overflow-x: hidden !important;
-    }
-    [vaul-drawer][vaul-drawer-visible="true"][vaul-drawer-direction="top"] {
-      transform: translate3d(0, var(--snap-point-height, 0), 0);
-    }
-    [vaul-drawer][vaul-drawer-visible="true"][vaul-drawer-direction="bottom"] {
-      transform: translate3d(0, var(--snap-point-height, 0), 0);
-    }
-    [vaul-drawer][vaul-drawer-visible="true"][vaul-drawer-direction="left"] {
-      transform: translate3d(var(--snap-point-height, 0), 0, 0);
-    }
-    [vaul-drawer][vaul-drawer-visible="true"][vaul-drawer-direction="right"] {
-      transform: translate3d(var(--snap-point-height, 0), 0, 0);
-    }
-    [vaul-overlay] {
-      opacity: 0;
-      transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-    [vaul-overlay][vaul-drawer-visible="true"] {
-      opacity: 1;
-    }
-    [vaul-drawer]::after {
-      content: "";
-      position: absolute;
-      background: inherit;
-      background-color: inherit;
-    }
-    [vaul-drawer][vaul-drawer-direction="top"]::after {
-      top: initial;
-      bottom: 100%;
-      left: 0;
-      right: 0;
-      height: 200%;
-    }
-    [vaul-drawer][vaul-drawer-direction="bottom"]::after {
-      top: 100%;
-      bottom: initial;
-      left: 0;
-      right: 0;
-      height: 200%;
-    }
-    [vaul-drawer][vaul-drawer-direction="left"]::after {
-      left: initial;
-      right: 100%;
-      top: 0;
-      bottom: 0;
-      width: 200%;
-    }
-    [vaul-drawer][vaul-drawer-direction="right"]::after {
-      left: 100%;
-      right: initial;
-      top: 0;
-      bottom: 0;
-      width: 200%;
-    }
-    [vaul-handle] {
-      display: block;
-      position: relative;
-      opacity: 0.8;
-      margin-left: auto;
-      margin-right: auto;
-      height: 5px;
-      width: 56px;
-      border-radius: 1rem;
-      touch-action: pan-y;
-      cursor: grab;
-    }
-    [vaul-handle]:active,
-    [vaul-handle]:hover {
-      opacity: 1;
-    }
-    [vaul-handle]:active {
-      cursor: grabbing;
-    }
-    [vaul-handle-hitarea] {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: max(100%, 2.75rem);
-      height: max(100%, 2.75rem);
-      touch-action: inherit;
-    }
-    [vaul-overlay][vaul-snap-points="true"]:not(
-        [vaul-snap-points-overlay="true"]
-      ):not([data-state="closed"]) {
-      opacity: 0;
-    }
-    [vaul-overlay][vaul-snap-points-overlay="true"]:not(
-        [vaul-drawer-visible="false"]
-      ) {
-      opacity: 1;
-    }
-    @media (hover: hover) and (pointer: fine) {
-      [vaul-drawer] {
-        user-select: none;
-      }
-    }
-  </style>
   <!-- Required Meta Tags -->
   <!-- bret victor + alan kay + robots = 4 god things in zeld botw + majora - you = hero of time -->
   <script type="importmap">
@@ -294,12 +102,36 @@
         RoomEvent,
       } from "https://unpkg.com/livekit-client@latest/dist/livekit-client.esm.mjs?module";
 
+      const identity = 'livekit_speech_to_fn_call'
+      async function postLivekitConnect() {
+        const response = await fetch('/livekit_connect', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ identity }),
+        });
+
+        if (!response.ok) {
+          console.error('Failed to connect to Livekit:', response.statusText);
+          return;
+        }
+
+        const data = await response.json();
+        //console.log('Connected to Livekit:', data);
+        return data
+      }
+
+      const liveKit_data = await postLivekitConnect();
+
+
+
       async function startWebcam() {
         const videoElement = document.getElementById("localVideo");
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
             video: { facingMode: { ideal: "environment" } },
-            audio: false,
           });
           videoElement.srcObject = stream;
           console.log("Media stream created:", stream);
@@ -311,20 +143,7 @@
       }
 
       async function startLiveKit() {
-        const url = "wss://omnissiah-university-kmuz0plz.livekit.cloud";
-        const data = { identity: "happydream" + Math.random() };
-        console.log('data', data)
-        // const json = await d3.json("/livekit", {
-        //     method: "POST",
-        //     body: JSON.stringify(data),
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // });
-        const token_get_url = `/livekit?identity=${data.identity}`;
-        //const token_get_url = `https://shels-macbook-pro.jerboa-kokanue.ts.net/livekit?identity="happydream.5"`;
-        const json = await d3.json(token_get_url);
-        console.log('json', json)
+        const url = liveKit_data.wsUrl;
 
         let roomOptions = {};
         let connectOptions = {};
@@ -339,7 +158,7 @@
         };
 
         const room = new Room();
-        await room.connect(url, json.token);
+        await room.connect(url, liveKit_data.token);
 
         // Get the webcam stream
         const stream = await startWebcam();
@@ -396,7 +215,7 @@
           });
 
         const videoTrack = stream.getVideoTracks()[0];
-        //const audioTrack = stream.getAudioTracks()[0];
+        const audioTrack = stream.getAudioTracks()[0];
 
         if (!videoTrack) {
           console.error("Video or audio track not found in stream.");
@@ -404,11 +223,11 @@
         }
 
         const localVideoTrack = new LocalVideoTrack(videoTrack);
-        //const localAudioTrack = new LocalAudioTrack(audioTrack);
+        const localAudioTrack = new LocalAudioTrack(audioTrack);
 
         // Publish both video and audio tracks
         await room.localParticipant.publishTrack(localVideoTrack);
-        //await room.localParticipant.publishTrack(localAudioTrack);
+        await room.localParticipant.publishTrack(localAudioTrack);
 
         console.log("Tracks published to the room");
       }

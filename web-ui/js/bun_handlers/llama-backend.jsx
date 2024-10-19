@@ -19,19 +19,30 @@ function App() {
 function livekit_speech_to_fn_call(req) {
   //what is rpc 
   //send audio p primary function -> use from app
-
-
-
-
   // from phone ---- speak -> 
-
   // send to server -> whisper -> find the function - call it -> schedules an gent 
-  
-  return new Response("blahblah");
+ 
+    
+
+    //let pathname = join(process.cwd(), 'views', 'llama-tools', 'screenshare.html')
+    const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/livekit_speech_to_fn_call.html`
+    console.log('pathname', pathname)
+    const html = fs.readFileSync(pathname, 'utf8');
+
+    /// view all 
+    return new Response(html, {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
 }
 
 const routes = {
+  "/livekit_speech_to_fn_call": livekit_speech_to_fn_call,
+
   '/livekit_screenshare': () => {
+
+    
 
     //let pathname = join(process.cwd(), 'views', 'llama-tools', 'screenshare.html')
     const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/screenshare.html`
@@ -62,7 +73,6 @@ const routes = {
   },
   "/_private_routes_for_local_host": livekit_speech_to_fn_call,
 
-  "/livekit_speech_to_rpc": livekit_speech_to_fn_call,
   "/cognition_engine": () => new Response("blahblah"),
   "/replay_analyzer": () => new Response("blahblah"),
   "/logs_viewer": () => new Response("blahblah"),
