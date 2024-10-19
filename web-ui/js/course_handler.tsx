@@ -25,6 +25,7 @@ import serveMakeBunCell from './bun_helper.ts'
 import docker_run from './docker_helper.ts'
 import llamaRoutes from './bun_handlers/llama-backend.jsx'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
+import Bun from 'bun'
 // doc = https://caddyserver.com/docs/
 
 function serveLlamaTools(req: Request) { 
@@ -56,7 +57,34 @@ function serveOptimizelyPlaywrightSupervision() {
 
 }
 
+// const WebSocket = require('ws');
+// const fs = require('fs');
+
+// const wss = new WebSocket.Server({ port: 8080 });
+
+// wss.on('connection', (ws) => {
+//   ws.on('message', (message) => {
+//     const data = JSON.parse(message);
+//     fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+//     ws.send('Data saved successfully');
+//   });
+// });
+
+
+//Response.json
+//    return new Response(file("index.html"));
+//    return Response.redirect("/redirected");
+
+
+const save_livekit_data = (req: Request) => {
+  const data = req.body;
+  Bun.write('data.json', JSON.stringify(data, null, 2));
+  return new Response('Data saved successfully', { status: 200 });
+}
+
 const routes = {
+  "/serve_proxy_docs": (req: Request) => serve_proxy_docs(req),
+  "/save-livekit-data": (req: Request) => save_livekit_data(req),
   //"/": (req: Request) => make_docs,
   "docs/": (req: Request) => response_404(req),
   "_outlier_agent": (req: Request) => serveOutlierAgent(req),
@@ -128,24 +156,102 @@ const response_404 = () => {
 //return response_404(routes)
 
 
+const proxy_docs = [
+  "https://bun.sh/docs/runtime/bunfig#run-bun-auto-alias-node-to-bun", 
+  //"https://google.com", 
+  //"https://youtube.com", 
+  //"https://github.com", 
+  //"https://openai.com", 
+  //"https://bun.sh/docs", 
+  "https://zed.dev/docs/multibuffers",
+]
+
+function serve_proxy_docs(req: Request) { 
+  const html_string = proxy_docs.map(doc => `<div><iframe src=${"/proxy/" + doc}></iframe></div>`).join("\n")
+  console.log('html_string', html_string)
+
+  return new Response(html_string, {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
+}
+
+
 async function proxy(req: Request) {
    const url = new URL(req.url);   
    console.log('url', url.pathname)
-    if (routes[url.pathname]) {
+
+
+    if (routes[url.pathname]) { //handles all HTTPS JSON regular bear routes
       return routes[url.pathname](req)
     }
-    return response_404(req)
+
+    
+
+
+    console.log('url.pathname', url.pathname, url.pathname.startsWith("/proxy"))
+    //llama in the request handler ?!??!?! 
+    if (url.pathname.startsWith("/proxy")) {
+      const targetUrl = url.pathname.replace("/proxy", "");
+      if (targetUrl === "") { 
+        return new Response("how to proxy??? - try /proxy/https://google.com", {
+          headers: {
+            "Content-Type": "text/html",
+          },
+        });
+      }
+      console.log('targetUrl', targetUrl)
+
+      const response = await fetch("https://bun.sh", {
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+      });
+
+      return new Response(response.body) 
+      // return new Response(response.body, {
+      //   status: response.status,
+      //   statusText: response.statusText,
+      //   headers: response.headers,
+      // });
+
+
+
+
+
+      // const response = await fetch(targetUrl, {
+      //   method: req.method,
+      //   headers: req.headers,
+      //   body: req.body,
+      // });
+      // return new Response(response.body, {
+      //   status: response.status,
+      //   statusText: response.statusText,
+      //   headers: response.headers,
+      // });
+    }
+
+
+    //return response_404(req)
 }
 
 // (nanosaur factory)
 // peteer attia - rhonda patrick ----- bill nye
 
+const handle_websocket = (ws: WebSocket) => {
+  ws.on('message', (message) => {
+    console.log('message', message)
+  })
+}
+
 
 const port = 8080;
 async function main() {
-  serve({
+  Bun.serve({
     port,
     fetch: proxy,
+    // websocket: handle_websocket
   });
 }
 console.log('compile time checks: ' ,'typeof default_response === string' , typeof default_response === 'string');
@@ -235,3 +341,6 @@ let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
 
 //tic tac toe not stephane and anyone who blah -> they have to recruit the most knowleable  they  know
 // iq lead weight , hardw ork = gem stones ?
+
+///robots nee dt o browweserewb - how else will they know when law changes a --- are they suppseod to wait for some guy to look it up and doit ?!?!?! 
+// geofences shure but what about liek what kylge

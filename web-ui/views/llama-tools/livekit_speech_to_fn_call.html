@@ -235,6 +235,41 @@
       document.body.addEventListener("click", () => {
         startLiveKit();
       });
+
+
+// const socket = new WebSocket('ws://hashirama.blog/ws/');
+
+// socket.addEventListener('open', () => {
+//   socket.send(JSON.stringify(data));
+// });
+
+// socket.addEventListener('message', (event) => {
+//   console.log('Message from server ', event.data);
+// });
+
+async function sendDataToServer(data) {
+  try {
+    const response = await fetch('/save-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send data to server');
+    }
+
+    console.log('Data successfully sent to server');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+
+
+
     </script>
   </body>
 </html>
