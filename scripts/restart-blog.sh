@@ -17,7 +17,7 @@
 #curl ifconfig.me
 # Function to check if Caddy is running
 
-# admin dahboard to be public 
+# admin dahboard to be public
 # Check if the Caddyfile has good syntax
 echo "Checking Caddyfile syntax..."
 sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile || {
@@ -150,7 +150,7 @@ else
     sudo journalctl -u homelab_status_page.service -n 50 --no-pager
 fi
 
-#jetson containers -> systemD 
+#jetson containers -> systemD
 #proxmox - DOCKERIZE FIGURE OUT - > FIRE RCRACK CRIU
 # Portainer
 
@@ -158,7 +158,7 @@ fi
 #k8 after 50 GPUs (12+ tinyboxes)
 sudo systemctl daemon-reload
 sudo systemctl enable homelab_status_page.service
-sudo systemctl start homelab_status_page.service 
+sudo systemctl start homelab_status_page.service
 
 
 #sudo systemctl status homelab_status_page.service

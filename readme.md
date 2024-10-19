@@ -38,6 +38,7 @@ incorpate -- ideas from 8 billion people
 >
 > — _Edward Tuft_ recognized Bret as
 > “design theory wizard, at the cutting edge of interface designs for programming, seeing, reasoning”
+
 ![https://dynamicland.org/2024/Roots/e4129e4c77f4d01b2c44d59cfaef451f.jpg](https://dynamicland.org/2024/Roots/e4129e4c77f4d01b2c44d59cfaef451f.jpg)
 ![https://worrydream.com/MagicInk/p/logo.png](https://worrydream.com/MagicInk/p/logo.png)
 ![https://worrydream.com/SeeingSpaces/SeeingSpaces.jpg](https://worrydream.com/SeeingSpaces/SeeingSpaces.jpg)

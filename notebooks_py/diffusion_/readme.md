@@ -18,3 +18,6 @@ figure out how to get this to be ----- 100x cheaper
 https://chatgpt.com/share/67069372-d4d0-8013-a7f7-3092c720d884
 https://news.ycombinator.com/item?id=35072891
 say questions all day --- each one spanwns 50 gpts - and then the useful threads - are collected and used
+
+
+Git cloen jeremheyhoward stablefussion notebooks 

@@ -45,6 +45,20 @@ hashirama.blog {
 		reverse_proxy localhost:8080
 	}
 
+	route /portainer/* {
+
+		reverse_proxy localhost:9443
+
+	}	
+	
+	route /portainer/* {
+		reverse_proxy localhost:9000
+	}
+
+	route /immich/* {
+		reverse_proxy localhost:2283
+	}
+
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
