@@ -48,6 +48,22 @@ console.log(req.url);
 }
 
 
+function serveLlamaTools(req: Request) { 
+  return new Response("llama-tools", {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
+}
+
+function serveCgiTools(req: Request) { 
+  return new Response("cgi-tools", {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
+}
+
 const routes = {
   //"/": (req: Request) => make_docs,
   "/livekit_connect": (req: Request) => handle_livekit_connect(req),
@@ -56,6 +72,8 @@ const routes = {
   "/make_deno_cell": (req: Request) => serveMakeDenoCell(req),
   "/make_python_cell": (req: Request) => serveMakePythonCell(req),
   "/blag": (req: Request) => serveBlag(req),
+  "/llama-tools": (req: Request) => serveLlamaTools(req),
+  "/cgi-tools": (req: Request) => serveCgiTools(req),
   //...cgi_tools
  }
 const routes_links = Object.keys(routes).map(
@@ -105,6 +123,10 @@ async function proxy(req: Request) {
     if (url.pathname === "/blag" || url.pathname === "/") return routes["/blag"](req)
 
       if (url.pathname === "/archive") return routes["/archive-blog"](req)
+
+
+        if (url.pathname === "/llama-tools") return routes["/llama-tools"](req)
+        if (url.pathname === "/cgi-tools") return routes["/cgi-tools"](req)
 
   return new Response(response_404, {
     headers: {
