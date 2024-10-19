@@ -1,9 +1,6 @@
 module.exports = {
   // https://github.com/microsoft/clarity
   //prefix: "tw-",
-
-
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
 
   variants: {
@@ -45,6 +42,22 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/forms"),
+    // require("@tailwindcss/typography"),
+    // require("@tailwindcss/aspect-ratio"),
+    // require("@tailwindcss/line-clamp"),
+    // require("@tailwindcss/typography"),
+    // require("@tailwindcss/forms"),
+    // require("tailwindcss-children"),
+    // require("tailwindcss-debug-screens"),
+    // require("tailwindcss-gradients"),
+    // require("tailwindcss-interaction-variants"),
+    // require("tailwindcss-multi-theme"),
+    // require("tailwindcss-pseudo-elements"),
+    // require("tailwindcss-scrollbar"),
+    // require("tailwindcss-textshadow"),
+    // require("tailwindcss-typography")({
+    //   modifiers: ['DEFAULT', 'sm', 'lg', 'xl'],
+    // }),
 
     // require("daisyui"),
     // iconsPlugin({

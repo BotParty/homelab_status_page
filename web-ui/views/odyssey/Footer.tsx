@@ -42,7 +42,7 @@ const navigation = {
     // { name: 'Claim', href: '#' },
     // { name: 'Privacy', href: '#' },
     // { name: 'Terms', href: '#' },
-    / 
+    
   ],
   social: [
     {

@@ -1,15 +1,19 @@
 import React, {useRef, useEffect} from "react";
-// import Header from "./views/odyssey/Header.tsx";
-import ObservablePreview from "./views/odyssey/ObservablePreview.tsx";
-import Footer from "./views/odyssey/Footer.tsx";
-import TwitchPlaysPokemonPanel from "./views/odyssey/TwitchPlaysPokemonPanel.tsx";
-import TeleGuidance from "./views/odyssey/TeleGuidance.tsx";
-import DynamicHow from "./views/odyssey/Dynamichow.tsx";
-import PowerPoint from "./views/odyssey/PowerPoints.tsx";
-import Box from "./views/odyssey/Box.tsx";
+import Header from "./views/odyssey/Header.tsx";
+import ObservablePreview from "views/odyssey/ObservablePreview.tsx";
+import Footer from "views/odyssey/Footer.tsx";
+import TwitchPlaysPokemonPanel from "views/odyssey/TwitchPlaysPokemonPanel.tsx";
+import TeleGuidance from "views/odyssey/TeleGuidance.tsx";
+import DynamicHow from "views/odyssey/Dynamichow.tsx";
+import PowerPoint from "views/odyssey/PowerPoints.tsx";
+import Box from "views/odyssey/Box.tsx";
 import { Runtime, Inspector} from "@observablehq/runtime";
 import Hardware_Picker from "./Hardware_picker.jsx";
 import OdysseyIntro from "./Odyssey-Intro.tsx";
+
+// function RoboticsOdyssey() {  
+//   return <div>Robotics Odyssey</div>;
+// }
 
 function RoboticsOdyssey() {
   return (

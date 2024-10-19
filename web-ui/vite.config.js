@@ -6,7 +6,7 @@
    export default defineConfig({
      plugins: [react()],
     publicDir: 'static',
-    root: 'js',
+    //root: '',
      server: {
        port: 8000, // You can specify the port here
        proxy: {
@@ -21,24 +21,19 @@
       rollupOptions: {
         external: ['three',  /^screenshot\.png$/ , 'firefox.png'],
         input: {
-          main: 'index.html', // Change this to your main entry point
+          //main: 'index.html', // Change this to your main entry point
           voiceReactiveParticles: 'views/cgi-tools/voice_reactive_particles.html',
           // Add more HTML files here if needed
         },
       },
       target: 'esnext', // Add this line to target the latest ECMAScript version
     },
-    //  resolve: {
-    //    alias: {
-    //      $components: '/src/components',
-    //      $assets: '/src/assets',
-    //      $styles: '/src/styles',
-    //      $utils: '/src/utils',
-    //      $types: '/src/types',
-    //      $hooks: '/src/hooks',
-    //      $contexts: '/src/contexts',
-    //    }
-    // } 
+     resolve: {
+       alias: {
+        views: '/views',
+
+       }
+    } 
      
    })
 

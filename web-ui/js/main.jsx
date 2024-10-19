@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
-import "../public/css/output.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
   import RoboticsOdyssey from "./robotics-odyssey.tsx";
 import CGI_Tools from "./CGI_Tools.jsx";
