@@ -137,10 +137,7 @@
         await room.connect(url, liveKit_data.token);
         window.room = room
 
-  async function startLiveKit() {
-    // ... existing code ...
 
-    await room.connect(url, liveKit_data.token);
 
     // Add this function to log room participants and tracks
     function logRoomParticipantsAndTracks() {
@@ -172,7 +169,7 @@
       .on(RoomEvent.TrackUnpublished, () => logRoomParticipantsAndTracks());
 
     // ... existing event listeners ...
-  }
+
 
 
         room
