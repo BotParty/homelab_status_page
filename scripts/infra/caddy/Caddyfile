@@ -16,8 +16,7 @@ files.hashirama.blog {
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
-}
-#health, robotics-odyssey, hello, api/*
+
 hashirama.blog {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
