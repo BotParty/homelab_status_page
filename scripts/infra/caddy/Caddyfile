@@ -66,17 +66,22 @@ hashirama.blog {
 		#reverse_proxy localhost:8080
 	}
 
-	route /portainer/* {
-		reverse_proxy localhost:9443
-	}
-
-	route /portainer_2/* {
+	route /portainer {
 		reverse_proxy localhost:9000
 	}
 
 	route /immich/* {
 		reverse_proxy localhost:2283
 	}
+
+	# route /caddy_proxy/* {
+	# 	reverse_proxy /youtube https://www.youtube.com {
+	# 		header_up Host {http.reverse_proxy.upstream.hostport}
+	# 		header_up X-Real-IP {remote}
+	# 		header_up X-Forwarded-For {remote}
+	# 		header_up X-Forwarded-Proto {scheme}
+	# 	}
+	# }
 
 	# route /ws/* {
 	# 	reverse_proxy localhost:8080

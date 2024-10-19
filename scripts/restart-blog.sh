@@ -161,5 +161,27 @@ sudo systemctl enable homelab_status_page.service
 sudo systemctl start homelab_status_page.service
 
 
-#sudo systemctl status homelab_status_page.service
-alias restart="bash scripts/restart-blog.sh"
+#ln -s /usr/local/bin/homelab_status_page.sh ~/homelab_status_page/scripts/homelab_status_page.sh
+
+
+
+# Start Portainer service
+echo "Starting Portainer service..."
+if sudo systemctl start portainer; then
+    echo "Portainer service started successfully."
+else
+    echo "Failed to start Portainer service. Checking status..."
+    sudo systemctl status portainer
+    echo "Checking journal logs for more information..."
+    sudo journalctl -u portainer -n 50 --no-pager
+fi
+
+# Check Portainer status
+echo "Checking Portainer status..."
+if systemctl is-active --quiet portainer; then
+    echo "Portainer is running."
+else
+    echo "Error: Portainer is not running."
+    sudo systemctl status portainer
+    exit 1
+fi

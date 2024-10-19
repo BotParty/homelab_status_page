@@ -1,16 +1,8 @@
-//augment reflect -> okay[ ], good[] , better[]  ----- pefect - tomorow ???? 5 impossibel things before preakfeast 
-//figure out atuhenticaitors - try anyone 0 make own - make fulxu QR vodce
-
-//rainbow amaterasu --  no golden path ------ 
-//404 that llamas - and says """wrong route friend, hwodd you get here??? also did you mean?? coundown 5 sconds -> aut oroute to most porbable - prediction "
-//tools that predict not obey -> people that predictionot obey their nature and the world 
-//https://underscorejs.org/underscore-esm.js
-import _ from 'https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-esm.min.js';
-
+//import _ from 'https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-esm.min.js';
 const { exec } = require('child_process');
 import { renderToString } from "react-dom/server";
 import React from "react";
-import { serve } from "bun";
+import Bun from 'bun'
 const { spawn } = require("child_process");
 import Blag from "./blag.jsx";
 //import RoboticsOdyssey from "views/odyssey/robotics-odyssey.tsx";
@@ -18,25 +10,11 @@ import fs from "fs";
 import path from "path";
 import { watch } from "fs";
 import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
-import serveMakeDenoCell from './serveMakeDenoCell.ts'
-import serveMakePythonCell from './serveMakePythonCell.ts'
-
-import serveMakeBunCell from './bun_helper.ts'
-import docker_run from './docker_helper.ts'
 import llamaRoutes from './bun_handlers/llama-backend.jsx'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
-import Bun from 'bun'
-// doc = https://caddyserver.com/docs/
-
 function serveLlamaTools(req: Request) { 
-  return new Response("llama-tools", {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
+  return new Response("llama-tools");
 }
-
-
 const CgiRoutesHandlers = Object.fromEntries(
   Object.entries(CgiRoutes).map(([key, value]) => [`/cgi-tools${key}`, value])
 );
@@ -44,81 +22,10 @@ const CgiRoutesHandlers = Object.fromEntries(
 const llamaRoutesHandlers = Object.fromEntries(
   Object.entries(llamaRoutes).map(([key, value]) => [`/llama-tools${key}`, value])
 );
-//compile time check theese
-//console.log('CgiRoutesHandlers', CgiRoutesHandlers)
-
-function serveOutlierAgent() {
-
-}
-
-function serveOptimizelyPlaywrightSupervision() {
-  //livekit webrtc the tab 
-
-
-}
-
-// const WebSocket = require('ws');
-// const fs = require('fs');
-
-// const wss = new WebSocket.Server({ port: 8080 });
-
-// wss.on('connection', (ws) => {
-//   ws.on('message', (message) => {
-//     const data = JSON.parse(message);
-//     fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
-//     ws.send('Data saved successfully');
-//   });
-// });
-
-
-//Response.json
-//    return new Response(file("index.html"));
-//    return Response.redirect("/redirected");
-
-
-const save_livekit_data = (req: Request) => {
-  const data = req.body;
-  Bun.write('data.json', JSON.stringify(data, null, 2));
-  return new Response('Data saved successfully', { status: 200 });
-}
-
-function serve_proxy_docs(req: Request) { 
-  const html_string = proxy_docs.map(doc => `<div><iframe src=${"/proxy/" + doc}></iframe></div>`).join("\n")
-  console.log('html_string', html_string)
-
-  return new Response(html_string, {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
-}
-
-function serve_proxy_docs_regular_iframe(req: Request) { 
-  const html_string = proxy_docs.map(doc => `<div><iframe src=${doc}></iframe></div>`).join("\n")
-  console.log('html_string', html_string)
-
-  return new Response(html_string, {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
-}
 
 const routes = {
-  "/serve_proxy_docs": (req: Request) => serve_proxy_docs(req),
-
-  "/serve_proxy_docs_regular_iframe": (req: Request) => serve_proxy_docs_regular_iframe(req),
-
-  "/save-livekit-data": (req: Request) => save_livekit_data(req),
-  //"/": (req: Request) => make_docs,
-  "/docs": (req: Request) => response_404(req),
-  "_outlier_agent": (req: Request) => serveOutlierAgent(req),
-  "_optimizely_playwright_supervision": (req: Request) => serveOptimizelyPlaywrightSupervision(req),
-  "/livekit_connect": (req: Request) => livekit_connect(req),
+  "/": (req: Request) => serveBlag(req),
   "/robotics-odyssey": (req: Request) => serveRoboticsOdyssey(req),
-  "/make_bun_cell": (req: Request) => serveMakeBunCell(req),
-  "/make_deno_cell": (req: Request) => serveMakeDenoCell(req),
-  "/make_python_cell": (req: Request) => serveMakePythonCell(req),
   "/blag": (req: Request) => serveBlag(req),
   "/llama-tools": (req: Request) => serveLlamaTools(req),
   "/cgi-tools": (req: Request) => serveCgiTools(req),
@@ -135,8 +42,6 @@ const docs_response = (routes) => {
 ${routes_links.join("\n")}
 </body></html>`
 
-
-
 return new Response(content, {
   headers: {
     "Content-Type": "text/html",
@@ -148,93 +53,12 @@ function serveCgiTools(req: Request) {
   return  docs_response(CgiRoutes)
 }
 
-const response_404 = () => { 
-  return docs_response(routes)
-}
-
-
-// console.log("req url", url.pathname);
-// if (url.pathname === "/blag" || url.pathname === "/") return routes["/blag"](req)
-//  if (url.pathname === "/docs") return response_404(req)
-// if (url.pathname === '/livekit_connect') return handle_livekit_connect(req)  
-// if (url.pathname === "/robotics-odyssey") return routes["/robotics-odyssey"](req)
-// if (url.pathname == '/favicon.ico') return new Response(Bun.file('public/images/favicon.svg'))
-//   //web-ui/public/images/favicon.svg//
-// if (url.pathname === "/make_bun_cell") return routes["/make_bun_cell"](req)
-// if (url.pathname === "/make_deno_cell") return routes["/make_deno_cell"](req)
-// if (url.pathname === "/make_python_cell") return routes["/make_python_cell"](req)
-// if (url.pathname.includes("/user_code")) return static_files(req)
-// if (url.pathname === "/archive") return routes["/archive-blog"](req)
-//if (url.pathname === "/obs-zed-prediction-mode") return routes["/llama-tools"](req) --- FOUNDATION -> RE_READ -> convert the tv show to graphic novel - guyaka girls
-// if (url.pathname === "/llama-tools") return routes["/llama-tools"](req)
-// if (url.pathname === "/llama-tools") return routes["/llama-tools"](req)
-// if (url.pathname === "/cgi-tools") return routes["/cgi-tools"](req);
-//if (url.pathname === "/science-tools*") return new Response("sciente-tools")  // redictrect - to all users contribute anytihn they wantnt //?! - they nsicee odnt 
-// if (url.pathname === "/manifest.json") {
-//   return new Response(JSON.stringify({"IDK":10}), {
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   })
-// try gpt then just redirect to 3 bun rpoceses in one bun file - started by systemd - a script... like levles 
-// delete new relic 
-//return response_404(routes)
-
-
-const proxy_docs = [
-  "https://bun.sh/docs/runtime/bunfig#run-bun-auto-alias-node-to-bun", 
-  // "https://google.com", 
-  // "https://youtube.com", 
-  // "https://github.com", 
-  "https://openai.com", 
-  "https://bun.sh/docs", 
-  "https://reflect.app",
-  "https://zed.dev/docs/multibuffers",
-  // "https://colab.research.google.com/",
-  "http://hashirama.blog",
-  "https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros_interface/ros1/raspberry_pi_setup.html",
-  "http://llama-tools.com",
-  "https://replicate.com/black-forest-labs/flux-1.1-pro",
-  "https://x.com/home",
-  "https://ai.google.dev/edge/mediapipe/solutions/guide",
-  https://observablehq.com/d/396854ba12551e3a
-https://ai.google.dev/edge/mediapipe/solutions/guide
-https://paulgraham.com/swan.html
-https://worrydream.com/SeeingSpaces/SeeingSpaces.jpg
-https://robertheaton.com/archive/
-https://chatgpt.com/c/671358b5-9ffc-8013-bffd-11fd2f7bf1a1
-https://www.youtube.com/watch?v=CZim0p_etvM
-https://dynamicland.org/2024/FAQ/
-https://tailwindcss.com/docs/animation
-https://observablehq.com/@mbostock/rainbow-pack
-view-source:https://worrydream.com/LadderOfAbstraction/
-https://reflect.app/g/awahab/19102024
-https://developer.nvidia.com/sdk-manager
-https://login.nvgs.nvidia.com/v1/error?preferred_nvidia=true&context=reset&theme=Bright&locale=en-US&prompt=default&email=eggnog.wahab@gmail.com&key=eyJhbGciOiJIUzI1NiJ9.eyJzZSI6IjhsQzUiLCJ0b2tlbklkIjoiMTI5NzIwMjUyNzMxMjE2NjkxMiIsImV4cCI6MTcyOTM1MTE5MCwib3QiOiIxMjk3MjAyNTU1NTMyODczNzI4IiwianRpIjoiNTljNjEwZGUtMzg2Zi00ZTYzLWEzNGUtNDdjZDM3ZWQ0N2Q1In0.32bu8bBYxJhTwcoJ-a9uQ1c3IpoarslXbdfUEPzOAtU&client_id=323893095789756813&code=82bea1d181ad43fb993d3af2b432b449&id=c035c24e-ed9e-4e7b-a7e8-faa0caaee637&multipleOrigin=false&isAutoInit=false&jarvis_error=%7B%22error%22:%22CREDENTIALS_EXPIRED%22%7D
-https://chatgpt.com/c/6713bf25-6d78-8013-b29b-8ad79f6af262
-https://ubuntu.com/download/server/thank-you?version=24.04.1&architecture=amd64&lts=true
-https://www.google.com/search?q=ubuntu+2404&rlz=1C5CHFA_enUS1125US1125&oq=ubuntu+2404+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDU4NzRqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8
-https://github.com/mitchellh/nixos-config
-https://resend.com/emails
-https://chatgpt.com/c/6713c608-74ec-8013-b77f-7769630cb45f
-https://wiki.ubuntu.com/ARM/Server/Install?_gl=1*t9dj9w*_gcl_au*NDc0NDc3NzMuMTcyOTM0NzUxOQ..&_ga=2.99606046.1295490594.1729347516-1204181597.1729347516
-https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros_interface/ros1/raspberry_pi_setup.html
-]
-
-
-
-
 async function proxy(req: Request) {
    const url = new URL(req.url);   
    console.log('url', url.pathname)
-
-
     if (routes[url.pathname]) { //handles all HTTPS JSON regular bear routes
       return routes[url.pathname](req)
     }
-
-    
-
 
     console.log('url.pathname', url.pathname, url.pathname.startsWith("/proxy"))
     //llama in the request handler ?!??!?! 
@@ -247,50 +71,12 @@ async function proxy(req: Request) {
           },
         });
       }
-      console.log('targetUrl', targetUrl)
-
-      const response = await fetch("https://bun.sh", {
-        method: req.method,
-        headers: req.headers,
-        body: req.body,
-      });
-
-      return new Response(response.body) 
-      // return new Response(response.body, {
-      //   status: response.status,
-      //   statusText: response.statusText,
-      //   headers: response.headers,
-      // });
-
-
-
-
-
-      // const response = await fetch(targetUrl, {
-      //   method: req.method,
-      //   headers: req.headers,
-      //   body: req.body,
-      // });
-      // return new Response(response.body, {
-      //   status: response.status,
-      //   statusText: response.statusText,
-      //   headers: response.headers,
-      // });
+     
     }
-
-
-    //return response_404(req)
 }
 
 // (nanosaur factory)
 // peteer attia - rhonda patrick ----- bill nye
-
-const handle_websocket = (ws: WebSocket) => {
-  ws.on('message', (message) => {
-    console.log('message', message)
-  })
-}
-
 
 const port = 8080;
 async function main() {
@@ -300,32 +86,9 @@ async function main() {
     // websocket: handle_websocket
   });
 }
-console.log('compile time checks: ' ,'typeof default_response === string' , typeof default_response === 'string');
+//console.log('compile time checks: ' ,'typeof default_response === string' , typeof default_response === 'string');
 main();
 console.log("Server running at http://localhost", port);
-// the intelillgence age is here - and the repsonsibliey of intellegnetn peple is to use it 
-// alan - everyoen has infintie intleigenice ive thoguht this isince 5 years old - sister disagreeed -  show sister this 
-// your were one of the msartest girls ive met - just used it for emotional intelligence because thats why you liked 
-//-read sneuro -  
-
-//kapil says - depression - as opspsosed cmheical ----- find out change yoru min dfw 
-
-
-async function livekit_connect(req: Request) { 
-  //const identity = url.searchParams.get("identity");
-  //console.log('identity', identity)
-const jsonData = await req.json();
-console.log('Received JSON data:', jsonData);
-
-  const identity = jsonData.identity;
-  if (!identity) {
-    return new Response("Identity parameter is missing", { status: 400 });
-  }
-
-  const json = await connect_to_livekit(jsonData);
-  console.log(json, json);
-    return new Response(JSON.stringify(json));
-}
 
 async function serveRoboticsOdyssey(req: Request) { 
   return new Response(makeReactApp(), {
@@ -336,8 +99,11 @@ async function serveRoboticsOdyssey(req: Request) {
 }
 // writers are thinks, coders a thinkers, designers are ithnks ->>>> use your instrument of MIND > GOD 
 function serveBlag(req: Request) { 
-  const filePath = path.join(__dirname, "views/odyssey/blag.html");
-  let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
+  let path = '/home/adnan/homelab_status_page/web-ui/views/odyssey/blag.html'
+//  const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/livekit_speech_to_fn_call.html`
+
+  //const previous_filePath = path.join(process.cwd(), "views/odyssey/blag.html");
+  let indexHtmlContent = fs.readFileSync(path, "utf-8");
 
   const blag = indexHtmlContent.replace(
     "{{template blag}}",
@@ -350,6 +116,36 @@ function serveBlag(req: Request) {
     },
   });
 }
+
+
+
+
+function makeReactApp() {
+  const filePath = path.join(__dirname, "views/odyssey/index.html");
+
+  let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
+
+      //const App = () => <RoboticsOdyssey />;
+      const App = () => { return <div>course_handler</div> }
+      let html = indexHtmlContent.replace(
+        "{{template roboticsodyssey}}",
+        `${renderToString(<App />)}`,
+      );
+      return html
+}
+
+//tic tac toe not stephane and anyone who blah -> they have to recruit the most knowleable  they  know
+// iq lead weight , hardw ork = gem stones ?
+
+///robots nee dt o browweserewb - how else will they know when law changes a --- are they suppseod to wait for some guy to look it up and doit ?!?!?! 
+// geofences shure but what about liek what kylge
+//augment reflect -> okay[ ], good[] , better[]  ----- pefect - tomorow ???? 5 impossibel things before preakfeast 
+//figure out atuhenticaitors - try anyone 0 make own - make fulxu QR vodce
+
+//rainbow amaterasu --  no golden path ------ 
+//404 that llamas - and says """wrong route friend, hwodd you get here??? also did you mean?? coundown 5 sconds -> aut oroute to most porbable - prediction "
+//tools that predict not obey -> people that predictionot obey their nature and the world 
+//https://underscorejs.org/underscore-esm.js
 
 
 // async function static_files(req: Request) {
@@ -370,23 +166,9 @@ function serveBlag(req: Request) {
 //   }
 //   return new Response(Bun.file(dir_name));
 // }
+// the intelillgence age is here - and the repsonsibliey of intellegnetn peple is to use it 
+// alan - everyoen has infintie intleigenice ive thoguht this isince 5 years old - sister disagreeed -  show sister this 
+// your were one of the msartest girls ive met - just used it for emotional intelligence because thats why you liked 
+//-read sneuro -  
 
-function makeReactApp() {
-  const filePath = path.join(__dirname, "views/odyssey/index.html");
-
-let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
-
-      //const App = () => <RoboticsOdyssey />;
-      const App = () => { return <div>course_handler</div> }
-      let html = indexHtmlContent.replace(
-        "{{template roboticsodyssey}}",
-        `${renderToString(<App />)}`,
-      );
-      return html
-}
-
-//tic tac toe not stephane and anyone who blah -> they have to recruit the most knowleable  they  know
-// iq lead weight , hardw ork = gem stones ?
-
-///robots nee dt o browweserewb - how else will they know when law changes a --- are they suppseod to wait for some guy to look it up and doit ?!?!?! 
-// geofences shure but what about liek what kylge
+//kapil says - depression - as opspsosed cmheical ----- find out change yoru min dfw 

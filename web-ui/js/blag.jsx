@@ -144,11 +144,10 @@ function Blog () {
               <div class="container mx-auto px-4">
                 <section class="mb-6">
                   <h2 id="memory-updated" class="text-3xl font-bold mb-4">
-                    <a id="memory-updated" href="/robotics-odyssey"
+                    <a id="memory-updated" href="https://robotics-odyssey.com"
                       >Launch: Robotics Odyssey - oct 10 midnight
                       
-                      
-             
+                     
                       <img
               alt=""
               src="https://files.hashirama.blog/static/blog/5.png"

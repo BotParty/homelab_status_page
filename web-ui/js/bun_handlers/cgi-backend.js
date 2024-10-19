@@ -102,6 +102,31 @@ const routes = {
   // '/comment-visualizer-remover' : () => {
 
   // },
+  // spline proxy api
+  "fs-visual-ncdu" : () => {},
+
+"3d-transform-designer-from-video-periodic-truth-fma" : () => {},
+  "book_to_comic_book": () => {
+    return new Response("book_to_comic_book", {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
+  "comic_book_to_video": () => {
+    return new Response("domo+replicate", {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
+  "/webgpu-streaming-streaming": () => {
+    return new Response("webgpu-streaming-streaming", {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
 
   '/voice_reactive_particles': () => {
     /// static html 
