@@ -5,56 +5,176 @@ const goodOnesDir = join('views', 'cgi-tools');
 const Replicate = require("replicate");
 const fs = require('fs'); 
 
-const routes = [
-  'livekit_video',
-  'voice_reactive_particles',
-  'flux_test', //flux
-  // 'git_viusalizer',
-  // 'ig-generation-flux',
-  // 'kill-math',
-  // 'nerf',
-  // 'scene_reconstruction',
-]
-// obs + jupyter right panel (remote desktop on jupyter)
-const path_maker = (route) => join(goodOnesDir, route + '.html')
-const goodOnesFiles = routes.map(path_maker)
-const compile_time_file_checker = file => { 
-  return goodOnesFiles.includes(  path_maker(file)  ) 
-}
-const filtered_good_ones_files = routes.filter(compile_time_file_checker);
-console.log('Files in goodOnesDir:',filtered_good_ones_files.length);
-console.log('filtered,  goodOnesFiles', compile_time_file_checker('index') )
-const render_page = (page_name) => {
-  const page_path = path_maker(page_name)
-  if (filtered_good_ones_files.includes(page_name.replace('/', ''))) { // Remove leading slash
-    return fs.readFileSync(page_path, 'utf8')
-  } else {
-    return '404'
-  }
-}
-const port = 8003;
-Bun.serve({
-  port: port,
-  async fetch(req) {
-    let url = new URL(req.url).pathname;
-    console.log('url', url);
-    if (url === '/helpers_list') {
-      const helpersDir = path.join(__dirname, 'helpers');
-      const helperFiles = fs.readdirSync(helpersDir);
-      return new Response(JSON.stringify(helperFiles), { headers: { "Content-Type": "application/json" } });
-    }
-    if (url === '/') url = 'livekit_video';
-    if (url === '/connect') { 
-      const json = await connect_to_livekit();
-      console.log(json, json);
-      return new Response(JSON.stringify(json));
-    }
-    if (url.includes('static')) return new Response(Bun.file(url.slice(1)));
-    return new Response(render_page(url), { headers: { "Content-Type": "text/html" } });
+const routes = {
+  // framesplitter: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/framesplitter.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // object_search: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/object_search.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // vr_ghost_in_shell: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/vr_ghost_in_shell.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // css_webgl_animation_from_paper_image: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/css_webgl_animation_from_paper_image.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // particles: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/particles.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // cloud_flare: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/cloud_flare.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // perspective_transformation: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/perspective_transformation.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // "jsonp-yt-instant-everything": () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/jsonp-yt-instant-everything.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // all_tools_in_obs: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/all_tools_in_obs.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+  // ffmpeg_vid_to_img: () => {
+  //   try {
+  //     return new Response(fs.readFileSync("views/ffmpeg_vid_to_img.html", 'utf8'), {
+  //       headers: { "Content-Type": "text/html" },
+  //     });
+  //   } catch (error) {
+  //     return new Response("Error: fuck you", { status: 500 });
+  //   }
+  // },
+
+  //"/print_compoentsn_of_network": () => {},
+  //"/infra-tools-here" : () => {},
+  // '/comment-visualizer-remover' : () => {
+
+  // },
+  '/livekit_screenshare': () => {
+    console.log('livekit_screenshare')
+
+    /// view all 
+    return new Response("livekit_video", {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
   },
-});
-// add rate limitier - 
-console.log('running cgi-backend on port ' + 8003);
+  '/voice_reactive_particles': () => {
+    /// static html 
+    return new Response("voice_reactive_particles", {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
+  '/flux_test': () => { //flux
+    //docker container
+    return new Response("flux_test", {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  },
+}
+// obs + jupyter right panel (remote desktop on jupyter)
+// const path_maker = (route) => join(goodOnesDir, route + '.html')
+// const goodOnesFiles = routes.map(path_maker)
+// const compile_time_file_checker = file => { 
+//   return goodOnesFiles.includes(  path_maker(file)  ) 
+// }
+// const filtered_good_ones_files = routes.filter(compile_time_file_checker);
+// console.log('Files in goodOnesDir:',filtered_good_ones_files.length);
+// console.log('filtered,  goodOnesFiles', compile_time_file_checker('index') )
+// const render_page = (page_name) => {
+//   const page_path = path_maker(page_name)
+//   if (filtered_good_ones_files.includes(page_name.replace('/', ''))) { // Remove leading slash
+//     return fs.readFileSync(page_path, 'utf8')
+//   } else {
+//     return '404'
+//   }
+// }
+// let cgi_tools = {
+ 
+// };
+
+export default routes;
+
+// const port = 8003;
+// Bun.serve({
+//   port: port,
+//   async fetch(req) {
+//     let url = new URL(req.url).pathname;
+//     console.log('url', url);
+//     if (url === '/helpers_list') {
+//       const helpersDir = path.join(__dirname, 'helpers');
+//       const helperFiles = fs.readdirSync(helpersDir);
+//       return new Response(JSON.stringify(helperFiles), { headers: { "Content-Type": "application/json" } });
+//     }
+//     if (url === '/') url = 'livekit_video';
+//     if (url === '/connect') { 
+//       const json = await connect_to_livekit();
+//       console.log(json, json);
+//       return new Response(JSON.stringify(json));
+//     }
+//     if (url.includes('static')) return new Response(Bun.file(url.slice(1)));
+//     return new Response(render_page(url), { headers: { "Content-Type": "text/html" } });
+//   },
+// });
+// // add rate limitier - 
+// console.log('running cgi-backend on port ' + 8003);
 
 
 // cgi-backend.js

@@ -16,6 +16,7 @@ files.hashirama.blog {
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
+}
 
 hashirama.blog {
 	tls {
@@ -23,9 +24,16 @@ hashirama.blog {
 		resolvers 1.1.1.1
 	}
 
-	route / {
-		root * /home/adnan/homelab_status_page/web-ui/docs
-		file_server
+	route /* {
+		reverse_proxy localhost:8080
+	}
+
+	route /cgi-tools/* {
+		reverse_proxy localhost:8004
+	}
+
+	route /llama-tools/* {
+		reverse_proxy localhost:8003
 	}
 
 	route /health {
@@ -41,22 +49,23 @@ hashirama.blog {
 	}
 
 	route /api/* {
-		reverse_proxy localhost:8080
+		respond "hello world"
+		#reverse_proxy localhost:8080
 	}
 
 	route /portainer/* {
-
 		reverse_proxy localhost:9443
+	}
 
-	}	
-	
-	route /portainer/* {
+	route /portainer_2/* {
 		reverse_proxy localhost:9000
 	}
 
 	route /immich/* {
 		reverse_proxy localhost:2283
 	}
+
+	respond "404 Not Found" 404
 
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
@@ -84,13 +93,15 @@ jupyter.hashirama.blog {
 	reverse_proxy localhost:8888
 }
 
-llama-tools.com {
-	tls {
-		dns porkbun pk1_db81d4b3634b90e44327d0d42d7fd5f46e3ca439a2ffe2587cd6a91ff9835aa3  sk1_dedb9466f623f54c717975473ac5c14a8a544f0a07b2f1266de20e55ffeafc70
-	}
-	
-	header Access-Control-Allow-Origin *
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type"
-	
-}respond "hello world"
+# llama-tools.com {
+# 	tls {
+# 		dns porkbun pk1_db81d4b3634b90e44327d0d42d7fd5f46e3ca439a2ffe2587cd6a91ff9835aa3 sk1_dedb9466f623f54c717975473ac5c14a8a544f0a07b2f1266de20e55ffeafc70
+# 	}
+##   /cgi/* { 
+#  reverse proxy to flux
+# }
+
+# 	header Access-Control-Allow-Origin *
+# 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+# 	header Access-Control-Allow-Headers "Content-Type"
+# }

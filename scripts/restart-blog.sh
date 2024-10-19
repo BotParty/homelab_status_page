@@ -162,4 +162,4 @@ sudo systemctl start homelab_status_page.service
 
 
 #sudo systemctl status homelab_status_page.service
-#alias restart="bash scripts/restart-blog.sh"
+alias restart="bash scripts/restart-blog.sh"
