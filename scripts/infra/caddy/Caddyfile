@@ -1,0 +1,86 @@
+{
+	email adnan.f.wahab@gmail.com
+	log {
+		output file /var/log/caddy/caddy.log {
+			roll_size 10MiB
+			roll_keep 5
+			roll_gzip
+		}
+		level DEBUG
+	}
+}
+
+files.hashirama.blog {
+	root * /home/adnan/derp
+	file_server browse
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+}
+#health, robotics-odyssey, hello, api/*
+hashirama.blog {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+
+	route / {
+		root * /home/adnan/homelab_status_page/web-ui/docs
+		file_server
+	}
+
+	route /health {
+		respond "ok"
+	}
+
+	route /robotics-odyssey {
+		redir https://roboticsodyssey.com #static bundle 
+	}
+
+	route /hello {
+		respond "hello world"
+	}
+
+	route /api/* {
+		reverse_proxy localhost:8080
+	}
+
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+
+	# Add logging for this site
+	log {
+		output file /home/adnan/derp/log/caddy/hashirama.blog.log {
+			roll_size 10MiB
+			roll_keep 5
+			roll_gzip
+		}
+	}
+}
+
+#
+# jupyter.hashirama.blog {
+# 	tls {
+# 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+# 		resolvers 1.1.1.1
+# 	}
+# 	#respond "hi world"
+# 	header Access-Control-Allow-Origin *
+# 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+# 	header Access-Control-Allow-Headers "Content-Type"
+# 	reverse_proxy localhost:8888
+# }
+# llama-tools.com {
+# 	# tls {
+# 	# 	dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+# 	# 	resolvers 1.1.1.1
+# 	# }
+# 	#respond "hi world"
+# 	# header Access-Control-Allow-Origin *
+# 	# header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+# 	# header Access-Control-Allow-Headers "Content-Type"
+# 	# reverse_proxy localhost:8080
+#     #reverse_proxy localhost:8080
+#     respond "hi world"
+# }

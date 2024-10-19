@@ -1,0 +1,30 @@
+name: Git Pull on Devices
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  pull-updates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Pull from all devices
+        env:
+          DEVICES: gpu, jetson-orin, jetson-nano-mini
+        run: |
+          IFS=',' read -r -a devices <<< "$DEVICES"
+          for device in "${devices[@]}"; do
+            ssh -o StrictHostKeyChecking=no adnan@$device "cd /home/adnan/homelab_status_page && git pull origin main"
+          done
