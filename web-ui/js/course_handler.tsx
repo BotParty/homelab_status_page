@@ -1,6 +1,28 @@
 const { EgressClient, RoomCompositeEgressRequest } = require('livekit-server-sdk');
 import { spawn } from "bun";
+const { exec } = require('child_process');
+const { execSync } = require('child_process');
+import { $ } from "bun";
+import { renderToString } from "react-dom/server";
+import React from "react";
+import Bun from 'bun'
+const { spawn } = require("child_process");
+import Blag from "./blag.jsx";
+//import RoboticsOdyssey from "views/odyssey/robotics-odyssey.tsx";
+import fs from "fs";
+import path from "path";
+import { watch } from "fs";
+import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
+import llamaRoutes from './bun_handlers/llama-backend.jsx'
+import CgiRoutes from './bun_handlers/cgi-backend.js'
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const indexHtmlPath = path.resolve(__dirname, 'views', 'index.html');
+console.log('indexHtmlPath', indexHtmlPath)
+const indexHtmlContent = fs.readFileSync(indexHtmlPath, 'utf-8');
+import LlamaGrid from './views/llama-grid.tsx';
 //import {$} from "bun";
 //op item list --vault=personal --tags=api --format json
 //more tab - auto complete for everything - this repo coudl be good stdlib for robutts - for obs,toolchain(5things linux,go,zig,bun,python,C++,5apis,5apps) -- (english+diagrams) can gen the first 15.
@@ -34,58 +56,34 @@ import { spawn } from "bun";
 //looking for best practices in mmphenomena --- because that was in importnati in games and cartoons.
 //best practice in robotics engineerng - idk?
 
-const livekitHost = process.env.OPEN_AI_KEY
-const apiKey = process.env.LIVEKIT_API_KEY
-const apiSecret = process.env.LIVEKIT_API_SECRET
+// const livekitHost = process.env.OPEN_AI_KEY
+// const apiKey = process.env.LIVEKIT_API_KEY
+// const apiSecret = process.env.LIVEKIT_API_SECRET
 
-const egressClient = new EgressClient(livekitHost, apiKey, apiSecret);
-// https://dev.twitch.tv/docs/api/
-//microbox + microsaur -
-//localhost -> connects to tailscale serve / funnel -> auto symlink to mothership - 4pb desktopx4
-async function startEgress() {
-  const request = RoomCompositeEgressRequest.fromPartial({
-    roomName: 'example-room',
-    layout: 'speaker-dark',
-    audioOnly: true,
-    fileOutputs: [
-      {
-        fileType: 'OGG', // LiveKit supports OGG for audio-only recordings
-        filepath: '/audio.ogg',
-      },
-    ],
-  });
+// const egressClient = new EgressClient(livekitHost, apiKey, apiSecret);
+// // https://dev.twitch.tv/docs/api/
+// //microbox + microsaur -
+// //localhost -> connects to tailscale serve / funnel -> auto symlink to mothership - 4pb desktopx4
+// async function startEgress() {
+//   const request = RoomCompositeEgressRequest.fromPartial({
+//     roomName: 'example-room',
+//     layout: 'speaker-dark',
+//     audioOnly: true,
+//     fileOutputs: [
+//       {
+//         fileType: 'OGG', // LiveKit supports OGG for audio-only recordings
+//         filepath: '/audio.ogg',
+//       },
+//     ],
+//   });
 
-  const response = await egressClient.startRoomCompositeEgress(request);
-  console.log('Egress started with egress ID:', response.egressId);
-  return response.egressId
-}
-const { exec } = require('child_process');
-const { execSync } = require('child_process');
-import { $ } from "bun";
-import { renderToString } from "react-dom/server";
-import React from "react";
-import Bun from 'bun'
-const { spawn } = require("child_process");
-import Blag from "./blag.jsx";
-//import RoboticsOdyssey from "views/odyssey/robotics-odyssey.tsx";
-import fs from "fs";
-import path from "path";
-import { watch } from "fs";
-import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
-import llamaRoutes from './bun_handlers/llama-backend.jsx'
-import CgiRoutes from './bun_handlers/cgi-backend.js'
-import { fileURLToPath } from 'url';
+//   const response = await egressClient.startRoomCompositeEgress(request);
+//   console.log('Egress started with egress ID:', response.egressId);
+//   return response.egressId
+// }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Resolve the path to index.html
-const indexHtmlPath = path.resolve(__dirname, 'views', 'index.html');
-
-// Read the file
-const indexHtmlContent = fs.readFileSync(indexHtmlPath, 'utf-8');
-
-import LlamaGrid from '../views/llama-grid.tsx';
 
 
 function serveLlamaTools(req: Request) { 
@@ -450,11 +448,11 @@ async function serveRoboticsOdyssey(req: Request) {
 }
 // writers are thinks, coders a thinkers, designers are ithnks ->>>> use your instrument of MIND > GOD 
 function serveBlag(req: Request) { 
-  let path = '/home/adnan/homelab_status_page/web-ui/views/odyssey/blag.html'
+  
 //  const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/livekit_speech_to_fn_call.html`
 
   //const previous_filePath = path.join(process.cwd(), "views/odyssey/blag.html");
-  let indexHtmlContent = fs.readFileSync(path, "utf-8");
+  let indexHtmlContent = fs.readFileSync(path.resolve(__dirname, './views/blag.html'), "utf-8");
 
   const blag = indexHtmlContent.replace(
     "{{template blag}}",
@@ -522,8 +520,6 @@ function makeReactApp(component_name) {
 // your were one of the msartest girls ive met - just used it for emotional intelligence because thats why you liked 
 //-read sneuro -  
 
-//kapil says - depression - as opspsosed cmheical ----- find out change yoru min dfw 
 
 
-
-
+//live in a magical scientifc mystery.
