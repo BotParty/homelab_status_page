@@ -69,11 +69,6 @@ hashirama.blog {
 		respond "hello world"
 	}
 
-	route /api/* {
-		respond "hello world"
-		#reverse_proxy localhost:8080
-	}
-
 	route /portainer {
 		reverse_proxy localhost:9000
 	}
@@ -85,28 +80,11 @@ hashirama.blog {
 	handle_path /vite/* {
 		reverse_proxy localhost:8002
 	}
-	# when edit this file - restart caddy ifi it papssed check
-	# route /caddy_proxy/* {
-	# 	reverse_proxy /youtube https://www.youtube.com {
-	# 		header_up Host {http.reverse_proxy.upstream.hostport}
-	# 		header_up X-Real-IP {remote}
-	# 		header_up X-Forwarded-For {remote}
-	# 		header_up X-Forwarded-Proto {scheme}
-	# 	}
-	# }
 
 	# route /ws/* {
 	# 	reverse_proxy localhost:8080
 	# }
 
-
-	# route /source/* {
-	# 	root * /home/adnan/derp
-	# 	file_server browse
-	# 	header Access-Control-Allow-Origin *
-	# 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	# 	header Access-Control-Allow-Headers "Content-Type"
-	# }
 
 	respond "404 Not Found" 404
 
