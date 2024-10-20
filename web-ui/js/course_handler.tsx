@@ -14,7 +14,8 @@ import { watch } from "fs";
 import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
 import llamaRoutes from './bun_handlers/llama-backend.jsx'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
-//import indexHtmlContent from '/home/adnan/homelab_status_page/web-ui/views/index.html'
+
+const  indexHtmlContent = fs.readFileSync('/home/adnan/homelab_status_page/web-ui/views/index.html', 'utf-8')
 
 
 
@@ -22,7 +23,7 @@ import  LlamaGrid from '/home/adnan/homelab_status_page/web-ui/views/llama-grid.
 
 
 function serveLlamaTools(req: Request) { 
-  const content = renderToString(<LlamaGrid />) + 'miranda';
+  const content = indexHtmlContent + renderToString(<LlamaGrid />) //+ 'miranda';
   return new Response(content, {
     headers: {
       "Content-Type": "text/html",
@@ -199,38 +200,38 @@ async function proxy(req: Request) {
 
 
    //console.log('url.pathname', url.pathname.startsWith("/llama_backend"), url.pathname)
-   let pathy = url.pathname 
+//    let pathy = url.pathname 
 
-   const isDeno = pathy.slice(1,5) === 'deno';
+//    const isDeno = pathy.slice(1,5) === 'deno';
+// console.log('pathy', pathy)
+//    if (isDeno) { 
+//     console.log('Proxying to Deno server');
+//     const targetUrl = `http://localhost:3000${pathy}`;
 
-   if (isDeno) { 
-    console.log('Proxying to Deno server');
-    const targetUrl = `http://localhost:3000${pathy}`;
+//     try {
+//       const response = await fetch(targetUrl, {
+//         method: req.method,
+//         headers: req.headers,
+//         body: req.method !== "GET" && req.method !== "HEAD" ? req.body : null,
+//       });
 
-    try {
-      const response = await fetch(targetUrl, {
-        method: req.method,
-        headers: req.headers,
-        body: req.method !== "GET" && req.method !== "HEAD" ? req.body : null,
-      });
+//       // Create a new response with the original body but new headers
+//       const newResponse = new Response(response.body, {
+//         status: response.status,
+//         statusText: response.statusText,
+//         headers: new Headers(response.headers),
+//       });
 
-      // Create a new response with the original body but new headers
-      const newResponse = new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: new Headers(response.headers),
-      });
+//       // Remove any problematic headers
+//       newResponse.headers.delete('content-encoding');
+//       newResponse.headers.delete('content-length');
 
-      // Remove any problematic headers
-      newResponse.headers.delete('content-encoding');
-      newResponse.headers.delete('content-length');
-
-      return newResponse;
-    } catch (error) {
-      console.error('Error proxying to Deno server:', error);
-      return new Response('Error proxying request', { status: 500 });
-    }
-  }
+//       return newResponse;
+//     } catch (error) {
+//       console.error('Error proxying to Deno server:', error);
+//       return new Response('Error proxying request', { status: 500 });
+//     }
+//   }  /// move to file
 
    
 

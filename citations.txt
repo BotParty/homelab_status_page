@@ -1,4 +1,4 @@
-
+host entire desktop + (repo in edit + (view-data) as json) - backup derp weekly
 staircase comic - all webcomics ---- private tracker self hosted stack -> only good things -> webtorrent etc -> use LLAMA -> to refresh abnadoned open source like pathgl
 https://blog.stackademic.com/i-made-rn-webview-app-10x-faster-than-yours-heres-how-i-did-it-7132b7421261
 https://www.appmysite.com/blog/native-app-vs-webview-app-which-path-offers-better-odds-of-success/

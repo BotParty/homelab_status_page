@@ -63,10 +63,20 @@ app.use(
   })
 );
 
+app.use(
+  "/deno/https://openai.com",
+  createProxyMiddleware({
+    target: "https://openai.com", // Target website
+    changeOrigin: true, // Needed to make the target domain appear the same
+    pathRewrite: { "^/openai": "" }, // Optional: Remove /youtube prefix when proxying
+    onProxyReq(proxyReq, req, res) {
+      // Add additional headers if needed
+      console.log("youtube proxy");
+      proxyReq.setHeader("X-Special-Proxy-Header", "Bun-Proxy");
+    },
+  })
+);
 
-app.listen(3000, () => {
-  console.log("Bun proxy server is running on http://localhost:3000");
-});
 
 // proxy_docs.forEach((url) => {
 //   const route = new URL(url).hostname.replace(/\./g, '-'); // Create a unique route based on the hostname
@@ -77,8 +87,15 @@ app.listen(3000, () => {
 //       changeOrigin: true,
 //       pathRewrite: { [`^/${route}`]: "" },
 //       onProxyReq(proxyReq, req, res) {
+//         console.log(url, route);
+
 //         proxyReq.setHeader("X-Special-Proxy-Header", "Bun-Proxy");
 //       },
 //     })
 //   );
 // });
+
+app.listen(3000, () => {
+  console.log("Bun proxy server is running on http://localhost:3000");
+});
+
