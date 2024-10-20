@@ -12,6 +12,74 @@ ln -s ~/derp/logs ~/homelab_status_page/data/logs
 
 ln -s ~/derp/sensor_data ~/homelab_status_page/data/sensor_data
 
+#!/bin/bash
+
+# Script to clone and build specified Jetson containers
+
+# Check if Git is installed
+if ! command -v git &> /dev/null
+then
+    echo "Git is not installed. Please install Git before running this script."
+    exit
+fi
+
+# Check if Docker is installed
+if ! command -v docker &> /dev/null
+then
+    echo "Docker is not installed. Please install Docker before running this script."
+    exit
+fi
+
+# Clone or update the jetson-containers repository
+if [ ! -d "jetson-containers" ]; then
+    echo "Cloning jetson-containers repository..."
+    git clone https://github.com/dusty-nv/jetson-containers.git
+else
+    echo "Updating jetson-containers repository..."
+    cd jetson-containers
+    git pull
+    cd ..
+fi
+
+cd jetson-containers
+
+# List of package paths
+packages=(
+    "packages/llm/ollama"
+    "packages/llm/llama_cpp"
+    "packages/llm/llama-factory"
+    "packages/llm/exllama"
+    "packages/vlm/llama-vision"
+)
+
+# Build each container
+for package in "${packages[@]}"; do
+    echo "-----------------------------------------"
+    echo "Building container for $package"
+    cd "$package"
+
+    # Check if a build script exists
+    if [ -f "build.sh" ]; then
+        echo "Found build.sh, executing..."
+        chmod +x build.sh
+        ./build.sh
+    elif [ -f "Dockerfile" ]; then
+        # Build the Docker image
+        image_name="${package##*/}"
+        echo "No build.sh found. Building Docker image: $image_name"
+        docker build -t "$image_name" .
+    else
+        echo "No build script or Dockerfile found in $package. Skipping..."
+    fi
+
+    cd - > /dev/null
+done
+
+echo "All containers have been built."
+
+# https://github.com/dusty-nv/jetson-inference
+
+
 #cp ~/homelab_status_page/scripts/homelab_status_page.sh /usr/local/bin/homelab_status_page.sh
 
 #docker

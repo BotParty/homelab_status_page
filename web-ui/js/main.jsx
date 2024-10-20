@@ -76,7 +76,7 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<RoboticsOdyssey />} /> */}
+        <Route path="/" element={<RoboticsOdyssey />} />
         <Route path="/docs" element={<Documentation />} />
         <Route path="/cgi" element={<CGI_Tools />} />
         <Route path="/llama" element={<LLAMA_Tools />} />

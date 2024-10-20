@@ -249,7 +249,6 @@ function LivekitAudio() {
       setIsRecording(false);
     }
   }
-  window.sendAudioToServer = sendAudioToServer
   async function sendAudioToServer(chunks) {
     console.log('sendAudioToServer')
 

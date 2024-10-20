@@ -102,7 +102,10 @@ derp = robotics foundation model - lerobt+human_prediction 4tb-> 50PB
 | intermediate_representations| render passes of embeddings before sending to transformer, gpt, llm                                   |
 | logs                        | 1TB log = code executing -> std+stdout                                                                |
 | sensor_data                 | camera, sound, lidar, radar, satellites, neuralink, tactiles, olfactory, gustatory, vestibular, proprioception |
-| text / notes / scribblings                        | webPages, (most compact but easiest to misinterpret representation of model of reality - quote BV + Chomsky) |
+| text / notes / scribblings  | webPages, (most compact but easiest to misinterpret representation of model of reality - quote BV + Chomsky) |
+
+
+
 prediction-planning
 audience = 10yr +
 each module needs 50 iterations - course launch nov 1 to friends - jan 1 ---- to zoox+waymo+dynamicland not vw
@@ -118,4 +121,4 @@ books are too difficult to read them all
 but the probably closets formula to create like alan kay or bret victor = read 10,000 boooks
 i tried that didnt work :( - so i gave up and started to only paint using observablehq's magic paper for bret's magic ink.
 
-how to english->code gen for robotics - 
+how to english->code gen for robotics - llama-artifact -> dynamciland + arcology = future-city
