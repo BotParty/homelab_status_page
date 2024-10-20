@@ -170,7 +170,8 @@ async function toggleScreenShare(room) {
 // Add this near the top of the file, alongside the ENABLE_SCREEN_SHARE constant
 const ENABLE_SCREEN_SHARE = false;
 const ENABLE_AUDIO_PLAYBACK = true; // New environment variable
-
+// pose estimator - mood predictor - gottman shader 
+// do evertytign
 function LivekitAudio() {
   const screenShareVideo = useRef<HTMLVideoElement>(null);
   const audioElement = useRef<HTMLAudioElement>(null);
@@ -184,34 +185,54 @@ function LivekitAudio() {
     setAudioContext(context);
   }, []);
 
+  async function handleButtonPress() {
+    console.log('Button pressed!');
+    await joinRoom(screenShareVideo.current, audioElement.current);
+    console.log('Room joined, starting recording');
+    startRecording();
+  }
+
   async function startRecording() {
-    if (!audioContext) return;
-
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    setMediaRecorder(recorder);
-
-    const chunks: Blob[] = [];
-    recorder.ondataavailable = (e) => { 
-      
-      
-      chunks.push(e.data);
-      const blob = new Blob(chunks, { type: 'audio/webm' });
-      sendAudioToServer(blob);
-      console.log('saving to server!!')
+    if (!audioContext) {
+      console.error('AudioContext not initialized');
+      return;
     }
-    recorder.onstop = () => {
-      console.log('recorder stopped')
-      // const blob = new Blob(chunks, { type: 'audio/webm' });
-      // sendAudioToServer(blob);
-    };
 
-    recorder.start();
-    setIsRecording(true);
-    setAudioChunks([]);
+    console.log('Starting recording...');
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log('Got media stream:', stream);
+      const recorder = new MediaRecorder(stream);
+      setMediaRecorder(recorder);
 
-    // Stop recording after 5 seconds
-    setTimeout(() => stopRecording(), 5000);
+      recorder.ondataavailable = (e) => {
+        console.log('Data available:', e.data.size, 'bytes');
+        if (e.data.size > 0) {
+          const blob = new Blob([e.data], { type: 'audio/webm' });
+          sendAudioToServer(blob);
+          console.log('Saving to server!!');
+        }
+      };
+
+      recorder.onstart = () => {
+        console.log('Recorder started');
+        setIsRecording(true);
+        setAudioChunks([]);
+      };
+
+      recorder.onstop = () => {
+        console.log('Recorder stopped');
+        setIsRecording(false);
+      };
+
+      recorder.start(1000); // Start recording and fire ondataavailable every 1 second
+      console.log('Recorder started');
+
+      // Stop recording after 10 seconds
+      setTimeout(() => stopRecording(), 10000);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+    }
   }
 
   function stopRecording() {
@@ -242,19 +263,6 @@ function LivekitAudio() {
     }
   }
 
-  function handleButtonPress() {
-    console.log('Button pressed!');
-    joinRoom(screenShareVideo.current, audioElement.current);
-  }
-
-  function handleRecordButtonPress() {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  }
-
   return (
     <div>
       <div>
@@ -265,7 +273,8 @@ function LivekitAudio() {
       </div>
       {ENABLE_SCREEN_SHARE && <video ref={screenShareVideo} autoPlay muted playsInline />}
       {ENABLE_AUDIO_PLAYBACK && <audio ref={audioElement} autoPlay />}
-      <button onClick={handleButtonPress}>Connect to LiveKit</button>
+      <button onClick={handleButtonPress}>Connect to LiveKit and Start Recording</button>
+      <div>{isRecording ? 'Recording...' : 'Not recording'}</div>
     </div>
   );
 }
@@ -360,6 +369,7 @@ export default LlamaGrid;
 
 
 //dating = a game like mounment valley or  the game amro playerd - farm ville 
+
 
 
 

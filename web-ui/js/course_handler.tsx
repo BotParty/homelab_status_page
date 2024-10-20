@@ -210,14 +210,90 @@ function serveCgiTools(req: Request) {
 }
 
 // convert all books to music videos - read aloud + show diagrms - interactive if psosibel 
-async function save_audio_to_whisper(req: Request) { 
-  console.log('save_audio_to_whisper', req)
-  return new Response('save_audio_to_whisper')
+async function save_audio_to_whisper(req: Request) {
+  console.log('save_audio_to_whisper called');
+
+  try {
+    // Check if the request method is POST
+    if (req.method !== 'POST') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Get the content type
+    const contentType = req.headers.get('content-type');
+
+    let data;
+    if (contentType && contentType.includes('application/json')) {
+      // If it's JSON data
+      data = await req.json();
+    } else if (contentType && contentType.includes('multipart/form-data')) {
+      // If it's form data (e.g., file upload)
+      const formData = await req.formData();
+      data = Object.fromEntries(formData);
+    } else {
+      // For other content types, try to read as text
+      data = await req.text();
+    }
+
+    console.log('Received data:', data);
+
+    // Process the data (this is where you'd implement your whisper logic)
+    // For now, we'll just echo back the received data
+    return new Response(JSON.stringify({ message: 'Data received', data }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    console.error('Error in save_audio_to_whisper:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+function webhook(req: Request) { 
+  console.log('webhook', req)
+  return new Response('webhook')
 }
 
 async function proxy(req: Request) {
    const url = new URL(req.url);   
    console.log('url', url.pathname)
+
+
+  //  if (url.pathname.startsWith("/_not_vite")) {
+  //    const targetUrl = `http://localhost:8001${url.pathname}`;
+
+  //    try {
+  //      const response = await fetch(targetUrl, {
+  //        method: req.method,
+  //        headers: req.headers,
+  //        body: req.method !== "GET" && req.method !== "HEAD" ? req.body : null,
+  //      });
+
+  //      // Create a new response with the original body but new headers
+  //      const newResponse = new Response(response.body, {
+  //        status: response.status,
+  //        statusText: response.statusText,
+  //        headers: new Headers(response.headers),
+  //      });
+
+  //      // Remove any problematic headers
+  //      newResponse.headers.delete('content-encoding');
+  //      newResponse.headers.delete('content-length');
+
+  //      return newResponse;
+  //    } catch (error) {
+  //      console.error('Error proxying to Vite server:', error);
+  //      return new Response('Error proxying request', { status: 500 });
+  //    }
+  //  }
+
+
+
+
+   //if (url.pathname.startsWith("/webhook")) return webhook(req);
    if (url.pathname.startsWith("/os_automation")) return os_automation(req);
 
     if (url.pathname.startsWith("/api/save_audio_to_whisper")) return save_audio_to_whisper(req);
@@ -380,4 +456,7 @@ function makeReactApp(component_name) {
 //-read sneuro -  
 
 //kapil says - depression - as opspsosed cmheical ----- find out change yoru min dfw 
+
+
+
 
