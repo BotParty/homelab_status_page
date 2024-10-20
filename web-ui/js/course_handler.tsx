@@ -74,12 +74,18 @@ import { watch } from "fs";
 import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
 import llamaRoutes from './bun_handlers/llama-backend.jsx'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
+import { fileURLToPath } from 'url';
 
-const  indexHtmlContent = fs.readFileSync('/home/adnan/homelab_status_page/web-ui/views/index.html', 'utf-8')
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Resolve the path to index.html
+const indexHtmlPath = path.resolve(__dirname, 'views', 'index.html');
 
+// Read the file
+const indexHtmlContent = fs.readFileSync(indexHtmlPath, 'utf-8');
 
-import  LlamaGrid from '/home/adnan/homelab_status_page/web-ui/views/llama-grid.tsx'
+import LlamaGrid from '../views/llama-grid.tsx';
 
 
 function serveLlamaTools(req: Request) { 
