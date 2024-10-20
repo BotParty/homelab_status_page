@@ -449,7 +449,6 @@ import React, { Suspense, lazy } from 'react';
 function App() {
   return (
     <div>
-        <script src="https://cdn.tailwindcss.com"></script>
 
       <input type="text" />
       <Suspense fallback={<div>Loading...</div>}>
