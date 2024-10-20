@@ -184,9 +184,6 @@ function LivekitAudio() {
   console.log('LivekitAudio - rendering blah')
   const chunks = [];
     
-  window.chunks = chunks;
-
-
   const handleStopRecording = () => {
     console.log('stopping recording')
     console.log(chunks)

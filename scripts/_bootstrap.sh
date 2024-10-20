@@ -1,3 +1,6 @@
+
+ op item list --vault=personal --tags=api --format json
+
 # Symlink each category into a data folder in the root of this git repo
 #chmod +x scripts/*
 ln -s ~/derp/actions ~/homelab_status_page/data/actions

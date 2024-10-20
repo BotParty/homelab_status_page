@@ -117,3 +117,5 @@ point of robotics odyssey - Combine Creative AI w/ Robotics for Robotic Art like
 books are too difficult to read them all
 but the probably closets formula to create like alan kay or bret victor = read 10,000 boooks
 i tried that didnt work :( - so i gave up and started to only paint using observablehq's magic paper for bret's magic ink.
+
+how to english->code gen for robotics - 

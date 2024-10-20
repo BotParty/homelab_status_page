@@ -4,7 +4,7 @@
       // focus = CLJS + study light table + any cool clj project liek datomic.  
        // focus = metric get entire repo down to 10mb - each file only 15-45 lines - self driving -semi-autonomous robots - all visualizaitons in obs.
        // theorem = 151 files = anything - if contain probalblitliy = reality creation  -probablity manipualtion  = contain chaos by tune correct variable.
-
+//we want a magic terminal in observable - for fun --- 100x100 terminal of all robots - sensors + dsahobards + whatever - 200 cars - 
 import fs from 'fs' 
 import { $ } from "bun";
 //uber style guide - git visuzler
@@ -49,7 +49,7 @@ export async function re_organize_file_system_simple(prompt) {
 
 import { chromium } from 'playwright';
 //import ollama from 'ollama'
-const vit = () => {
+const vit = () => {}
 //     
 
 
@@ -94,11 +94,14 @@ async function fix_deisgn (url) {
 
 if (process.argv[0].includes('bun')) {
     //fix_deisgn('http://gpu.jerboa-kokanue.ts.net/');
-    fix_deisgn('http://localhost:8001/');
+    //fix_deisgn('http://localhost:8001/');
     // const file_name = process.argv[1]
     // if (!file_name) throw new Error("No file name provided")
     // else Main_Rich_Hickey_Refactor(file_name);
 
     //console.log(await re_organize_file_system_simple(""))
 
+
+    //Rich_Hickey_Refactor()
+    //re_organize_file_system_simple // this should move all htmls to /web-ui/views/ - convert them to good react.jsx + tailwind.  --- design
 }
