@@ -37,8 +37,8 @@ function RoboticsOdyssey() {
             {/* <PowerPoint />
             <Box /> */}
             {/* <UseDirectImport /> */}
-            <Pricing />
-            {/* <Footer /> */}
+            {/* <Pricing /> */}
+            <Footer />
             {/* <Hardware_Picker></Hardware_Picker> */}
           </main>
         </div>
@@ -109,7 +109,7 @@ function Pricing() {
           <div class="bg-gray-700 p-4 rounded-full"></div>
         </div>
       </div>
-      <img src="https://nanosaur.ai/assets/images/nanosaur-wireframe-bw.png" />
+      {/* <img style={{width: "500px"}} src="https://nanosaur.ai/assets/images/nanosaur-wireframe-bw.png" /> */}
     </div>
   );
 }

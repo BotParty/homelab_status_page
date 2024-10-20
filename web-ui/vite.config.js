@@ -24,7 +24,11 @@ export default defineConfig({
         }
       },
       input: {
+<<<<<<< HEAD
         // voiceReactiveParticles: 'views/cgi-tools/voice_reactive_particles.html',
+=======
+        //voiceReactiveParticles: 'views/cgi-tools/voice_reactive_particles.html',
+>>>>>>> 655eae1 (asdf)
       },
     },
     target: 'esnext', // Add this line to target the latest ECMAScript version
