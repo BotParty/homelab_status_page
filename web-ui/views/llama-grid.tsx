@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Room,
   RoomEvent,
@@ -125,7 +125,7 @@ async function joinRoom(screenShareVideo, audioElement) {
   room.on(RoomEvent.LocalTrackPublished, (publication, participant) => {
     if (publication.kind === Track.Kind.Video && publication.source === Track.Source.ScreenShare) {
       publication.track.attach(screenShareVideo);
-    } else if (publication.kind === Track.Kind.Audio) {
+    } else if (publication.kind === Track.Kind.Audio && ENABLE_AUDIO_PLAYBACK) {
       publication.track.attach(audioElement);
     }
   });
@@ -133,14 +133,13 @@ async function joinRoom(screenShareVideo, audioElement) {
   room.on(RoomEvent.LocalTrackUnpublished, (publication, participant) => {
     if (publication.kind === Track.Kind.Video && publication.source === Track.Source.ScreenShare) {
       publication.track.detach(screenShareVideo);
-    } else if (publication.kind === Track.Kind.Audio) {
+    } else if (publication.kind === Track.Kind.Audio && ENABLE_AUDIO_PLAYBACK) {
       publication.track.detach(audioElement);
     }
   });
 
   await toggleMicrophone(room);
   
-  // Only toggle screen share if ENABLE_SCREEN_SHARE is true
   if (ENABLE_SCREEN_SHARE) {
     await toggleScreenShare(room);
   }
@@ -168,24 +167,104 @@ async function toggleScreenShare(room) {
   }
 }
 
-// Add this near the top of the file
-//const ENABLE_SCREEN_SHARE = process.env.ENABLE_SCREEN_SHARE === 'true';
+// Add this near the top of the file, alongside the ENABLE_SCREEN_SHARE constant
 const ENABLE_SCREEN_SHARE = false;
+const ENABLE_AUDIO_PLAYBACK = true; // New environment variable
 
 function LivekitAudio() {
-  const screenShareVideo = React.useRef<HTMLVideoElement>(null);
-  const audioElement = React.useRef<HTMLAudioElement>(null);
+  const screenShareVideo = useRef<HTMLVideoElement>(null);
+  const audioElement = useRef<HTMLAudioElement>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+
+  useEffect(() => {
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    setAudioContext(context);
+  }, []);
+
+  async function startRecording() {
+    if (!audioContext) return;
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    setMediaRecorder(recorder);
+
+    const chunks: Blob[] = [];
+    recorder.ondataavailable = (e) => { 
+      
+      
+      chunks.push(e.data);
+      const blob = new Blob(chunks, { type: 'audio/webm' });
+      sendAudioToServer(blob);
+      console.log('saving to server!!')
+    }
+    recorder.onstop = () => {
+      console.log('recorder stopped')
+      // const blob = new Blob(chunks, { type: 'audio/webm' });
+      // sendAudioToServer(blob);
+    };
+
+    recorder.start();
+    setIsRecording(true);
+    setAudioChunks([]);
+
+    // Stop recording after 5 seconds
+    setTimeout(() => stopRecording(), 5000);
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  }
+
+  async function sendAudioToServer(audioBlob: Blob) {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'audio.webm');
+
+    try {
+      const response = await fetch('/api/save_audio_to_whisper', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Server response:', result);
+    } catch (error) {
+      console.error('Error sending audio to server:', error);
+    }
+  }
 
   function handleButtonPress() {
     console.log('Button pressed!');
     joinRoom(screenShareVideo.current, audioElement.current);
   }
 
+  function handleRecordButtonPress() {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  }
+
   return (
     <div>
-      <div>Audio {ENABLE_SCREEN_SHARE ? 'and screen sharing ' : ''}with LiveKit</div>
+      <div>
+        Audio
+        {ENABLE_SCREEN_SHARE ? ' and screen sharing' : ''}
+        {ENABLE_AUDIO_PLAYBACK ? ' with playback' : ' without playback'}
+        {' with LiveKit'}
+      </div>
       {ENABLE_SCREEN_SHARE && <video ref={screenShareVideo} autoPlay muted playsInline />}
-      <audio ref={audioElement} autoPlay />
+      {ENABLE_AUDIO_PLAYBACK && <audio ref={audioElement} autoPlay />}
       <button onClick={handleButtonPress}>Connect to LiveKit</button>
     </div>
   );
@@ -281,5 +360,7 @@ export default LlamaGrid;
 
 
 //dating = a game like mounment valley or  the game amro playerd - farm ville 
+
+
 
 

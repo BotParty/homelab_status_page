@@ -209,11 +209,18 @@ function serveCgiTools(req: Request) {
   return  docs_response(CgiRoutes)
 }
 
+// convert all books to music videos - read aloud + show diagrms - interactive if psosibel 
+async function save_audio_to_whisper(req: Request) { 
+  console.log('save_audio_to_whisper', req)
+  return new Response('save_audio_to_whisper')
+}
+
 async function proxy(req: Request) {
    const url = new URL(req.url);   
+   console.log('url', url.pathname)
    if (url.pathname.startsWith("/os_automation")) return os_automation(req);
 
-
+    if (url.pathname.startsWith("/api/save_audio_to_whisper")) return save_audio_to_whisper(req);
    //console.log('url.pathname', url.pathname.startsWith("/llama_backend"), url.pathname)
 //    let pathy = url.pathname 
 
