@@ -54,11 +54,6 @@ const llamaRoutesHandlers = Object.fromEntries(
 //   return new Response(`tbc`)
 // }
 
-const llama_backend = (req: Request) => { 
-  console.log('llama_backend')
-  return new Response('llama_backend')
-}
-
 
 async function os_automation(req) {
   const { method } = req;
@@ -203,13 +198,39 @@ async function proxy(req: Request) {
    if (url.pathname.startsWith("/os_automation")) return os_automation(req);
 
 
-   console.log('url.pathname', url.pathname.startsWith("/llama_backend"), url.pathname)
+   //console.log('url.pathname', url.pathname.startsWith("/llama_backend"), url.pathname)
+   let pathy = url.pathname 
 
-   if (url.pathname.includes("llama_backend")) { 
-    console.log('llama_backend')
-    return llama_backend(req);
+   const isDeno = pathy.slice(1,5) === 'deno';
 
-   }
+   if (isDeno) { 
+    console.log('Proxying to Deno server');
+    const targetUrl = `http://localhost:3000${pathy}`;
+
+    try {
+      const response = await fetch(targetUrl, {
+        method: req.method,
+        headers: req.headers,
+        body: req.method !== "GET" && req.method !== "HEAD" ? req.body : null,
+      });
+
+      // Create a new response with the original body but new headers
+      const newResponse = new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: new Headers(response.headers),
+      });
+
+      // Remove any problematic headers
+      newResponse.headers.delete('content-encoding');
+      newResponse.headers.delete('content-length');
+
+      return newResponse;
+    } catch (error) {
+      console.error('Error proxying to Deno server:', error);
+      return new Response('Error proxying request', { status: 500 });
+    }
+  }
 
    
 

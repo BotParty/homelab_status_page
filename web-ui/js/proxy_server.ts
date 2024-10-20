@@ -1,16 +1,11 @@
-// import express from "express";
-// import { createProxyMiddleware } from "http-proxy-middleware";
-
+import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+//optimizely for agents -> agnets want to view ggoogle accounts -> they do it on your domain - you keep the data
+//i f theres erres- you kepe llalaming till this proxy anying
+///this kirby star route --- -api 
 // // Create an express app
-// const app = express();
-
-
-
-
-
-
-
-
+const app = express();
+///rewtie open soruce - they mrigestuequwts - you might have to mitm - for good
 const proxy_docs = [
     "https://bun.sh/docs/runtime/bunfig#run-bun-auto-alias-node-to-bun", 
     // "https://google.com", 
@@ -52,65 +47,26 @@ const proxy_docs = [
     "https://scholar.google.com/",
   ];
 
-
-  import { serve } from "https://deno.land/std@0.206.0/http/server.ts";
-
-  const proxyUrl = "https://docs.anthropic.com/";  // URL of the Anthropic documentation
   
-  async function proxyHandler(request: Request): Promise<Response> {
-    // Extract the requested path from the original request
-    const url = new URL(request.url);
-    const path = url.pathname;
   
-    // Fetch content from the external resource (Anthropic docs)
-    const targetUrl = `${proxyUrl}${path}`;
-    const proxyRequest = await fetch(targetUrl, {
-      method: request.method,
-      headers: request.headers,
-    });
-  
-    // Forward the response from the external site
-    const responseHeaders = new Headers(proxyRequest.headers);
-  //proxy then webgpu with 200gpus
-    // Add CORS headers to allow embedding in an iframe
-    responseHeaders.set("Access-Control-Allow-Origin", "*");
-    responseHeaders.set("Content-Type", "text/html");
-  
-    const body = await proxyRequest.text();
-  
-    return new Response(body, {
-      status: proxyRequest.status,
-      headers: responseHeaders,
-    });
-  }
-  
-  // Start the Deno server on port 8080
-  serve(proxyHandler, { port: 3000 });
-  
-  console.log("Proxy server running on http://localhost:3000/");
+app.use(
+  "/deno/youtube",
+  createProxyMiddleware({
+    target: "https://www.youtube.com", // Target website
+    changeOrigin: true, // Needed to make the target domain appear the same
+    pathRewrite: { "^/youtube": "" }, // Optional: Remove /youtube prefix when proxying
+    onProxyReq(proxyReq, req, res) {
+      // Add additional headers if needed
+      console.log("youtube proxy");
+      proxyReq.setHeader("X-Special-Proxy-Header", "Bun-Proxy");
+    },
+  })
+);
 
 
-
-
-  
-  
-// app.use(
-//   "/youtube",
-//   createProxyMiddleware({
-//     target: "https://www.youtube.com", // Target website
-//     changeOrigin: true, // Needed to make the target domain appear the same
-//     pathRewrite: { "^/youtube": "" }, // Optional: Remove /youtube prefix when proxying
-//     onProxyReq(proxyReq, req, res) {
-//       // Add additional headers if needed
-//       proxyReq.setHeader("X-Special-Proxy-Header", "Bun-Proxy");
-//     },
-//   })
-// );
-
-// Start the server using Bun
-// app.listen(3000, () => {
-//   console.log("Bun proxy server is running on http://localhost:3000");
-// });
+app.listen(3000, () => {
+  console.log("Bun proxy server is running on http://localhost:3000");
+});
 
 // proxy_docs.forEach((url) => {
 //   const route = new URL(url).hostname.replace(/\./g, '-'); // Create a unique route based on the hostname

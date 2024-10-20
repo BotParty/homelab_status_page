@@ -17,6 +17,9 @@ async function proxyHandler(request: Request): Promise<Response> {
   // Forward the response from the external site
   const responseHeaders = new Headers(proxyRequest.headers);
 
+
+  responseHeaders.delete("X-Frame-Options");
+
   // Add CORS headers to allow embedding in an iframe
   responseHeaders.set("Access-Control-Allow-Origin", "*");
   responseHeaders.set("Content-Type", "text/html");
