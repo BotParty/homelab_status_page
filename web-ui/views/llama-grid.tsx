@@ -3,6 +3,8 @@ import {
   Room,
   RoomEvent,
   Track,
+  LocalTrack,
+  RoomOptions,
 } from "livekit-client";
 
 let Livekit = {
@@ -11,6 +13,8 @@ let Livekit = {
   Track,
 };
 
+//replay then autocommit - walk!!
+//
 // const token =
 //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjkxOTU3MjEsImlzcyI6IkFQSXRTYndYdlNqaDRjZiIsIm5hbWUiOiJzY3JlZW5fc2hhcmUiLCJuYmYiOjE3MjkxMDkzMjEsInN1YiI6InNjcmVlbl9zaGFyZSIsInZpZGVvIjp7ImNhblVwZGF0ZU93bk1ldGFkYXRhIjp0cnVlLCJyb29tIjoicm9vbSIsInJvb21BZG1pbiI6dHJ1ZSwicm9vbUNyZWF0ZSI6dHJ1ZSwicm9vbUpvaW4iOnRydWUsInJvb21MaXN0Ijp0cnVlLCJyb29tUmVjb3JkIjp0cnVlfX0.Ub3VigeCkaL4sG4cdw7VaPfaHECuMg8buy6u38xqZPQ";
 // ramble to rewind database - lots of  bear notes -> helper can reogranize into a gant chart.
@@ -77,12 +81,22 @@ async function getLivekitData() {
     return data
 }
 //const liveKit_data = await postLivekitConnect();
-async function joinRoom(screenShareVideo) {
+async function joinRoom(screenShareVideo, audioElement) {
   let room = new Room();
-  //console.log('room', room.name)
   const liveKit_data = await getLivekitData();
   const url = "wss://omnissiah-university-kmuz0plz.livekit.cloud";
-  await room.connect(url, liveKit_data.token);
+
+  const roomOptions: RoomOptions = {
+    adaptiveStream: true,
+    dynacast: true,
+    publishDefaults: {
+      simulcast: true,
+      audioEnabled: true,
+      videoEnabled: false,
+    },
+  };
+
+  await room.connect(url, liveKit_data.token, roomOptions);
 
   room.on(
     RoomEvent.TrackSubscribed,
@@ -109,23 +123,37 @@ async function joinRoom(screenShareVideo) {
   );
 
   room.on(RoomEvent.LocalTrackPublished, (publication, participant) => {
-    if (
-      publication.kind === Track.Kind.Video &&
-      publication.source === Track.Source.ScreenShare
-    ) {
+    if (publication.kind === Track.Kind.Video && publication.source === Track.Source.ScreenShare) {
       publication.track.attach(screenShareVideo);
+    } else if (publication.kind === Track.Kind.Audio) {
+      publication.track.attach(audioElement);
     }
   });
 
   room.on(RoomEvent.LocalTrackUnpublished, (publication, participant) => {
-    if (
-      publication.kind === Track.Kind.Video &&
-      publication.source === Track.Source.ScreenShare
-    ) {
+    if (publication.kind === Track.Kind.Video && publication.source === Track.Source.ScreenShare) {
       publication.track.detach(screenShareVideo);
+    } else if (publication.kind === Track.Kind.Audio) {
+      publication.track.detach(audioElement);
     }
   });
-  toggleScreenShare(room);
+
+  await toggleMicrophone(room);
+  
+  // Only toggle screen share if ENABLE_SCREEN_SHARE is true
+  if (ENABLE_SCREEN_SHARE) {
+    await toggleScreenShare(room);
+  }
+}
+
+async function toggleMicrophone(room) {
+  const enabled = room.localParticipant.isMicrophoneEnabled;
+  console.log(`${enabled ? "stopping" : "starting"} microphone`);
+  try {
+    await room.localParticipant.setMicrophoneEnabled(!enabled);
+  } catch (e) {
+    console.error("error toggling microphone", e);
+  }
 }
 
 async function toggleScreenShare(room) {
@@ -139,32 +167,30 @@ async function toggleScreenShare(room) {
     console.error("error sharing screen", e);
   }
 }
+
+// Add this near the top of the file
+//const ENABLE_SCREEN_SHARE = process.env.ENABLE_SCREEN_SHARE === 'true';
+const ENABLE_SCREEN_SHARE = false;
+
 function LivekitAudio() {
-  const ref = React.useRef<HTMLDivElement>(null);
   const screenShareVideo = React.useRef<HTMLVideoElement>(null);
+  const audioElement = React.useRef<HTMLAudioElement>(null);
 
   function handleButtonPress() {
     console.log('Button pressed!');
-    console.log('screenShareVideo', screenShareVideo);
-    joinRoom(screenShareVideo);
+    joinRoom(screenShareVideo.current, audioElement.current);
   }
-
-  //console.log('screenShareVideo', screenShareVideo)
-  //alert(123123)
-
-  // React.useEffect(() => {
-  //   console.log('LivekitAudio component mounted');
-  // }, []);
 
   return (
     <div>
-      <div ref={ref}></div>
-      <div>text to speech goes here !!</div>
-      <video ref={screenShareVideo} autoPlay muted playsInline />
-      <button onClick={handleButtonPress}>connect to livekit!</button>
+      <div>Audio {ENABLE_SCREEN_SHARE ? 'and screen sharing ' : ''}with LiveKit</div>
+      {ENABLE_SCREEN_SHARE && <video ref={screenShareVideo} autoPlay muted playsInline />}
+      <audio ref={audioElement} autoPlay />
+      <button onClick={handleButtonPress}>Connect to LiveKit</button>
     </div>
   );
 }
+
 // proxy  use(figma, 2) fun - (gmail, chatGPT)
 const actualComponents = Object.entries({
 
@@ -255,3 +281,5 @@ export default LlamaGrid;
 
 
 //dating = a game like mounment valley or  the game amro playerd - farm ville 
+
+
