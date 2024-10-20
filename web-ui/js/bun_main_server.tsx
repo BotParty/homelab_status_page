@@ -1,23 +1,90 @@
 import { renderToString } from "react-dom/server";
-import React from "react";
+import React, { Suspense, lazy } from 'react';
 import Bun from 'bun'
-import Blag from "./blag.jsx";
 import fs from "fs";
 import path from "path";
 import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
 import llamaRoutes from './bun_handlers/llama-backend.js'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
+import { renderToReadableStream } from 'react-dom/server';
+
+
+const LlamaGrid = lazy(() => import('./llama-grid.tsx'));
+{/* <div>
+<SimpleComponent />
+<Suspense fallback={<div>Loading...</div>}>
+  <ComplexComponent />
+</Suspense>
+</div> */}
+
+
+import Blag from "./blag.jsx";
 
 //const  indexHtmlContent = fs.readFileSync('/home/adnan/homelab_status_page/web-ui/views/index.html', 'utf-8')
-import  LlamaGrid from '/home/adnan/homelab_status_page/web-ui/views/llama-grid.tsx'
-function serveLlamaTools(req: Request) { 
+
+async function serveLlamaTools(req: Request) { 
   //const content = indexHtmlContent + renderToString(<LlamaGrid />) //+ 'miranda';
-  const content = 'producitiviy';
+  const filePath = path.join(process.cwd(), "js/views/blag.html");
+  console.log('filePath', filePath)
+  let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
+
+  return new Response(
+    await renderToReadableStream(<LlamaGrid />),
+    {
+      headers: { 'Content-Type': 'text/html' },
+    }
+  );
+
+
+  // const blag = indexHtmlContent.replace(
+  //   "{{template blag}}",
+  //   `${renderToString(<LlamaGrid />)}`,
+  // );
+
+  // return new Response(blag, {
+  //   headers: {
+  //     "Content-Type": "text/html",
+  //   },
+  // });
+}
+
+function serveBlag(req: Request) { 
+  //let path = '/home/adnan/homelab_status_page/web-ui/views/odyssey/blag.html'
+//  const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/livekit_speech_to_fn_call.html`
+
+  const filePath = path.join(process.cwd(), "js/views/blag.html");
+  console.log('filePath', filePath)
+  let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
+
+  const blag = indexHtmlContent.replace(
+    "{{template blag}}",
+    `${renderToString(<Blag />)}`,
+  );
+
+  return new Response(blag, {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
+}
+
+function  serveBlagArchive(req: Request) { 
+  let content = '<ul>';
+  for (let i = 0; i < 500; i++) {
+    const randomLink = `https://example.com/${Math.random()}`;
+    content += `<li><a href="${randomLink}">Link ${i + 1}</a></li>`;
+  }
+  content += '</ul>';
+
   return new Response(content, {
     headers: {
       "Content-Type": "text/html",
     },
   });
+
+
+
+  return new Response('blag archive')
 }
 
 const CgiRoutesHandlers = Object.fromEntries(
@@ -36,6 +103,8 @@ const routes = {
   "/blag": (req: Request) => serveBlag(req),
   "/llama-tools": (req: Request) => serveLlamaTools(req),
   "/cgi-tools": (req: Request) => serveCgiTools(req),
+  "/blag-archive": (req: Request) => serveBlagArchive(req),
+
   ...CgiRoutesHandlers,
   ...llamaRoutesHandlers
  }
@@ -170,25 +239,7 @@ async function serveRoboticsOdyssey(req: Request) {
   });
 }
 // writers are thinks, coders a thinkers, designers are ithnks ->>>> use your instrument of MIND > GOD 
-function serveBlag(req: Request) { 
-  //let path = '/home/adnan/homelab_status_page/web-ui/views/odyssey/blag.html'
-//  const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/livekit_speech_to_fn_call.html`
 
-  const filePath = path.join(process.cwd(), "js/views/blag.html");
-  console.log('filePath', filePath)
-  let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
-
-  const blag = indexHtmlContent.replace(
-    "{{template blag}}",
-    `${renderToString(<Blag />)}`,
-  );
-
-  return new Response(blag, {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
-}
 
 function makeReactApp(component_name) {
   const filePath = path.join(__dirname, component_name);

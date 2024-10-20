@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import {
   Room,
   RoomEvent,
@@ -11,7 +11,10 @@ let Livekit = {
   Room,
   RoomEvent,
   Track,
+
 };
+import routes from './bun_handlers/llama-backend.tsx';
+
 
 //replay then autocommit - walk!!
 //
@@ -300,60 +303,172 @@ function LivekitAudio() {
     </div>
   );
 }
+function FMA_B_truth() {
+  return <div>FMA_B_truth</div>
+}
+function ghost_in_the_shell() {
+  return <div>ghost_in_the_shell</div>
+}
+
+
+function livekit_screenshare() {
+  return <div>livekit_screenshare</div>
+}
 
 // proxy  use(figma, 2) fun - (gmail, chatGPT)
 const actualComponents = Object.entries({
 
   "livekit_audio": LivekitAudio,
+  "FMA_B_truth": FMA_B_truth,
+  "ghost_in_the_shell": ghost_in_the_shell,
+  "livekit_screenshare": livekit_screenshare,
   // "cognition_engine", - research paper -> diagram -> robot - stixels, waymo, 
     // "import_docs",
   
   });
+
+//click on the component - renders the frame - as a full scren tool 
+
 // const llamaComponents = [
 //   "youtube"
 // ]
 
 
-function LlamaGrid() {
-  return           <LivekitAudio />
-  // return (
-  //   <>
-  //     <div className="bg-white">
-  //       <h1>anthropic artifact - chatbot blahlalblh - makes observable</h1>
-  //       <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-  //         <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
-  //         <LivekitAudio />
-  //           {/* {actualComponents.map((component) => (
-  //             <div key={component} className="relative lg:col-span-4">
-  //               <div className="absolute inset-px rounded-lg bg-white"></div>
-  //               <div className="relative flex h-full flex-col overflow-hidden">
-  //                 <div className={`container-${component}`}></div>
-  //                 <LivekitAudio>
-  //                 {/* <iframe width="500"  
-                  
-                  
-                  
-  //                 height="500" src={`/deno/${component}`}></iframe> */}
-  //                 <div className="p-10 pt-4"></div>
-  //               </div>
-  //               <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
-  //             </div>
-  //           {/* ))}} */}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </>
-  // );
+function Example() {
+  //console.log('Example - rendering llama-grid')
+  return (
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+        <h2 className="text-base/7 font-semibold text-indigo-600">Lama-tools.com</h2>
+        <p className="mt-2 max-w-lg text-pretty text-4xl font-medium tracking-tight text-gray-950 sm:text-5xl">
+          10 days of learning llama.
+        </p>
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
+          <div className="relative lg:col-span-3">
+            <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]">
+              {/* <img
+                alt=""
+                src="https://tailwindui.com/plus/img/component-images/bento-01-performance.png"
+                className="h-80 object-cover object-left"
+              /> */}
+              <div className="p-10 pt-4">
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Performance</h3>
+                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Lightning-fast builds</p>
+                <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In gravida justo et nulla efficitur, maximus
+                  egestas sem pellentesque.
+                </p>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
+          </div>
+          <div className="relative lg:col-span-3">
+            <div className="absolute inset-px rounded-lg bg-white lg:rounded-tr-[2rem]" />
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
+              <img
+                alt=""
+                src="https://tailwindui.com/plus/img/component-images/bento-01-releases.png"
+                className="h-80 object-cover object-left lg:object-right"
+              />
+              <div className="p-10 pt-4">
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Releases</h3>
+                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Push to deploy</p>
+                <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
+                  Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus massa, laoreet dapibus ex elit vitae
+                  odio.
+                </p>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
+          </div>
+          <div className="relative lg:col-span-2">
+            <div className="absolute inset-px rounded-lg bg-white lg:rounded-bl-[2rem]" />
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-bl-[calc(2rem+1px)]">
+              <img
+                alt=""
+                src="https://tailwindui.com/plus/img/component-images/bento-01-speed.png"
+                className="h-80 object-cover object-left"
+              />
+              <div className="p-10 pt-4">
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Speed</h3>
+                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Built for power users</p>
+                <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
+                  Sed congue eros non finibus molestie. Vestibulum euismod augue.
+                </p>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-bl-[2rem]" />
+          </div>
+          <div className="relative lg:col-span-2">
+            <div className="absolute inset-px rounded-lg bg-white" />
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
+              <img
+                alt=""
+                src="https://tailwindui.com/plus/img/component-images/bento-01-integrations.png"
+                className="h-80 object-cover object-center"
+              />
+              <div className="p-10 pt-4">
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Integrations</h3>
+                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Connect your favorite tools</p>
+                <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
+                  Maecenas at augue sed elit dictum vulputate, in nisi aliquam maximus arcu.
+                </p>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5" />
+          </div>
+          <div className="relative lg:col-span-2">
+            <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" />
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-br-[calc(2rem+1px)]">
+              <img
+                alt=""
+                src="https://tailwindui.com/plus/img/component-images/bento-01-network.png"
+                className="h-80 object-cover object-center"
+              />
+              <div className="p-10 pt-4">
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Network</h3>
+                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Globally distributed CDN</p>
+                <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
+                  Aenean vulputate justo commodo auctor vehicula in malesuada semper.
+                </p>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
+
+
+import React, { Suspense, lazy } from 'react';
+
+
+function App() {
+  return (
+    <div>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+      <input type="text" />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Example />
+      </Suspense>
+    </div>
+  );
+}
+export default App;
+
 
 // ... (rest of the code remains unchanged)
       // <h1>goal by nov 1 - 1001 useful tools that shorten distance dynamicland</h1>
 
-export default LlamaGrid;
+// export default Example;
 
 // AI seinfeld but with all cartoons ever + robots - questionablecontent.net
 
-
+// function Backup () {
 // async function requestMicrophoneAndSpeechToText() {
 //   try {
 //     // Request microphone access
@@ -388,9 +503,11 @@ export default LlamaGrid;
 //     console.error('Error accessing microphone:', error);
 //   }
 // }
+// }
 
 
 //dating = a game like mounment valley or  the game amro playerd - farm ville 
+
 
 
 
