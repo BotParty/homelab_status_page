@@ -22,30 +22,37 @@ import Blag from "./blag.jsx";
 
 //const  indexHtmlContent = fs.readFileSync('/home/adnan/homelab_status_page/web-ui/views/index.html', 'utf-8')
 
-async function serveLlamaTools(req: Request) { 
-  //const content = indexHtmlContent + renderToString(<LlamaGrid />) //+ 'miranda';
+async function serveLlamaTools(req: Request) {
   const filePath = path.join(process.cwd(), "js/views/blag.html");
-  console.log('filePath', filePath)
   let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
 
-  return new Response(
-    await renderToReadableStream(<LlamaGrid />),
-    {
-      headers: { 'Content-Type': 'text/html' },
-    }
+  const stream = await renderToReadableStream(
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LlamaGrid />
+    </React.Suspense>
   );
 
+  // Wait for all content to be ready
+  await stream.allReady;
 
-  // const blag = indexHtmlContent.replace(
-  //   "{{template blag}}",
-  //   `${renderToString(<LlamaGrid />)}`,
-  // );
+  const reader = stream.getReader();
+  let result = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    result += new TextDecoder().decode(value);
+  }
 
-  // return new Response(blag, {
-  //   headers: {
-  //     "Content-Type": "text/html",
-  //   },
-  // });
+  const htmlContent = indexHtmlContent.replace(
+    "{{template blag}}",
+    result
+  );
+
+  return new Response(htmlContent, {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
 }
 
 function serveBlag(req: Request) { 
