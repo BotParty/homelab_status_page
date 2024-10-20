@@ -119,36 +119,36 @@ echo "Restart process completed."
 #
 
 
-echo "Creating symlink for homelab-status-page systemd service..."
-#sudo rm -f "/etc/systemd/system/homelab_status_page.service"
-sudo rm  "/etc/systemd/system/homelab_status_page.service"
-source_file="/home/adnan/homelab_status_page/scripts/infra/systemd/homelab_status_page.service"
-target_file="/etc/systemd/system/homelab_status_page.service"
+# echo "Creating symlink for homelab-status-page systemd service..."
+# #sudo rm -f "/etc/systemd/system/homelab_status_page.service"
+# sudo rm  "/etc/systemd/system/homelab_status_page.service"
+# source_file="/home/adnan/homelab_status_page/scripts/infra/systemd/homelab_status_page.service"
+# target_file="/etc/systemd/system/homelab_status_page.service"
 
-if [ -f "$source_file" ]; then
-    echo "Creating new symlink..."
-    sudo ln -s "$source_file" "$target_file"
-    echo "Symlink created successfully."
-else
-    echo "Source file $source_file not found. Cannot create symlink."
-    exit 1
-fi
+# if [ -f "$source_file" ]; then
+#     echo "Creating new symlink..."
+#     sudo ln -s "$source_file" "$target_file"
+#     echo "Symlink created successfully."
+# else
+#     echo "Source file $source_file not found. Cannot create symlink."
+#     exit 1
+# fi
 
-echo "Reloading systemd daemon..."
-sudo systemctl daemon-reload
+# echo "Reloading systemd daemon..."
+# sudo systemctl daemon-reload
 
-echo "Enabling homelab_status_page service..."
-sudo systemctl enable homelab_status_page.service
+# echo "Enabling homelab_status_page service..."
+# sudo systemctl enable homelab_status_page.service
 
-echo "Starting homelab_status_page service..."
-if sudo systemctl start homelab_status_page.service; then
-    echo "homelab_status_page service started successfully."
-else
-    echo "Failed to start homelab_status_page service. Checking status..."
-    sudo systemctl status homelab_status_page.service
-    echo "Checking journal logs for more information..."
-    sudo journalctl -u homelab_status_page.service -n 50 --no-pager
-fi
+# echo "Starting homelab_status_page service..."
+# if sudo systemctl start homelab_status_page.service; then
+#     echo "homelab_status_page service started successfully."
+# else
+#     echo "Failed to start homelab_status_page service. Checking status..."
+#     sudo systemctl status homelab_status_page.service
+#     echo "Checking journal logs for more information..."
+#     sudo journalctl -u homelab_status_page.service -n 50 --no-pager
+# fi
 
 #jetson containers -> systemD
 #proxmox - DOCKERIZE FIGURE OUT - > FIRE RCRACK CRIU
@@ -156,32 +156,32 @@ fi
 
 
 #k8 after 50 GPUs (12+ tinyboxes)
-sudo systemctl daemon-reload
-sudo systemctl enable homelab_status_page.service
-sudo systemctl start homelab_status_page.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable homelab_status_page.service
+# sudo systemctl start homelab_status_page.service
 
 
 #ln -s /usr/local/bin/homelab_status_page.sh ~/homelab_status_page/scripts/homelab_status_page.sh
 
 
 
-# Start Portainer service
-echo "Starting Portainer service..."
-if sudo systemctl start portainer; then
-    echo "Portainer service started successfully."
-else
-    echo "Failed to start Portainer service. Checking status..."
-    sudo systemctl status portainer
-    echo "Checking journal logs for more information..."
-    sudo journalctl -u portainer -n 50 --no-pager
-fi
+# # Start Portainer service
+# echo "Starting Portainer service..."
+# if sudo systemctl start portainer; then
+#     echo "Portainer service started successfully."
+# else
+#     echo "Failed to start Portainer service. Checking status..."
+#     sudo systemctl status portainer
+#     echo "Checking journal logs for more information..."
+#     sudo journalctl -u portainer -n 50 --no-pager
+# fi
 
 # Check Portainer status
-echo "Checking Portainer status..."
-if systemctl is-active --quiet portainer; then
-    echo "Portainer is running."
-else
-    echo "Error: Portainer is not running."
-    sudo systemctl status portainer
-    exit 1
-fi
+# echo "Checking Portainer status..."
+# if systemctl is-active --quiet portainer; then
+#     echo "Portainer is running."
+# else
+#     echo "Error: Portainer is not running."
+#     sudo systemctl status portainer
+#     exit 1
+# fi

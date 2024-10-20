@@ -2,7 +2,7 @@
   "scripts": {
     "style": "npx tailwindcss -i ./index.css -o ./output.css --watch",
     "format": "npx prettier observable_templates.html --write",
-    "format-js": "standard 'static/**/*.js' --fix",
+    "format-js": "standard 'views/*/*.{js,jsx}' --fix",
     "format-js-gpt": "python paralel_LLM.py",
     "beautify": "bunx js-beautify static/3_3_journey/https:/threejs-journey.com/bundles/public/HeroExperience-367a3eca.js > static/3_3_journey/https:/threejs-journey.com/bundles/public/HeroExperience-367a3eca.js-2.js",
     "cog": "bun run js/cognition_engine_parser.js",
@@ -22,7 +22,8 @@
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
     "auto-correct-last-command": "bun run js/helpers/auto_correct_last_command.ts",
-    "refactor": "bun run js/helpers/Rich_hickey_helper_simple_made_easy_refactor.ts"
+    "refactor": "bun run js/helpers/Rich_hickey_helper_simple_made_easy_refactor.ts",
+    "proxy_server": "deno run --access-all js/proxy_server.ts"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.7.4",

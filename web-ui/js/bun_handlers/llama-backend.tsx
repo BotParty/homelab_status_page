@@ -50,9 +50,37 @@ console.log('Received JSON data:', jsonData);
   console.log(json, json);
     return new Response(JSON.stringify(json));
 }
-
+async function history_search(req: Request) { 
+  // const jsonData = await req.json();
+  // console.log('Received JSON data:', jsonData);
+}
 
 const routes = {
+  "/iframe_for_bret_victor": () => {
+    return new Response(JSON.stringify({
+      url: "https://worrydream.com"
+    }), {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  "/progress_to_archiving_all_of_worryDream": () => {
+    return new Response(JSON.stringify({
+      progress: 0.1,
+      total_disk_usage: "unknown" // Replace "unknown" with the actual disk usage if available
+    }), {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    },
+
+    "/private_trackers_web_torrent_apply_creative_ai_to_all_of_it": (req: Request) => history_search(req),
+
+
+  "/history_search": (req: Request) => history_search(req),
+
   "/livekit_connect": (req: Request) => livekit_connect(req),
 
   "/livekit_speech_to_fn_call": livekit_speech_to_fn_call,

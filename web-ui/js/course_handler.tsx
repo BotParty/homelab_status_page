@@ -14,9 +14,25 @@ import { watch } from "fs";
 import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
 import llamaRoutes from './bun_handlers/llama-backend.jsx'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
+//import indexHtmlContent from '/home/adnan/homelab_status_page/web-ui/views/index.html'
+
+
+
+import  LlamaGrid from '/home/adnan/homelab_status_page/web-ui/views/llama-grid.tsx'
+
+
 function serveLlamaTools(req: Request) { 
-  return new Response("llama-tools");
+  const content = renderToString(<LlamaGrid />) + 'miranda';
+  return new Response(content, {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
 }
+
+
+
+
 const CgiRoutesHandlers = Object.fromEntries(
   Object.entries(CgiRoutes).map(([key, value]) => [`/cgi-tools${key}`, value])
 );
@@ -38,6 +54,10 @@ const llamaRoutesHandlers = Object.fromEntries(
 //   return new Response(`tbc`)
 // }
 
+const llama_backend = (req: Request) => { 
+  console.log('llama_backend')
+  return new Response('llama_backend')
+}
 
 
 async function os_automation(req) {
@@ -142,7 +162,9 @@ function serve404(req: Request) {
 }
 
 const routes = {
+  //vr if done 
   ///"/os/*": (req: Request) => os_automation(req),
+  
   "/docs": (req: Request) => docs_response(routes),
   "/": (req: Request) => serveBlag(req),
   "/robotics-odyssey": (req: Request) => serveRoboticsOdyssey(req),
@@ -154,7 +176,7 @@ const routes = {
   ...CgiRoutesHandlers,
   ...llamaRoutesHandlers
  }
-
+// DWIM  agents ----- psobiltis
 
 const docs_response = (routes) => { 
   const routes_links = Object.keys(routes).map(
@@ -163,6 +185,7 @@ const docs_response = (routes) => {
   const content = `<html><body>docs - please thank you
 ${routes_links.join("\n")}
 </body></html>`
+
 
 return new Response(content, {
   headers: {
@@ -177,18 +200,24 @@ function serveCgiTools(req: Request) {
 
 async function proxy(req: Request) {
    const url = new URL(req.url);   
-   console.log('url', url.pathname);
-
    if (url.pathname.startsWith("/os_automation")) return os_automation(req);
 
 
+   console.log('url.pathname', url.pathname.startsWith("/llama_backend"), url.pathname)
 
+   if (url.pathname.includes("llama_backend")) { 
+    console.log('llama_backend')
+    return llama_backend(req);
+
+   }
+
+   
 
     if (routes[url.pathname]) { //handles all HTTPS JSON regular bear routes
       return routes[url.pathname](req)
     }
 
-    console.log('url.pathname', url.pathname, url.pathname.startsWith("/proxy"))
+    //console.log('url.pathname', url.pathname, url.pathname.startsWith("/proxy"))
     //llama in the request handler ?!??!?! 
     if (url.pathname.startsWith("/proxy")) {
       const targetUrl = url.pathname.replace("/proxy", "");
@@ -201,6 +230,12 @@ async function proxy(req: Request) {
       }
      
     }
+
+
+
+// console.log('404 has occured :(', fs.writeFileSync('/home/adnan/derp/intermediate_representation/404_routes.json', JSON.stringify(routes)))
+//if 404 - write to json - observlbe scheudle 10min - gen all routes - 1 secon 500 seconds -90 moduels - 5 demos each - guitar ---- coolest 
+
 }
 
 // (nanosaur factory)
@@ -219,7 +254,8 @@ main();
 console.log("Server running at http://localhost", port);
 
 async function serveRoboticsOdyssey(req: Request) { 
-  return new Response(makeReactApp(), {
+  //const component_name = "views/odyssey/index.html"
+  return new Response('', {
     headers: {
       "Content-Type": "text/html",
     },
@@ -248,8 +284,8 @@ function serveBlag(req: Request) {
 
 
 
-function makeReactApp() {
-  const filePath = path.join(__dirname, "views/odyssey/index.html");
+function makeReactApp(component_name) {
+  const filePath = path.join(__dirname, component_name);
 
   let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
 

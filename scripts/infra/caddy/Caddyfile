@@ -1,13 +1,5 @@
 {
 	email adnan.f.wahab@gmail.com
-	log {
-		output file /var/log/caddy/caddy.log {
-			roll_size 10MiB
-			roll_keep 5
-			roll_gzip
-		}
-		level DEBUG
-	}
 }
 
 files.hashirama.blog {
@@ -24,73 +16,11 @@ hashirama.blog {
 		resolvers 1.1.1.1
 	}
 
-	route /data/* {
-		root * /home/adnan/derp
-		file_server browse
-		header Access-Control-Allow-Origin *
-		header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-		header Access-Control-Allow-Headers "Content-Type"
-	}
-
 	route /* {
 		reverse_proxy localhost:8080
 	}
 
-	route /ws/* {
-		reverse_proxy localhost:8080 {
-			transport http {
-				# Allow WebSocket upgrades
-				versions h2c 1.1
-			}
-		}
-	}
-
-	route /infra-tools/* {
-		respond "ok"
-	}
-
-	route /robotics-tools/* {
-		respond "ok"
-	}
-
-	route /science-tools/* {
-		respond "ok"
-	}
-
-	route /health {
-		respond "ok"
-	}
-
-	route /robotics-odyssey {
-		redir https://roboticsodyssey.com #static bundle 
-	}
-
-	route /hello {
-		respond "hello world"
-	}
-
-	route /portainer {
-		reverse_proxy localhost:9000
-	}
-
-	route /immich/* {
-		reverse_proxy localhost:2283
-	}
-
-	handle_path /vite/* {
-		reverse_proxy localhost:8002
-	}
-
-	# route /ws/* {
-	# 	reverse_proxy localhost:8080
-	# }
-
-
-	respond "404 Not Found" 404
-
-	header Access-Control-Allow-Origin *
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type"
+	/
 
 	# Add logging for this site
 	log {
@@ -102,27 +32,8 @@ hashirama.blog {
 	}
 }
 
-jupyter.hashirama.blog {
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1
-	}
-
-	header Access-Control-Allow-Origin *
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type"
-	reverse_proxy localhost:8888
-}
-
-# llama-tools.com {
-# 	tls {
-# 		dns porkbun pk1_db81d4b3634b90e44327d0d42d7fd5f46e3ca439a2ffe2587cd6a91ff9835aa3 sk1_dedb9466f623f54c717975473ac5c14a8a544f0a07b2f1266de20e55ffeafc70
-# 	}
-# 	#   /cgi/* { 
-# 	#reverse proxy to flux
-# 	respond "llama-tools"
-
-# 	header Access-Control-Allow-Origin *
-# 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-# 	header Access-Control-Allow-Headers "Content-Type"
-# }
+# 	respond "404 Not Found" 404
+# header Access-Control-Allow-Origin *
+# header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+# header Access-Control-Allow-Headers "Content-Type"
+# put all of bret victors pages on one tv sccreen -> macos finder 3d css carosuel

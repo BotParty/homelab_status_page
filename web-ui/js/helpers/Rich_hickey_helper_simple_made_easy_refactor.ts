@@ -52,17 +52,7 @@ import { chromium } from 'playwright';
 const vit = () => {
 //     
 
-// const res = await ollama.chat({
-// 	model: 'llava',
-// 	messages: [{
-// 		role: 'user',
-// 		content: 'Describe this image:'
-// 		images: ['./art.jpg']
-// 	}]
-// })
 
-// console.log(res.message.content)
-}
 
 async function fix_deisgn (url) {
     //find api or make one - whateve
@@ -79,10 +69,20 @@ async function fix_deisgn (url) {
     // //const annotation = await $`ollama prompt "Annotate this screenshot and provide a 5-line description of any design flaws from the perspective of a UI-designer. ${screenshotPath}"`.text();
     // const example_from_net = await $`ollama run llava "${prompt}: ${screenshotPath}"`.text();
 
-    
-    console.log(example_from_net);
-}
+    const res = await ollama.chat({
+        model: 'llava',
+        messages: [{
+            role: 'user',
+                content: 'Describe this image:'
+                images: ['Screenshot from 2024-10-19 23-42-30.png']
+        }]
+    })
 
+        console.log(res.message.content)
+
+    //console.log(example_from_net);
+}
+//netcat - image to display for jetson fixing 
 //give miranda a lightsaber - >
 // tool support with 1 m tools -> | ls | sc -l yay -1m alias 
 

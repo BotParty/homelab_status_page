@@ -1,8 +1,14 @@
-import express from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
+// import express from "express";
+// import { createProxyMiddleware } from "http-proxy-middleware";
 
-// Create an express app
-const app = express();
+// // Create an express app
+// const app = express();
+
+
+
+
+
+
 
 
 const proxy_docs = [
@@ -45,25 +51,66 @@ const proxy_docs = [
     "https://www.youtube.com/watch?v=CZim0p_etvM",
     "https://scholar.google.com/",
   ];
+
+
+  import { serve } from "https://deno.land/std@0.206.0/http/server.ts";
+
+  const proxyUrl = "https://docs.anthropic.com/";  // URL of the Anthropic documentation
+  
+  async function proxyHandler(request: Request): Promise<Response> {
+    // Extract the requested path from the original request
+    const url = new URL(request.url);
+    const path = url.pathname;
+  
+    // Fetch content from the external resource (Anthropic docs)
+    const targetUrl = `${proxyUrl}${path}`;
+    const proxyRequest = await fetch(targetUrl, {
+      method: request.method,
+      headers: request.headers,
+    });
+  
+    // Forward the response from the external site
+    const responseHeaders = new Headers(proxyRequest.headers);
+  //proxy then webgpu with 200gpus
+    // Add CORS headers to allow embedding in an iframe
+    responseHeaders.set("Access-Control-Allow-Origin", "*");
+    responseHeaders.set("Content-Type", "text/html");
+  
+    const body = await proxyRequest.text();
+  
+    return new Response(body, {
+      status: proxyRequest.status,
+      headers: responseHeaders,
+    });
+  }
+  
+  // Start the Deno server on port 8080
+  serve(proxyHandler, { port: 3000 });
+  
+  console.log("Proxy server running on http://localhost:3000/");
+
+
+
+
   
   
-app.use(
-  "/youtube",
-  createProxyMiddleware({
-    target: "https://www.youtube.com", // Target website
-    changeOrigin: true, // Needed to make the target domain appear the same
-    pathRewrite: { "^/youtube": "" }, // Optional: Remove /youtube prefix when proxying
-    onProxyReq(proxyReq, req, res) {
-      // Add additional headers if needed
-      proxyReq.setHeader("X-Special-Proxy-Header", "Bun-Proxy");
-    },
-  })
-);
+// app.use(
+//   "/youtube",
+//   createProxyMiddleware({
+//     target: "https://www.youtube.com", // Target website
+//     changeOrigin: true, // Needed to make the target domain appear the same
+//     pathRewrite: { "^/youtube": "" }, // Optional: Remove /youtube prefix when proxying
+//     onProxyReq(proxyReq, req, res) {
+//       // Add additional headers if needed
+//       proxyReq.setHeader("X-Special-Proxy-Header", "Bun-Proxy");
+//     },
+//   })
+// );
 
 // Start the server using Bun
-app.listen(3000, () => {
-  console.log("Bun proxy server is running on http://localhost:3000");
-});
+// app.listen(3000, () => {
+//   console.log("Bun proxy server is running on http://localhost:3000");
+// });
 
 // proxy_docs.forEach((url) => {
 //   const route = new URL(url).hostname.replace(/\./g, '-'); // Create a unique route based on the hostname
