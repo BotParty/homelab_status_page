@@ -171,11 +171,12 @@ async function serveRoboticsOdyssey(req: Request) {
 }
 // writers are thinks, coders a thinkers, designers are ithnks ->>>> use your instrument of MIND > GOD 
 function serveBlag(req: Request) { 
-  let path = '/home/adnan/homelab_status_page/web-ui/views/odyssey/blag.html'
+  //let path = '/home/adnan/homelab_status_page/web-ui/views/odyssey/blag.html'
 //  const pathname = `/home/adnan/homelab_status_page/web-ui/views/llama-tools/livekit_speech_to_fn_call.html`
 
-  //const previous_filePath = path.join(process.cwd(), "views/odyssey/blag.html");
-  let indexHtmlContent = fs.readFileSync(path, "utf-8");
+  const filePath = path.join(process.cwd(), "js/views/blag.html");
+  console.log('filePath', filePath)
+  let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
 
   const blag = indexHtmlContent.replace(
     "{{template blag}}",
