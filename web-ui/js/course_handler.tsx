@@ -253,14 +253,15 @@ async function save_audio_to_whisper(req: Request) {
   }
 }
 function webhook(req: Request) { 
-  console.log('webhook', req)
+  //console.log('webhook', req)
   return new Response('webhook')
 }
 
 async function proxy(req: Request) {
    const url = new URL(req.url);   
    console.log('url', url.pathname)
-
+   if (url.pathname.startsWith("/webhook")) return webhook(req)
+   
 
   //  if (url.pathname.startsWith("/_not_vite")) {
   //    const targetUrl = `http://localhost:8001${url.pathname}`;

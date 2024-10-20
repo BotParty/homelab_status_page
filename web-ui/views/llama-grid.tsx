@@ -81,6 +81,8 @@ async function getLivekitData() {
     return data
 }
 //const liveKit_data = await postLivekitConnect();
+
+// livekit video + audio - replay 
 async function joinRoom(screenShareVideo, audioElement) {
   let room = new Room();
   const liveKit_data = await getLivekitData();
@@ -166,11 +168,12 @@ async function toggleScreenShare(room) {
     console.error("error sharing screen", e);
   }
 }
-
+//when prompting - do not exceed the threshold of complexity pls 
+// job of a human = contain complexity - so AI can be happy. 
 // Add this near the top of the file, alongside the ENABLE_SCREEN_SHARE constant
 const ENABLE_SCREEN_SHARE = false;
-const ENABLE_AUDIO_PLAYBACK = false; // New environment variable
-
+const ENABLE_AUDIO_PLAYBACK = true; // New environment variable
+/// show timer of 5 seconds - every httpt - show progress -  over-use asnyc to fetch to 500 GPUs --- test with cheapetst rental 
 function LivekitAudio() {
   const screenShareVideo = useRef<HTMLVideoElement>(null);
   const audioElement = useRef<HTMLAudioElement>(null);
@@ -178,6 +181,32 @@ function LivekitAudio() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+  console.log('LivekitAudio - rendering blah')
+  const chunks = [];
+    
+  window.chunks = chunks;
+
+
+  const handleStopRecording = () => {
+    console.log('stopping recording')
+    console.log(chunks)
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  }
+
+  function handleRecordButtonPress() {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  }
+
+
+
+
 
   useEffect(() => {
     const context = new (window.AudioContext || window.webkitAudioContext)();
@@ -186,16 +215,19 @@ function LivekitAudio() {
 
   async function startRecording() {
     if (!audioContext) return;
-
+    console.log('starting recording')
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const recorder = new MediaRecorder(stream);
     setMediaRecorder(recorder);
 
-    const chunks: Blob[] = [];
+
+
     recorder.ondataavailable = (e) => chunks.push(e.data);
+
+
     recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'audio/webm' });
-      sendAudioToServer(blob);
+      console.log('sending 5 seconds of audio to server')
+      sendAudioToServer(chunks);
     };
 
     recorder.start();
@@ -203,17 +235,29 @@ function LivekitAudio() {
     setAudioChunks([]);
 
     // Stop recording after 5 seconds
-    setTimeout(() => stopRecording(), 5000);
+    setTimeout(() => { 
+      console.log('stopping recording after 5 seconds')
+      
+      stopRecording()
+
+      }
+        , 5000);
   }
 
   function stopRecording() {
+    console.log('stopping recording')
+
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
       mediaRecorder.stop();
       setIsRecording(false);
     }
   }
+  window.sendAudioToServer = sendAudioToServer
+  async function sendAudioToServer(chunks) {
+    console.log('sendAudioToServer')
 
-  async function sendAudioToServer(audioBlob: Blob) {
+    const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+
     const formData = new FormData();
     formData.append('audio', audioBlob, 'audio.webm');
 
@@ -232,21 +276,17 @@ function LivekitAudio() {
     } catch (error) {
       console.error('Error sending audio to server:', error);
     }
+    return audioBlob
   }
 
   function handleButtonPress() {
     console.log('Button pressed!');
     joinRoom(screenShareVideo.current, audioElement.current);
+    handleRecordButtonPress()
+    //rule for ai - if function is not called --- log easoning or ask other helper or supervisor.
   }
 
-  function handleRecordButtonPress() {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  }
-
+  
   return (
     <div>
       <div>
@@ -258,6 +298,9 @@ function LivekitAudio() {
       {ENABLE_SCREEN_SHARE && <video ref={screenShareVideo} autoPlay muted playsInline />}
       {ENABLE_AUDIO_PLAYBACK && <audio ref={audioElement} autoPlay />}
       <button onClick={handleButtonPress}>Connect to LiveKit</button>
+      <br></br>
+      <button onClick={handleStopRecording}>Stop Recording!</button>
+
     </div>
   );
 }
