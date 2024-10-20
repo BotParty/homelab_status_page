@@ -43,3 +43,4 @@ incorpate -- ideas from 8 billion people
 ![https://worrydream.com/MagicInk/p/logo.png](https://worrydream.com/MagicInk/p/logo.png)
 ![https://worrydream.com/SeeingSpaces/SeeingSpaces.jpg](https://worrydream.com/SeeingSpaces/SeeingSpaces.jpg)
 [![alt text](https://dynamicland.org/2024/Front_shelf/2dc5b9c5984d24df5d2aeaedf06442f8.jpg)](https://dynamicland.org/2024/Front_shelf/2dc5b9c5984d24df5d2aeaedf06442f8.jpg)
+https://youtu.be/y4ajXJ3nj1Q?si=CMpEXr9DBH86-9jG
