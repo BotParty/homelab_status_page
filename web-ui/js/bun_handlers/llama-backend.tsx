@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { identity, continuous_eval, serve_proxy_docs_regular_iframe, save_livekit_data, response_404, serveOutlierAgent, serveOptimizelyPlaywrightSupervision, serveMakeBunCell, serveMakeDenoCell, serveMakePythonCell } from '../course_handler.tsx';
+import { identity, continuous_eval, serve_proxy_docs_regular_iframe, save_livekit_data, response_404, serveOutlierAgent, serveOptimizelyPlaywrightSupervision, serveMakeBunCell, serveMakeDenoCell, serveMakePythonCell } from '../bun_main_server.tsx';
 import serveMakeDenoCell from './serveMakeDenoCell.ts'
 import serveMakePythonCell from './serveMakePythonCell.ts'
 import serveMakeBunCell from './bun_helper.ts'

@@ -23,7 +23,10 @@
     "docs:preview": "vitepress preview",
     "auto-correct-last-command": "bun run js/helpers/auto_correct_last_command.ts",
     "refactor": "bun run js/helpers/Rich_hickey_helper_simple_made_easy_refactor.ts",
-    "proxy_server": "deno run --access-all js/proxy_server.ts"
+    "proxy_server": "deno run --access-all js/proxy_server.ts",
+
+
+    "ssr": "bun run --hot js/bun_main_server.tsx"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.7.4",
