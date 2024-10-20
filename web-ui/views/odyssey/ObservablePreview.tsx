@@ -1,19 +1,9 @@
 import React from "react";
 
-
-// change all pw to sicp ->
-// marked.setOptions({
-//   gfm: true,
-//   breaks: true,
-// });
-
-// marked.parse(readme);
-
-//marked()
 function ObservablePreview() {
   return (
     <div className="overflow-hidden" style={{height: "50vh"}}>
-                  <iframe className="h-full w-full" src="http://localhost:3001"></iframe>
+    <iframe className="h-full w-full" src="http://localhost:3001"></iframe>
 
       {/* <div className="pb-24 px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-7xl"> */}
