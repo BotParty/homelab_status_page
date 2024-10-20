@@ -8,6 +8,7 @@ const client = new OpenAI({
   apiKey: openai_api_key,
 });
 
+
 function parseGPT(results) {
   const comp = results;
   if (comp.choices.length === 0) {

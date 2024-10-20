@@ -1,12 +1,13 @@
 # Symlink each category into a data folder in the root of this git repo
-chmod +x scripts/*
-ln -s ~/derp/actions ~/homelab_status_page/actions
-ln -s ~/derp/cartoons ~/homelab_status_page/cartoons
-ln -s ~/derp/comics ~/homelab_status_page/comics
-ln -s ~/derp/embeddings ~/homelab_status_page/embeddings
-ln -s ~/derp/intermediate_representations ~/homelab_status_page/intermediate_representations
-ln -s ~/derp/logs ~/homelab_status_page/logs
-ln -s ~/derp/sensor_data ~/homelab_status_page/sensor_data
+#chmod +x scripts/*
+ln -s ~/derp/actions ~/homelab_status_page/data/actions
+ln -s ~/derp/cartoons ~/homelab_status_page/data/cartoons
+ln -s ~/derp/comics ~/homelab_status_page/data/comics
+ln -s ~/derp/embeddings ~/homelab_status_page/data/embeddings
+ln -s ~/derp/intermediate_representation ~/homelab_status_page/data/intermediate_representation
+ln -s ~/derp/logs ~/homelab_status_page/data/logs
+
+ln -s ~/derp/sensor_data ~/homelab_status_page/data/sensor_data
 
 #cp ~/homelab_status_page/scripts/homelab_status_page.sh /usr/local/bin/homelab_status_page.sh
 
@@ -463,7 +464,7 @@ install_portainer() {
 
 
 # Call the functions to install Portainer and configure Caddy
-install_portainer
+#install_portainer
 
 
 

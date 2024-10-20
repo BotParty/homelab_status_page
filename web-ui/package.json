@@ -1,7 +1,7 @@
 {
   "scripts": {
     "style": "npx tailwindcss -i ./index.css -o ./output.css --watch",
-    "format": "npx prettier views/**/*.html --write",
+    "format": "npx prettier observable_templates.html --write",
     "format-js": "standard 'static/**/*.js' --fix",
     "format-js-gpt": "python paralel_LLM.py",
     "beautify": "bunx js-beautify static/3_3_journey/https:/threejs-journey.com/bundles/public/HeroExperience-367a3eca.js > static/3_3_journey/https:/threejs-journey.com/bundles/public/HeroExperience-367a3eca.js-2.js",
@@ -20,7 +20,9 @@
     "obs": "cd course_content && bun run dev",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress preview",
+    "auto-correct-last-command": "bun run js/helpers/auto_correct_last_command.ts",
+    "refactor": "bun run js/helpers/Rich_hickey_helper_simple_made_easy_refactor.ts"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.7.4",
@@ -39,7 +41,6 @@
     "vitepress": "^1.4.1"
   },
   "dependencies": {
-    "three": "^0.169.0",
     "@anthropic-ai/sdk": "^0.29.0",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@headlessui/react": "^2.1.10",
@@ -51,22 +52,24 @@
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "dotenv": "^16.4.5",
+    "express": "^4.21.1",
     "ffmpeg-static": "^5.2.0",
     "fluent-ffmpeg": "^2.1.3",
     "gmath": "^0.0.6",
+    "http-proxy-middleware": "^3.0.3",
     "livekit-client": "^2.5.7",
     "livekit-server-sdk": "^2.7.0",
     "marked": "^14.1.3",
     "octokit": "^4.0.2",
     "ollama": "^0.5.9",
     "openai": "^4.67.3",
+    "playwright": "^1.48.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "replicate": "^1.0.0",
     "sqlite3": "^5.1.7",
     "three": "^0.169.0",
-    "express": "^4.21.1", 
-    "http-proxy-middleware": "^3.0.3"
+    "underscore": "^1.13.7"
   }
 }

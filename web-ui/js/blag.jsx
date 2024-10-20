@@ -1,7 +1,7 @@
 // the wizards are humans too -- shodan was right.
 function Blog () {  
   let focus = {
-    "sensors": ["zed-2i", "realsense", "roomba", "lidar", "camera"],
+    "sensors": ["zed-2i", "realsense", "roomba", "lidar", "camera", "flash_compute_observableHQ_all_pages"],
     "manipulators": ["trossen", "gello", "shadow"],
     "locomotion": ["roomba", "segway", "wheelchair"],
     "tools": [],
@@ -145,14 +145,19 @@ function Blog () {
                 <section class="mb-6">
                   <h2 id="memory-updated" class="text-3xl font-bold mb-4">
                     <a id="memory-updated" href="https://robotics-odyssey.com"
-                      >Launch: Robotics Odyssey - oct 10 midnight
-                      
+                      >Launch: Robotics Odyssey - Oct 25 - 50GPUS ---- 
+                      {/* 50 * 2 = 100 */}
+                      {/* predict when stork views it -> show him wow */}
                      
-                      <img
+                      {/* <img
               alt=""
               src="https://files.hashirama.blog/static/blog/5.png"
-              className="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
-            />
+            /> */}
+            <iframe 
+            
+            className="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
+
+            src="/proxy" />
                       
                       </a
                     >

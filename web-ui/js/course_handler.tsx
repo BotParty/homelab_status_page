@@ -1,5 +1,7 @@
-//import _ from 'https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-esm.min.js';
+import _ from 'https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-esm.min.js';
 const { exec } = require('child_process');
+const { execSync } = require('child_process');
+import { $ } from "bun";
 import { renderToString } from "react-dom/server";
 import React from "react";
 import Bun from 'bun'
@@ -22,13 +24,133 @@ const CgiRoutesHandlers = Object.fromEntries(
 const llamaRoutesHandlers = Object.fromEntries(
   Object.entries(llamaRoutes).map(([key, value]) => [`/llama-tools${key}`, value])
 );
+//fn.name and 1m list of functions - each one cool - eval each for usefulness - find all fn in bun,py,etc --- be safe with CRIU any other kernel extension research papers like jetpack_nix
+//log every shell exec, and  thing carefully and make infrastrcture easy to restart (immutable important parts + highly dynamicland parts)
+// async function os_automation(req: Request) { 
+//   const cmd =  new URL(req.url).searchParams.get('cmd');
+//   // const is_safe = await Bun.$(`ollama prompt "is this command safe to run on my computer? - estimate "`).text();  
+//   // if (is_safe.toLowerCase().includes("no")) {  // add error why?? 
+//   //   return new Response(`command seems not safe sorry, email eggnog.wahab@gmail.com or text '+1 (346) 697-0747 ' with this timestamp ${Date.now()}`, { status: 400 });
+//   // }
+//   // place hodler - b4 + after - criu - 
+//   //return new Response(await Bun.$`${cmd}`.text());
+
+//   return new Response(`tbc`)
+// }
+
+
+
+async function os_automation(req) {
+  const { method } = req;
+
+  // Handle OPTIONS requests for CORS preflight
+  if (method === "OPTIONS") {
+    return new Response(null, {
+      status: 204, // No Content
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
+  }
+
+  // https://bun.sh/docs/api/file-system-router
+    // Ensure the request method is correct
+    if (req.method !== "POST") {
+      console.log("Invalid request method. POST expected.");
+    }
+
+    // Check if request body exists
+    if (!req.body) {
+      console.log("No request body found");
+    }
+
+
+  //console.log('req', req)
+  const jsonData = await req.json().catch(err =>  console.log('shits fucked', err) );
+
+  console.log(' os jsonData', jsonData.cmd);
+
+  //$.escape (escape strings)
+
+  const { stdout, stderr, exitCode } = await $`${jsonData.cmd}`
+      .quiet()
+      .nothrow()
+     
+      const data = { stdout, stderr, exitCode }
+      
+
+    const _ = require('lodash');
+
+    const responseValue = _.mapValues(data, value => value.toString());
+    return new Response( JSON.stringify(responseValue), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  //console.log('req', req);
+  // console.log('os_automation');
+  // let jsonData;
+  // try {
+  //   
+  // } catch (error) {
+  //   console.error('Error parsing JSON:', error);
+  //   return new Response('Invalid JSON input', { status: 400 });
+  // }
+  // console.log('jsonData', jsonData);
+
+  // const cmd = jsonData?.cmd;
+  // if (!cmd) {
+  //   return new Response('No command provided', { status: 400 });
+  // }
+
+  // try {
+  //   
+
+  //   const data = { stdout, stderr, exitCode };
+//
+  // } catch (error) {
+  //   console.error('Error executing command:', error);
+  //   return new Response('Error executing command', { status: 500 });
+  // }
+}
+
+// steps -> dist bundle -> store those in intermediate impresiteaont
+
+async function serveVite(req: Request) { 
+  const targetUrl = `http://localhost:8001}`;
+  const response = await fetch(targetUrl, {
+    method: req.method,
+    headers: req.headers,
+    body: req.body
+  });
+
+  const headers = new Headers(response.headers);
+  headers.set('X-Proxy-By', 'course_handler');
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: headers
+  });
+}
+
+
+function serve404(req: Request) { 
+  return new Response(`404 - not found`, { status: 404 });
+}
 
 const routes = {
+  ///"/os/*": (req: Request) => os_automation(req),
+  "/docs": (req: Request) => docs_response(routes),
   "/": (req: Request) => serveBlag(req),
   "/robotics-odyssey": (req: Request) => serveRoboticsOdyssey(req),
   "/blag": (req: Request) => serveBlag(req),
   "/llama-tools": (req: Request) => serveLlamaTools(req),
   "/cgi-tools": (req: Request) => serveCgiTools(req),
+  "/vite/*": (req: Request) => serveVite(req),
+  "404": (req: Request) => serve404(req),
   ...CgiRoutesHandlers,
   ...llamaRoutesHandlers
  }
@@ -55,7 +177,13 @@ function serveCgiTools(req: Request) {
 
 async function proxy(req: Request) {
    const url = new URL(req.url);   
-   console.log('url', url.pathname)
+   console.log('url', url.pathname);
+
+   if (url.pathname.startsWith("/os_automation")) return os_automation(req);
+
+
+
+
     if (routes[url.pathname]) { //handles all HTTPS JSON regular bear routes
       return routes[url.pathname](req)
     }
@@ -172,3 +300,4 @@ function makeReactApp() {
 //-read sneuro -  
 
 //kapil says - depression - as opspsosed cmheical ----- find out change yoru min dfw 
+
