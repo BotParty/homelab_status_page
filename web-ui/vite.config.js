@@ -9,7 +9,7 @@ export default defineConfig({
     port: 8000, // You can specify the port here
     proxy: {
       '/api': {
-        target: 'http://localhost:8003',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
@@ -24,7 +24,7 @@ export default defineConfig({
         }
       },
       input: {
-        voiceReactiveParticles: 'views/cgi-tools/voice_reactive_particles.html',
+        // voiceReactiveParticles: 'views/cgi-tools/voice_reactive_particles.html',
       },
     },
     target: 'esnext', // Add this line to target the latest ECMAScript version

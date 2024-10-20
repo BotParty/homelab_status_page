@@ -9,7 +9,7 @@ import serveMakeDenoCell from './serveMakeDenoCell.ts'
 import serveMakePythonCell from './serveMakePythonCell.ts'
 import serveMakeBunCell from './bun_helper.ts'
 import docker_run from './docker_helper.ts'
-async function livekit_connect(req: Request) { 
+
   //const identity = url.searchParams.get("identity");
   //console.log('identity', identity)
   // console.log("req url", url.pathname);
@@ -38,18 +38,7 @@ async function livekit_connect(req: Request) {
 // try gpt then just redirect to 3 bun rpoceses in one bun file - started by systemd - a script... like levles 
 // delete new relic 
 //return response_404(routes)
-const jsonData = await req.json();
-console.log('Received JSON data:', jsonData);
 
-  const identity = jsonData.identity;
-  if (!identity) {
-    return new Response("Identity parameter is missing", { status: 400 });
-  }
-
-  const json = await connect_to_livekit(jsonData);
-  console.log(json, json);
-    return new Response(JSON.stringify(json));
-}
 async function history_search(req: Request) { 
   // const jsonData = await req.json();
   // console.log('Received JSON data:', jsonData);
@@ -81,7 +70,7 @@ const routes = {
 
   "/history_search": (req: Request) => history_search(req),
 
-  "/livekit_connect": (req: Request) => livekit_connect(req),
+  //"/livekit_connect": (req: Request) => livekit_connect(req),
 
   "/livekit_speech_to_fn_call": livekit_speech_to_fn_call,
 

@@ -1,5 +1,19 @@
 import React from 'react';
+import {
+  Room,
+  RoomEvent,
+  Track,
+} from "livekit-client";
 
+let Livekit = {
+  Room,
+  RoomEvent,
+  Track,
+};
+
+// const token =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjkxOTU3MjEsImlzcyI6IkFQSXRTYndYdlNqaDRjZiIsIm5hbWUiOiJzY3JlZW5fc2hhcmUiLCJuYmYiOjE3MjkxMDkzMjEsInN1YiI6InNjcmVlbl9zaGFyZSIsInZpZGVvIjp7ImNhblVwZGF0ZU93bk1ldGFkYXRhIjp0cnVlLCJyb29tIjoicm9vbSIsInJvb21BZG1pbiI6dHJ1ZSwicm9vbUNyZWF0ZSI6dHJ1ZSwicm9vbUpvaW4iOnRydWUsInJvb21MaXN0Ijp0cnVlLCJyb29tUmVjb3JkIjp0cnVlfX0.Ub3VigeCkaL4sG4cdw7VaPfaHECuMg8buy6u38xqZPQ";
+// ramble to rewind database - lots of  bear notes -> helper can reogranize into a gant chart.
 const proxy_docs = [
   // "https://bun.sh/docs/runtime/bunfig#run-bun-auto-alias-node-to-bun", 
   // "https://google.com", 
@@ -40,55 +54,204 @@ const proxy_docs = [
   // "https://www.youtube.com/watch?v=CZim0p_etvM",
   // "https://scholar.google.com/",
 ];
-// proxy  use(figma, 2) fun - (gmail, chatGPT)
-const actualComponents = [
 
-  "livekit_audio",
+/// spoken word = unifies groups from 5 to 100 - written word - 100,000 - pictures = 1 billion - Proof:youtube
+
+async function getLivekitData() {
+  const livekit_connect = 'livekit_connect'
+    const response = await fetch('/api/livekit_connect', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ identity: 'voice to prompt' }),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to connect to Livekit:', response.statusText);
+      return;
+    }
+
+    const data = await response.json();
+    //console.log('Connected to Livekit:', data);
+    return data
+}
+//const liveKit_data = await postLivekitConnect();
+async function joinRoom(screenShareVideo) {
+  let room = new Room();
+  //console.log('room', room.name)
+  const liveKit_data = await getLivekitData();
+  const url = "wss://omnissiah-university-kmuz0plz.livekit.cloud";
+  await room.connect(url, liveKit_data.token);
+
+  room.on(
+    RoomEvent.TrackSubscribed,
+    (track, publication, participant) => {
+      if (
+        track.kind === Track.Kind.Video &&
+        track.source === Track.Source.ScreenShare
+      ) {
+        track.attach(screenShareVideo);
+      }
+    },
+  );
+
+  room.on(
+    RoomEvent.TrackUnsubscribed,
+    (track, publication, participant) => {
+      if (
+        track.kind === Track.Kind.Video &&
+        track.source === Track.Source.ScreenShare
+      ) {
+        track.detach(screenShareVideo);
+      }
+    },
+  );
+
+  room.on(RoomEvent.LocalTrackPublished, (publication, participant) => {
+    if (
+      publication.kind === Track.Kind.Video &&
+      publication.source === Track.Source.ScreenShare
+    ) {
+      publication.track.attach(screenShareVideo);
+    }
+  });
+
+  room.on(RoomEvent.LocalTrackUnpublished, (publication, participant) => {
+    if (
+      publication.kind === Track.Kind.Video &&
+      publication.source === Track.Source.ScreenShare
+    ) {
+      publication.track.detach(screenShareVideo);
+    }
+  });
+  toggleScreenShare(room);
+}
+
+async function toggleScreenShare(room) {
+  const enabled = room.localParticipant.isScreenShareEnabled;
+  console.log(`${enabled ? "stopping" : "starting"} screen share`);
+  try {
+    await room.localParticipant.setScreenShareEnabled(!enabled, {
+      audio: true,
+    });
+  } catch (e) {
+    console.error("error sharing screen", e);
+  }
+}
+function LivekitAudio() {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const screenShareVideo = React.useRef<HTMLVideoElement>(null);
+
+  function handleButtonPress() {
+    console.log('Button pressed!');
+    console.log('screenShareVideo', screenShareVideo);
+    joinRoom(screenShareVideo);
+  }
+
+  //console.log('screenShareVideo', screenShareVideo)
+  //alert(123123)
+
+  // React.useEffect(() => {
+  //   console.log('LivekitAudio component mounted');
+  // }, []);
+
+  return (
+    <div>
+      <div ref={ref}></div>
+      <div>text to speech goes here !!</div>
+      <video ref={screenShareVideo} autoPlay muted playsInline />
+      <button onClick={handleButtonPress}>connect to livekit!</button>
+    </div>
+  );
+}
+// proxy  use(figma, 2) fun - (gmail, chatGPT)
+const actualComponents = Object.entries({
+
+  "livekit_audio": LivekitAudio,
   // "cognition_engine", - research paper -> diagram -> robot - stixels, waymo, 
-  "logs_viewer",
-  // "import_docs",
+    // "import_docs",
   
-];
+  });
 // const llamaComponents = [
 //   "youtube"
 // ]
 
-const llamaComponents = [
-  ...actualComponents,
-  //...proxy_docs
-]
-console.log(llamaComponents)
 
 function LlamaGrid() {
-  return (
-    <>
-      <div className="bg-white">
-        <h1>anthropic artifact - chatbot blahlalblh - makes observable</h1>
-        <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-          <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
-            {llamaComponents.map((component) => (
-              <div key={component} className="relative lg:col-span-4">
-                <div className="absolute inset-px rounded-lg bg-white"></div>
-                <div className="relative flex h-full flex-col overflow-hidden">
-                  <div className={`container-${component}`}></div>
-                  <iframe width="500"  
+  return           <LivekitAudio />
+  // return (
+  //   <>
+  //     <div className="bg-white">
+  //       <h1>anthropic artifact - chatbot blahlalblh - makes observable</h1>
+  //       <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+  //         <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
+  //         <LivekitAudio />
+  //           {/* {actualComponents.map((component) => (
+  //             <div key={component} className="relative lg:col-span-4">
+  //               <div className="absolute inset-px rounded-lg bg-white"></div>
+  //               <div className="relative flex h-full flex-col overflow-hidden">
+  //                 <div className={`container-${component}`}></div>
+  //                 <LivekitAudio>
+  //                 {/* <iframe width="500"  
                   
                   
                   
-                  height="500" src={`/deno/${component}`}></iframe>
-                  <div className="p-10 pt-4"></div>
-                </div>
-                <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <h1>goal by nov 1 - 1001 useful tools that shorten distance dynamicland</h1>
-    </>
-  );
+  //                 height="500" src={`/deno/${component}`}></iframe> */}
+  //                 <div className="p-10 pt-4"></div>
+  //               </div>
+  //               <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
+  //             </div>
+  //           {/* ))}} */}
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </>
+  // );
 }
 
 // ... (rest of the code remains unchanged)
+      // <h1>goal by nov 1 - 1001 useful tools that shorten distance dynamicland</h1>
 
 export default LlamaGrid;
+
+// AI seinfeld but with all cartoons ever + robots - questionablecontent.net
+
+
+// async function requestMicrophoneAndSpeechToText() {
+//   try {
+//     // Request microphone access
+//     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+//     console.log('Microphone access granted');
+
+//     // Initialize SpeechRecognition
+//     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+//     const recognition = new SpeechRecognition();
+
+//     recognition.onstart = () => {
+//       console.log('Speech recognition started');
+//     };
+
+//     recognition.onspeechend = () => {
+//       console.log('Speech recognition ended');
+//       recognition.stop();
+//     };
+
+//     recognition.onresult = (event) => {
+//       const transcript = event.results[0][0].transcript;
+//       console.log('Speech to text result:', transcript);
+//     };
+
+//     recognition.onerror = (event) => {
+//       console.error('Speech recognition error:', event.error);
+//     };
+
+//     // Start speech recognition
+//     recognition.start();
+//   } catch (error) {
+//     console.error('Error accessing microphone:', error);
+//   }
+// }
+
+
+//dating = a game like mounment valley or  the game amro playerd - farm ville 

@@ -157,7 +157,22 @@ function serve404(req: Request) {
   return new Response(`404 - not found`, { status: 404 });
 }
 
+async function livekit_connect(req: Request) { 
+  const jsonData = await req.json();
+console.log('Received JSON data:', jsonData);
+
+  const identity = jsonData.identity;
+  if (!identity) {
+    return new Response("Identity parameter is missing", { status: 400 });
+  }
+
+  const json = await connect_to_livekit(jsonData);
+  console.log(json, json);
+    return new Response(JSON.stringify(json));
+}
+
 const routes = {
+  "/livekit_connect": (req: Request) => livekit_connect(req),
   //vr if done 
   ///"/os/*": (req: Request) => os_automation(req),
   
