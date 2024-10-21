@@ -17,10 +17,8 @@ hashirama.blog {
 	}
 
 	route /* {
-		reverse_proxy localhost:8080
+		reverse_proxy localhost:3333
 	}
-
-	/
 
 	# Add logging for this site
 	log {

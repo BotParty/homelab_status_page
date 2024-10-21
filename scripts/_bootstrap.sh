@@ -3,79 +3,80 @@
 
 # Symlink each category into a data folder in the root of this git repo
 #chmod +x scripts/*
-ln -s ~/derp/actions ~/homelab_status_page/data/actions
-ln -s ~/derp/cartoons ~/homelab_status_page/data/cartoons
-ln -s ~/derp/comics ~/homelab_status_page/data/comics
-ln -s ~/derp/embeddings ~/homelab_status_page/data/embeddings
-ln -s ~/derp/intermediate_representation ~/homelab_status_page/data/intermediate_representation
-ln -s ~/derp/logs ~/homelab_status_page/data/logs
+# ln -s ~/derp/actions ~/homelab_status_page/data/actions
+# ln -s ~/derp/cartoons ~/homelab_status_page/data/cartoons
+# ln -s ~/derp/comics ~/homelab_status_page/data/comics
+# ln -s ~/derp/embeddings ~/homelab_status_page/data/embeddings
+# ln -s ~/derp/intermediate_representation ~/homelab_status_page/data/intermediate_representation
+# ln -s ~/derp/logs ~/homelab_status_page/data/logs
 
-ln -s ~/derp/sensor_data ~/homelab_status_page/data/sensor_data
+# ln -s ~/derp/sensor_data ~/homelab_status_page/data/sensor_data
 
 #!/bin/bash
 
 # Script to clone and build specified Jetson containers
 
 # Check if Git is installed
-if ! command -v git &> /dev/null
-then
-    echo "Git is not installed. Please install Git before running this script."
-    exit
-fi
+# if ! command -v git &> /dev/null
+# then
+#     echo "Git is not installed. Please install Git before running this script."
+#     exit
+# fi
 
-# Check if Docker is installed
-if ! command -v docker &> /dev/null
-then
-    echo "Docker is not installed. Please install Docker before running this script."
-    exit
-fi
+# # Check if Docker is installed
+# if ! command -v docker &> /dev/null
+# then
+#     echo "Docker is not installed. Please install Docker before running this script."
+#     exit
+# fi
 
-# Clone or update the jetson-containers repository
-if [ ! -d "jetson-containers" ]; then
-    echo "Cloning jetson-containers repository..."
-    git clone https://github.com/dusty-nv/jetson-containers.git
-else
-    echo "Updating jetson-containers repository..."
-    cd jetson-containers
-    git pull
-    cd ..
-fi
+# # Clone or update the jetson-containers repository
+# if [ ! -d "jetson-containers" ]; then
+#     echo "Cloning jetson-containers repository..."
+#     git clone https://github.com/dusty-nv/jetson-containers.git
+# else
+#     echo "Updating jetson-containers repository..."
+#     cd jetson-containers
+#     git pull
+#     cd ..
+# fi
 
-cd jetson-containers
+
+#cd jetson-containers
 
 # List of package paths
-packages=(
-    "packages/llm/ollama"
-    "packages/llm/llama_cpp"
-    "packages/llm/llama-factory"
-    "packages/llm/exllama"
-    "packages/vlm/llama-vision"
-)
+# packages=(
+#     "packages/llm/ollama"
+#     "packages/llm/llama_cpp"
+#     "packages/llm/llama-factory"
+#     "packages/llm/exllama"
+#     "packages/vlm/llama-vision"
+# )
 
-# Build each container
-for package in "${packages[@]}"; do
-    echo "-----------------------------------------"
-    echo "Building container for $package"
-    cd "$package"
+# # Build each container
+# for package in "${packages[@]}"; do
+#     echo "-----------------------------------------"
+#     echo "Building container for $package"
+#     cd "$package"
 
-    # Check if a build script exists
-    if [ -f "build.sh" ]; then
-        echo "Found build.sh, executing..."
-        chmod +x build.sh
-        ./build.sh
-    elif [ -f "Dockerfile" ]; then
-        # Build the Docker image
-        image_name="${package##*/}"
-        echo "No build.sh found. Building Docker image: $image_name"
-        docker build -t "$image_name" .
-    else
-        echo "No build script or Dockerfile found in $package. Skipping..."
-    fi
+#     # Check if a build script exists
+#     if [ -f "build.sh" ]; then
+#         echo "Found build.sh, executing..."
+#         chmod +x build.sh
+#         ./build.sh
+#     elif [ -f "Dockerfile" ]; then
+#         # Build the Docker image
+#         image_name="${package##*/}"
+#         echo "No build.sh found. Building Docker image: $image_name"
+#         docker build -t "$image_name" .
+#     else
+#         echo "No build script or Dockerfile found in $package. Skipping..."
+#     fi
 
-    cd - > /dev/null
-done
+#     cd - > /dev/null
+# done
 
-echo "All containers have been built."
+# echo "All containers have been built."
 
 # https://github.com/dusty-nv/jetson-inference
 
@@ -508,30 +509,7 @@ echo "All containers have been built."
 
 
 # Function to install and run Portainer
-install_portainer() {
-    # Update package list and install dependencies
-    sudo apt-get update
-    sudo apt-get install -y docker.io
-
-    # Pull the latest Portainer image
-    sudo docker pull portainer/portainer-ce:latest
-
-    # Create a Docker volume for Portainer data
-    sudo docker volume create portainer_data
-
-    # Run Portainer container
-    sudo docker run -d \
-        --name=portainer \
-        --restart=always \
-        -p 8000:8000 \
-        -p 9443:9443 \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        -v portainer_data:/data \
-        portainer/portainer-ce:latest
-
-    echo "Portainer installation and setup completed."
-}
-
+# l
 
 
 # Call the functions to install Portainer and configure Caddy

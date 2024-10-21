@@ -1,9 +1,7 @@
 
 // proxy-server.
 
-const port = 8000;
-
-
+const port = 3333;
 /// bun - dockerized + system or whateer 
 //      --- this proxies to vite for app 
       ////   --- this proxies to another bun or deno server for iteration  /sanit
@@ -34,3 +32,4 @@ Bun.serve({
     }
   },
 });
+console.log("server running on port", port);

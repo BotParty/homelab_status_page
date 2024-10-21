@@ -24,7 +24,13 @@
     "auto-correct-last-command": "bun run js/helpers/auto_correct_last_command.ts",
     "refactor": "bun run js/helpers/Rich_hickey_helper_simple_made_easy_refactor.ts",
     "proxy_server": "deno run --access-all js/proxy_server.ts",
-    "ssr": "bun run --hot js/bun_main_server.tsx"
+
+    "ssr": "bun run --hot js/bun_main_server.tsx",
+    "tdd": "web-ui/js/helpers/Kent_Beck_robusteness.js",
+
+
+
+    "main": "bun run --main js/bun_main_server.tsx"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.7.4",
@@ -50,6 +56,8 @@
     "@livekit/rtc-node": "latest",
     "@observablehq/runtime": "5",
     "@octokit/rest": "^21.0.2",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
@@ -66,8 +74,8 @@
     "ollama": "^0.5.9",
     "openai": "^4.67.3",
     "playwright": "^1.48.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-router-dom": "^6.27.0",
     "replicate": "^1.0.0",
     "sqlite3": "^5.1.7",
