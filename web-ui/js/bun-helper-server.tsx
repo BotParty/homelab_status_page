@@ -1,3 +1,5 @@
+const ollama = require('ollama');
+import {$} from 'bun'
 import { renderToString } from "react-dom/server";
 import React, { Suspense, lazy } from 'react';
 import Bun from 'bun'
@@ -7,6 +9,7 @@ import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
 import llamaRoutes from './bun_handlers/llama-backend.js'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
 import { renderToReadableStream } from 'react-dom/server';
+import TurndownService from 'turndown';
 
 const port = 8080;
 console.log(`Server running at http://localhost:${port}`);
@@ -77,53 +80,83 @@ function serveBlag(req: Request) {
   });
 }
 
+function on_save_blag(req: Request) { 
+  ollama.generate({
+    model: "llama3.2",
+    prompt: "predict if there are errors before running thiss"
+  })
+  //run thing 
+  ollama.generate({
+    //model: "llama3.2",
+  model: "llama3.2",
+  prompt: "if errors - suggest fixes"
+  })
+}
+
 async function serveBlagArchive(req: Request) { 
-  const url = `https://reflect.site/g/awahab/500-blog-posts---prolific---show-steps---12yr-exec--phd-x-7-in-2-yrs/d1ea069679c64f649827dd990648b17c`
-  const response = await fetch(url);
-  const htmlContent = await response.text();
+  try {
+    const filePath = path.join(process.cwd(), "docs/blag/index.md");
+    // console.log('filePath', filePath);
+    // const htmlContent = fs.readFileSync(filePath, "utf-8");
 
-  const turndownService = new TurndownService();
-  const markdownContent = turndownService.turndown(htmlContent);
-  const lines = markdownContent.split('\n');
+    // async function convertHtmlToMarkdown(htmlContent) {
+    //   const ask_ollama = async (prompt) => {
+    //     const proc = Bun.spawn(["ollama", "run", "llama3.2", "prompt", prompt]);
+    //     const output = await new Response(proc.stdout).text();
+    //     return output;
+    //   };
+
+    //   const prompt = "Convert the following HTML content to Markdown:\n\n" + htmlContent;
+
+    //   const markdownContent = await ask_ollama(prompt);
+    //   return markdownContent;
+    // }
+
+    const markdownContent = fs.readFileSync(filePath, "utf-8");
+    //console.log('markdownContent', markdownContent);
+
+    //const lines = markdownContent.split('\n');
+
+  //console.log('lines', lines);;
+
+  //immutable functional reactive infra -> on save -> refresh + replit but faster - tailwind 4 robots
+    const lines = markdownContent.split('\n')
 
 
-  const docsPath = path.join(process.cwd(), 'docs');
-  if (!fs.existsSync(docsPath)) {
-    fs.mkdirSync(docsPath, { recursive: true });
-  }
+    const docsPath = path.join(process.cwd(), 'docs');
+    if (!fs.existsSync(docsPath)) {
+      fs.mkdirSync(docsPath, { recursive: true });
+    }
+    
+    const content = `${lines.map((line, i) => {
 
-  lines.forEach(line => {
-    if (line.startsWith('#')) {
-      const header = line.replace(/#/g, '').trim();
-      const folderName = header.replace(/\s+/g, '-');
-      const folderPath = path.join(docsPath, folderName);
-      if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath, { recursive: true });
+      if (line.startsWith('#')) {
+        return `<h1>${line.slice(2)}</h1>`;
       }
 
-      // Create an HTML file in the folder with the title
-      const htmlContent = `<html><head><title>${header}</title></head><body><h1>${header}</h1></body></html>`;
-      const filePath = path.join(folderPath, `${folderName}.html`);
-      fs.writeFileSync(filePath, htmlContent, 'utf-8');
-    }
-  });
+      const cleanedLine = line.slice(3).replace(/[^a-zA-Z0-9\s-]/g, '').trim();
 
-  let content = '<ul>';
-  for (let i = 0; i < 500; i++) {
-    const randomLink = `https://example.com/${Math.random()}`;
-    content += `<li><a href="${randomLink}">Link ${i + 1}</a></li>`;
+      if (cleanedLine === ' ') {
+        return '';
+      }
+
+  
+  
+
+      const simplifiedLink = cleanedLine.replace(/\s+/g, '-').toLowerCase();
+
+      return `<div><a href="blag/${simplifiedLink}">${cleanedLine}</a></div>`;
+    }).join('<br/>')}`;
+
+    return new Response(content, {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    });
+  } catch (error) {
+    console.error('Error in serveBlagArchive:', error);
+    return new Response('An error occurred while processing your request', { status: 500 });
   }
-  content += '</ul>';
-
-  return new Response(content, {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
-
-
-
-  return new Response('blag archive')
 }
 
 const CgiRoutesHandlers = Object.fromEntries(
@@ -142,6 +175,9 @@ const routes = {
   "/blag": (req: Request) => serveBlag(req),
   "/llama-tools": (req: Request) => serveLlamaTools(req),
   "/cgi-tools": (req: Request) => serveCgiTools(req),
+
+
+
   "/blag-archive": (req: Request) => serveBlagArchive(req),
 
   ...CgiRoutesHandlers,
@@ -159,6 +195,47 @@ main();
 
 async function fetch(req: Request) {
   const url = new URL(req.url);   
+
+  if (!req.url) {
+    console.error('Request URL is undefined');
+    return new Response('Invalid request', { status: 400 });
+  }
+  if (url.pathname.startsWith("/blag/")) {
+    const route = url.pathname.replace("/blag/", "");
+    const filePath = `./docs/${route}.md`;
+    try {
+      await Bun.write(filePath, `# ${route}\n\nContent for ${route}`);
+      const fileExists = await Bun.file(filePath).exists();
+      if (fileExists) {
+        return new Response(await Bun.file(filePath).text(), { status: 200 });
+      } else {
+      const prompt = `Generate a paragraph of PhD level content and 10 citations related to the topic described in the file: ${filePath}`;
+
+      const response = await ollama.chat({
+        model: 'llama3.1',
+        messages: [{ role: 'user', content: prompt  }],
+      })
+
+      const generatedContent = await response.message.content;
+      const content = generatedContent.text;
+
+      await Bun.write(filePath, content);
+      return new Response(content, { status: 200 });
+
+
+
+      } 
+
+
+      //return new Response(`File created at ${filePath}`, { status: 201 });
+    } catch (error) {
+      console.error('Error creating file:', error);
+      return new Response('An error occurred while creating the file', { status: 500 });
+    }
+  }
+
+
+
   console.log('url', url.pathname)
   if (url.pathname.startsWith("/assets")) return Bun.file('/Users/shelbernstein/homelab_status_page/web-ui/assets/output.css')
 
@@ -352,3 +429,6 @@ function makeReactApp(component_name) {
 // }
 
 //import RoboticsOdyssey from "views/odyssey/robotics-odyssey.tsx";
+
+
+

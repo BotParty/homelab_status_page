@@ -238,3 +238,4 @@ https://jetsonhacks.com/2023/05/30/jetson-orin-nano-tutorial-ssd-install-boot-an
 https://web.archive.org/web/20191125073329/http://alexsharry.com/ - {reflect.app}
 
 https://edu.irobot.com/what-we-offer/create3
+https://blog.gregbrockman.com/
