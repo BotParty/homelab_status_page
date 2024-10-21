@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "style": "npx tailwindcss -i ./index.css -o ./output.css --watch",
+    "style": "npx tailwindcss -i ./assets/index.css -o ./assets/output.css --watch",
     "format": "npx prettier observable_templates.html --write",
     "format-js": "standard 'views/*/*.{js,jsx}' --fix",
     "format-js-gpt": "python paralel_LLM.py",

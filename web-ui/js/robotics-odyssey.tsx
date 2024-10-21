@@ -1,19 +1,17 @@
 import React, { useRef, useEffect } from "react";
 import Header from "./views/odyssey/Header.tsx";
-import ObservablePreview from "views/odyssey/ObservablePreview.tsx";
-import Footer from "views/odyssey/Footer.tsx";
-import TwitchPlaysPokemonPanel from "views/odyssey/TwitchPlaysPokemonPanel.tsx";
-import TeleGuidance from "views/odyssey/TeleGuidance.tsx";
-import DynamicHow from "views/odyssey/Dynamichow.tsx";
-import PowerPoint from "views/odyssey/PowerPoints.tsx";
-import Box from "views/odyssey/Box.tsx";
+import ObservablePreview from "./views/odyssey/ObservablePreview.tsx";
+import Footer from "./views/odyssey/Footer.tsx";
+import TwitchPlaysPokemonPanel from "./views/odyssey/TwitchPlaysPokemonPanel.tsx";
+import TeleGuidance from "./views/odyssey/TeleGuidance.tsx";
+import DynamicHow from "./views/odyssey/DynamicHow.tsx";
+import PowerPoint from "./views/odyssey/PowerPoints.tsx";
+import Box from "./views/odyssey/Box.tsx";
 import { Runtime, Inspector } from "@observablehq/runtime";
 import Hardware_Picker from "./Hardware_picker.jsx";
 import OdysseyIntro from "./Odyssey-Intro.tsx";
 
-// function RoboticsOdyssey() {
-//   return <div>Robotics Odyssey</div>;
-// }
+
 
 function RoboticsOdyssey() {
   return (
@@ -22,13 +20,13 @@ function RoboticsOdyssey() {
       <div className="text-gray-950 antialiased bg-slate-900">
         <div className="overflow-hidden flex justify-center items-center min-h-screen">
           <main>
-            <OdysseyIntro />
+            {/* <OdysseyIntro /> */}
 
             <div className="">
               <TeleGuidance />{" "}
             </div>
             <div className="">
-              <ObservablePreview></ObservablePreview>
+              {/* <ObservablePreview></ObservablePreview> */}
             </div>
             <div className="relative">
               {" "}
@@ -37,7 +35,7 @@ function RoboticsOdyssey() {
             {/* <PowerPoint />
             <Box /> */}
             {/* <UseDirectImport /> */}
-            {/* <Pricing /> */}
+            <Pricing />
             <Footer />
             {/* <Hardware_Picker></Hardware_Picker> */}
           </main>
@@ -141,7 +139,7 @@ function UseDirectImport() {
   return <div ref={ref}></div>;
 }
 
-export default RoboticsOdyssey;
+export default  RoboticsOdyssey
 // tailwind fixed my design skills
 // tailscale fixed my sysm-admin skills
 // 3js journey fixed my grahpics skills

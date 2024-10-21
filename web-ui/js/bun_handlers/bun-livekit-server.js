@@ -3,6 +3,11 @@ import { AccessToken } from "livekit-server-sdk";
 import { serve } from "bun";
 
 
+const apiKey = process.env.LIVEKIT_API_KEY
+const apiSecret = process.env.LIVEKIT_API_SECRET
+const wsUrl = process.env.LIVEKIT_WS_URL
+
+
 async function connect_to_livekit(options) {
   console.log("options", options);
   //if (!options.identity) throw new Error("requester must have an identity");

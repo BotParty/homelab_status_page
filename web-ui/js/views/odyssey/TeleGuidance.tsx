@@ -60,7 +60,7 @@ function MMO_Prediction_Planning(props) {
         href="https://observablehq.com/@roboticsuniversity/3-planning-prediction"
       />
       <div class="hidden" ref={TwitchPlaysPokemonPanelRef} />
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/PaCmpygFfXo?si=pamD56WkBAsJBEPF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/PaCmpygFfXo?si=pamD56WkBAsJBEPF" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
 
     </div>
   );
@@ -167,7 +167,7 @@ function DiffusionVoxelPointCloud() {
   //return <></>
   // https://github.com/zed-industries/zed
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-3 gap-4">
       {/* <div ref={output_threeRef} /> */}
       <ObservableTitle
         title="Simulation + UI"
@@ -188,29 +188,29 @@ function DiffusionVoxelPointCloud() {
 
 function TeleGuidance() {
   return (
-    <div className="bg-slate-900 p-1">
-      <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid gap-4 lg:grid-cols-2 lg:grid-rows-2">
-          <div className="relative">
-            <div className="relative overflow-hidden rounded-lg lg:rounded-tl-[2rem] h-[300px]">
+    <div class="bg-slate-900 p-1">
+      <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+        <div class="grid gap-4 lg:grid-cols-2 lg:grid-rows-2">
+          <div class="relative">
+            <div class="relative overflow-hidden rounded-lg lg:rounded-tl-[2rem] h-[300px]">
               <Perception_Module />
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative overflow-hidden rounded-lg lg:rounded-tr-[2rem] h-[300px]">
+          <div class="relative">
+            <div class="relative overflow-hidden rounded-lg lg:rounded-tr-[2rem] h-[300px]">
               <MMO_Prediction_Planning />
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative overflow-hidden rounded-lg lg:rounded-bl-[2rem] h-[300px]">
+          <div class="relative">
+            <div class="relative overflow-hidden rounded-lg lg:rounded-bl-[2rem] h-[300px]">
               <RoboticsHardware />
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative overflow-hidden rounded-lg lg:rounded-br-[2rem] h-[300px]">
+          <div class="relative">
+            <div class="relative overflow-hidden rounded-lg lg:rounded-br-[2rem] h-[300px]">
               <DiffusionVoxelPointCloud />
             </div>
           </div>

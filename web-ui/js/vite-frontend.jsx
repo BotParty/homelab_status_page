@@ -72,25 +72,26 @@ function RoamResearch () {
 
 
 const root = ReactDOM.createRoot(document.getElementById("app"));
-root.render(
-<RoboticsOdyssey />
 
-  // <StrictMode>
-  //   <BrowserRouter>
-  //     <Routes>
-  //       <Route path="/" element={} />
-  //       {/* <Route path="/docs" element={<Documentation />} />
-  //       <Route path="/cgi" element={<CGI_Tools />} />
-  //       <Route path="/llama" element={<LLAMA_Tools />} />
-  //       <Route path="/hardware" element={<Hardware_Tools />} />
-  //       <Route path="/math" element={<Math_Tools />} /> */}
-  //       {/* <Route path="/blag" element={<Blog />} /> */}
 
-  //       {/* <Route path="/course_content"  element={<iframe width="1920" height="1080" src="http://localhost:3000" />} /> */}
-  //     </Routes>
-  //   </BrowserRouter>
-  // </StrictMode>,
-);
+root.render(<StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<RoboticsOdyssey /> } />
+        <Route path="/llama" element={<LLAMA_Tools />} />
+        <Route path="/blag" element={<Blog />} />
+
+  {/* blog is extra - llama = gabmle - might be integral" */}
+        {/* <Route path="/docs" element={<Documentation />} /> */}
+        {/* <Route path="/cgi" element={<CGI_Tools />} /> */}
+        {/* <Route path="/hardware" element={<Hardware_Tools />} />
+        <Route path="/math" element={<Math_Tools />} /> * */}
+        {/* <Route path="/course_content"  element={<iframe width="1920" height="1080" src="http://localhost:3000" />} /> */}
+      </Routes>
+    </BrowserRouter>
+  </StrictMode>
+)
+
 
 
 //  llama 

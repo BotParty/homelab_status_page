@@ -129,6 +129,8 @@ main();
 async function fetch(req: Request) {
   const url = new URL(req.url);   
   console.log('url', url.pathname)
+  if (url.pathname.startsWith("/assets")) return Bun.file('/Users/shelbernstein/homelab_status_page/web-ui/assets/output.css')
+
   if (url.pathname.startsWith("/webhook")) return webhook(req)
 
   //if (url.pathname.startsWith("/os_automation")) return os_automation(req);

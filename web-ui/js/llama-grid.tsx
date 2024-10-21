@@ -203,6 +203,8 @@ function LivekitAudio() {
       startRecording();
     }
   }
+//use 
+
 
 
 
@@ -333,6 +335,11 @@ const actualComponents = Object.entries({
 //   "youtube"
 // ]
 
+//simplest bun-native build process -
+  //for ssr webgpu on 50GPUs for MMO dwarf fortress - 
+     // --- simple, standard compliant like d3, and integrate with any robotics infra + observablheq
+
+
 
 function Example() {
   //console.log('Example - rendering llama-grid')
@@ -352,8 +359,9 @@ function Example() {
                 src="https://tailwindui.com/plus/img/component-images/bento-01-performance.png"
                 className="h-80 object-cover object-left"
               /> */}
+              <LivekitAudio />
               <div className="p-10 pt-4">
-                <h3 className="text-sm/4 font-semibold text-indigo-600">Performance</h3>
+                <h3 className="text-sm/4 font-semibold text-indigo-600">LiveKit Voice Agent</h3>
                 <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Lightning-fast builds</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. In gravida justo et nulla efficitur, maximus
@@ -372,7 +380,7 @@ function Example() {
                 className="h-80 object-cover object-left lg:object-right"
               />
               <div className="p-10 pt-4">
-                <h3 className="text-sm/4 font-semibold text-indigo-600">Releases</h3>
+                <h3 className="text-sm/4 font-semibold text-indigo-600">ObervableHQ Infrastructure</h3>
                 <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Push to deploy</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus massa, laoreet dapibus ex elit vitae
@@ -391,7 +399,7 @@ function Example() {
                 className="h-80 object-cover object-left"
               />
               <div className="p-10 pt-4">
-                <h3 className="text-sm/4 font-semibold text-indigo-600">Speed</h3>
+                <h3 className="text-sm/4 font-semibold text-indigo-600">denoWEBGPU - cognition engine - alan kay game design</h3>
                 <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Built for power users</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Sed congue eros non finibus molestie. Vestibulum euismod augue.
@@ -409,7 +417,7 @@ function Example() {
                 className="h-80 object-cover object-center"
               />
               <div className="p-10 pt-4">
-                <h3 className="text-sm/4 font-semibold text-indigo-600">Integrations</h3>
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Replay analyzer</h3>
                 <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Connect your favorite tools</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Maecenas at augue sed elit dictum vulputate, in nisi aliquam maximus arcu.
@@ -427,7 +435,7 @@ function Example() {
                 className="h-80 object-cover object-center"
               />
               <div className="p-10 pt-4">
-                <h3 className="text-sm/4 font-semibold text-indigo-600">Network</h3>
+                <h3 className="text-sm/4 font-semibold text-indigo-600">Continuous eval for helpers for robotics - bc learn prediction -coolest field in ai (worory dream said "tools that anticpate rather than obey in 2008" - invent at the intersection of robotics and LLAMA - because LLAMA = self-owned ai - seizing means of productions p2p robots</h3>
                 <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Globally distributed CDN</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Aenean vulputate justo commodo auctor vehicula in malesuada semper.

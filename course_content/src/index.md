@@ -3,6 +3,10 @@
 theme: slate
 ---
 
+# 10 days - 10 passes per day - update logs - after that it takes 90 days to hand finsih the process.
+
+
+
 <img src="https://web.archive.org/web/20220511180805im_/https://static.observablehq.com/assets/collaboration-static.jpg" />
 
 https://101.school/courses/physics-101 - chatbot + twitch chat -> issues commands to queue -

@@ -1,4 +1,4 @@
-import Grid from 'views/llama-grid.tsx'
+import Grid from './llama-grid.tsx'
 
 
 function LLAMA_Tools () {
