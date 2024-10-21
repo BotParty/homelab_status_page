@@ -49,6 +49,7 @@ async function moveComments(filePath) {
   });
 
   let newFileContent = acorn.generate(ast);
+  fs.writeFileSync(filePath, newFileContent);
   return { newFileContent, comments };
   // Process the response and return suggestions
 }
