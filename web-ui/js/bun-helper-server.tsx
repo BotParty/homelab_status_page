@@ -1,17 +1,20 @@
+const { EgressClient, RoomCompositeEgressRequest } = require('livekit-server-sdk');
+
 const ollama = require('ollama');
 import {$} from 'bun'
 import { renderToString } from "react-dom/server";
-import React, { Suspense, lazy } from 'react';
+import React, {lazy } from 'react';
 import Bun from 'bun'
 import fs from "fs";
 import path from "path";
 import { connect_to_livekit } from './bun_handlers/bun-livekit-server.js'
 import llamaRoutes from './bun_handlers/llama-backend.js'
 import CgiRoutes from './bun_handlers/cgi-backend.js'
-import { renderToReadableStream } from 'react-dom/server';
+//import { startEgress } from './bun_handlers/bun-livekit-server.js'
+//import { renderToReadableStream } from 'react-dom/server';
 import TurndownService from 'turndown';
 
-const port = 8080;
+const port = 8003;
 console.log(`Server running at http://localhost:${port}`);
 
 const LlamaGrid = lazy(() => import('./llama-grid.tsx'));
@@ -31,22 +34,22 @@ async function serveLlamaTools(req: Request) {
   const filePath = path.join(process.cwd(), "js/views/blag.html");
   let indexHtmlContent = fs.readFileSync(filePath, "utf-8");
 
-  const stream = await renderToReadableStream(
-    <React.Suspense fallback={<div>Loading...</div>}>
+  const result = await renderToString(
+    
       <LlamaGrid />
-    </React.Suspense>
+    
   );
 
   // Wait for all content to be ready
-  await stream.allReady;
+  // await stream.allReady;
 
-  const reader = stream.getReader();
-  let result = '';
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    result += new TextDecoder().decode(value);
-  }
+  // const reader = stream.getReader();
+  // let result = '';
+  // while (true) {
+  //   const { done, value } = await reader.read();
+  //   if (done) break;
+  //   result += new TextDecoder().decode(value);
+  // }
 
   const htmlContent = indexHtmlContent.replace(
     "{{template blag}}",
@@ -159,6 +162,79 @@ async function serveBlagArchive(req: Request) {
   }
 }
 
+function saveScreenShare() { 
+
+}
+
+async function startEgress(roomName) {
+  const { EgressClient, RoomServiceClient } = require('livekit-server-sdk');
+  const apiKey = process.env.LIVEKIT_API_KEY;
+  const apiSecret = process.env.LIVEKIT_API_SECRET;
+  const wsUrl = process.env.LIVEKIT_WS_URL;
+
+  const egressClient = new EgressClient(wsUrl, apiKey, apiSecret);
+  const roomService = new RoomServiceClient(wsUrl, apiKey, apiSecret);
+
+  const outputParams = {
+    file: {
+      filepath: `./screen-share.mp4`, // Ensure this path is valid and writable
+    },
+  };
+
+  const request = {
+    room_name: roomName,
+    output: outputParams,
+  };
+
+  // Check if outputParams is correctly structured
+  if (!outputParams.file || !outputParams.file.filepath) {
+    throw new Error("Output parameters are not correctly defined.");
+  }
+
+  // Initiate egress
+  const response = await egressClient.startRoomCompositeEgress(request);
+  console.log('Egress response:', response);
+}
+
+
+function ReplayAnalyzer() { 
+  startEgress('example-room')
+ return (<div className="max-w-4xl mx-auto p-6">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Replay Analyzer</h1>
+        
+        <div  className="bg-white shadow-md rounded-lg p-6">
+            <form className="mb-4">
+                <label htmlFor="file-upload" className="block text-gray-700 mb-2">Upload Replay File:</label>
+                <input type="file" id="file-upload" className="block w-full text-gray-700 border border-gray-300 rounded p-2" accept=".replay"/>
+                
+                <button type="submit" className="mt-4 w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600">Analyze Replay</button>
+            </form>
+            
+            <div id="analysis-result" className="hidden mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                <p>Results of the replay analysis will appear here...</p>
+            </div>
+        </div>
+
+        <footer className="mt-6 text-center">
+                <p className="text-gray-500">&copy; 2023 Replay Analyzer. All rights reserved.</p>
+        </footer>
+        </div>
+  );
+}
+
+
+function replay_analyzer(req: Request) { 
+  const replay_html = renderToString(<ReplayAnalyzer />)
+
+
+  return new Response(replay_html, {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
+}
+
+
 const CgiRoutesHandlers = Object.fromEntries(
   Object.entries(CgiRoutes).map(([key, value]) => [`/cgi-tools${key}`, value])
 );
@@ -167,7 +243,8 @@ const llamaRoutesHandlers = Object.fromEntries(
   Object.entries(llamaRoutes).map(([key, value]) => [`/llama-tools${key}`, value])
 );
 const routes = {
-  "/livekit_connect": (req: Request) => livekit_connect(req),
+  "/api/livekit_connect": (req: Request) => livekit_connect(req),
+  "/api/replay_analyzer": (req: Request) => replay_analyzer(req),
   ///"/os/*": (req: Request) => os_automation(req),
   "/docs": (req: Request) => docs_response(routes),
   "/": (req: Request) => serveBlag(req),
@@ -262,9 +339,9 @@ async function fetch(req: Request) {
 
 
 async function livekit_connect(req: Request) { 
-  const jsonData = await req.json();
-  console.log('Received JSON data:', jsonData);
-
+  //const jsonData = await req.json();
+  //console.log('Received JSON data:', jsonData);
+const jsonData = {identity: 'voice to prompt?' + Date.now()}
   const identity = jsonData.identity;
   if (!identity) {
     return new Response("Identity parameter is missing", { status: 400 });
@@ -429,6 +506,7 @@ function makeReactApp(component_name) {
 // }
 
 //import RoboticsOdyssey from "views/odyssey/robotics-odyssey.tsx";
+
 
 
 

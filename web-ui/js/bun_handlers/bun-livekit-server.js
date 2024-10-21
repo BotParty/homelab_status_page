@@ -72,24 +72,26 @@ import { spawn } from "bun";
 // const apiKey = process.env.LIVEKIT_API_KEY
 // const apiSecret = process.env.LIVEKIT_API_SECRET
 
-// const egressClient = new EgressClient(livekitHost, apiKey, apiSecret);
-// // https://dev.twitch.tv/docs/api/
-// //microbox + microsaur -
-// //localhost -> connects to tailscale serve / funnel -> auto symlink to mothership - 4pb desktopx4
-// async function startEgress() {
-//   const request = RoomCompositeEgressRequest.fromPartial({
-//     roomName: 'example-room',
-//     layout: 'speaker-dark',
-//     audioOnly: true,
-//     fileOutputs: [
-//       {
-//         fileType: 'OGG', // LiveKit supports OGG for audio-only recordings
-//         filepath: '/audio.ogg',
-//       },
-//     ],
-//   });
+const egressClient = new EgressClient(wsUrl, apiKey, apiSecret);
+// https://dev.twitch.tv/docs/api/
+//microbox + lamasaur - homeage to nanosaur.ai (nanosaur w/ pi)
+//localhost -> connects to tailscale serve / funnel -> auto symlink to mothership - 4pb desktopx4
+async function startEgress() {
+  const request = RoomCompositeEgressRequest.fromPartial({
+    roomName: 'example-room',
+    layout: 'speaker-dark',
+    audioOnly: true,
+    fileOutputs: [
+      {
+        fileType: 'OGG', // LiveKit supports OGG for audio-only recordings
+        filepath: '/audio.ogg',
+      },
+    ],
+  });
 
-//   const response = await egressClient.startRoomCompositeEgress(request);
-//   console.log('Egress started with egress ID:', response.egressId);
-//   return response.egressId
-// }
+  const response = await egressClient.startRoomCompositeEgress(request);
+  console.log('Egress started with egress ID:', response.egressId);
+  return response.egressId
+}
+
+export { startEgress }

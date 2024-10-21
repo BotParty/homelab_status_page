@@ -150,3 +150,6 @@ Advanced Computer Graphics Techniques
 	4.	Voxels and Stixels
 	5.	Server Side WebGPU Streaming
 	6.	Ray Tracing (2D and 3D) - Visibility
+
+# Miscellaneous
+	1. Flaws in Facebooks Data Pipeline

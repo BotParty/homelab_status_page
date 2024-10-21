@@ -64,14 +64,14 @@ const proxy_docs = [
 
 /// spoken word = unifies groups from 5 to 100 - written word - 100,000 - pictures = 1 billion - Proof:youtube
 
-async function getLivekitData() {
+async function getLivekitData(identity) {
   const livekit_connect = 'livekit_connect'
     const response = await fetch('/api/livekit_connect', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ identity: 'voice to prompt' }),
+      body: JSON.stringify({ identity: identity || 'voice to prompt' }),
     });
 
     if (!response.ok) {
@@ -86,7 +86,8 @@ async function getLivekitData() {
 //const liveKit_data = await postLivekitConnect();
 
 // livekit video + audio - replay 
-async function joinRoom(screenShareVideo, audioElement) {
+async function joinRoom(not_used, audioElement) {
+  let screenShareVideo = document.getElementById("screenShareVideo")
   let room = new Room();
   const liveKit_data = await getLivekitData();
   const url = "wss://omnissiah-university-kmuz0plz.livekit.cloud";
@@ -347,9 +348,9 @@ function Example() {
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
         <h2 className="text-base/7 font-semibold text-indigo-600">Lama-tools.com</h2>
-        <p className="mt-2 max-w-lg text-pretty text-4xl font-medium tracking-tight text-gray-950 sm:text-5xl">
+        {/* <p className="mt-2 max-w-lg text-pretty text-4xl font-medium tracking-tight text-gray-950 sm:text-5xl">
           10 days of learning llama.
-        </p>
+        </p> */}
         <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
           <div className="relative lg:col-span-3">
             <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
@@ -362,11 +363,11 @@ function Example() {
               <LivekitAudio />
               <div className="p-10 pt-4">
                 <h3 className="text-sm/4 font-semibold text-indigo-600">LiveKit Voice Agent</h3>
-                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Lightning-fast builds</p>
+                {/* <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Lightning-fast builds</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. In gravida justo et nulla efficitur, maximus
                   egestas sem pellentesque.
-                </p>
+                </p> */}
               </div>
             </div>
             <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
@@ -374,18 +375,24 @@ function Example() {
           <div className="relative lg:col-span-3">
             <div className="absolute inset-px rounded-lg bg-white lg:rounded-tr-[2rem]" />
             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
-              <img
+              {/* <img
                 alt=""
                 src="https://tailwindui.com/plus/img/component-images/bento-01-releases.png"
                 className="h-80 object-cover object-left lg:object-right"
-              />
+              /> */}
+              <div>
+             
+             <button onClick={handleButtonPress}>Connect to LiveKit</button>
+             <video id="screenShareVideo" className="w-full h-full" autoPlay muted playsInline />
+
+              </div>
               <div className="p-10 pt-4">
                 <h3 className="text-sm/4 font-semibold text-indigo-600">ObervableHQ Infrastructure</h3>
-                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Push to deploy</p>
+                {/* <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Push to deploy</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus massa, laoreet dapibus ex elit vitae
                   odio.
-                </p>
+                </p> */}
               </div>
             </div>
             <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
@@ -400,10 +407,10 @@ function Example() {
               />
               <div className="p-10 pt-4">
                 <h3 className="text-sm/4 font-semibold text-indigo-600">denoWEBGPU - cognition engine - alan kay game design</h3>
-                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Built for power users</p>
+                {/* <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Built for power users</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Sed congue eros non finibus molestie. Vestibulum euismod augue.
-                </p>
+                </p> */}
               </div>
             </div>
             <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-bl-[2rem]" />
@@ -411,17 +418,13 @@ function Example() {
           <div className="relative lg:col-span-2">
             <div className="absolute inset-px rounded-lg bg-white" />
             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
-              <img
-                alt=""
-                src="https://tailwindui.com/plus/img/component-images/bento-01-integrations.png"
-                className="h-80 object-cover object-center"
-              />
+             <ReplayAnalyzer />
               <div className="p-10 pt-4">
                 <h3 className="text-sm/4 font-semibold text-indigo-600">Replay analyzer</h3>
-                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Connect your favorite tools</p>
+                {/* <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Connect your favorite tools</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Maecenas at augue sed elit dictum vulputate, in nisi aliquam maximus arcu.
-                </p>
+                </p> */}
               </div>
             </div>
             <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5" />
@@ -436,10 +439,10 @@ function Example() {
               />
               <div className="p-10 pt-4">
                 <h3 className="text-sm/4 font-semibold text-indigo-600">Continuous eval for helpers for robotics - bc learn prediction -coolest field in ai (worory dream said "tools that anticpate rather than obey in 2008" - invent at the intersection of robotics and LLAMA - because LLAMA = self-owned ai - seizing means of productions p2p robots</h3>
-                <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Globally distributed CDN</p>
+                {/* <p className="mt-2 text-lg/7 font-medium tracking-tight text-gray-950">Globally distributed CDN</p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600">
                   Aenean vulputate justo commodo auctor vehicula in malesuada semper.
-                </p>
+                </p> */}
               </div>
             </div>
             <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" />
@@ -453,12 +456,51 @@ function Example() {
 
 import React, { Suspense, lazy } from 'react';
 
+async function handleInputChange(e) {
+let typingTimeout;
+
+async function sendRequest(prompt) {
+  try {
+    const response = await fetch('/ollama', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    console.log('Server response:', data);
+  } catch (error) {
+    console.error('Error sending request:', error);
+  }
+
+}
+const prompt = e.target.value;
+
+
+  sendRequest(prompt);
+
+// function handleInputChange(e) {
+//   clearTimeout(typingTimeout);
+
+//   const prompt = e.target.value;
+
+//   typingTimeout = setTimeout(() => {
+//     sendRequest(prompt);
+//   }, 1000);
+//   }
+}
 
 function App() {
   return (
     <div>
 
-      <input type="text" />
+      <input type="text" onChange={handleInputChange} />
       <Suspense fallback={<div>Loading...</div>}>
         <Example />
       </Suspense>
@@ -519,3 +561,131 @@ export default App;
 
 
 
+async function screnshareis_cool ( ) {
+ //import {  Livekit }from "https://cdn.jsdelivr.net/npm/livekit-client@2.5.9/+esm";
+//  import {
+//   Room,
+//   RoomEvent,
+//   Track,
+// } from "https://cdn.jsdelivr.net/npm/livekit-client@2.5.9/+esm";
+
+let Livekit = {
+  Room,
+  RoomEvent,
+  Track,
+};
+
+// const token =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjkxOTU3MjEsImlzcyI6IkFQSXRTYndYdlNqaDRjZiIsIm5hbWUiOiJzY3JlZW5fc2hhcmUiLCJuYmYiOjE3MjkxMDkzMjEsInN1YiI6InNjcmVlbl9zaGFyZSIsInZpZGVvIjp7ImNhblVwZGF0ZU93bk1ldGFkYXRhIjp0cnVlLCJyb29tIjoicm9vbSIsInJvb21BZG1pbiI6dHJ1ZSwicm9vbUNyZWF0ZSI6dHJ1ZSwicm9vbUpvaW4iOnRydWUsInJvb21MaXN0Ijp0cnVlLCJyb29tUmVjb3JkIjp0cnVlfX0.Ub3VigeCkaL4sG4cdw7VaPfaHECuMg8buy6u38xqZPQ";
+
+const livekit_connect = 'livekit_connect'
+
+let room;
+//const button = document.getElementById("share");
+//button.addEventListener("click", joinRoom);
+joinRoom()
+async function joinRoom() {
+  room = new Room();
+  //console.log('room', room.name)
+  const url = "wss://omnissiah-university-kmuz0plz.livekit.cloud";
+  const  datum = await getLivekitData('identity')
+
+
+  await room.connect(url, datum.token);
+
+  room.on(
+    RoomEvent.TrackSubscribed,
+    (track, publication, participant) => {
+      if (
+        track.kind === Track.Kind.Video &&
+        track.source === Track.Source.ScreenShare
+      ) {
+        track.attach(screenShareVideo);
+      }
+    },
+  );
+
+  room.on(
+    RoomEvent.TrackUnsubscribed,
+    (track, publication, participant) => {
+      if (
+        track.kind === Track.Kind.Video &&
+        track.source === Track.Source.ScreenShare
+      ) {
+        track.detach(screenShareVideo);
+      }
+    },
+  );
+
+  room.on(RoomEvent.LocalTrackPublished, (publication, participant) => {
+    if (
+      publication.kind === Track.Kind.Video &&
+      publication.source === Track.Source.ScreenShare
+    ) {
+      publication.track.attach(screenShareVideo);
+    }
+  });
+
+  room.on(RoomEvent.LocalTrackUnpublished, (publication, participant) => {
+    if (
+      publication.kind === Track.Kind.Video &&
+      publication.source === Track.Source.ScreenShare
+    ) {
+      publication.track.detach(screenShareVideo);
+    }
+  });
+  toggleScreenShare(room);
+}
+
+async function toggleScreenShare(room) {
+  const enabled = room.localParticipant.isScreenShareEnabled;
+  console.log(`${enabled ? "stopping" : "starting"} screen share`);
+  try {
+    await room.localParticipant.setScreenShareEnabled(!enabled, {
+      audio: true,
+    });
+  } catch (e) {
+    console.error("error sharing screen", e);
+  }
+}
+//private tracker - 1tb animated stories(comics, hn, cartoons)
+// 1 tb - robot actions
+// 1tb research ppapers and books - discussion.
+// 1tb intermediate represenstaiton
+//we 'll meet someday.
+// you'll be megaman x, and i'll be one of dr lights - helpers in the capsule.
+// all of you will be mega manx. you'll have boots, armor, and hellmet.
+// you win. i lost. i was weak. i am weak. i will always be weak.
+// but mega man x  will always be strong. because the world needs everyone to be a  champion.
+//mass effect, matt, shodan, and the 3 factions and inner circle and 3 pyramid = mega man x * 1 million. you win.
+//i dont believe in spiritaulity, i believe in science and art - those are the answer krishnamurtih and so on sought.
+//self sacrifice is okay sometimes. if a lion attacks your tribe - it might be the only answer
+// until dynamicland.
+//rest easy, dynamicland is here.
+
+}
+
+
+
+
+
+
+
+function handleButtonPress() {
+  console.log('button pressed')
+  screnshareis_cool()
+}
+
+
+function ReplayAnalyzer() {
+  
+
+
+
+  return (<><div>Replay Analyzer</div>
+  <iframe src="/api/replay_analyzer"></iframe>
+  </>)
+
+
+
+}

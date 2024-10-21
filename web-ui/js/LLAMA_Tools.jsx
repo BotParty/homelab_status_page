@@ -20,7 +20,7 @@ function LLAMA_Tools () {
 
           {/* <div>LLAMA Tools for JP, Abid, Raffi, Eric, and Mark</div> */}
           {/* <div><Dashboard panels={panels} /></div> */}
-<iframe width="900" height="500" src="http://localhost:8000"></iframe>
+{/* <iframe width="900" height="500" src="http://localhost:8000"></iframe> */}
           <Grid />
           </>
 

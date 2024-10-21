@@ -1,21 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-  import RoboticsOdyssey from "./robotics-odyssey.tsx";
-import CGI_Tools from "./CGI_Tools.jsx";
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+//   import RoboticsOdyssey from "./robotics-odyssey.tsx";
+// import CGI_Tools from "./CGI_Tools.jsx";
 import LLAMA_Tools from "./LLAMA_Tools.jsx";
-import Hardware_Tools from "./Hardware_Tools.jsx";
- import Blog from "./blag.jsx";
+// import Hardware_Tools from "./Hardware_Tools.jsx";
+//  import Blog from "./blag.jsx";
 
-const links = [
-  { path: "/cgi", component: CGI_Tools },
-  { path: "/llama", component: LLAMA_Tools },
-  { path: "/hardware", component: Hardware_Tools },
-  { path: "/docs", component: Documentation },
-  { path: "/math-tools", component: Math_Tools },
-  { path: "/blog  ", component: Blog },
-];
+// const links = [
+//   { path: "/cgi", component: CGI_Tools },
+//   { path: "/llama", component: LLAMA_Tools },
+//   { path: "/hardware", component: Hardware_Tools },
+//   { path: "/docs", component: Documentation },
+//   { path: "/math-tools", component: Math_Tools },
+//   { path: "/blog  ", component: Blog },
+// ];
 
 
 
@@ -75,24 +75,25 @@ const root = ReactDOM.createRoot(document.getElementById("app"));
 
 
 root.render(<StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<RoboticsOdyssey /> } />
-        <Route path="/llama" element={<LLAMA_Tools />} />
-        <Route path="/blag" element={<Blog />} />
-
-  {/* blog is extra - llama = gabmle - might be integral" */}
-        {/* <Route path="/docs" element={<Documentation />} /> */}
-        {/* <Route path="/cgi" element={<CGI_Tools />} /> */}
-        {/* <Route path="/hardware" element={<Hardware_Tools />} />
-        <Route path="/math" element={<Math_Tools />} /> * */}
-        {/* <Route path="/course_content"  element={<iframe width="1920" height="1080" src="http://localhost:3000" />} /> */}
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>
+  <LLAMA_Tools />
+  
+  </StrictMode> 
 )
 
+  // {/* <BrowserRouter>
+  //     <Routes>
+  //       <Route path="/" element={<RoboticsOdyssey /> } />
+  //       <Route path="/llama" element={<LLAMA_Tools />} />
+  //       <Route path="/blag" element={} />
 
+  // {/* blog is extra - llama = gabmle - might be integral" */}
+  //       {/* <Route path="/docs" element={<Documentation />} /> */}
+  //       {/* <Route path="/cgi" element={<CGI_Tools />} /> */}
+  //       {/* <Route path="/hardware" element={<Hardware_Tools />} />
+  //       <Route path="/math" element={<Math_Tools />} /> * */}
+  //       {/* <Route path="/course_content"  element={<iframe width="1920" height="1080" src="http://localhost:3000" />} /> */}
+  //       </Routes>
+  //       </BrowserRouter>*/}
 
 //  llama 
 // cgi? 

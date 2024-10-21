@@ -16,6 +16,13 @@ hashirama.blog {
 		resolvers 1.1.1.1
 	}
 
+	route /ws/* {
+		reverse_proxy localhost:3333 {
+			header_up Connection {>Connection}
+			header_up Upgrade {>Upgrade}
+		}
+	}
+
 	route /* {
 		reverse_proxy localhost:3333
 	}
