@@ -52,3 +52,11 @@ const TailwindResume = () => {
 };
 
 export default TailwindResume;
+
+//react strings + htmx -- more servery + llamy
+// function reactive ifnrastcutre for robots
+
+
+// observable -> click a button or speak
+
+    /// DWIM - auto-install - auto-migrate -> auto-gpu - auto run torch shit semgent 2 anything
