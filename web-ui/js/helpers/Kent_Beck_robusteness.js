@@ -28,6 +28,8 @@ async function findUnusedFiles(directory) {
 // Agent 2: Comment Quality Evaluator
 async function moveComments(filePath) {
   const fileContent = fs.readFileSync(filePath, "utf-8");
+  console.log('acorn', filePath)
+  //install -g uglify-js
   // const response = await ollama.generate({
   //   model: "codellama:13b",
   //   prompt: `Evaluate the following code comments and suggest improvements or removal of unnecessary ones:\n\n${fileContent}`,
@@ -49,7 +51,8 @@ async function moveComments(filePath) {
   });
 
   let newFileContent = acorn.generate(ast);
-  fs.writeFileSync(filePath, newFileContent);
+  console.log(newFileContent)
+  //fs.writeFileSync(filePath, newFileContent);
   return { newFileContent, comments };
   // Process the response and return suggestions
 }
@@ -95,15 +98,17 @@ async function runAllAgents(directory) {
   //const directorySuggestions = await suggestDirectorySimplifications(directory);
   //saveSuggestions({ directory_suggestions: directorySuggestions }, "directory_suggestions.json");
   let count = {
-    comments: {}
+    comments: {},
+    by_extension: {},
 
   }
 
   files.forEach(file => {
-    count[path.extname(file)] =(count[path.extname(file)] || 0) + fs.readFileSync(file, 'utf-8').length
-    count['comments'][file] = moveComments(file)
-    count[file] = fs.readFileSync(file, 'utf-8').length
-
+    if (path.extname(file) === '.js' || path.extname(file) === '.ts' || path.extname(file) === '.jsx' || path.extname(file) === '.tsx') {   
+      count.by_extension[path.extname(file)] =(count.by_extension[path.extname(file)] || 0) + fs.readFileSync(file, 'utf-8').length
+      //count['comments'][file] = moveComments(file)
+      count[file] = fs.readFileSync(file, 'utf-8').length
+    }
   });
 
   //console.log(count)
@@ -113,6 +118,41 @@ async function runAllAgents(directory) {
 
   //anthropci ---- 200k maximum
   //gemini 2 million token context window
+
+
+  // Move all JSX and TSX files to a folder called 'views'
+  const moveFilesToViews = async () => {
+    const viewsDir = path.join(root_dir, 'views');
+    if (!fs.existsSync(viewsDir)) {
+      fs.mkdirSync(viewsDir);
+    }
+
+    files.filter(file => file.endsWith('.jsx') || file.endsWith('.tsx')).forEach(file => {
+      const newFilePath = path.join(viewsDir, path.basename(file));
+      fs.renameSync(file, newFilePath);
+      console.log(`Moved ${file} to ${newFilePath}`);
+    });
+  };
+
+  // Move all HTML files to a folder called 'views/archive'
+  const moveHtmlFilesToArchive = async () => {
+    const archiveDir = path.join(root_dir, 'views', 'archive');
+    if (!fs.existsSync(archiveDir)) {
+      fs.mkdirSync(archiveDir, { recursive: true });
+    }
+
+    files.filter(file => file.endsWith('.html')).forEach(file => {
+      const newFilePath = path.join(archiveDir, path.basename(file));
+      fs.renameSync(file, newFilePath);
+      console.log(`Moved ${file} to ${newFilePath}`);
+    });
+  };
+
+  await moveFilesToViews();
+  await moveHtmlFilesToArchive();
+
+
+
 }
 
 runAllAgents()
