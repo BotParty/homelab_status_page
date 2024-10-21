@@ -10,7 +10,7 @@ if [ -z "$COMMAND" ]; then
     COMMAND="restart-blog"
 fi
 
-if [ "$COMMAND" = "cleanup" ] || [ "$COMMAND" = "build.sh" ]; then
+if [ "$COMMAND" = "kentbeck" ] || [ "$COMMAND" = "build.sh" ]; then
     #$ROOT/build.sh "$@"
     echo "Running run.sh..."
     bun run ~/homelab_status_page/web-ui/js/helpers/Kent_Beck_robusteness.js

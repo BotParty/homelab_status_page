@@ -95,12 +95,13 @@ async function runAllAgents(directory) {
   //const directorySuggestions = await suggestDirectorySimplifications(directory);
   //saveSuggestions({ directory_suggestions: directorySuggestions }, "directory_suggestions.json");
   let count = {
+    comments: {}
 
   }
 
   files.forEach(file => {
-    count[path.extname(file)] = fs.readFileSync(file, 'utf-8').length
-    count[comments] = moveComments(file)
+    count[path.extname(file)] =(count[path.extname(file)] || 0) + fs.readFileSync(file, 'utf-8').length
+    count['comments'][file] = moveComments(file)
     count[file] = fs.readFileSync(file, 'utf-8').length
 
   });
