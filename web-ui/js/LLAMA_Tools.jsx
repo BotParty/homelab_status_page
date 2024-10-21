@@ -16,9 +16,11 @@ function LLAMA_Tools () {
   ]; 
   return (
     <>
-          <div>LLAMA Tools for JP, Abid, Raffi, Eric, and Mark</div>
-          {/* <div><Dashboard panels={panels} /></div> */}
+          <div>Finish course in 10 days using the 3 tools in grid.</div>
 
+          {/* <div>LLAMA Tools for JP, Abid, Raffi, Eric, and Mark</div> */}
+          {/* <div><Dashboard panels={panels} /></div> */}
+<iframe width="900" height="500" src="http://localhost:8000"></iframe>
           <Grid />
           </>
 
@@ -27,3 +29,14 @@ function LLAMA_Tools () {
 
 export default LLAMA_Tools;
 //tonality - monk
+
+// vite = for course -- students  to leanr orobts 
+
+
+/// bun_main_server = for robots to connect to the vite app. 
+
+
+// gen 500 blog posts - for blog - iterate on that using some functions 
+
+
+/// use the same functions to improve course for 10-90 days. 
