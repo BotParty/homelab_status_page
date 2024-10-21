@@ -10,8 +10,10 @@ if [ -z "$COMMAND" ]; then
     COMMAND="restart-blog"
 fi
 
-if [ "$COMMAND" = "build" ] || [ "$COMMAND" = "build.sh" ]; then
+if [ "$COMMAND" = "cleanup" ] || [ "$COMMAND" = "build.sh" ]; then
     #$ROOT/build.sh "$@"
+    echo "Running run.sh..."
+    bun run ~/homelab_status_page/web-ui/js/helpers/Kent_Beck_robusteness.js
     echo "Running run.sh..."
 elif [ "$COMMAND" = "run" ] || [ "$COMMAND" = "run.sh" ]; then
     #$ROOT/run.sh "$@"

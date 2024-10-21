@@ -6,8 +6,6 @@ import { serve } from "bun";
 const apiKey = process.env.LIVEKIT_API_KEY
 const apiSecret = process.env.LIVEKIT_API_SECRET
 const wsUrl = process.env.LIVEKIT_WS_URL
-
-
 async function connect_to_livekit(options) {
   console.log("options", options);
   //if (!options.identity) throw new Error("requester must have an identity");
@@ -95,3 +93,87 @@ async function startEgress() {
 }
 
 export { startEgress }
+
+async function startEgress(roomName) {
+  const { EgressClient, RoomServiceClient } = require('livekit-server-sdk');
+  const apiKey = process.env.LIVEKIT_API_KEY;
+  const apiSecret = process.env.LIVEKIT_API_SECRET;
+  const wsUrl = process.env.LIVEKIT_WS_URL;
+
+  const egressClient = new EgressClient(wsUrl, apiKey, apiSecret);
+  const roomService = new RoomServiceClient(wsUrl, apiKey, apiSecret);
+
+  const request = {
+    room_name: roomName,
+    // Directly specify the 'file' property here
+    file: {
+      filepath: `./screen-share.mp4`, // Ensure this path is valid and writable
+    },
+  };
+  try {
+    const response = await egressClient.startRoomCompositeEgress(request);
+    console.log('Egress started successfully. Response:', response);
+  } catch (error) {
+    console.error('Error starting egress:', error);
+  }
+}
+
+async function livekit_connect(req: Request) { 
+  const jsonData = {identity: 'voice to prompt?' + Date.now()}
+    const identity = jsonData.identity;
+    if (!identity) {
+      return new Response("Identity parameter is missing", { status: 400 });
+    }
+  
+    const json = await connect_to_livekit(jsonData);
+    console.log(json, json);
+      return new Response(JSON.stringify(json));
+  }
+  
+
+export { livekit_connect }
+
+
+
+async function save_audio_to_whisper(req: Request) {
+  console.log('save_audio_to_whisper called');
+
+  try {
+    // Check if the request method is POST
+    if (req.method !== 'POST') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Get the content type
+    const contentType = req.headers.get('content-type');
+
+    let data;
+    if (contentType && contentType.includes('application/json')) {
+      // If it's JSON data
+      data = await req.json();
+    } else if (contentType && contentType.includes('multipart/form-data')) {
+      // If it's form data (e.g., file upload)
+      const formData = await req.formData();
+      data = Object.fromEntries(formData);
+    } else {
+      // For other content types, try to read as text
+      data = await req.text();
+    }
+
+    console.log('Received data:', data);
+
+    // Process the data (this is where you'd implement your whisper logic)
+    // For now, we'll just echo back the received data
+    return new Response(JSON.stringify({ message: 'Data received', data }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    console.error('Error in save_audio_to_whisper:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}

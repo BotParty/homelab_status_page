@@ -3,9 +3,6 @@ import path from "path";
 import { Ollama } from "ollama";
 
 const ollama = new Ollama();
-
-//code undrstnading
-
 // Agent 1: Unused File Marker
 async function findUnusedFiles(directory) {
   const files = getAllFiles(directory);
@@ -14,7 +11,7 @@ async function findUnusedFiles(directory) {
   for (const file of files) {
     const fileContent = fs.readFileSync(file, "utf-8");
     const response = await ollama.generate({
-      model: "codellama",
+      model: "llama3.2",
       prompt: `Analyze the following file and determine if it's used or not in the project. Consider imports, function calls, and references. Respond with only "USED" or "UNUSED":\n\n${fileContent}`,
     });
 
@@ -27,9 +24,45 @@ async function findUnusedFiles(directory) {
   return unusedFiles;
 }
 
+
+// Agent 2: Comment Quality Evaluator
+async function moveComments(filePath) {
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  // const response = await ollama.generate({
+  //   model: "codellama:13b",
+  //   prompt: `Evaluate the following code comments and suggest improvements or removal of unnecessary ones:\n\n${fileContent}`,
+  // });
+
+  const acorn = require("acorn");
+  const acornWalk = require("acorn-walk");
+
+  let comments = [];
+  let ast = acorn.parse(fileContent, {
+    onComment: comments,
+    locations: true,
+  });
+
+  acornWalk.simple(ast, {
+    Program(node) {
+      node.body = node.body.filter((stmt) => stmt.type !== "CommentLine" && stmt.type !== "CommentBlock");
+    },
+  });
+
+  let newFileContent = acorn.generate(ast);
+  return { newFileContent, comments };
+  // Process the response and return suggestions
+}
+
 function getAllFiles(directory) {
   let files = [];
-  const entries = fs.readdirSync(directory, { withFileTypes: true });
+  let entries = fs.readdirSync(directory, { withFileTypes: true });
+  const ignore_list = ['node_modules', 'dist', 'docs', 'user_code'];
+
+  //console.log(ignore_list)
+
+  ignore_list.forEach(ignore => {   
+    entries = entries.filter(entry => entry.name !== ignore);
+  });
 
   for (const entry of entries) {
     const fullPath = path.join(directory, entry.name);
@@ -43,79 +76,41 @@ function getAllFiles(directory) {
   return files;
 }
 
-// Agent 2: Directory Simplification Suggestor
-async function suggestDirectorySimplifications(directory) {
-  
-}
 
-// Agent 3: Comment Quality Evaluator
-async function evaluateComments(filePath) {
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const response = await ollama.generate({
-    model: "codellama",
-    prompt: `Evaluate the following code comments and suggest improvements or removal of unnecessary ones:\n\n${fileContent}`,
-  });
-  // Process the response and return suggestions
-}
-
-// Agent 4: Function Complexity Analyzer
-async function analyzeFunctionComplexity(filePath) {
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const response = await ollama.generate({
-    model: "codellama",
-    prompt: `Analyze the following code for complex functions and suggest simplifications:\n\n${fileContent}`,
-  });
-  // Process the response and return suggestions
-}
-
-// Agent 5: Dead Code Detector
-async function findDeadCode(filePath) {
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const response = await ollama.generate({
-    model: "codellama",
-    prompt: `Identify dead code or unused imports in the following code:\n\n${fileContent}`,
-  });
-  // Process the response and return suggestions
-}
-
-// Save suggestions to JSON files
-function saveSuggestions(suggestions, filename) {
-  const outputFolder = "output";
-  if (!fs.existsSync(outputFolder)) {
-    fs.mkdirSync(outputFolder);
-  }
-  const reportPath = path.join(outputFolder, filename);
-  fs.writeFileSync(reportPath, JSON.stringify(suggestions, null, 2));
-}
-
-// Main function to run all agents
 async function runAllAgents(directory) {
-  const unusedFiles = await findUnusedFiles(directory);
-  saveSuggestions({ unused_files: unusedFiles }, "unused_files.json");
+  const root_dir = '/home/adnan/homelab_status_page/web-ui/';
+  const ignore_list = ['node_modules', 'dist', 'docs', 'user_code', 'obs3-breakout' ,'js'];
+  let files = getAllFiles(root_dir, ignore_list);
 
-  const directorySuggestions = await suggestDirectorySimplifications(directory);
-  saveSuggestions({ directory_suggestions: directorySuggestions }, "directory_suggestions.json");
+  files = files.filter(file => !['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg'].includes(path.extname(file).toLowerCase()));
+  console.log(files.length);
+
+  //fs.writeFileSync('concatenated_files.txt', concatenatedContent);
+  //console.log(concatenatedContent.length)
+
+  //const unusedFiles = await findUnusedFiles(directory);
+  //saveSuggestions({ unused_files: unusedFiles }, "unused_files.json");
+
+  //const directorySuggestions = await suggestDirectorySimplifications(directory);
+  //saveSuggestions({ directory_suggestions: directorySuggestions }, "directory_suggestions.json");
+  let count = {
+
+  }
+
+  files.forEach(file => {
+    count[path.extname(file)] = fs.readFileSync(file, 'utf-8').length
+    count[comments] = moveComments(file)
+    count[file] = fs.readFileSync(file, 'utf-8').length
+
+  });
+
+  //console.log(count)
 
   // ... run other agents and save their suggestions ...
+  fs.writeFileSync('files.json', JSON.stringify(count, null, 2));
+
+  //anthropci ---- 200k maximum
+  //gemini 2 million token context window
 }
 
-// Bun server
-const server = Bun.serve({
-  port: 3000,
-  async fetch(req) {
-    const url = new URL(req.url);
-    if (url.pathname.startsWith("/suggestions/")) {
-      const filename = url.pathname.split("/").pop();
-      const filePath = path.join("output", filename);
-      if (fs.existsSync(filePath)) {
-        return new Response(fs.readFileSync(filePath));
-      }
-    }
-    return new Response("Not Found", { status: 404 });
-  },
-});
-
-console.log(`Listening on http://localhost:${server.port}`);
-
-// Run the agents
-runAllAgents("path/to/your/project");
+runAllAgents()

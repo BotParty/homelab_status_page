@@ -3,7 +3,7 @@
 }
 
 files.hashirama.blog {
-	root * /home/adnan/derp
+	root * /home/adnan/
 	file_server browse
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
@@ -14,6 +14,9 @@ hashirama.blog {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
+	}
+	route /status_page {
+		respond "status page"
 	}
 
 	route /ws/* {

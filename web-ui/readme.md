@@ -122,3 +122,6 @@ but the probably closets formula to create like alan kay or bret victor = read 1
 i tried that didnt work :( - so i gave up and started to only paint using observablehq's magic paper for bret's magic ink.
 
 how to english->code gen for robotics - llama-artifact -> dynamciland + arcology = future-city
+
+https://criu.org/Main_Page
+https://chatgpt.com/c/6716dacc-984c-8013-9f74-b45a37a9f5af

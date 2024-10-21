@@ -1,13 +1,4 @@
-
-// proxy-server.
-
 const port = 3333;
-/// bun - dockerized + system or whateer 
-//      --- this proxies to vite for app 
-      ////   --- this proxies to another bun or deno server for iteration  /sanit
-        /// that way --- the primary bun process is mostly static and cant break 
-            ///that means llama can edit all other files wtihout crashing your app --- TDD ==== done yourintern can write the whoel thing for you 
-             ////then youge tto read papers not write app code ---- vp of eng not a junir odev. 
 
 Bun.serve({
   websocket: {
@@ -83,7 +74,7 @@ console.log("server running on port", port);
 import { spawn } from 'child_process';
 
 function startBunHelperServer() {
-  const bunHelperServer = spawn('bun', ['js/bun-helper-server.tsx'], {
+  const bunHelperServer = spawn('bun', ['js/bun-helper-server.tsx', '--port', '8002'], {
     stdio: 'inherit',
   });
 
