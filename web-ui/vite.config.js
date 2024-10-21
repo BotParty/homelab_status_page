@@ -1,12 +1,14 @@
 // vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 export default defineConfig({
   plugins: [react()],
   publicDir: 'static',
   server: {
-    port: 8000, // You can specify the port here
+    port: 8001, // You can specify the port here
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
@@ -33,5 +35,13 @@ export default defineConfig({
     alias: {
       views: '/views',
     }
-  }
+  },
+  css: {
+    postcss: {
+      plugins: [
+        tailwindcss,
+        autoprefixer,
+      ],
+    },
+  },
 })

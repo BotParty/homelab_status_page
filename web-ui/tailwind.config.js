@@ -7,7 +7,10 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-  content: ["./views/**/*.html"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   darkMode: "class",
   theme: {
     extend: {
@@ -66,3 +69,5 @@ module.exports = {
   ],
   // daisyui: {},
 };
+
+
