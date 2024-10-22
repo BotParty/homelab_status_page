@@ -161,9 +161,14 @@ function DiffusionVoxelPointCloud() {
     const runtime = new Runtime();
     runtime.module(VoxelNotebook, (name) => {
       if (name === "NOTCH") return new Inspector(nOTCHRef.current);
+<<<<<<< HEAD:web-ui/views/TeleGuidance.tsx
       if (name === "voxelPainter") return new Inspector(lOGORef.current);
       if (name === "voxelPainter") return new Inspector(idk.current);
 
+=======
+      if (name === "LOGO") return new Inspector(lOGORef.current);
+      if (name === "render_the_cavas") return new Inspector(render_the_cavasRef.current);
+>>>>>>> c2752e0 (cool):web-ui/js/views/odyssey/TeleGuidance.tsx
     });
     return () => runtime.dispose();
   }, []);

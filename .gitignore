@@ -9,6 +9,7 @@ previous_static/
 data.json
 web-ui/user_code/tmp/web_bg.wasm
 web-ui/user_code/tmp/webgpu-examples
+200k_prs/client-sdk-js
 
 
 ObservableRobotRemote
