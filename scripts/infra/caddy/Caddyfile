@@ -27,7 +27,7 @@ hashirama.blog {
 	}
 
 	route /* {
-		reverse_proxy localhost:3333
+		reverse_proxy localhost:3000
 	}
 
 	# Add logging for this site

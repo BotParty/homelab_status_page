@@ -3,9 +3,16 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), createHtmlPlugin({
+    inject: {
+      injectData: {
+        script: '<script type="module" src="views/vite-frontend.jsx"></script>',
+      },
+    },
+  })],
   publicDir: 'static',
   hmr: false, // Disable HMR
 

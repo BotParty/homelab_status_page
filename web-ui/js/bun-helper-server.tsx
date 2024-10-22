@@ -1,3 +1,4 @@
+import { Hono } from 'hono'
 const ollama = require('ollama');
 import {$} from 'bun'
 import { renderToString } from "react-dom/server";
@@ -5,19 +6,58 @@ import React, {lazy } from 'react';
 import Bun from 'bun'
 import fs from "fs";
 import path from "path";
-//import { connect_to_livekit } from 'js/bun-livekit-server.js'
-//import llamaRoutes from 'js/llama-backend.js'
-//import CgiRoutes from 'js/bun_handlers/cgi-backend.js'
-const port = 3002;
-console.log(`Server running at http://localhost:${port}`);
-//import Blag from "./blag.jsx";
+// const routes = {
+//   "/api/placeholder_screenshare": (req: Request) => placeholder_screenshare(req),
 
-import { AccessToken } from "livekit-server-sdk";
+//   "/api/livekit_connect": (req: Request) => livekit_connect(req),
+//   "/api/replay_analyzer": (req: Request) => replay_analyzer(req),
+//   ///"/os/*": (req: Request) => os_automation(req),
+//   "/": (req: Request) => serveBlag(req),
+//   "/blag": (req: Request) => serveBlag(req),
+//   //"/llama-tools": (req: Request) => serveLlamaTools(req),
+//   //"/cgi-tools": (req: Request) => serveCgiTools(req),
+//   "/blag-archive": (req: Request) => serveBlagArchive(req),
+//   // ...CgiRoutesHandlers,
+//   // ...llamaRoutesHandlers
 
 
-const apiKey = process.env.LIVEKIT_API_KEY
-const apiSecret = process.env.LIVEKIT_API_SECRET
-const wsUrl = process.env.LIVEKIT_WS_URL
+//   "/api/magic_llama": (req: Request) => magic_llama(req),
+//   "/api/measure_magic_llama": (req: Request) => measure_magic_llama(req),
+
+//  }
+
+
+function main() {
+  const app = new Hono();
+  app.get('/api/placeholder_screenshare', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/api/livekit_connect', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/api/replay_analyzer', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/blag', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/blag-archive', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/api/magic_llama', (c) => c.json({'Pretty Blog API': 1}));
+  app.get('/api/measure_magic_llama', (c) => c.json({'Pretty Blog API': 1}));
+  return app
+}
+const hono = main()
+const port = 3333;
+//hono.listen(port)
+
+
+// import { AccessToken } from "livekit-server-sdk";
+// //import Blag from "./blag.jsx";
+
+// //import { connect_to_livekit } from 'js/bun-livekit-server.js'
+// //import llamaRoutes from 'js/llama-backend.js'
+// //import CgiRoutes from 'js/bun_handlers/cgi-backend.js'
+// const apiKey = process.env.LIVEKIT_API_KEY
+// const apiSecret = process.env.LIVEKIT_API_SECRET
+// const wsUrl = process.env.LIVEKIT_WS_URL
+// console.log(`Server running at http://localhost:${port}`);
+
+
+
+
 async function livekit_connect(req: Request) { 
   console.log('livekit_connect')
   const jsonData = {identity: 'voice to prompt?' + Date.now()}
@@ -179,40 +219,9 @@ async function placeholder_screenshare(req: Request) {
 // const llamaRoutesHandlers = Object.fromEntries(
 //   Object.entries(llamaRoutes).map(([key, value]) => [`/llama-tools${key}`, value])
 // );
-const routes = {
-  "/api/placeholder_screenshare": (req: Request) => placeholder_screenshare(req),
-
-  "/api/livekit_connect": (req: Request) => livekit_connect(req),
-  "/api/replay_analyzer": (req: Request) => replay_analyzer(req),
-  ///"/os/*": (req: Request) => os_automation(req),
-  "/": (req: Request) => serveBlag(req),
-  "/blag": (req: Request) => serveBlag(req),
-  //"/llama-tools": (req: Request) => serveLlamaTools(req),
-  //"/cgi-tools": (req: Request) => serveCgiTools(req),
-  "/blag-archive": (req: Request) => serveBlagArchive(req),
-  // ...CgiRoutesHandlers,
-  // ...llamaRoutesHandlers
 
 
-  "/api/magic_llama": (req: Request) => magic_llama(req),
-  "/api/measure_magic_llama": (req: Request) => measure_magic_llama(req),
 
- }
- main();
-
-async function main() {
-  Bun.serve({
-    port,
-    fetch(req: Request) {
-     
-
-      return route_to_handler(req).then(_=>console.log('done'))
-      .catch(err=>console.error('error', err))
-    },
-    reusePort: true,
-
-  });
-}
 function test_fetch(req: Request) { 
   return Response(JSON.stringify({message: 'hello'}), {
     headers: {
@@ -411,4 +420,5 @@ function print(msg: string) {
 }
 
 
-//https://news.ycombinator.com/item?id=37165054
+// //https://news.ycombinator.com/item?id=37165054
+
