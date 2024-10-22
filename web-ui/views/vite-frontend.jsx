@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
-//   import RoboticsOdyssey from "./robotics-odyssey.tsx";
 // import CGI_Tools from "./CGI_Tools.jsx";
 import LLAMA_Tools from "./LLAMA_Tools.tsx";
 // import Hardware_Tools from "./Hardware_Tools.jsx";
@@ -16,6 +15,7 @@ import LLAMA_Tools from "./LLAMA_Tools.tsx";
 //   { path: "/math-tools", component: Math_Tools },
 //   { path: "/blog  ", component: Blog },
 // ];
+  import RoboticsOdyssey from "./robotics-odyssey.tsx";
 
 
 
@@ -75,8 +75,8 @@ const root = ReactDOM.createRoot(document.getElementById("app"));
 
 
 root.render(<StrictMode>
-  <LLAMA_Tools />
-  
+  {/* <LLAMA_Tools /> */}
+  <RoboticsOdyssey />
   </StrictMode> 
 )
 

@@ -1,16 +1,16 @@
 import React, { useRef, useEffect } from "react";
-import Header from "./views/odyssey/Header.tsx";
-import ObservablePreview from "./views/odyssey/ObservablePreview.tsx";
-import Footer from "./views/odyssey/Footer.tsx";
-import TwitchPlaysPokemonPanel from "./views/odyssey/TwitchPlaysPokemonPanel.tsx";
-import TeleGuidance from "./views/odyssey/TeleGuidance.tsx";
-import DynamicHow from "./views/odyssey/DynamicHow.tsx";
-import PowerPoint from "./views/odyssey/PowerPoints.tsx";
-import Box from "./views/odyssey/Box.tsx";
+import Header from "./Header.tsx";
+import ObservablePreview from "./ObservablePreview.tsx";
+import Footer from "./Footer.tsx";
+import TwitchPlaysPokemonPanel from "./TwitchPlaysPokemonPanel.tsx";
+import TeleGuidance from "./TeleGuidance.tsx";
+import DynamicHow from "./Dynamichow.tsx";
+import PowerPoint from "./PowerPoints.tsx";
+import Box from "./Box.tsx";
 import { Runtime, Inspector } from "@observablehq/runtime";
 import Hardware_Picker from "./Hardware_picker.jsx";
-import OdysseyIntro from "./Odyssey-Intro.tsx";
-
+  import OdysseyIntro from "./Odyssey-Intro.tsx";
+import Sisterschools from "./sisterschools.tsx";
 
 
 function RoboticsOdyssey() {
@@ -20,13 +20,13 @@ function RoboticsOdyssey() {
       <div className="text-gray-950 antialiased bg-slate-900">
         <div className="overflow-hidden flex justify-center items-center min-h-screen">
           <main>
-            {/* <OdysseyIntro /> */}
+            <OdysseyIntro />
 
             <div className="">
               <TeleGuidance />{" "}
             </div>
             <div className="">
-              {/* <ObservablePreview></ObservablePreview> */}
+              <ObservablePreview></ObservablePreview>
             </div>
             <div className="relative">
               {" "}
@@ -37,6 +37,7 @@ function RoboticsOdyssey() {
             {/* <UseDirectImport /> */}
             <Pricing />
             <Footer />
+            <Sisterschools />
             {/* <Hardware_Picker></Hardware_Picker> */}
           </main>
         </div>
@@ -44,6 +45,9 @@ function RoboticsOdyssey() {
     </div>
   );
 }
+
+// magic proxy + es6 proxy iframe --> 500 notebooks - being inscribed to and imbued with --- acutally anything --- 2x fly.io gpu for 
+//$1000 for on-demand rendering + used compute for 200k llama-requests to refine notebook + hand edit for 10 hours a day for 10 days 
 
 function Pricing() {
   return (

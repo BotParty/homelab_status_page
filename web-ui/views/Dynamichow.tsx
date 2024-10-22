@@ -14,12 +14,15 @@ import define from "https://api.observablehq.com/@roboticsuniversity/dynamicland
 
 
 const AlanHow = () => {
-  const viewofModuleNameRef = useRef();
+      const viewofModuleNameRef = useRef();
+      const viewofModuleNameRef2 = useRef();
 
   useEffect(() => {
     const runtime = new Runtime();
     runtime.module(notebook, name => {
       if (name === "Complex_Systems") return new Inspector(viewofModuleNameRef.current);
+      if (name === "change_in_groups") return new Inspector(viewofModuleNameRef2.current);
+
       return ["basicRequire","dynamicImport","skypackImport","bundleRun","scavengingForLinks","globalLeaksPattern","pkg"].includes(name);
     });
     return () => runtime.dispose();
@@ -29,6 +32,8 @@ const AlanHow = () => {
     <div className="bg-slate-900 p-4">
       <div className="text-white"><a href="https://observablehq.com/@roboticsuniversity/alan_how">Alan Kay how?</a></div>
       <div ref={viewofModuleNameRef} />
+      <div ref={viewofModuleNameRef2} />
+
     </div>
   );
 };
@@ -38,12 +43,15 @@ const AlanHow = () => {
 function DynamicLand() {
   const viewofModuleNameRef = useRef();
   const viewofModuleNameRef2 = useRef();
+  const viewofModuleNameRef3 = useRef();
 
   useEffect(() => {
     const runtime = new Runtime();
     runtime.module(define, name => {
       if (name === "staticDynamicland") return new Inspector(viewofModuleNameRef.current);
-      if (name === "Seeing_space_datum") return new Inspector(viewofModuleNameRef2.current);
+      if (name === "Seeing_space") return new Inspector(viewofModuleNameRef2.current);
+      if (name === "ladder_") return new Inspector(viewofModuleNameRef3.current);
+
 
       return ["basicRequire","dynamicImport","skypackImport","bundleRun","scavengingForLinks","globalLeaksPattern","pkg"].includes(name);
     });
@@ -56,6 +64,8 @@ function DynamicLand() {
       <div className="grid grid-cols-2 gap-4">
         <div ref={viewofModuleNameRef2} className="overflow-auto" />
         <div ref={viewofModuleNameRef} className="overflow-auto" />
+        <div ref={viewofModuleNameRef3} className="overflow-auto" />
+
       </div>
     </div>
   );

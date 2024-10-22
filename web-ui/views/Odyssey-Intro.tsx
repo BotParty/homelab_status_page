@@ -206,8 +206,8 @@ export default function Example() {
     console.log(from_color, to_color)
   }
   return (
-    <div className="bg-white">
-      <header className="absolute inset-x-0 top-0 z-50">
+    <div className="bg-white" style={{maxHeight: "100px"}}>
+      <header className="absolute inset-x-0 top-0 z-50" >
 
 {/*         
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
@@ -293,7 +293,7 @@ export default function Example() {
         </Dialog>
       </header>
 
-      <div className="relative isolate px-6 pt-14 lg:px-8">
+      <div className="relative isolate px-6 lg:px-8">
         <div
           aria-hidden="true"
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -325,7 +325,7 @@ export default function Example() {
      
           <div className="text-center">
             <h1 className="text-balance text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">
-            Thanks to <a href="https://botparty.org" className="text-indigo-600 underline">BotParty.org</a> + <a href="https://dynamicland.org" className="text-indigo-600 underline">Dynamicland.org</a>!
+            Last Missing Piece <a href="https://botparty.org" className="text-indigo-600 underline">200k PRs</a> + <a href="https://dynamicland.org" className="text-indigo-600 underline">Dynamicland.org</a>!
             </h1>
             {/* <p className="mt-6 text-lg leading-8 text-gray-600">
               Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet

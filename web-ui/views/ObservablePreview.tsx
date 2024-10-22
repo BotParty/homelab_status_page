@@ -3,7 +3,7 @@ import React from "react";
 function ObservablePreview() {
   return (
     <div className="overflow-hidden" style={{height: "50vh"}}>
-    <iframe className="h-full w-full" src="http://localhost:3001"></iframe>
+    <iframe className="h-full w-full" src="http://localhost:3000"></iframe>
 
       {/* <div className="pb-24 px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-7xl"> */}

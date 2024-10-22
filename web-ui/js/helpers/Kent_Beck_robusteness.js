@@ -118,41 +118,6 @@ async function runAllAgents(directory) {
 
   //anthropci ---- 200k maximum
   //gemini 2 million token context window
-
-
-  // Move all JSX and TSX files to a folder called 'views'
-  const moveFilesToViews = async () => {
-    const viewsDir = path.join(root_dir, 'views');
-    if (!fs.existsSync(viewsDir)) {
-      fs.mkdirSync(viewsDir);
-    }
-
-    files.filter(file => file.endsWith('.jsx') || file.endsWith('.tsx')).forEach(file => {
-      const newFilePath = path.join(viewsDir, path.basename(file));
-      fs.renameSync(file, newFilePath);
-      console.log(`Moved ${file} to ${newFilePath}`);
-    });
-  };
-
-  // Move all HTML files to a folder called 'views/archive'
-  const moveHtmlFilesToArchive = async () => {
-    const archiveDir = path.join(root_dir, 'views', 'archive');
-    if (!fs.existsSync(archiveDir)) {
-      fs.mkdirSync(archiveDir, { recursive: true });
-    }
-
-    files.filter(file => file.endsWith('.html')).forEach(file => {
-      const newFilePath = path.join(archiveDir, path.basename(file));
-      fs.renameSync(file, newFilePath);
-      console.log(`Moved ${file} to ${newFilePath}`);
-    });
-  };
-
-  await moveFilesToViews();
-  await moveHtmlFilesToArchive();
-
-
-
 }
 
 runAllAgents()

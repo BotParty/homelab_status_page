@@ -153,13 +153,17 @@ function VoxelPainter() {
 function DiffusionVoxelPointCloud() {
   const lOGORef = useRef();
   const nOTCHRef = useRef();
+  const idk = useRef();
+
   // const output_threeRef = useRef();
   const render_the_cavasRef = useRef();
   useEffect(() => {
     const runtime = new Runtime();
     runtime.module(VoxelNotebook, (name) => {
       if (name === "NOTCH") return new Inspector(nOTCHRef.current);
-      if (name === "LOGO") return new Inspector(lOGORef.current);
+      if (name === "voxelPainter") return new Inspector(lOGORef.current);
+      if (name === "voxelPainter") return new Inspector(idk.current);
+
     });
     return () => runtime.dispose();
   }, []);
@@ -167,8 +171,8 @@ function DiffusionVoxelPointCloud() {
   //return <></>
   // https://github.com/zed-industries/zed
   return (
-    <div class="grid grid-cols-3 gap-4">
-      {/* <div ref={output_threeRef} /> */}
+    <>
+
       <ObservableTitle
         title="Simulation + UI"
         href="https://observablehq.com/@roboticsuniversity/voxels-diffusion-policy-3d"
@@ -177,10 +181,20 @@ function DiffusionVoxelPointCloud() {
         title="Stixels"
         href="https://observablehq.com/@roboticsuniversity/stixels"
       />
+   
+    <div class="grid grid-cols-2 gap-4">
+    <img className="w-48 h-48" src="https://files.hashirama.blog/derp/static_assets/static/blog/future-city.gif" />
 
-      <div ref={nOTCHRef} />
-      <div ref={lOGORef} />
+      <div style={{width: "100px", height: "100px"}} ref={nOTCHRef} />
+  
+
+      <div class="w-4" ref={lOGORef} />
+      <div class="w-4" ref={idk} />
+      <img src="https://files.hashirama.blog/voxel.png" />
+
+
     </div>
+    </>
   );
 
   // https://files.hashirama.blog/static/blog/animated_gifs/Animated%20GIF%20optimizer.gif
@@ -193,6 +207,8 @@ function TeleGuidance() {
         <div class="grid gap-4 lg:grid-cols-2 lg:grid-rows-2">
           <div class="relative">
             <div class="relative overflow-hidden rounded-lg lg:rounded-tl-[2rem] h-[300px]">
+              <img src="https://files.hashirama.blog/derp/static_assets/static/blog/zed_sensor.gif" className="w-48 h-48 object-cover" />
+              <video id="screenshare"></video>
               <Perception_Module />
             </div>
           </div>
