@@ -14,7 +14,7 @@ export default function Example() {
                   src="https://tailwindui.com/plus/img/component-images/bento-02-releases.png"
                   className="h-80 object-cover object-left"
                 /> */}
-                <div className="p-10" hx-get="/views/livekit_screenshare.html" hx-trigger="load">
+                <div className="p-10" hx-get="/-odyssey" hx-trigger="load">
                   <h3 className="text-sm/4 font-semibold text-gray-400">Releases</h3>
                   <p className="mt-2 text-lg/7 font-medium tracking-tight text-white">Push to deploy</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400">

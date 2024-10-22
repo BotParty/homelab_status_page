@@ -16,10 +16,15 @@ function ObservablePreview() {
 
             flex flex-row"
           > */}
-            {/* <iframe
+             <iframe
               className="h-full w-full"
               src="http://127.0.0.1:3000"
-            ></iframe> */}
+              ></iframe>
+
+
+
+
+              
             {/* <iframe
               className="h-screen w-1/2 flex-1"
               src="/public/dist/index.html"

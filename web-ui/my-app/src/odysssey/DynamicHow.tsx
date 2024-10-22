@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import TwitchPlaysPokemonPanel from './TwitchPlaysPokemonPanel';
+import TwitchPlaysPokemonPanel from '../../views/TwitchPlaysPokemonPanel';
 //import notebook from "@roboticsuniversity/alan_how";
 //import notebook2 from "@roboticsuniversity/dynamicland";//"@roboticsuniversity/voxels-diffusion-policy-3d";
 // analyze seinfeild - cant be constant comedy - some boring parts -- watch youtube -with vonnegut annotaion - tvroeps is a datum
 // kapil gupta was a doctor who discovered presiciptriosn were like sledge hammers for yuor neurons - AUC - attia + sapolsky -> 
 // https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
 import {useRef, useEffect} from "react";
-import {Runtime, Inspector} from "@observablehq/runtime";
 
-import notebook from "https://api.observablehq.com/@roboticsuniversity/alan_how.js?v=4";
-import define from "https://api.observablehq.com/@roboticsuniversity/dynamicland.js?v=4";
 
+
+import {d3} from "https://cdn.jsdelivr.net/npm/d3@7.4.4/dist/d3.min.js";
+
+const notebook = d3.require("https://api.observablehq.com/@roboticsuniversity/alan_how.js?v=4");
+const define = d3.require("https://api.observablehq.com/@roboticsuniversity/dynamicland.js?v=4");
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+
+
+d3.require()
 
 
 const AlanHow = () => {

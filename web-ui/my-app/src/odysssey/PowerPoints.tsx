@@ -1,7 +1,7 @@
 // import text from "./human_robot.txt"
 // https://www.jasper.ai/
 
-import reflectNotionHomage from "../../public/reflect_notion_homage.png";
+//import reflectNotionHomage from "../../public/reflect_notion_homage.png";
 
 //seuqelitis
 //metal gear solid - explain war
@@ -15,6 +15,7 @@ function PowerPoint() {
     <div class="flex flex-row">
       [
       <iframe
+      className="border-2 border-red-500"
         key="youtube"
         width="560"
         height="215"

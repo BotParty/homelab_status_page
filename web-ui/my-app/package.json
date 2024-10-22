@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
     "hono": "^4.6.5"

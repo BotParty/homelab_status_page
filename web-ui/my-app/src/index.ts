@@ -7,6 +7,7 @@ const app = new Hono()
 // const hono_livekit_connect = async (c: Context) => { 
 //   return c.json(await livekit_connect(c.req.raw))
 // }
+import odyssey from './robotics-odyssey.jsx'
 
 import grid from './llama-tools.jsx'
 import { flushSync } from 'react-dom'
@@ -22,19 +23,58 @@ import { cors } from 'hono/cors';
 
 app.use(logger())
 
+
+
+app.onError((err, c) => {
+  console.error(err); // Log the error for debugging
+  const errorMessage = {
+    message: err.message,
+    stack: err.stack, // Include stack trace for line numbers
+    // You can add more details here if needed
+  };
+  return c.json(errorMessage, 500); // Send a JSON response with the error details
+});
 // specify path
 app.use('*', cors())
 
+
+
+
+app.all('/odyssey', (c) => {
+  //Layout(odyssey())
+  return c.html(Layout(odyssey()))
+})
+
+app.all('/_/TeleGuidance.tsx', async (c) => {
+  console.log('htmx render ', c.req.path)
+
+  const html = fs.readFileSync('./src/odysssey/TeleGuidance.tsx', 'utf8')
+  return c.html(html)
+})
+
+app.all('/_/DynamicHow.tsx', async (c) => {
+  console.log('htmx render ', c.req.path)
+
+  const html = fs.readFileSync('./src/odysssey/DynamicHow.tsx', 'utf8')
+  return c.html(html)
+})
+
 app.all('/', async (c) => {
-  return c.html(Layout(grid()))
-})
+  return c.html(`<div>
+    <h1> hono index </h1>
+    <div><a href="/odyssey">Robotics Odyssey</a></div>
+    <div><a href="/llama-tools">llamatools</a></div>
+    <div><a href="/flow">flow</a></div>
+    <div><a href="/blog">blog</a></div>
 
-app.all('/odyssey', async (c) => {
-  return c.html(Layout(grid()))
-})
 
-app.all('/*', async (c) => {
-  return c.html(Layout(grid()))
+    <div>
+    <li> add magic iframe -- htmx + some observable links --- grid %s 
+    <li> auto refresh like vite 
+    <li> add livekit screenshare 
+     holman 
+    </div>
+  </div>`)
 })
 
 app.all('/livekit_screenshare', async (c) => {
@@ -69,7 +109,7 @@ const Layout = (content: any) => html`
     </head>
     <body>
       <div class="p-4">
-        <h1 class="text-4xl font-bold mb-4"><a href="/">Todo</a></h1>
+        <h1 class="text-4xl font-bold mb-4"><a href="/">Robotics Odyssey</a></h1>
         ${content}
       </div>
     </body>
@@ -135,3 +175,6 @@ async function connect_to_livekit(options: { identity: string }) {
 
 // Starting the server
 app.fire();
+
+// -- obs_react_notebook_component -- 10 stars - make 
+//3d css react tw

@@ -50,9 +50,7 @@ const port = 3333;
 // //import { connect_to_livekit } from 'js/bun-livekit-server.js'
 // //import llamaRoutes from 'js/llama-backend.js'
 // //import CgiRoutes from 'js/bun_handlers/cgi-backend.js'
-// const apiKey = process.env.LIVEKIT_API_KEY
-// const apiSecret = process.env.LIVEKIT_API_SECRET
-// const wsUrl = process.env.LIVEKIT_WS_URL
+
 // console.log(`Server running at http://localhost:${port}`);
 
 

@@ -5,13 +5,15 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 //
 
 import * as d3Chromatic from 'https://unpkg.com/d3-scale-chromatic@3.0.0/dist/d3-scale-chromatic.min.js';
-import * as d3 from "https://cdn.skypack.dev/d3@7";
-import { interpolateTurbo } from "https://cdn.skypack.dev/d3-scale-chromatic@3";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"; // Updated CDN
+// import { interpolateTurbo } from "https://unpkg.com/d3-scale-chromatic@3.0.0/dist/d3-scale-chromatic.min.js";
 
 //let https://underscorejs.org/underscore-esm.js
 
-const makeGradient = (t) => interpolateTurbo(t)
+const makeGradient = (t) => 1
 
+//const makeGradient = (t) => interpolateTurbo(t)
+//get voice modulator - fft - info theory
 
 const navigation = [
   // { name: 'Product', href: '#' },

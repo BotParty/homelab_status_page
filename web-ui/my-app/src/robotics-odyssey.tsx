@@ -1,16 +1,28 @@
 import React, { useRef, useEffect } from "react";
-import Header from "./Header.tsx";
-import ObservablePreview from "./ObservablePreview.tsx";
-import Footer from "./Footer.tsx";
-import TwitchPlaysPokemonPanel from "./TwitchPlaysPokemonPanel.tsx";
-import TeleGuidance from "./TeleGuidance.tsx";
-import DynamicHow from "./Dynamichow.tsx";
-import PowerPoint from "./PowerPoints.tsx";
-import Box from "./Box.tsx";
-import { Runtime, Inspector } from "@observablehq/runtime";
-import Hardware_Picker from "./Hardware_picker.jsx";
-  import OdysseyIntro from "./Odyssey-Intro.tsx";
-import Sisterschools from "./sisterschools.tsx";
+import Header from "../views/Header.js";
+
+const  OdysseyIntro = function () {} 
+
+//import OdysseyIntro from "./Odyssey-Intro.js"
+
+
+import { readFileSync } from "fs";
+import Hardware_Picker from "./odysssey/Hardware_picker.jsx";
+
+import ObservablePreview from "./odysssey/ObservablePreview.js";
+import Footer from "../views/Footer.js";
+import TwitchPlaysPokemonPanel from ".//TwitchPlaysPokemonPanel.js";
+import TeleGuidance from "./odyssey/TeleGuidance.js";
+import DynamicHow from "./odysssey/DynamicHow.js";
+import PowerPoint from "./odysssey/PowerPoints.js";
+import Box from "./odysssey/Box.js";
+//import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+//import define from "https://api.observablehq.com/@observablehq/hello-world.js?v=4";
+import Sisterschools from "../views/sisterschools.js";
+import _ from 'https://esm.sh/lodash';
+//const  OdysseyIntro  =  require('https://files.hashirama.blog/homelab_status_page/web-ui/my-app/src/odysssey/OdysseyIntro.ts');
+
+//import   OdysseyIntro  from 'homelaodysssey/OdysseyIntro.ts'
 
 
 function RoboticsOdyssey() {
@@ -20,17 +32,30 @@ function RoboticsOdyssey() {
       <div className="text-gray-950 antialiased bg-slate-900">
         <div className="overflow-hidden flex justify-center items-center min-h-screen">
           <main>
-            <OdysseyIntro />
+            {/* <iframe src="/_/OdysseyIntro.tsx" className="
+    
+    border-2 border-red-500
+    w-full h-full"></iframe> */}
+            <div className="">
+              {/* <TeleGuidance />{" "} */}
+              <iframe src="/_/TeleGuidance.tsx" className="
+    
+              border-2 border-red-500
+              w-full h-full"></iframe>
 
-            <div className="">
-              <TeleGuidance />{" "}
             </div>
             <div className="">
-              <ObservablePreview></ObservablePreview>
+              {/* <iframe src="/_/ObservablePreview.tsx" className="
+
+ border-2 border-red-500
+w-full h-full"></iframe> */}
             </div>
-            <div className="relative">
-              {" "}
-              <DynamicHow />{" "}
+            <div className="relative" id="shit"
+            >
+<iframe src="/_/DynamicHow.tsx" className="
+
+ border-2 border-red-500
+w-full h-full"></iframe>
             </div>
             {/* <PowerPoint />
             <Box /> */}
@@ -131,7 +156,7 @@ function Pricing() {
   ```
 */
 //</link>import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-import define from "https://api.observablehq.com/@roboticsuniversity/agent-dashboard@77.js?v=4&api_key=d656d272d7f07743922b44815d2905265f91507b";
+// import define from "https://api.observablehq.com/@roboticsuniversity/agent-dashboard@77.js?v=4&api_key=d656d272d7f07743922b44815d2905265f91507b";
 
 function UseDirectImport() {
   const ref = useRef();

@@ -1,14 +1,19 @@
 import React from "react";
 import { useRef, useEffect, useState } from "react";
+import { require } from "d3"; // Add this import statement
+
 import {
   Runtime,
   Inspector,
 } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-import define from "https://api.observablehq.com/@roboticsuniversity/livekit.js?v=4";
-import define2 from "https://api.observablehq.com/@roboticsuniversity/robotics-hardware.js?v=4";
-import voxelpainter from "https://api.observablehq.com/@roboticsuniversity/alanthree.js?v=4";
-import VoxelNotebook from "https://api.observablehq.com/@roboticsuniversity/voxels-diffusion-policy-3d@88.js?v=4";
-import prediction_planning_notebook from "https://api.observablehq.com/@roboticsuniversity/3-planning-prediction.js?v=4";
+const define = await require("https://api.observablehq.com/@roboticsuniversity/livekit.js?v=4");
+const define2 = await require("https://api.observablehq.com/@roboticsuniversity/robotics-hardware.js?v=4");
+const voxelpainter = await require("https://api.observablehq.com/@roboticsuniversity/alanthree.js?v=4");
+const VoxelNotebook = await require("https://api.observablehq.com/@roboticsuniversity/voxels-diffusion-policy-3d@88.js?v=4");
+const prediction_planning_notebook = await require("https://api.observablehq.com/@roboticsuniversity/3-planning-prediction.js?v=4");
+
+
+
 const observable_titles = [
   {
     title: "Perception Module",
