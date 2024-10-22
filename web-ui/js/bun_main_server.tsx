@@ -23,21 +23,10 @@ Bun.serve({
   else 
   return parlay_to_vite(req, url)
   
-      // Return the Vite server's response to the client
-  }, // The port your proxy server will listen on
+  }, 
 });
 console.log("server running on port", port);
 
-
-// function kill() {
-//   for (const bun of buns) {
-//     console.log('cool')
-//     bun.kill();
-//   }
-// }
-
-// process.on("SIGINT", kill);
-// process.on("exit", kill);
 
  function make_ws ()  {
   return { 
@@ -100,7 +89,7 @@ return response;
 
 async function parlay_to_api(req, url) {
   //console.log('parlay', url, port)
-  url.port = 8002; // Forward to Vite server's port
+  url.port = 3002; // Forward to Vite server's port
   url.hostname = "localhost"; // Assuming Vite is running locally
   
   const response = await fetch(url.toString(), {

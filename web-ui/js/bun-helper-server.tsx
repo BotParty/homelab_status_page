@@ -12,6 +12,44 @@ const port = 3002;
 console.log(`Server running at http://localhost:${port}`);
 //import Blag from "./blag.jsx";
 
+import { AccessToken } from "livekit-server-sdk";
+
+
+const apiKey = process.env.LIVEKIT_API_KEY
+const apiSecret = process.env.LIVEKIT_API_SECRET
+const wsUrl = process.env.LIVEKIT_WS_URL
+async function livekit_connect(req: Request) { 
+  console.log('livekit_connect')
+  const jsonData = {identity: 'voice to prompt?' + Date.now()}
+    const identity = jsonData.identity;
+    if (!identity) {
+      return new Response("Identity parameter is missing", { status: 400 });
+    }
+  
+    const json = await connect_to_livekit(jsonData);
+    console.log(json, json);
+      return new Response(JSON.stringify(json));
+  }
+  
+async function connect_to_livekit(options) {
+  console.log("options", options);
+  //if (!options.identity) throw new Error("requester must have an identity");
+  if (!options.identity) {
+    options.identity = 'anonymous' + Math.random().toString(36).substring(2, 15);
+  }
+  const token = new AccessToken(apiKey, apiSecret, {
+    identity: options.identity,
+  });
+  token.addGrant({
+    room: "example-room",
+    roomJoin: true,
+    canPublish: true,
+  });
+  const jwt = await token.toJwt();
+
+  return { token: jwt, wsUrl };
+}
+
 
 function serveBlag(req: Request) { 
   const filePath = path.join(process.cwd(), "js/views/blag.html");
@@ -157,21 +195,43 @@ const routes = {
 
 
   "/api/magic_llama": (req: Request) => magic_llama(req),
+  "/api/measure_magic_llama": (req: Request) => measure_magic_llama(req),
+
  }
  main();
 
 async function main() {
   Bun.serve({
     port,
-    fetch,
+    fetch(req: Request) {
+     
+
+      return route_to_handler(req).then(_=>console.log('done'))
+      .catch(err=>console.error('error', err))
+    },
     reusePort: true,
 
   });
 }
-console.log('bun-helper-server')
-async function fetch(req: Request) {
+function test_fetch(req: Request) { 
+  return Response(JSON.stringify({message: 'hello'}), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+
+console.log('bun-helper-server beginning', port)
+
+
+async function route_to_handler(req: Request) {
+
+
   const url = new URL(req.url);   
+
   console.log('bun-helper', url.pathname)
+  print('bun-helper', url.pathname)
   if (!req.url) {
     console.error('Request URL is undefined');
     return new Response('Invalid request', { status: 400 });
@@ -195,7 +255,7 @@ async function fetch(req: Request) {
       const prompt = `Generate a paragraph of PhD level content and 10 citations related to the topic described in the file: ${filePath}`;
 
       const response = await ollama.chat({
-        model: 'llama3.1',
+        model: 'llama3.2',
         messages: [{ role: 'user', content: prompt  }],
       })
 
@@ -241,22 +301,22 @@ function webhook(req: Request) {
 async function magic_llama(req: Request) { 
   const url = new URL(req.url);
   const prompt = url.searchParams.get('msg') || '';
-  console.log('msg', prompt)
+  //console.log('msg', prompt)
   // const response = await ollama.chat({
   //   model: 'llama3.1',
   //   messages: [{ role: 'user', content: prompt  }],
   // })
-  console.time('magic_llama')
+  //console.time('magic_llama')
   const magic_llama_response = await $`ollama run llama3.2 ${prompt}`
   .quiet()
-  console.timeEnd('magic_llama')
+  //console.timeEnd('magic_llama')
   const json_response = {
 
     response: magic_llama_response.stdout.toString().trim(),
     hasError: magic_llama_response.stderr.toString().trim(),
   }
 
-  console.log('response',json_response)
+  //console.log('response',json_response)
   return new Response(JSON.stringify(json_response), {
     headers: {
       "Content-Type": "application/json",
@@ -267,5 +327,88 @@ async function magic_llama(req: Request) {
 
 
 
+async function measure_magic_llama(req: Request) { 
+  const url = new URL(req.url);
+  const time = url.searchParams.get('magic_llama_time') || '';
 
 
+  let times = JSON.parse(fs.readFileSync('/home/adnan/derp/magic_llama_times.json', 'utf8'))
+  times = times || []
+
+  times = times.filter(t => typeof t === 'number')
+  //use typescript - to make sure logs conform to schema pls 
+
+  const types_log = {
+    "timestamp": "2024-10-21T10:46:00Z",
+    "system": "user",
+    "event_type": "view",
+    "event_description": "User viewed blog post",
+    "metadata": {
+      "user_id": "user_456",
+      "resource": "hashirama.blog/post/123",
+      "details": {
+        "session_duration": "120 seconds",
+        "scroll_depth": "75%"
+      }
+    }
+  }
+
+  type TypesStruct = {
+    timestamp: string;
+    system: string;
+    event_type: string;
+    event_description: string;
+    metadata: {
+      user_id: string;
+      resource: string;
+      details: {
+        session_duration: string;
+        scroll_depth: string;
+      };
+    };
+  };
+
+  const types_struct: TypesStruct = {
+    timestamp: "2024-10-21T10:46:00Z",
+    system: "user",
+    event_type: "view",
+    event_description: "User viewed blog post",
+    metadata: {
+      user_id: "user_456",
+      resource: "hashirama.blog/post/123",
+      details: {
+        session_duration: "120 seconds",
+        scroll_depth: "75%"
+      }
+    }
+  };
+
+
+
+  times.push(time)
+
+  console.log('times', times.length)
+
+  fs.writeFileSync('/home/adnan/derp/magic_llama_times.json', JSON.stringify(times))
+
+
+  return new Response(JSON.stringify({ 'measure_theory_count': times.length }), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+
+}
+
+
+
+
+
+function print(msg: string) {
+  console.log('print', msg)
+  fs.appendFileSync('/home/adnan/derp/print.txt', msg)
+}
+
+
+//https://news.ycombinator.com/item?id=37165054

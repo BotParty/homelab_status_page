@@ -7,8 +7,13 @@ import autoprefixer from 'autoprefixer'
 export default defineConfig({
   plugins: [react()],
   publicDir: 'static',
+  hmr: false, // Disable HMR
+
   server: {
     port: 8001, // You can specify the port here
+    webSocket: false, // Disable WebSockets
+    hmr: false, // Disable HMR
+
     proxy: {
       '/api': {
         target: 'http://localhost:8080',

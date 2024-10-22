@@ -60,57 +60,6 @@ function Documentation() {
   );
 }
 
-function RoamResearch () {
-  return (<><div>Open_problems.robotics</div>
-  <img src="/public/dynamic_land_toolchain.png" />
-  <div>Roam Research</div>
-
-
-  
-  </>);
-}
-
-
 const root = ReactDOM.createRoot(document.getElementById("app"));
+root.render(window.location.pathname !== '/' ? <LLAMA_Tools /> : <RoboticsOdyssey />)
 
-
-root.render(<StrictMode>
-  {/* <LLAMA_Tools /> */}
-  <RoboticsOdyssey />
-  </StrictMode> 
-)
-
-  // {/* <BrowserRouter>
-  //     <Routes>
-  //       <Route path="/" element={<RoboticsOdyssey /> } />
-  //       <Route path="/llama" element={<LLAMA_Tools />} />
-  //       <Route path="/blag" element={} />
-
-  // {/* blog is extra - llama = gabmle - might be integral" */}
-  //       {/* <Route path="/docs" element={<Documentation />} /> */}
-  //       {/* <Route path="/cgi" element={<CGI_Tools />} /> */}
-  //       {/* <Route path="/hardware" element={<Hardware_Tools />} />
-  //       <Route path="/math" element={<Math_Tools />} /> * */}
-  //       {/* <Route path="/course_content"  element={<iframe width="1920" height="1080" src="http://localhost:3000" />} /> */}
-  //       </Routes>
-  //       </BrowserRouter>*/}
-
-//  llama 
-// cgi? 
-//robotics - you did robotics ? 
-// find pau 
-// send to YC: JP + mark + eric - 2pm
-// send to stork 4pm 
-
-
-// nolagen - flower for algenernon + naver
-//reflect = read only - populate from roam resarch
-
-// function Blog () {
-//   return <div>Blog</div>;
-// }
-
-//JP + mark + eric - 4pm
-//stork + shawn - 6pm
-//NVDusty - 8pm
-// steam + netflix
