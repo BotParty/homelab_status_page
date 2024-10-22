@@ -125,3 +125,10 @@ how to english->code gen for robotics - llama-artifact -> dynamciland + arcology
 
 https://criu.org/Main_Page
 https://chatgpt.com/c/6716dacc-984c-8013-9f74-b45a37a9f5af
+Thanks jwz
+
+20% typescript 
+20% python
+20% zig
+20% ? cuda
+20% ?  treasure plaent

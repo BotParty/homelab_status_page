@@ -122,7 +122,7 @@
         }
   
         const liveKit_data = await postLivekitConnect();
-  
+  console.log('liveKit_data', liveKit_data)
         async function startLiveKit() {
           const url = "wss://omnissiah-university-kmuz0plz.livekit.cloud";
           // const data = { identity: "happydream" + Math.random() };
@@ -145,7 +145,36 @@
         
         // Log local participant
         console.log("Local Participant:", room.localParticipant.identity);
+        document.getElementById('startButton').addEventListener('click', () => {
+          console.log('startButton clicked')
+          screeenshare()
+        })
 
+        room.on(RoomEvent.LocalTrackPublished, (pub) => {
+          console.log('local track published', pub);
+          renderScreenShare(room);
+        })
+
+
+
+function screeenshare() {
+  navigator.mediaDevices.getDisplayMedia({ video: true })
+        .then((stream) => {
+            // Publish the screen track to the room
+            const screenTrack = stream.getVideoTracks()[0];
+            const publication = room.localParticipant.publishTrack(screenTrack);
+            console.log('Screen sharing started:', publication.trackSid);
+            
+            // Optionally, you can stop sharing after some time or on a button click
+            screenTrack.onended = () => {
+                console.log('Screen sharing stopped');
+                room.localParticipant.unpublishTrack(screenTrack);
+            };
+        })
+        .catch((error) => {
+            console.error('Error accessing display media:', error);
+        });
+}
         // room.localParticipant.tracks.forEach(publication => {
         //   console.log(`- Track: ${publication.trackSid}, Kind: ${publication.kind}, Name: ${publication.trackName}`);
         // });

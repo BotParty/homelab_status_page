@@ -14,13 +14,14 @@ export default function Example() {
                   src="https://tailwindui.com/plus/img/component-images/bento-02-releases.png"
                   className="h-80 object-cover object-left"
                 /> */}
+                <iframe src="/iframe/lama-tools/livekit_audio.html" />
                 <div className="p-10" hx-get="/-odyssey" hx-trigger="load">
-                  <h3 className="text-sm/4 font-semibold text-gray-400">Releases</h3>
-                  <p className="mt-2 text-lg/7 font-medium tracking-tight text-white">Push to deploy</p>
-                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400">
+                  <h3 className="text-sm/4 font-semibold text-gray-400">livekit audio</h3>
+                  <p className="mt-2 text-lg/7 font-medium tracking-tight text-white">livekit audio</p>
+                  {/* <p className="mt-2 max-w-lg text-sm/6 text-gray-400">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. In gravida justo et nulla efficitur, maximus
                     egestas sem pellentesque.
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -31,11 +32,13 @@ export default function Example() {
                   src="https://tailwindui.com/plus/img/component-images/bento-02-integrations.png"
                   className="h-80 object-cover object-center"
                 /> */}
-                <div className="p-10" hx-get="/view/livekit_screen_share.html">
-                  <h3 className="text-sm/4 font-semibold text-gray-400">Integrations</h3>
-                  <p className="mt-2 text-lg/7 font-medium tracking-tight text-white">Connect your favorite tools</p>
+              <iframe src="/iframe/lama-tools/livekit_share.html" />
+
+                <div className="p-10">
+                  {/* <h3 className="text-sm/4 font-semibold text-gray-400"></h3> */}
+                  <p className="mt-2 text-lg/7 font-medium tracking-tight text-white">livekit share</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400">
-                    Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus massa.
+                    {/* Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus massa. */}
                   </p>
                 </div>
               </div>
@@ -47,6 +50,8 @@ export default function Example() {
                   src="https://tailwindui.com/plus/img/component-images/bento-02-security.png"
                   className="h-80 object-cover object-center"
                 /> */}
+                    <iframe src="/iframe/lama-tools/livekit_view_all.html" />
+
                 <div className="p-10" hx-get="/view/replay_analyzer.html">
                   <h3 className="text-sm/4 font-semibold text-gray-400">Security</h3>
                   <p className="mt-2 text-lg/7 font-medium tracking-tight text-white">Advanced access control</p>

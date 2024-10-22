@@ -45,6 +45,27 @@ app.all('/odyssey', (c) => {
   return c.html(Layout(odyssey()))
 })
 
+app.all('/llama-tools', (c) => {
+  //Layout(odyssey())
+  return c.html(Layout(grid()))
+})
+
+app.all('/iframe/*', (c) => {
+  //Layout(odyssey())
+  let basename = c.req.path.split('/').pop()
+  console.log('basename', basename)
+  // fs.readdirSync('./src').forEach(file => {
+  //   console.log(file)
+  // })
+  const html = fs.readFileSync('./src/llama-tools/'+ basename, 'utf8')
+  //let html = 'yay'
+  return c.html(html)
+})
+//after 1k signups - lower price to course by 10% by 1k till $5 for life.
+//only need 20k per year -  (20k / 100) = (goal: 200per year) - rest -> reinveest to hardware
+//1 buy per day = all beings (awaken + flourish)
+//1000 users is 1000/20 = 50 years of free service.
+
 app.all('/_/TeleGuidance.tsx', async (c) => {
   console.log('htmx render ', c.req.path)
 
@@ -109,7 +130,7 @@ const Layout = (content: any) => html`
     </head>
     <body>
       <div class="p-4">
-        <h1 class="text-4xl font-bold mb-4"><a href="/">Robotics Odyssey</a></h1>
+        <h1 class="text-4xl font-bold mb-4"><a href="/">Robotics Odyssey</a> <a class="float-right" href="https://buy.stripe.com/test_28o6oZelUe8g2HubII">pay via stripe </a></h1>
         ${content}
       </div>
     </body>
