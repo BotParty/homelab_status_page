@@ -1,0 +1,5 @@
+{
+  "room_name": "my-room",
+  "websocket_url": "wss://omnissiah-university-kmuz0plz.livekit.cloud",
+  "specs": "audio, linguistic, conceptual, mathematical, biological, visual, proprioception"
+}
