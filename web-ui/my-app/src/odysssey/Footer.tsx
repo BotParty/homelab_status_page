@@ -102,7 +102,7 @@ const navigation = {
     },
   ],
 };
-
+//https://codepen.io/shironitus/pen/QWyNBqx
 function Docker_pricing() {
   //console -> homepage
   return   (<div className="flex flex-col gap-4 flex-auto">
