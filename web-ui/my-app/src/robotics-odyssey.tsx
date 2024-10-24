@@ -124,7 +124,13 @@ function RoboticsOdyssey() {
       <div className="text-gray-950 antialiased bg-slate-900">
         <div className="overflow-hidden flex justify-center items-center min-h-screen">
           <main>
-            {/* <LlamaGrid /> */}
+          <h1 className="text-4xl font-bold text-center text-white">Robotics Odyssey - become a Robotics Odyssey</h1>
+
+          <div> by adnan wahab </div>
+          <h3 className="text-xl font-bold text-center text-white">93 hours of video to go from absolute beginner to advanced AI+Robotics Engineer</h3>
+          <div className="text-center text-white">40 students already enrolled</div>
+          <div>5 stars on trust pilot</div>
+            <LlamaGrid />
   
     
             <Sisterschools />
