@@ -26,9 +26,9 @@ elif [ "$COMMAND" = "show" ]; then
     #$ROOT/build.sh --show "$@"
     echo "Running run.sh..."
 
-elif [ "$COMMAND" = "autotag" ]; then
+elif [ "$COMMAND" = "install" ]; then
     #$ROOT/autotag "$@"
-    echo "Running run.sh..."
+    bash ~/homelab_status_page/scripts/install.sh
 
 elif [ "$COMMAND" = "update" ]; then
     # cd $ROOT
@@ -52,6 +52,7 @@ elif [ "$COMMAND" = "restart-blog" ]; then
 
     # Add your restart-blog command logic here
 else
+    
     #echo 'default PARAM - no toher requests currently - restarting blag for fun !?!?!'
     # echo 'homelab_status_page > Invalid command'
     # echo ''
@@ -68,6 +69,6 @@ else
     # echo '   * restart-blog (default)'
     # echo ''
     # echo 'Run "jetson-containers <CMD> --help" for more info.'
-    bash ~/homelab_status_page/scripts/restart-blog.sh
+    
     exit 1
 fi

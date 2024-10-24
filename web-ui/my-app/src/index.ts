@@ -54,11 +54,20 @@ app.all('/iframe/*', (c) => {
   //Layout(odyssey())
   let basename = c.req.path.split('/').pop()
   console.log('basename', basename)
-  // fs.readdirSync('./src').forEach(file => {
-  //   console.log(file)
-  // })
-  const html = fs.readFileSync('./src/llama-tools/'+ basename, 'utf8')
-  //let html = 'yay'
+  let html = ''
+  if (basename == 'livekit_audio.html') {
+      html = fs.readFileSync('./src/llama-tools/livekit_audio.html', 'utf8')
+  }
+  if (basename == 'livekit_view_all.html') {
+    html = fs.readFileSync('./src/llama-tools/livekit_view_all.html', 'utf8')
+  } 
+   if (basename == 'livekit_share.html') {
+    html = fs.readFileSync('./src/llama-tools/livekit_share.html', 'utf8')
+  }
+
+  if (basename == 'replay_analyzer.html') {
+    html = fs.readFileSync('./src/llama-tools/replay_analyzer.html', 'utf8')
+  }
   return c.html(html)
 })
 //after 1k signups - lower price to course by 10% by 1k till $5 for life.
