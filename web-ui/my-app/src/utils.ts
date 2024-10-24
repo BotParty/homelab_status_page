@@ -148,10 +148,9 @@ export const webhook_receiver = async (c: Context) => {
       <title>Hono + htmx</title>
     </head>
     <body>
-      <div class="p-4">
-        <h1 class="text-4xl font-bold mb-4"><a href="/">Robotics Odyssey</a></h1>
-        <div>${content}</div>
-      </div>
+    
+    ${content}
+ 
     </body>
   </html>
 `
@@ -162,82 +161,6 @@ export const webhook_receiver = async (c: Context) => {
 //1000 users is 1000/20 = 50 years of free service.
 
 
-export const llama_ = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <script src="https://unpkg.com/htmx.org@1.9.3"></script>
-      <script src="https://unpkg.com/hyperscript.org@0.9.9"></script>
-      <script src="https://cdn.tailwindcss.com"></script>
-      <title>Hono + htmx</title>
-    </head>
-    <body>
-      <div class="p-4">
-        <h1 class="text-4xl font-bold mb-4"><a href="/">LLama Tools</a> <a class="float-right hidden" href="https://buy.stripe.com/test_28o6oZelUe8g2HubII">pay via stripe </a></h1>
-<div class="bg-gray-900 py-2 sm:py-32">
-    <div class="mx-auto px-6 lg:max-w-7xl lg:px-8">
-      <h2 class="text-base/7 font-semibold text-indigo-400">Deploy faster</h2>
-      <p class="mt-2 max-w-lg text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-        LLama Tools
-      </p>
-  
-      <!-- Toggle button -->
-      <button class="mt-4 bg-indigo-600 text-white py-2 px-4 rounded-lg">
-       cool!
-      </button>
-  
-      <div class="mt-6 grid grid-cols-1 gap-4">
-        <!-- First grid item -->
-        <div class="flex p-px col-span-1 ">
-          <div class="overflow-scroll rounded-lg bg-gray-800 ring-1 ring-white/15 w-full">
-            <iframe src="/iframe/lama-tools/livekit_audio.html" class="w-full h-full"></iframe>
-            <div class="p-4">
-              <h3 class="text-sm/4 font-semibold text-gray-400">livekit audio</h3>
-              <p class="mt-2 text-lg/7 font-medium tracking-tight text-white">livekit audio</p>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Second grid item -->
-        <div class="flex p-px col-span-1">
-          <div class="overflow-scroll rounded-lg bg-gray-800 ring-1 ring-white/15 w-full">
-            <iframe src="/iframe/lama-tools/livekit_share.html" class="w-full h-full"></iframe>
-            <div class="p-4">
-              <p class="mt-2 text-lg/7 font-medium tracking-tight text-white">livekit screenshare</p>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Third grid item -->
-        <div class="flex p-px col-span-1">
-          <div class="overflow-scroll rounded-lg bg-gray-800 ring-1 ring-white/15 w-full">
-          <iframe src="/iframe/lama-tools/livekit_view_all.html" class="w-full h-full"></iframe>
-
-            <div class="p-4">
-              <h3 class="text-sm/4 font-semibold text-gray-400">view all</h3>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Fourth grid item -->
-        <div class="flex p-px col-span-1">
-          <div class="overflow-scroll rounded-lg bg-gray-800 ring-1 ring-white/15 w-full">
-            <div class="p-4">
-                  <iframe src="/iframe/lama-tools/replay_analyzer.html" class="w-full h-full"></iframe>
-
-              <h3 class="text-sm/4 font-semibold text-gray-400">replay analyzer - day9</h3>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-        </div>
-    </body>
-  </html>
-`
 
 export const indexPage = `<div>
     <h1> hono index </h1>

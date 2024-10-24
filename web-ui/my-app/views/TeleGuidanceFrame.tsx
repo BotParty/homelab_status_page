@@ -1,5 +1,5 @@
 import React from 'react';
-import TwitchPlaysPokemonPanel from './TwitchPlaysPokemonPanel';
+import TwitchPlaysPokemonPanel from '../src/TwitchPlaysPokemonPanel';
 
 function TeleGuidanceFrame(props) {
   let  src = props.link;

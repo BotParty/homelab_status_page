@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TwitchPlaysPokemonPanel from '../../views/TwitchPlaysPokemonPanel';
+import TwitchPlaysPokemonPanel from '../TwitchPlaysPokemonPanel';
 //import notebook from "@roboticsuniversity/alan_how";
 //import notebook2 from "@roboticsuniversity/dynamicland";//"@roboticsuniversity/voxels-diffusion-policy-3d";
 // analyze seinfeild - cant be constant comedy - some boring parts -- watch youtube -with vonnegut annotaion - tvroeps is a datum
