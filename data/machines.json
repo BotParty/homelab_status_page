@@ -1,0 +1,21 @@
+
+
+
+[
+    {
+        "id": "learn-math.app",
+        "name": "gpu",
+        "ts_dns": "https://gpu.jerboa-kokanue.ts.net"
+    },
+ {
+        "id": "learnmath.fyi",
+        "name": "gpu2",
+        "ts_dns": "https://gpu2.jerboa-kokanue.ts.net"
+    },
+    {
+        "id": "learn-math.org",
+        "name": "shels-macbook-pro",
+        "ts_dns": "https://shels-macbook-pro.jerboa-kokanue.ts.net"
+    }
+
+]

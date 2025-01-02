@@ -9,21 +9,30 @@
 # 7. bun.sh + deno2 for webGPU + jupyter to observablehq integration
 # https://playwright.dev/docs/api/class-playwright
 
-curl -fsSL https://bun.sh/install | bash
-npm install @playwright/test                                              ║
-npx playwright install    
-sudo npx playwright install-deps  
 
+setup_webserver() {
+    go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 
+    # Build Caddy with the porkbun module
+    xcaddy build \
+        --with github.com/caddy-dns/porkbun
+}
 
+setup_agent_deps() {
+    curl -fsSL https://bun.sh/install | bash
+    npm install @playwright/test                                              ║
+    npx playwright install    
+    sudo npx playwright install-deps  
+}
 
+install_tailscale() {
+    curl -fsSL https://tailscale.com/install.sh | sh
+}
 
-
-
-curl -fsSL https://tailscale.com/install.sh | sh
-
-git clone https://github.com/adnanwahab/homelab.git
-cd homelab
+get_homelab() {
+    git clone https://github.com/adnanwahab/homelab.git
+    cd homelab
+}
 
 install_1password() {
     # Check if 1password-cli is already installed

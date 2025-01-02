@@ -108,12 +108,12 @@
     "url": "https://www.hardbreak.wiki/network-analysis/protocols/application-layer/proprietary-protocols/parrot-anafi-drone-reverse-engineering"
   },
   {
-    "title": "Large Concept Models: Language modeling in a sentence representation space",
-    "url": "https://github.com/facebookresearch/large_concept_model"
-  },
-  {
     "title": "Hitting the Jackpot: The Birth of the Monte Carlo Method – LANL (2023)",
     "url": "https://www.lanl.gov/media/publications/actinide-research-quarterly/first-quarter-2023/hitting-the-jackpot-the-birth-of-the-monte-carlo-method"
+  },
+  {
+    "title": "Large Concept Models: Language modeling in a sentence representation space",
+    "url": "https://github.com/facebookresearch/large_concept_model"
   },
   {
     "title": "Lucy: A concise language for describing Finite State Machines",

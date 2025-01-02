@@ -2,7 +2,7 @@
 	email adnan.f.wahab@gmail.com
 }
 
-files.hashirama.blog {
+files.learnmath.fyi {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
@@ -14,7 +14,7 @@ files.hashirama.blog {
 	header Access-Control-Allow-Headers "Content-Type"
 }
 
-jupyter.hashirama.blog {
+jupyter.learnmath.fyi {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
@@ -25,7 +25,7 @@ jupyter.hashirama.blog {
 	header Access-Control-Allow-Headers "Content-Type"
 }
 
-hashirama.blog {
+learnmath.fyi {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
@@ -43,12 +43,6 @@ hashirama.blog {
 		header Access-Control-Allow-Headers "Content-Type"
 	}
 
-	route /ws/* {
-		reverse_proxy localhost:3000 {
-			header_up Connection {>Connection}
-			header_up Upgrade {>Upgrade}
-		}
-	}
 
 	route /* {
 		reverse_proxy localhost:8888
