@@ -1,0 +1,62 @@
+{
+	email adnan.f.wahab@gmail.com
+}
+
+files.learn-math.org {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+	root * /home/adnan/derp/support_bret
+	file_server browse
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+}
+
+jupyter.learn-math.org {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+	reverse_proxy localhost:8888
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+}
+
+learn-math.org {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+
+	route /status_page {
+		respond "status page"
+	}
+
+	route /files {
+		root * /home/adnan/homelab
+		file_server browse
+		header Access-Control-Allow-Origin *
+		header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		header Access-Control-Allow-Headers "Content-Type"
+	}
+
+	route /* {
+		reverse_proxy localhost:8000
+	}
+
+	# Add logging for this site
+	log {
+		output file /home/adnan/derp/log/caddy/hashirama.blog.log {
+			roll_size 10MiB
+			roll_keep 5
+			roll_gzip
+		}
+	}
+
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+}

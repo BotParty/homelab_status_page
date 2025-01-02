@@ -1,0 +1,36 @@
+{
+  "name": "threejs-journey-exercise",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "deploy": "vite build && npx wrangler pages deploy dist",
+    "server_start": "bun run server.js --watch",
+    "playwright_snapshot_musicgame2025.netlify.app": "npx playwright screenshot https://musicgame2025.netlify.app foo.png",
+    "tailscale_server_5173": "sudo tailscale serve  5173",
+    "publish": "npm run build && ntl deploy --prod"
+  },
+  "devDependencies": {
+    "@types/three": "^0.169.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.13.0",
+    "eslint-config-mdcs": "^5.0.0",
+    "eslint-plugin-compat": "^6.0.1",
+    "eslint-plugin-html": "^8.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.6.3",
+    "vite-plugin-top-level-await": "^1.4.4"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^25.0.0",
+    "d3": "^7.9.0",
+    "gsap": "^3.12.5",
+    "lil-gui": "^0.19.2",
+    "ollama": "^0.5.11",
+    "three": "^0.172.0"
+  }
+}

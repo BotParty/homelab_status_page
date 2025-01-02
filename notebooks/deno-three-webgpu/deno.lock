@@ -1,0 +1,110 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@david/dax@0.41": "0.41.0",
+    "jsr:@david/which@~0.4.1": "0.4.1",
+    "jsr:@std/assert@0.221": "0.221.0",
+    "jsr:@std/bytes@0.221": "0.221.0",
+    "jsr:@std/fmt@0.221": "0.221.0",
+    "jsr:@std/fs@0.221.0": "0.221.0",
+    "jsr:@std/io@0.221": "0.221.0",
+    "jsr:@std/io@0.221.0": "0.221.0",
+    "jsr:@std/path@0.221": "0.221.0",
+    "jsr:@std/path@0.221.0": "0.221.0",
+    "jsr:@std/streams@0.221.0": "0.221.0",
+    "jsr:@std/webgpu@0.224": "0.224.7"
+  },
+  "jsr": {
+    "@david/dax@0.41.0": {
+      "integrity": "9e1ecf66a0415962cc8ad3ba4e3fa93ce0f1a1cc797dd95c36fdfb6977dc7fc8",
+      "dependencies": [
+        "jsr:@david/which",
+        "jsr:@std/fmt",
+        "jsr:@std/fs",
+        "jsr:@std/io@0.221.0",
+        "jsr:@std/path@0.221.0",
+        "jsr:@std/streams"
+      ]
+    },
+    "@david/which@0.4.1": {
+      "integrity": "896a682b111f92ab866cc70c5b4afab2f5899d2f9bde31ed00203b9c250f225e"
+    },
+    "@std/assert@0.221.0": {
+      "integrity": "a5f1aa6e7909dbea271754fd4ab3f4e687aeff4873b4cef9a320af813adb489a"
+    },
+    "@std/bytes@0.221.0": {
+      "integrity": "64a047011cf833890a4a2ab7293ac55a1b4f5a050624ebc6a0159c357de91966"
+    },
+    "@std/fmt@0.221.0": {
+      "integrity": "379fed69bdd9731110f26b9085aeb740606b20428ce6af31ef6bd45ef8efa62a"
+    },
+    "@std/fs@0.221.0": {
+      "integrity": "028044450299de8ed5a716ade4e6d524399f035513b85913794f4e81f07da286",
+      "dependencies": [
+        "jsr:@std/assert",
+        "jsr:@std/path@0.221"
+      ]
+    },
+    "@std/io@0.221.0": {
+      "integrity": "faf7f8700d46ab527fa05cc6167f4b97701a06c413024431c6b4d207caa010da",
+      "dependencies": [
+        "jsr:@std/assert",
+        "jsr:@std/bytes"
+      ]
+    },
+    "@std/path@0.221.0": {
+      "integrity": "0a36f6b17314ef653a3a1649740cc8db51b25a133ecfe838f20b79a56ebe0095",
+      "dependencies": [
+        "jsr:@std/assert"
+      ]
+    },
+    "@std/streams@0.221.0": {
+      "integrity": "47f2f74634b47449277c0ee79fe878da4424b66bd8975c032e3afdca88986e61",
+      "dependencies": [
+        "jsr:@std/io@0.221"
+      ]
+    },
+    "@std/webgpu@0.224.7": {
+      "integrity": "dd1251ffff121ff011c6fedaeda4cb2cd18902db93da704d342cf38ce7530585"
+    }
+  },
+  "redirects": {
+    "https://crux.land/api/get/2arQ9t": "https://crux.land/api/get/2arQ9t.ts",
+    "https://crux.land/api/get/7UjCQv": "https://crux.land/api/get/7UjCQv.ts",
+    "https://crux.land/api/get/dds@0.0.1": "https://crux.land/api/get/2arQ9t",
+    "https://crux.land/api/get/obj@0.0.2": "https://crux.land/api/get/7UjCQv",
+    "https://crux.land/dds@0.0.1": "https://crux.land/api/get/dds@0.0.1",
+    "https://crux.land/obj@0.0.2": "https://crux.land/api/get/obj@0.0.2"
+  },
+  "remote": {
+    "https://crux.land/api/get/2arQ9t.ts": "8758ba7ac3376755e280b44783375e4148bd36a515779d4f74cb97ca3b483257",
+    "https://crux.land/api/get/7UjCQv.ts": "96c235640ccabcf2a0737877aee3f5411b9f49aa681c18dcee0f627bf50db194",
+    "https://deno.land/std@0.97.0/encoding/base64.ts": "eecae390f1f1d1cae6f6c6d732ede5276bf4b9cd29b1d281678c054dc5cc009e",
+    "https://deno.land/x/byte_type@0.1.1/mod.ts": "7d7cac3aba4bbc8cec74af78cdf6b34c22e70a2c2329dcb2e278dd7153378656",
+    "https://deno.land/x/byte_type@0.1.1/util.ts": "60b287013aad6c422777a66ae064a2dcf835e44e387619709093d5ba8ae9b825",
+    "https://deno.land/x/gmath@0.1.11/mod.ts": "696f0a39bef39268a717f110b391a2280f1a25072546d88ada03bd0aba03279b",
+    "https://deno.land/x/gmath@0.1.11/src/angle.ts": "116e5d0495900ff17352f8bab6765332d76ac672a93ec69afbb5f80576aa2169",
+    "https://deno.land/x/gmath@0.1.11/src/decomposed.ts": "0ebd6ee5276fb74ec8f0decdd9c7b08c98609d7dc382c38696ebde3c27176ba2",
+    "https://deno.land/x/gmath@0.1.11/src/matrix2.ts": "4b89304811d5c8cf55586a9ac103812666e4a3ccede21d12c62ca5c2a1fb3a56",
+    "https://deno.land/x/gmath@0.1.11/src/matrix3.ts": "a198ccc90d010cde481daa24350241e63fc7eb3eab9c5d2efc88903d895b1492",
+    "https://deno.land/x/gmath@0.1.11/src/matrix4.ts": "4a588ffcec8a2d0a922163e5425e69916533c811042dbb7f1603f136076d379e",
+    "https://deno.land/x/gmath@0.1.11/src/projection.ts": "5f9bd9fe110276db5ad30ee4380df5d15a147ed4b75fab03728821f42ebc1a4d",
+    "https://deno.land/x/gmath@0.1.11/src/quaternion.ts": "575d4e0ee783dfd0440593285b64a87238d022f0b758612624d65a8d2f8f915a",
+    "https://deno.land/x/gmath@0.1.11/src/util.ts": "1b19327d98124babb35a3a19084919384f107d7dc8ea1c995538a34817f57c19",
+    "https://deno.land/x/gmath@0.1.11/src/vector2.ts": "f9da5bd2c17aa9b4199991ab8bc64d1d7b7a2cc0425a354350c2e7c18ddfc204",
+    "https://deno.land/x/gmath@0.1.11/src/vector3.ts": "30b920c9e98bd9fe06ee61f66016a8f7fa3235a95f3151c85c602a6b88cc0a00",
+    "https://deno.land/x/gmath@0.1.11/src/vector4.ts": "c7240ab5e5d087dd1091ce904f721df80457894e81ce0b5a23272c5045df61ee",
+    "https://deno.land/x/gmath@0.1.11/wasm/mod.ts": "724fed398ddc3c261e72946a73cf8cc2eee08ae599327e85e8a90d9752481ad7",
+    "https://deno.land/x/gmath@0.1.11/wasm/wasm.js": "77db62126e548d63271853ec35371630dbe84707456f293f5ab8bd2bae6bb831",
+    "https://deno.land/x/lz4@v0.1.2/mod.ts": "4decfc1a3569d03fd1813bd39128b71c8f082850fe98ecfdde20025772916582",
+    "https://deno.land/x/lz4@v0.1.2/wasm.js": "b9c65605327ba273f0c76a6dc596ec534d4cda0f0225d7a94ebc606782319e46",
+    "https://deno.land/x/pngs@0.1.1/mod.ts": "9dc8a7daed1497b94a77b68c954164a9f0b2a6f40866481bdfdbbaf015b5f764",
+    "https://deno.land/x/pngs@0.1.1/wasm.js": "e3d4a8f293b267c9859a2164ca7b4603869bc92fe0d5ad4f109925858bce0c4c"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@david/dax@0.41",
+      "jsr:@std/webgpu@0.224"
+    ]
+  }
+}

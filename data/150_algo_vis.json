@@ -1,0 +1,254 @@
+{
+    "topics": [
+      {
+        "id": 1,
+        "title": "3D Simulation with Gazebo",
+        "description": "Learn how to set up and simulate robot models in a realistic 3D environment using Gazebo."
+      },
+      {
+        "id": 2,
+        "title": "Robot Visualization with RViz",
+        "description": "Explore how to use RViz in ROS to visualize sensor data, robot states, and interactive markers."
+      },
+      {
+        "id": 3,
+        "title": "Building URDF Models",
+        "description": "Understand how to create and visualize robot models using the Unified Robot Description Format (URDF)."
+      },
+      {
+        "id": 4,
+        "title": "Interactive Markers in RViz",
+        "description": "Implement interactive markers in RViz for user-driven control and manipulation of on-screen robots."
+      },
+      {
+        "id": 5,
+        "title": "Multi-Robot Coordination in Gazebo",
+        "description": "Simulate fleets of robots in Gazebo to study collaborative control, path planning, and task allocation."
+      },
+      {
+        "id": 6,
+        "title": "Sensor Fusion Visualization",
+        "description": "Combine data from multiple sensors in real time to provide a comprehensive view of a robot’s surroundings."
+      },
+      {
+        "id": 7,
+        "title": "Motion Planning with MoveIt!",
+        "description": "Use MoveIt! with RViz to visualize and plan trajectories for robotic arms in simulation or on real hardware."
+      },
+      {
+        "id": 8,
+        "title": "ROS TF Frames Visualization",
+        "description": "Display coordinate frames of complex robotic systems to better understand transformations and hierarchies."
+      },
+      {
+        "id": 9,
+        "title": "Map Building and SLAM",
+        "description": "Visualize map building processes and pose updates using SLAM algorithms like gmapping or Cartographer."
+      },
+      {
+        "id": 10,
+        "title": "3D Point Cloud Rendering",
+        "description": "Render point clouds from depth cameras or LiDAR sensors in RViz to observe real-time environmental data."
+      },
+      {
+        "id": 11,
+        "title": "Kinematic Chains Visualization",
+        "description": "Show how joints and links of robotic arms move and connect through an interactive kinematic chain display."
+      },
+      {
+        "id": 12,
+        "title": "Robot Control Dashboards",
+        "description": "Design interactive dashboards with control widgets and live data visualizations for teleoperation."
+      },
+      {
+        "id": 13,
+        "title": "Virtual Reality Robot Visualization",
+        "description": "Explore VR environments to view and interact with robot simulations in an immersive 3D space."
+      },
+      {
+        "id": 14,
+        "title": "AR Overlays for Robotics",
+        "description": "Use augmented reality headsets to overlay robot status, sensor readings, and path planning in the real world."
+      },
+      {
+        "id": 15,
+        "title": "Navigation Stack Visualization",
+        "description": "Inspect navigation goals, local and global paths, and costmaps in RViz to debug robot navigation behavior."
+      },
+      {
+        "id": 16,
+        "title": "Trajectory Visualization",
+        "description": "Plot and analyze robot trajectories to understand motion planning outcomes and optimize route efficiency."
+      },
+      {
+        "id": 17,
+        "title": "Robot Arm Grasp Simulation",
+        "description": "Visualize robotic grippers closing on target objects to evaluate grasp planning algorithms."
+      },
+      {
+        "id": 18,
+        "title": "Collision Detection and Avoidance",
+        "description": "Detect collisions in real time within simulated environments to prevent robot damage or unsafe maneuvers."
+      },
+      {
+        "id": 19,
+        "title": "RQT Graph for ROS Nodes",
+        "description": "Visually represent communication between ROS nodes, topics, and services for better debugging."
+      },
+      {
+        "id": 20,
+        "title": "Gazebo Plugin Visualization",
+        "description": "Enhance simulations with custom Gazebo plugins to visualize sensor noise, contact forces, or advanced physics."
+      },
+      {
+        "id": 21,
+        "title": "Lidar Scan Visualization",
+        "description": "Render 2D lidar scans in RViz to identify obstacles, measure distances, and support SLAM applications."
+      },
+      {
+        "id": 22,
+        "title": "Map Server and AMCL",
+        "description": "Visualize robot localization within a pre-built map using Adaptive Monte Carlo Localization in RViz."
+      },
+      {
+        "id": 23,
+        "title": "3D Model Import into Gazebo",
+        "description": "Import custom 3D object models (like furniture or machinery) to create realistic robot simulation scenarios."
+      },
+      {
+        "id": 24,
+        "title": "Dynamic Simulation with Physics Engines",
+        "description": "Explore the impact of gravity, friction, and collisions in robotics using simulators like ODE or Bullet."
+      },
+      {
+        "id": 25,
+        "title": "Camera Calibration and Visualization",
+        "description": "Visualize camera images and perform calibration checks to ensure accurate robot vision workflows."
+      },
+      {
+        "id": 26,
+        "title": "Heatmaps for Sensor Data",
+        "description": "Create heatmaps from sensor data to quickly spot high-intensity areas, like distance or temperature readings."
+      },
+      {
+        "id": 27,
+        "title": "Visual Odometry Debugging",
+        "description": "Plot odometry data to validate robot motion estimates and correct drifting or calibration errors."
+      },
+      {
+        "id": 28,
+        "title": "Interactive Scripts in Jupyter for Robotics",
+        "description": "Use Jupyter notebooks for plotting sensor data, controlling robots, and visualizing results in real time."
+      },
+      {
+        "id": 29,
+        "title": "Point Cloud Segmentation",
+        "description": "Display segmented point clouds to separate foreground objects from backgrounds for advanced perception tasks."
+      },
+      {
+        "id": 30,
+        "title": "3D Mesh Visualization",
+        "description": "Render 3D mesh models of robots or environments for improved realism in simulation and debugging."
+      },
+      {
+        "id": 31,
+        "title": "Open3D for Robotics",
+        "description": "Leverage Open3D libraries to visualize point clouds, meshes, and perform advanced geometric processing."
+      },
+      {
+        "id": 32,
+        "title": "Robotic Swarm Visualization",
+        "description": "Animate multiple robots working together in a swarm, highlighting interactions and group objectives."
+      },
+      {
+        "id": 33,
+        "title": "Distance and Proximity Sensors",
+        "description": "Use distance sensor data, such as ultrasound or IR, to visualize how robots perceive close-range objects."
+      },
+      {
+        "id": 34,
+        "title": "Simulating Differential Drive Robots",
+        "description": "Set up and visualize differential drive robots, including wheel encoders, odometry, and motion constraints."
+      },
+      {
+        "id": 35,
+        "title": "In-circuit Signal Visualization",
+        "description": "Monitor and visualize signals at the microcontroller level to debug robotics hardware integration."
+      },
+      {
+        "id": 36,
+        "title": "Marine Robot Simulation",
+        "description": "Simulate underwater or surface vehicles with environment-specific factors like buoyancy and water currents."
+      },
+      {
+        "id": 37,
+        "title": "Aerial Drone Visualization",
+        "description": "Visualize drone flight paths, sensor data, and control signals for multi-rotor or fixed-wing UAVs."
+      },
+      {
+        "id": 38,
+        "title": "Mechanical Linkage Animations",
+        "description": "Create animations of gears, levers, and linkages to illustrate the mechanics of complex robot assemblies."
+      },
+      {
+        "id": 39,
+        "title": "Robot End-Effector Paths",
+        "description": "Display the paths of end-effectors (grippers, tools) in real or simulated environments to refine planning."
+      },
+      {
+        "id": 40,
+        "title": "Telemetry Data Dashboards",
+        "description": "Set up real-time dashboards for critical telemetry like battery level, temperature, and motor currents."
+      },
+      {
+        "id": 41,
+        "title": "Physics-Based Soft Robot Simulation",
+        "description": "Visualize soft, deformable robots in simulations that account for elasticity and shape changes."
+      },
+      {
+        "id": 42,
+        "title": "Haptic Feedback Visualization",
+        "description": "Integrate haptic devices with robotics software and visualize force-feedback interactions."
+      },
+      {
+        "id": 43,
+        "title": "Network Topology for Distributed Robots",
+        "description": "Map out communication networks for distributed robot systems, including bandwidth and latency metrics."
+      },
+      {
+        "id": 44,
+        "title": "Path Optimization Visual Aid",
+        "description": "Compare multiple path planning solutions side by side for speed, safety, and energy usage optimization."
+      },
+      {
+        "id": 45,
+        "title": "Thermal Imaging Overlays",
+        "description": "Use thermal camera data to visualize temperature gradients and detect overheating in robotic components."
+      },
+      {
+        "id": 46,
+        "title": "Factory Floor Robot Simulations",
+        "description": "Model assembly line robots and conveyor belts with interactive layers showing throughput and potential jams."
+      },
+      {
+        "id": 47,
+        "title": "Time-lapse of Robot Operations",
+        "description": "Generate accelerated visual timelines of complex robot tasks to study efficiency and detect bottlenecks."
+      },
+      {
+        "id": 48,
+        "title": "Multi-Camera Robot Monitoring",
+        "description": "Display video feeds from multiple cameras on a single dashboard for complete situational awareness."
+      },
+      {
+        "id": 49,
+        "title": "State Machine Visualization",
+        "description": "Graphically depict finite state machines controlling robots, highlighting transitions and active states."
+      },
+      {
+        "id": 50,
+        "title": "Advanced Kinematics Visualization",
+        "description": "Show forward and inverse kinematics solutions for complex manipulators, emphasizing reachable workspaces."
+      }
+    ]
+  }

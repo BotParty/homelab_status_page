@@ -1,0 +1,610 @@
+{
+  "title": "List of cognitive biases (Wikipedia article)",
+  "introSummary": "Cognitive biases are systematic patterns of deviation from norm or rationality in judgment, often studied in psychology, sociology, and behavioral economics.",
+  "sections": [
+    {
+      "sectionTitle": "Belief, decision-making and behavioral biases",
+      "biases": [
+        {
+          "name": "Anchoring bias",
+          "summary": "Tendency to rely too heavily on the first piece of information (the 'anchor') when making decisions.",
+          "subBiases": [
+            {
+              "name": "Common source bias",
+              "summary": "Tendency to compare or rely on studies from the same source or methodology."
+            },
+            {
+              "name": "Conservatism bias",
+              "summary": "Failing to revise one’s beliefs adequately when presented with new evidence."
+            },
+            {
+              "name": "Functional fixedness",
+              "summary": "Seeing objects as only functioning in their usual way."
+            },
+            {
+              "name": "Law of the instrument",
+              "summary": "\"If all you have is a hammer, everything looks like a nail.\" Over-reliance on a familiar tool."
+            }
+          ]
+        },
+        {
+          "name": "Apophenia",
+          "summary": "Perceiving meaningful connections among unrelated phenomena.",
+          "subBiases": [
+            {
+              "name": "Clustering illusion",
+              "summary": "Overestimating importance of small clusters or streaks in large samples of random data."
+            },
+            {
+              "name": "Illusory correlation",
+              "summary": "Seeing a relationship between two unrelated events."
+            },
+            {
+              "name": "Pareidolia",
+              "summary": "Seeing significant patterns in vague stimuli (e.g., seeing faces in clouds)."
+            }
+          ]
+        },
+        {
+          "name": "Availability heuristic",
+          "summary": "Overestimating likelihood of events that come easily to mind, e.g., because they’re recent or vivid.",
+          "subBiases": [
+            {
+              "name": "Anthropocentric thinking",
+              "summary": "Using human analogies to reason about less familiar phenomena."
+            },
+            {
+              "name": "Anthropomorphism",
+              "summary": "Attributing human traits or intentions to non-humans (animals, objects, etc.)."
+            },
+            {
+              "name": "Attentional bias",
+              "summary": "Recurring thoughts affect perception, focusing attention on certain stimuli."
+            },
+            {
+              "name": "Frequency illusion / Baader–Meinhof phenomenon",
+              "summary": "Once you notice something, you see it everywhere."
+            },
+            {
+              "name": "Implicit association",
+              "summary": "Automatic and unconscious association between concepts."
+            },
+            {
+              "name": "Salience bias",
+              "summary": "Focusing on items that are more striking and ignoring those that are not."
+            },
+            {
+              "name": "Selection bias",
+              "summary": "Non-random sample selection leads to unrepresentative data."
+            },
+            {
+              "name": "Survivorship bias",
+              "summary": "Concentrating on the survivors of a process and overlooking those that did not survive."
+            },
+            {
+              "name": "Well travelled road effect",
+              "summary": "Underestimating travel time for familiar routes and overestimating it for unfamiliar routes."
+            }
+          ]
+        },
+        {
+          "name": "Cognitive dissonance",
+          "summary": "Mental discomfort caused by holding contradictory information or beliefs.",
+          "subBiases": [
+            {
+              "name": "Normalcy bias",
+              "summary": "Refusal to plan for or react to a disaster which has never happened before."
+            },
+            {
+              "name": "Effort justification",
+              "summary": "Attributing greater value to an outcome if one worked hard for it (e.g. IKEA effect)."
+            },
+            {
+              "name": "Ben Franklin effect",
+              "summary": "Doing a favor for someone makes you like them more."
+            }
+          ]
+        },
+        {
+          "name": "Confirmation bias",
+          "summary": "Seeking or interpreting evidence in a way that confirms existing beliefs.",
+          "subBiases": [
+            {
+              "name": "Backfire effect",
+              "summary": "Disconfirming evidence can strengthen existing beliefs."
+            },
+            {
+              "name": "Congruence bias",
+              "summary": "Testing only direct confirmations of one hypothesis instead of seeking alternatives."
+            },
+            {
+              "name": "Experimenter's / Expectation bias",
+              "summary": "Researchers more readily accept data that fits their expectations."
+            },
+            {
+              "name": "Observer-expectancy effect",
+              "summary": "Unconsciously influencing an experiment to find expected results."
+            },
+            {
+              "name": "Selective perception",
+              "summary": "Expectations shape what we perceive."
+            },
+            {
+              "name": "Semmelweis reflex",
+              "summary": "Rejecting new evidence that contradicts established norms."
+            }
+          ]
+        },
+        {
+          "name": "Egocentric bias",
+          "summary": "Overreliance on one’s own perspective; seeing oneself differently from how others see you.",
+          "subBiases": [
+            {
+              "name": "Bias blind spot",
+              "summary": "Seeing oneself as less biased than other people."
+            },
+            {
+              "name": "False consensus effect",
+              "summary": "Overestimating how many people share your beliefs or opinions."
+            },
+            {
+              "name": "False uniqueness bias",
+              "summary": "Believing one's attributes or traits are more unique than they really are."
+            },
+            {
+              "name": "Forer (Barnum) effect",
+              "summary": "Accepting vague, general statements as being highly accurate for oneself (e.g., horoscopes)."
+            },
+            {
+              "name": "Illusion of asymmetric insight",
+              "summary": "Thinking you know others better than they know you."
+            },
+            {
+              "name": "Illusion of control",
+              "summary": "Overestimating how much control one has over external events."
+            },
+            {
+              "name": "Illusion of transparency",
+              "summary": "Overestimating how well others can discern your internal states and vice versa."
+            },
+            {
+              "name": "Illusion of validity",
+              "summary": "Overestimating the accuracy of one’s judgments."
+            },
+            {
+              "name": "Illusory superiority (Lake Wobegon effect)",
+              "summary": "Overestimating one’s positive qualities compared to others."
+            },
+            {
+              "name": "Naïve cynicism",
+              "summary": "Expecting others to be more self-serving and biased than oneself."
+            },
+            {
+              "name": "Naïve realism",
+              "summary": "Belief that we see objective reality and anyone who disagrees is irrational or uninformed."
+            },
+            {
+              "name": "Overconfidence effect",
+              "summary": "Excessive confidence in one’s answers to questions or estimates."
+            },
+            {
+              "name": "Planning fallacy",
+              "summary": "Underestimating how long it will take to complete tasks."
+            },
+            {
+              "name": "Restraint bias",
+              "summary": "Overestimating one’s capacity to resist temptation."
+            },
+            {
+              "name": "Trait ascription bias",
+              "summary": "Seeing oneself as more flexible and less predictable than others."
+            },
+            {
+              "name": "Third-person effect",
+              "summary": "Believing that media messages affect others more than oneself."
+            }
+          ]
+        },
+        {
+          "name": "Extension neglect",
+          "summary": "Failing to properly consider sample size or scope when evaluating outcomes or probabilities.",
+          "subBiases": [
+            {
+              "name": "Base rate fallacy / Base rate neglect",
+              "summary": "Ignoring general base-rate information and focusing on specifics."
+            },
+            {
+              "name": "Compassion fade",
+              "summary": "Less compassion for large groups than for a single identifiable victim."
+            },
+            {
+              "name": "Conjunction fallacy",
+              "summary": "Assuming specific conditions are more probable than broader ones."
+            },
+            {
+              "name": "Duration neglect",
+              "summary": "Overlooking the length of an experience when evaluating its impact."
+            },
+            {
+              "name": "Hyperbolic discounting",
+              "summary": "Stronger preference for immediate payoffs relative to later payoffs."
+            },
+            {
+              "name": "Insensitivity to sample size",
+              "summary": "Underestimating variability in small samples."
+            },
+            {
+              "name": "Less-is-better effect",
+              "summary": "Preferring the smaller set if judged independently, but not in comparison."
+            },
+            {
+              "name": "Neglect of probability",
+              "summary": "Ignoring probability in uncertain situations."
+            },
+            {
+              "name": "Scope neglect",
+              "summary": "Insensitivity to the scope of a problem (e.g., paying the same to save 2,000 or 20,000 birds)."
+            },
+            {
+              "name": "Zero-risk bias",
+              "summary": "Preferring to reduce a small risk to zero over a greater total reduction in a larger risk."
+            }
+          ]
+        },
+        {
+          "name": "False priors",
+          "summary": "Incorrect initial assumptions or knowledge leading to biased conclusions.",
+          "subBiases": [
+            {
+              "name": "Agent detection bias",
+              "summary": "Presuming the intervention of a sentient agent in ambiguous situations."
+            },
+            {
+              "name": "Automation bias",
+              "summary": "Overreliance on automated systems, overriding correct decisions."
+            },
+            {
+              "name": "Gender bias",
+              "summary": "Implicit biases that discriminate based on gender."
+            },
+            {
+              "name": "Sexual overperception bias",
+              "summary": "Overestimating or underestimating another's sexual interest."
+            },
+            {
+              "name": "Stereotyping",
+              "summary": "Expecting certain characteristics based on group membership."
+            }
+          ]
+        },
+        {
+          "name": "Framing effect",
+          "summary": "Drawing different conclusions from the same information, depending on how it's presented.",
+          "subBiases": [
+            {
+              "name": "Contrast effect",
+              "summary": "Enhancement or diminishment of perception when compared with something else."
+            },
+            {
+              "name": "Decoy effect",
+              "summary": "Preferences change when a dominated option is introduced as a 'decoy.'"
+            },
+            {
+              "name": "Default effect",
+              "summary": "Choosing the default option when faced with multiple choices."
+            },
+            {
+              "name": "Denomination effect",
+              "summary": "Spending more when money is in smaller denominations."
+            },
+            {
+              "name": "Distinction bias",
+              "summary": "Seeing options as more dissimilar when evaluated together than separately."
+            },
+            {
+              "name": "Domain neglect bias / Context neglect bias",
+              "summary": "Failing to apply relevant domain knowledge or context properly."
+            }
+          ]
+        },
+        {
+          "name": "Logical fallacy (selected)",
+          "summary": "Errors in reasoning often arising from incorrect inferences or assumptions.",
+          "subBiases": [
+            {
+              "name": "Berkson's paradox",
+              "summary": "Misinterpreting conditional probabilities in statistical contexts."
+            },
+            {
+              "name": "Escalation of commitment / Sunk cost fallacy",
+              "summary": "Continuing a failing course of action because of prior investment."
+            },
+            {
+              "name": "Gambler's fallacy",
+              "summary": "Believing that separate chance events influence one another (e.g., coin flips)."
+            },
+            {
+              "name": "Hot-hand fallacy",
+              "summary": "Belief that success 'streaks' increase the probability of subsequent success."
+            },
+            {
+              "name": "Plan continuation bias",
+              "summary": "Sticking to an initial plan despite evidence it’s no longer appropriate."
+            },
+            {
+              "name": "Subadditivity effect",
+              "summary": "Judging the probability of the whole as less than the sum of its parts."
+            },
+            {
+              "name": "Zero-sum bias",
+              "summary": "Mistakenly viewing a situation as strictly win–lose."
+            }
+          ]
+        },
+        {
+          "name": "Prospect theory biases",
+          "summary": "Behavioral economic theory describing how people choose between probabilistic alternatives.",
+          "subBiases": [
+            {
+              "name": "Ambiguity effect",
+              "summary": "Avoiding choices where probability of outcomes is unknown."
+            },
+            {
+              "name": "Disposition effect",
+              "summary": "Selling assets that have gained value, while keeping assets that have lost value."
+            },
+            {
+              "name": "Dread aversion",
+              "summary": "Negative anticipation can have disproportionately strong emotional impact."
+            },
+            {
+              "name": "Endowment effect",
+              "summary": "Demanding more to give up an object than one would pay to acquire it."
+            },
+            {
+              "name": "Loss aversion",
+              "summary": "Losses loom larger than gains of the same size."
+            },
+            {
+              "name": "Pseudocertainty effect",
+              "summary": "Risk-averse choices when outcomes are positive, but risk-seeking to avoid negative outcomes."
+            },
+            {
+              "name": "Status quo bias",
+              "summary": "Preference for the current state of affairs."
+            },
+            {
+              "name": "System justification",
+              "summary": "Defending the status quo, even at one’s own expense."
+            }
+          ]
+        },
+        {
+          "name": "Self-assessment biases",
+          "summary": "Biases affecting how people judge their own abilities or traits.",
+          "subBiases": [
+            {
+              "name": "Dunning–Kruger effect",
+              "summary": "Unskilled people often overestimate their competence; experts sometimes underestimate theirs."
+            },
+            {
+              "name": "Hot-cold empathy gap",
+              "summary": "Underestimating how states of drive or emotion alter behavior or preferences."
+            },
+            {
+              "name": "Hard–easy effect",
+              "summary": "Overestimating chances of success on hard tasks, underestimating for easy ones."
+            },
+            {
+              "name": "Illusion of explanatory depth",
+              "summary": "Believing one understands complex topics better than one actually does."
+            },
+            {
+              "name": "Impostor syndrome",
+              "summary": "Persistent fear of being exposed as a fraud despite evidence of success."
+            },
+            {
+              "name": "Objectivity illusion",
+              "summary": "Believing oneself to be more objective than others."
+            }
+          ]
+        },
+        {
+          "name": "Truth judgment biases",
+          "summary": "Biases that affect how people judge the truth or believability of statements.",
+          "subBiases": [
+            {
+              "name": "Belief bias",
+              "summary": "Judging the strength of an argument by the believability of its conclusion."
+            },
+            {
+              "name": "Illusory truth effect",
+              "summary": "Repeated statements feel truer than new statements, regardless of their truth value."
+            },
+            {
+              "name": "Rhyme as reason effect",
+              "summary": "Rhyming statements are seen as more truthful or persuasive."
+            },
+            {
+              "name": "Subjective validation",
+              "summary": "Statements are seen as true if one’s belief demands it to be true."
+            }
+          ]
+        },
+        {
+          "name": "Other biases (selected)",
+          "summary": "Miscellaneous biases affecting decisions or behavior.",
+          "examples": [
+            {
+              "name": "Action bias",
+              "summary": "Preference to act to address a problem, even when doing nothing is better."
+            },
+            {
+              "name": "Additive bias",
+              "summary": "Inclination to add elements to solve a problem rather than remove them."
+            },
+            {
+              "name": "Curse of knowledge",
+              "summary": "Difficulty in imagining what it’s like not to know something once you do know it."
+            },
+            {
+              "name": "Declinism",
+              "summary": "Viewing the past favorably and the future negatively."
+            },
+            {
+              "name": "End-of-history illusion",
+              "summary": "Belief that one will change less in the future than one has in the past."
+            },
+            {
+              "name": "Hindsight bias",
+              "summary": "\"I knew it all along.\" Seeing past events as more predictable than they were."
+            },
+            {
+              "name": "Optimism bias",
+              "summary": "Overestimating the likelihood of positive events and underestimating negative ones."
+            },
+            {
+              "name": "Ostrich effect",
+              "summary": "Ignoring an obvious negative reality."
+            },
+            {
+              "name": "Outcome bias",
+              "summary": "Judging decisions by their outcomes rather than by their quality at the time."
+            },
+            {
+              "name": "Pessimism bias",
+              "summary": "Overestimating the likelihood of negative outcomes, often seen with depression."
+            },
+            {
+              "name": "Projection bias",
+              "summary": "Overestimating how much future preferences will match current preferences."
+            },
+            {
+              "name": "Proportionality bias",
+              "summary": "Assuming large events have large causes; can fuel conspiracy thinking."
+            },
+            {
+              "name": "Surrogation",
+              "summary": "Confusing a performance measure with the actual construct it represents."
+            },
+            {
+              "name": "Teleological bias",
+              "summary": "Ascribing purpose or design to natural events that are not goal-directed."
+            },
+            {
+              "name": "Unconscious / Implicit bias",
+              "summary": "Automatic attitudes or stereotypes that affect understanding and actions."
+            },
+            {
+              "name": "Unit bias",
+              "summary": "Perception that a single unit (e.g., one plate of food) is the ‘appropriate’ amount."
+            },
+            {
+              "name": "Women are wonderful effect",
+              "summary": "Associating more positive attributes with women than men."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionTitle": "Memory biases",
+      "summary": "Biases affecting the encoding, storage, or retrieval of memories.",
+      "subsections": [
+        {
+          "subsectionTitle": "Misattribution of memory",
+          "summary": "Mistakenly attributing a memory to an incorrect source.",
+          "subBiases": [
+            {
+              "name": "Cryptomnesia",
+              "summary": "A memory is mistaken for original thought."
+            },
+            {
+              "name": "False memory",
+              "summary": "Imagined events mistaken for true memories."
+            },
+            {
+              "name": "Social cryptomnesia",
+              "summary": "Forgetting how social change occurred while remembering that it happened."
+            },
+            {
+              "name": "Source confusion",
+              "summary": "Mixing up the source of a memory."
+            },
+            {
+              "name": "Suggestibility",
+              "summary": "Memories influenced by the phrasing of questions or external suggestions."
+            },
+            {
+              "name": "Perky effect",
+              "summary": "Real images can be misremembered as imagined and vice versa."
+            }
+          ]
+        },
+        {
+          "subsectionTitle": "Other memory biases (selected)",
+          "biasList": [
+            {
+              "name": "Bizarreness effect",
+              "summary": "Bizarre information is more memorable than commonplace information."
+            },
+            {
+              "name": "Choice-supportive bias",
+              "summary": "Remembering one's choices as better than they were."
+            },
+            {
+              "name": "Consistency bias",
+              "summary": "Incorrectly remembering past beliefs as similar to present beliefs."
+            },
+            {
+              "name": "Fading affect bias",
+              "summary": "Emotion associated with unpleasant memories fades faster than that of pleasant ones."
+            },
+            {
+              "name": "Google effect",
+              "summary": "Forgetting information that can easily be found online."
+            },
+            {
+              "name": "Hindsight bias",
+              "summary": "Recalling past events as more predictable than they actually were."
+            },
+            {
+              "name": "Misinformation effect",
+              "summary": "Memory becomes distorted by post-event information."
+            },
+            {
+              "name": "Negativity bias (in memory)",
+              "summary": "Greater recall of unpleasant memories over positive ones."
+            },
+            {
+              "name": "Peak–end rule",
+              "summary": "Evaluating experiences by how they were at their peak and how they ended."
+            },
+            {
+              "name": "Rosy retrospection",
+              "summary": "Recalling past events more favorably than they actually were."
+            },
+            {
+              "name": "Spacing effect",
+              "summary": "Better recall for information studied in spaced intervals."
+            },
+            {
+              "name": "Zeigarnik effect",
+              "summary": "Uncompleted tasks are remembered better than completed ones."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "seeAlso": [
+    "List of fallacies",
+    "Heuristics in judgment and decision making",
+    "Observational error (systematic bias)",
+    "Media bias",
+    "Motivated reasoning",
+    "Self-handicapping"
+  ],
+  "notes": "This JSON is an illustrative example, providing a condensed summary of each bias.",
+  "licenseNotice": "Text is adapted from Wikipedia and available under CC-BY-SA 4.0."
+}

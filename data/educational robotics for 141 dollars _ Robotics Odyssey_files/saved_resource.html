@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://worrydream.com/LearnableProgramming/ -->
+<html lang="en-US" slick-uniqueid="3"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <!--<base target="_top">--><base href="." target="_top">
+
+    <title>Learnable Programming</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+
+    <script type="text/javascript" src="./mootools.js"></script>
+    <script type="text/javascript" src="./Main.js"></script>
+
+</head>
+
+<body>
+
+
+<!--=========================================================================================================-->
+
+
+<div class="header">
+    <h1>Learnable Programming</h1>
+    <h4>Designing a programming system for understanding programs</h4>
+    <h5><a class="selflink" href="https://worrydream.com/">Bret Victor</a> / September 2012</h5>
+</div>
+
+
+<!--=========================================================================================================-->
+
+<div class="chapter">
+
+<p>Here's a trick question:  <i>How do we get people to understand programming?</i></p>
+
+<p>Khan Academy recently launched an <a href="http://www.khanacademy.org/cs">online environment</a> for learning to program.  It offers a set of tutorials based on the JavaScript and Processing languages, and features a "live coding" environment, where the program's output updates as the programmer types.</p>
+
+<p>Because my work was <a href="http://ejohn.org/blog/introducing-khan-cs">cited</a> as an inspiration for the Khan system, I felt I should respond with two thoughts about learning:</p>
+
+<ul>
+<li><b>Programming is a way of thinking, not a rote skill.</b>  Learning about "for" loops is not learning to program, any more than learning about pencils is learning to draw.</li>
+<li><b>People understand what they can see.</b>  If a programmer cannot see what a program is doing, she can't understand it.</li>
+</ul>
+
+<p>Thus, the goals of a programming system should be:</p>
+
+<ul>
+<li>to support and encourage powerful ways of thinking</li>
+<li>to enable programmers to see and understand the execution of their programs</li>
+</ul>
+
+<p>A live-coding Processing environment addresses neither of these goals.  JavaScript and Processing are poorly-designed languages that support weak ways of thinking, and ignore decades of learning about learning.  And live coding, as a standalone feature, misses the point.</p>
+
+<p>Alan Perlis wrote, <i>"To understand a program, you must become both the machine and the program."</i>  This view is a mistake, and it is this widespread and virulent mistake that keeps programming a difficult and obscure art.  A person is not a machine, and should not be forced to think like one.</p>
+
+<p><i>How do we get people to understand programming?</i></p>
+
+<p>We change programming.  We turn it into something that's understandable by people.</p>
+
+
+<h3>Contents</h3>
+
+<div class="sidenote">The concept of a system split between the computer and the head was derived from Will Wright's <a href="http://www.gamestudies.org/0102/pearce/">thoughts on games</a>.</div>
+
+<p>A programming system has two parts.  The programming "environment" is the part that's installed on the computer.  The programming "language" is the part that's installed in the programmer's head.</p>
+
+<p>This essay presents a set of design principles for an environment and language suitable for learning.</p>
+
+<p>The <b>environment</b> should allow the learner to:</p>
+<ul>
+<li><b>read the vocabulary</b> <i>-- what do these words mean?</i></li>
+<li><b>follow the flow</b> <i>-- what happens when?</i></li>
+<li><b>see the state</b> <i>-- what is the computer thinking?</i></li>
+<li><b>create by reacting</b> <i>-- start somewhere, then sculpt</i></li>
+<li><b>create by abstracting</b> <i>-- start concrete, then generalize</i></li>
+</ul>
+
+<p>The <b>language</b> should provide:</p>
+<ul>
+<li><b>identity and metaphor</b> <i>-- how can I relate the computer's world to my own?</i></li>
+<li><b>decomposition</b> <i>-- how do I break down my thoughts into mind-sized pieces?</i></li>
+<li><b>recomposition</b> <i>-- how do I glue pieces together?</i></li>
+<li><b>readability</b> <i>-- what do these words mean?</i></li>
+</ul>
+
+
+<h3>The features are not the point</h3>
+
+<p>We often think of a programming environment or language in terms of its <i>features</i> -- this one "has code folding", that one "has type inference".  This is like thinking about a book in terms of its <i>words</i> -- this book has a "fortuitous", that one has a "munificent".  What matters is not individual words, but how the words together convey a <i>message</i>.</p>
+
+<p>Likewise, a well-designed system is not simply a bag of features.  A good system is designed to encourage particular <b>ways of thinking</b>, with all features carefully and cohesively designed around that purpose.</p>
+
+<p>This essay will present many features!  The trick is to see <i>through</i> them -- to see the underlying design principles that they represent, and understand how these principles <i>enable the programmer to think.</i></p>
+
+</div> <!-- chapter -->
+
+
+
+<!--=========================================================================================================-->
+
+<div id="vocabulary" class="chapterHeader environment">
+    <h2>Read the vocabulary</h2>
+</div>
+
+<div class="chapter environment">
+
+<p>Here is a simple tutorial program that a learner might face:</p>
+
+<div class="sidenote" style="padding-top:3px;">For the sake of comparison, the examples here will use the same languages as the Khan Academy system, JavaScript and Processing.</div>
+
+<div class="example"><img src="./Vocab1.png" width="640" height="110"></div>
+
+<p>Before a reader can make any sense of this code, before she can even <i>begin</i> to understand how it works, here are some questions she will have:</p>
+
+<div class="example"><img src="./Vocab2.png" width="640" height="110"></div>
+
+<ul style="display:none;">
+<li>What does "fill" mean?</li>
+<li>What do those numbers after "fill" mean?</li>
+<li>What do those numbers after "ellipse" mean?</li>
+<li>What units are these numbers in?  What ranges are they in?</li>
+<li>Why are there so many numbers?</li>
+</ul>
+
+<p>Khan Academy's tutorials encourage the learner to address these questions by <i>randomly adjusting numbers</i> and trying to figure out what they do.</p>
+
+<div class="example"><img src="./Vocab3.png" width="640" height="92"></div>
+
+<p>Thought experiment.  Imagine if you bought a new microwave, took it out of the box, and found a panel of unlabeled buttons.</p>
+
+<div class="example"><img src="./Vocab4.png" width="640" height="114"></div>
+
+<p>Imagine if the microwave encouraged you to randomly hit buttons until you figured out what they did.</p>
+
+<div class="example"><img src="./Vocab5.png" width="640" height="173"></div>
+
+<p>Now, imagine if your cookbook advised you that randomly hitting unlabeled buttons was <i>how you learn cooking</i>.</p>
+
+
+<h3>Make meaning transparent</h3>
+
+<p>Learning cooking is not about guessing the functionality of your kitchen appliances.  It's about understanding how ingredients can be combined.</p>
+
+<p>Likewise, guessing the third argument of the "ellipse" function isn't "learning programming".  It's simply a <i>barrier</i> to learning.  In a modern environment, memorizing the minutia of an API should be as relevant as memorizing times tables.</p>
+
+<p>The environment is responsible for making meaning <i>transparent</i>.  The environment must enable the reader to <i>effortlessly read the program</i>, to decode the code, so she can concentrate on genuine programming concepts -- how the algorithmic "ingredients" combine.</p>
+
+<p>Here is one example of how a programming environment can make meaning transparent, by providing labels on mouse-over:</p>
+
+<div class="example" data-verbose-button="1" style="left: 0px;">
+	<video width="640" height="110" preload="">
+		<source src="Movies/Vocab6.mp4" type="video/mp4">
+		<source src="Movies/Vocab6.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 110px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 108px; left: 0px;">
+        <div class="videoPlayButton verbose" style="left: 281px; top: 11px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>Control structures can be labeled as well.</p>
+ 
+<div class="example"><img src="./Vocab7.png" width="640" height="110"></div>
+ 
+<p>It's tempting to think of this as "inline help", but it's not help -- it's simply labeling.  The problem with the following UI isn't that it lacks a "help feature".  The problem is that nothing is labeled.</p>
+
+<div class="example center"><img src="./Vocab9.png" width="462" height="199"></div>
+
+<p>That UI is exactly as informative as this line of code:</p>
+
+<div class="example center"><img src="./Vocab10.png" width="640" height="56"></div>
+
+<p>Why do we consider the code acceptable and the UI not?  Why do we expect programmers to "look up" functions in  "documentation", while modern user interfaces are designed so that documentation is typically unnecessary?</p>
+
+
+
+<h3>Explain in context</h3>
+
+<p>A programming environment is a <i>user interface for understanding a program</i>.  Especially in an environment for learning, the environment must be <i>designed to explain</i>.</p>
+
+<p>One attribute of great explanations is that they are often embedded in the context of what they are explaining.  That is, they <i>show</i> as well as <i>tell.</i></p>
+
+<div class="example" style="margin-top:26px;"><img src="./Vocab11.png" width="640" height="259"></div>
+
+<p>Instead of just <i>describing</i> what vocabulary means, we can often <i>show</i> it in the context of the data.  In the following example, the labels <i>connect</i> the code and its output:</p>
+
+<div class="example" style="left: 0px;">
+	<video width="640" height="110" preload="">
+		<source src="Movies/Vocab12.mp4" type="video/mp4">
+		<source src="Movies/Vocab12.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 110px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 108px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 16px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>Such a connection can be especially powerful when a line of code does multiple things:</p>
+
+<div class="example" style="left: 0px;">
+	<video width="640" height="110" preload="">
+		<source src="Movies/Vocab13.mp4" type="video/mp4">
+		<source src="Movies/Vocab13.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 110px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 108px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 16px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+<h3>Summary — Read the vocabulary</h3>
+
+<p>The particular solutions shown here are merely examples.  What matters is the underlying purpose: enabling the learner to <i>read the program</i>.</p>
+
+<ul>
+<li>The environment should <b>make meaning transparent</b>, so the learner can concentrate on high-level concepts, not vocabulary.</li>
+<li>The environment should <b>explain in context</b>.  Show and tell.  Annotate the data, not just the code.</li>
+</ul>
+
+<p>The examples above are just one of many ways of achieving these goals.  All that really matters is that <i>somehow</i> the learner's questions get answered:</p>    
+
+<div class="example"><img src="./Vocab2.png" width="640" height="110"></div>
+
+<p>An environment which allows learners to get hung up on these questions is an environment which discourages learners from even getting started.</p>
+
+
+</div> <!-- chapter -->
+
+
+
+<!--=========================================================================================================-->
+
+<div id="flow" class="chapterHeader environment">
+    <h2>Follow the flow</h2>
+</div>
+
+<div class="chapter environment">
+
+
+<p>A typical live-coding environment presents the learner with code on the left, and the output of the code on the right. When the code is changed, the output updates instantaneously.</p>
+
+<div class="example"><img src="./Flow1.png" width="640" height="110"></div>
+  
+<p>Another thought experiment.  Imagine a cooking show, ruthlessly abbreviated.  First, you're shown a counter full of ingredients.  Then, you see a delicious soufflé.  Then, the show's over.</p>
+
+<div class="example"><img src="./Flow2.jpg" width="640" height="249"></div>
+
+<!-- http://www.flickr.com/photos/manthatcooks/55765950/in/photostream/  -->
+  
+<p>Would you understand how that soufflé was made?  Would you feel prepared to create one yourself?</p>
+
+<p>Of course not.  You need to see how the ingredients are combined.  You need to <b>see the steps</b>.</p>
+
+<p>The programming environment exhibits the same ruthless abbreviation as this hypothetical cooking show.  We see code on the left and a result on the right, but it's the steps <i>in between</i> which matter most.  The computer traces a path through the code, looping around loops and calling into functions, updating variables and incrementally building up the output.  <i>We see none of this.</i></p>
+
+<p>People understand things that they can <i>see and touch</i>. In order for a learner to understand what the program is actually doing, the program flow must be made <i>visible and tangible</i>.</p>
+
+
+<h3>Make flow tangible</h3>
+
+<p>That example program again:</p>
+
+<div class="example"><img src="./Flow1.png" width="640" height="110"></div>
+
+This is a particularly difficult example for a beginner to follow.  The "for" construct, with its three statements on a single line, makes the control flow jump around bizarrely, and is an unnecessarily steep introduction to the concept of looping.
+
+<div class="example"><img src="./Flow3.png" width="640" height="126"></div>
+
+To make the flow more sane for a learner, the loop can be rewritten using "while":
+
+<div class="example"><img src="./Flow4.png" width="640" height="110"></div>
+
+
+<p>Now, the control flow must be made <i>tangible</i>.  We must put the execution of the program into the programmer's hand, let her feel that it is a <i>real thing</i>, let her <i>own</i> it.</p>
+
+<p>In the following example, the programmer uses a slider to scrub through the execution:</p>
+
+<div class="example" data-top="16" style="left: 0px;">
+	<video width="640" height="126" preload="">
+		<source src="Movies/Flow5.mp4" type="video/mp4">
+		<source src="Movies/Flow5.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 110px; top: 16px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 108px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 16px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+ 
+<p>This control allows the programmer to move around the loop at her own pace, and understand what is happening at each step.  She can go backwards and forwards, dwell in difficult areas, and compare what is happening at different times.  She can study how the output is built up over time, instead of seeing it magically appear all at once.</p>
+
+
+<h3>Make flow visible</h3>
+
+<p>The example above allows the programmer to follow the program's execution over time.  But she's peeking through a pinhole, only seeing a single point in time at any instant.  She has no <i>visual context</i>.</p>
+
+<p>To illustrate what I mean, here are two representations of a trip around my neighborhood, one where the neighborhood itself isn't visible, and one where it is.</p>
+
+<div class="example"><img src="./Flow6.png" width="640" height="217"></div>
+
+<p>This "overhead view" lets a person understand the trip at a higher level.  She can see the shape of the trip.  She can see <i>patterns</i>.</p>
+
+<p>In the following example, the program flow is plotted on a timeline.  Each line of code that is executed leaves a dot behind.  The programmer can take in the entire flow at a glance:</p>
+
+<div class="example" data-top="14" data-right="152" data-postright="7" style="left: 0px;">
+	<video width="792" height="124" preload="">
+		<source src="Movies/Flow8.mp4" type="video/mp4">
+		<source src="Movies/Flow8.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 110px; top: 14px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 108px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 16px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+<p>The patterns that emerge are especially helpful in the presence of conditionals and other forms of flow control:</p>
+
+<div class="example" data-top="14" data-right="152" data-postright="7" style="left: 0px;">
+	<video width="792" height="232" preload="">
+		<source src="Movies/Flow9.mp4" type="video/mp4">
+		<source src="Movies/Flow9.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 218px; top: 14px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 216px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 70px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+<div class="sidenote">It's possible that some novices may initially be confused by a timeline, but I'd say that learning to read a timeline is a far more valuable and general skill than learning the details of some graphics library.</div>
+
+<p>This visualization allows the programmer to see the "shape" of an algorithm, and understand it at a higher level.  The program flow is no longer "one line after another", but a <i>pattern of lines over time</i>.</p>
+
+
+
+<h3>Make time tangible</h3>
+
+<p>Line-by-line execution is a very fine-grained view of time.  The programmer also thinks about time at other granularities.</p>
+
+<p>For instance, animations and games run at a frame rate, say, sixty frames per second.  Every 1/60th of a second, the program prepares the next frame to display on the screen.  Other programs are event-driven -- they respond to an external event, such as a button click or network request, by performing some computation, and then they wait for the next event.</p>
+
+<p>These frames or event responses form a natural way of "chunking" time.  If the execution of a line of code is like a sentence, then a frame is like a chapter.  These chapters can also be made tangible, so the programmer can understand the execution at this granularity as well.</p>
+
+<p>The following example provides a timeline for exploring line-by-line execution, and a slider for exploring frame-by-frame.</p>
+
+<div class="example" data-top="14" data-bottom="36" style="left: 0px;">
+	<video width="640" height="268" preload="">
+		<source src="Movies/Flow10.mp4" type="video/mp4">
+		<source src="Movies/Flow10.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 218px; top: 14px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 216px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 70px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+<p>This control enables the programmer to go backwards and forwards through time, study interesting frames, and compare the execution across different frames.</p>
+
+
+<h3>Make time visible</h3>
+
+<p>In the above example, we are once again peeking through a pinhole, seeing just one frame at a time.  In the following example, all frames are lightly overlaid, in order to give <i>context</i> to the active frame.  The entire path of the ball can be seen at once.</p>
+
+<div class="example" data-bottom="30" style="left: 0px;">
+	<video width="640" height="248" preload="">
+		<source src="Movies/Flow11.mp4" type="video/mp4">
+		<source src="Movies/Flow11.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 218px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 216px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 70px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+<div class="sidenote" style="margin-top:-62px;">* One of the deepest and most powerful ideas in mathematics is the relationship between a differential formulation (such as a step-by-step process, like our "draw" function) and its integrated form (such as a function of time, or plot over time).  "Flattening time" allows the learner to see the process and its trajectory as two representations of the same thing, and thereby <i>think</i> of them interchangeably.</div>
+
+<p>The output of the program is no longer a series of fleeting moments, but can be seen as a single, solid thing that extends over time.  There is great power in this way of thinking.*</p>
+
+
+<h3>Summary — Follow the flow</h3>
+
+<p>Again, the particular solutions shown here are merely examples.  What matters is the underlying purpose: enabling the learner to follow the program flow, by <i>controlling time</i> and <i>seeing patterns across time</i>.  Transforming flow from an invisible, ephemeral notion into a <i>solid thing</i> that can be studied explicitly.</p>
+
+<ul>
+<li>The environment can <b>make flow tangible</b>, by enabling the programmer to explore forward and backward at her own pace.</li>
+<li>The environment can <b>make flow visible</b>, by visualizing the pattern of execution.</li>
+<li>The environment can represent time at <b>multiple granularities</b>, such as frames or event responses, to enable exploration across these meaningful chunks of execution.</li>
+</ul>
+
+
+</div> <!-- chapter -->
+
+
+<!--=========================================================================================================-->
+
+<div id="state" class="chapterHeader environment">
+    <h2 style="width:600px;">See the state</h2>
+</div>
+
+
+<div class="chapter environment">
+
+<p>A simple program:</p>
+
+<div class="example"><img src="./State1.png" width="640" height="182"></div>
+
+<p>The third line declares a variable named "scaleFactor", which varies with each iteration of the loop.</p>
+
+<div class="example"><img src="./State2.png" width="437" height="18"></div>
+
+<p>Take a moment to look at that line, and think about these questions:</p>
+
+<ul>
+<li>What values does scaleFactor take on?&nbsp;  1?&nbsp;  100?&nbsp;  -1?&nbsp;  pi / 2?</li>
+<li>What is scaleFactor at the beginning of the loop?  At the end?</li>
+<li>How does scaleFactor change over the course of the loop?  Linearly up?  Linearly down?  Does the change get faster or slower?</li>
+</ul>
+
+<p>Wait.  Wait a minute.  Were you trying to answer those questions by doing arithmetic in your head?  The computer somehow drew that picture, so the computer <i>must</i> have calculated all those scaleFactors itself.  Are you seriously <i>recalculating them in your head?</i></p>
+
+<div class="sidenote">* Other than setting a "breakpoint", which is like monitoring traffic on the freeway by setting up a barricade.  Or writing to a "console", which is like figuring out where your dog goes during the day by following the trail of droppings.</div>
+
+<p>Now imagine if scaleFactor also depended on some other variables, or some other functions, or external input.  There would be <i>no  way</i> to easily answer those questions.*</p>
+
+<p>Think about this.  We expect programmers to write code that manipulates variables, without ever seeing the values of those variables.  We expect readers to <i>understand</i> code that manipulates variables, without&nbsp;ever seeing the values of the variables.  <b>The entire purpose of code is to manipulate data, and we never see the data.</b>  We write with blindfolds, and we read by playing pretend with data-phantoms in our imaginations.</p>
+
+<div class="sidenote">One of the all-time most popular programming models is the spreadsheet.  A spreadsheet is the dual of a conventional programming language -- a language shows all the code, but hides the data.  A spreadsheet shows all the data, but hides the code.  Some people believe that spreadsheets are popular because of their two-dimensional grid, but that's a minor factor.  Spreadsheets rule because they <i>show the data</i>.</div>
+
+<p>Information design pioneer Edward Tufte has one primary rule, and this rule should be the principle underlying any environment for creating or understanding.</p>
+
+<p class="center"><b>Show the data.</b></p>
+
+<p>If you are serious about creating a programming environment for learning, the <b>number one thing you can do</b> -- more important than live coding or adjustable constants, more important than narrated lessons or discussion forums, more important than badges or points or ultra-points or <i>anything else</i> -- is to <b>show the data</b>.</p>
+
+
+<h3>Show the data</h3>
+
+<p>Because the value of a variable varies over time, showing the data is intimately connected with showing time.</p>
+
+<p>The previous section presented a timeline representation that showed the data at each step.  In the following example, the programmer mouses over a particular row of the timeline to concentrate on a single line.</p>
+
+<div class="example" data-top="14" data-right="152" data-postright="7" style="left: 0px;">
+	<video width="792" height="196" preload="">
+		<source src="Movies/State3.mp4" type="video/mp4">
+		<source src="Movies/State3.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 14px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>In this example, it is easy to answer the first two questions.  By skimming over the execution of that line of code, we can see all of the values that scaleFactor takes on, and when.</p>
+
+<p>However, it is still difficult to answer the third question: <i>how</i> does the variable vary?  What is the shape of its change?  The question is difficult because we are, once again, peeking through a pinhole, only seeing a single point at a time.</p>
+
+<p>Edward Tufte has a second rule.  It is not enough to just show the data.  We must <b>show comparisons</b>.</p>
+
+
+<h3>Show comparisons</h3>
+
+<p>Data needs context.  It is rarely enough to see a single data point in isolation.  We understand data by comparing it to other data.</p>
+
+<p>The timeline examples so far have used dots to represent executed lines.  But instead of dots, we can show data.  The following timeline shows each of the scaleFactors:</p>
+
+<div class="example"><img src="./State4.png" width="584" height="67"></div>
+
+<p>Almost every line of code here calculates <i>something</i>.  The environment should provide the best visualization of whatever that something is.  For example, the "rotate" line can show the rotations.</p>
+
+<div class="example"><img src="./State5.png" width="584" height="38"></div>
+
+<p>The "fill" line sets a fill color.  That color can be shown.</p>
+
+<div class="example"><img src="./State6.png" width="584" height="38"></div>
+
+<p>The "triangle" line draws a triangle to the canvas, rotated and colored.  The timeline can show a thumbnail of each triangle produced.</p>
+
+<div class="example"><img src="./State7.png" width="584" height="38"></div>
+
+<p>Taken together, we have a timeline that depicts not just the flow, but <i>all of the data calculated in that flow</i>.  The execution of the program is laid bare for the reader.  At a glance, she can see <i>which</i> lines were executed, <i>when</i> they were executed, and <i>what</i> they produced.  The flow and the data are both shown <i>in context</i>.</p>
+
+<div class="example" data-top="12" data-right="152" data-postright="7" style="left: 0px;">
+    <video width="792" height="194" preload="">
+		<source src="Movies/State8.mp4" type="video/mp4">
+		<source src="Movies/State8.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 12px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>The example above only loops twenty times.  Is it possible to understand a loop with, say, thousands of iterations, without drowning in thousands of numbers?</p>
+
+<p>Yes -- there is an entire field of study devoted to depicting large amounts of numbers.  To visualize this data, we can use all of the standard techniques of <i>data visualization</i>.</p>
+
+<p>In the following example, as the programmer zooms the timeline out, the visualization automatically switches from a table to a plot.</p>
+
+<div class="example" data-top="12" style="left: 0px;">
+	<video width="584" height="86" preload="">
+		<source src="Movies/State9.mp4" type="video/mp4">
+		<source src="Movies/State9.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 584px; height: 74px; top: 12px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 582px; height: 72px; left: 0px;">
+        <div class="videoPlayButton " style="left: 253px; top: -2px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+
+<h3>Eliminate hidden state</h3>
+
+<p>In order to understand what a line of code does, the learner must <i>see its effect</i>.  For example, as the programmer moves over iterations of the "triangle" line, she sees each triangle appear on the canvas:</p>
+
+<div class="example" data-top="12" data-right="152" data-postright="7" style="left: 0px;">
+	<video width="792" height="194" preload="">
+		<source src="Movies/State10.mp4" type="video/mp4">
+		<source src="Movies/State10.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 12px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>The "fill" line, on the other hand, sets the fill color for subsequent drawing operations.  When the programmer moves over this line, what effect does she see?  She sees <i>nothing happen</i>, because the "fill" function <i>modifies hidden state</i>.</p>
+
+<p>The Processing graphics library relies heavily on implicit state, in the form of the "current" fill color, stroke color, transform matrix, and so on.  Code that modifies this state produces <i>no visible effect</i> on the canvas.  In an interactive environment, this is unacceptable.</p>
+
+<p>There are two design options here. One alternative is to <b>eliminate the state.</b>  For example, color could be passed as a parameter to the "triangle" function.</p>
+
+<div class="example"><img src="./State11.png" width="439" height="38"></div>
+
+<p>The other alternative is to <b>show the state</b>.  In the following example, the current fill and stroke colors are shown above the canvas.  Now, when a line of code changes the fill color, the programmer actually <i>sees something change</i>. Making something visible <i>makes it real.</i></p>
+
+<div class="example" data-top="14" data-right="152" data-postright="7" style="left: 0px;">
+	<video width="792" height="196" preload="">
+		<source src="Movies/State12.mp4" type="video/mp4">
+		<source src="Movies/State12.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 14px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>All state must be <i>eliminated</i> or <i>shown</i>.  Either can be a reasonable design decision.  An environment that does neither -- forcing learners to <i>imagine</i> the state and make sense of functions that produce no visible effect -- is irresponsible design, and disrespectful to the learner.</p>
+
+<div class="sidenote">Just the concept of a "transform matrix" is undoubtably baffling for many learners, but with a better metaphor, it needn't be so.  Logo, for instance, uses a turtle to reify translation and rotation, and children understand it readily.  More on this later.</div>
+
+<p>The current transform matrix is a particularly critical and confusing member of the state.  Drawing anything interesting with the Processing graphics library requires matrix transforms, but the <i>current transform is invisible</i>.  Functions such as "scale" and "rotate" have no visible effect, and compound transformations (such as translation followed by scale, or should it be the other way around?) often involve groping blindly through trial-and-error.</p>
+
+<p>In the following example, the transform is visualized, and the effect of every function can be seen directly.</p>
+
+<div class="example" data-top="14" data-bottom="20" data-right="168" data-postright="23" style="left: 0px;">
+	<video width="808" height="216" preload="">
+		<source src="Movies/State13.mp4" type="video/mp4">
+		<source src="Movies/State13.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 14px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+
+
+<h3>Summary — See the state</h3>
+
+<p>Code manipulates data.  To understand code, a learner must <i>see the data</i>, and see the <i>effect of code on the data</i>.</p>
+
+<ul>
+<li>The environment must <b>show the data</b>.  If a line of code computes a thing, that thing should be immediately visible.</li>
+<li>The environment must <b>show comparisons</b>.   If a program computes many things, all of those things should be shown in context.  This is nothing more than <i>data visualization.</i></li>
+<li>The system must have <b>no hidden state</b>.  State should either be eliminated, or represented as explicit objects on the screen.  Every action must have a visible effect.</li>
+</ul>
+
+
+</div> <!-- chapter -->
+
+
+
+<!--=========================================================================================================-->
+
+<div id="react" class="chapterHeader environment">
+    <h2>Create by reacting</h2>
+</div>
+
+
+<div class="chapter environment">
+
+<p>I was recently watching an artist friend begin a painting, and I asked him what a particular shape on the canvas was going to be.  He said that he wasn't sure yet; he was just "pushing paint around on the canvas", reacting to and getting inspired by the forms that emerged.  Likewise, most musicians don't compose entire melodies in their head and then write them down; instead, they noodle around on a instrument for a while, playing with patterns and reacting to what they hear, adjusting and sculpting.</p>
+
+<p>An essential aspect of a painter's canvas and a musical instrument is the immediacy with which the artist gets <i>something there</i> to react to.  A canvas or sketchbook serves as an "external imagination", where an artist can grow an idea from birth to maturity by continuously <i>reacting to what's in front of him</i>.</p>
+
+<p>Programmers, by contrast, have traditionally worked in their heads, first imagining the details of a program, then laboriously coding them.</p>
+
+<p>Working in the head doesn't scale.  The head is a hardware platform that hasn't been updated in millions of years.  To enable the programmer to achieve increasingly complex feats of creativity, the environment must get the programmer <i>out</i> of her head, by providing an <i>external</i> imagination where the programmer can always be reacting to a work-in-progress.</p>
+
+<div class="sidenote">* Recently, some people have mistakenly attributed the "live coding" concept to me, but it's not a new idea, it's certainly not "my idea", and it's not a particularly interesting idea <i>in itself</i>.  Immediate-update is merely a <i>prerequisite</i> for doing anything interesting -- it enables <i>other</i> features which require a tight feedback loop.  An action game with a low frame rate is a bad game, but simply upping the frame rate doesn't magically make a game good.</div>
+
+<p>Some programming systems attempt to address this with a so-called "live coding" environment, where the output updates immediately as the code changes.  An example of live coding:*</p>
+
+<div class="example" style="left: 0px;">
+	<video width="640" height="110" preload="">
+		<source src="Movies/React1.mp4" type="video/mp4">
+		<source src="Movies/React1.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 110px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 108px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 16px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>As you can see, live coding, on its own, is not especially useful.  The programmer still must type at least a full line of code before <i>seeing any effect</i>.  This means that she must already understand what line of code she needs to write.  The programmer is still doing the creative work entirely in her head -- imagining the next addition to the program and then translating it into code.</p>
+
+
+<h3>Get something on the screen as soon as possible</h3>
+
+<p>Live coding does, however, provide a foundation for <i>other</i> features which can jump-start the create-by-reacting process.  In the following example, the environment offers <i>autocomplete with default arguments.</i>  After typing just a couple of characters, the programmer immediately <i>sees something on the screen</i>, and can proceed to adjust it.</p>
+
+<div class="example" data-push-left="18" data-bottom="16" data-right="6" style="left: -18px;">
+	<video width="664" height="198" preload="">
+		<source src="Movies/React2.mp4" type="video/mp4">
+		<source src="Movies/React2.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 0px; left: 18px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>Autocomplete is a common feature of most programming environments, but there are two critical subtleties here.  First, the functions all have default arguments (position, width, height, and so on are already filled in), so each completion is a complete statement that produces a visible effect.  Second, a default completion is selected immediately.  Here's what this means for the programmer's thought process:</p>
+
+<p>In the example above, the programmer wants to draw a roof on the house.  She doesn't need to mentally plan out <i>how</i> to draw the roof beforehand -- she doesn't need to imagine which functions would be appropriate.  She just needs the vague notion: "I want to draw <i>something.</i>"  She starts typing "draw", and <b>immediately sees a shape on the screen</b>.</p>
+
+<p>At this point, she can stop <i>imagining</i> and start <i>reacting</i>:</p>
+
+<ul>
+<li><i>"This is the wrong shape. Which shape will work better?"</i>  She goes down the list and turns the shape into a triangle.</li>
+<li><i>"This is a right triangle.  I want a different triangle."</i>  She adjusts the triangle's points into a more roof-like shape.</li>
+<li><i>"The roof isn't lying on the house."</i> She adjusts the triangle to lower it onto the house.</li>
+</ul>
+
+<div class="sidenote">* Strangely, I don't actually know of any APIs that are intentionally designed with autocomplete in mind.  I do know many APIs, such as Processing, that are designed for brevity, which is irrelevant in an environment with good autocomplete.</div>
+ 
+ <p>This example assumed a hypothetical graphics library which was <i>designed for autocomplete</i> -- all of the drawing functions begin with "draw", so the completion list would appear as the designer intended.*</p>
+
+<p>A different way to structure the library would be to provide a single "shape" function, which takes the type of shape (triangle, ellipse, etc.) as an argument.  For example:</p>
+
+<div class="example" data-push-left="18" data-right="6" style="left: -18px;">
+	<video width="664" height="182" preload="">
+		<source src="Movies/React4.mp4" type="video/mp4">
+		<source src="Movies/React4.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 182px; top: 0px; left: 18px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 180px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>This could help to further encourage the create-by-reacting way of thinking.  Because "drawTriangle" and "drawRect" aren't in the vocabulary, the programmer would never find herself thinking about specific shape functions before something is on the screen.  Her starting point is always just "shape".</p>
+
+<p>The environment is the <i>user interface for working with a program</i>.  Consider the second menu that appeared above, with "line", "triangle", etc.  If an argument can take one of five values, the environment should provide the <i>best interface</i> for selecting among those values.  That is, in this situation, the programmer is a <i>user who has to select one of five choices.</i>  How would a good UI designer represent those five choices?  Perhaps more like this:</p>
+
+<div class="example"><img src="./React5.png" width="640" height="190"></div>
+
+<p>Why should we expect anything less from a programming environment?</p>
+
+
+<h3>Dump the parts bucket onto the floor</h3>
+
+<p>As a child, you probably had the experience of playing with a construction kit of some kind -- Legos, or Erector Sets, or even just blocks.  As a first act before starting to build, a child will often spread out all of the parts on the floor.</p>
+
+<p class="example"><img src="./React6.jpg" width="640" height="308"></p>
+
+<!-- http://www.flickr.com/photos/koocbor/5316921032/ -->
+
+<p>This provides more than simply quick access.  It allows the child to scan the available parts and <i>get new ideas</i>.  A child building a Lego car might spot a wide flat piece, and decide to give the car wings.</p>
+    
+<p>This is a second form of create-by-reacting.  In addition to reacting to the object under construction, the child is also reacting to the <i>parts she has available.</i>
+
+</p><p>In the following example, the available functions are located adjacent to the coding area, and the programmer can skim over these "parts" and get ideas.</p>
+
+<div class="example" data-left="160" data-bottom="28" style="left: 0px;">
+	<video width="640" height="210" preload="">
+		<source src="Movies/React7.mp4" type="video/mp4">
+		<source src="Movies/React7.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 480px; height: 182px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 478px; height: 180px; left: 160px;">
+        <div class="videoPlayButton " style="left: 201px; top: 52px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 160px;"></div>
+</div></div>
+
+<p>The above example <i>encourages</i> the programmer to explore the available functions.  A learner who would never think to try typing the "bezier" function, with its unfamiliar name and eight arguments, can now easily stumble upon it and discover what it's about.</p>
+
+<p>The example above is one way of representing the "parts bucket" for programmatic drawing.  But would a user interface designer consider that to be the <i>best interface</i> for drawing a picture on a computer screen?  What about the following?</p>
+
+<div class="example" data-left="33" style="left: 0px;">
+	<video width="640" height="146" preload="">
+		<source src="Movies/React8.mp4" type="video/mp4">
+		<source src="Movies/React8.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 607px; height: 146px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 605px; height: 144px; left: 33px;">
+        <div class="videoPlayButton " style="left: 265px; top: 34px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 33px;"></div>
+</div></div>
+
+
+<p>An objection might arise at this point.  With this interface, is this even "programming"?</p>
+
+<p>No, not really.  <i>But none of the examples in this section are "programming".</i>  Typing in the code to draw a static shape -- </p>
+
+<p class="example"><img src="./React9.png" width="437" height="18"></p>
+
+<p>-- is not programming!  It's merely a very cumbersome form of illustration.  It becomes genuine <i>programming</i> when the code is <i>abstracted</i> -- when arguments are <i>variable</i>, when a block of code can do different things at different times.  The next section will discuss how create-by-reacting leads into <i>create-by-abstracting.</i></p>
+
+
+<h3>Summary — Create by reacting</h3>
+
+<div class="sidenote">* Thus, we need a powerful way of getting something onscreen, and powerful ways of adjusting it.  Adjustable values (such as draggable numbers or color palettes) are a valuable component for the latter purpose, and I am a long-time proponent of adjustable values (e.g., <a href="https://worrydream.com/ScrubbingCalculator/">Scrubbing Calculator</a>, <a href="https://worrydream.com/ExplorableExplanations/">Explorable Explanations</a>, <a href="https://worrydream.com/TenBrighterIdeas/">Ten Brighter Ideas</a>).  However, I have always proposed adjustable numbers in a context where the adjuster <i>already understands the meaning of the number.</i>  As mentioned earlier, I am very uncomfortable with the Khan Academy approach of encouraging learners to adjust unlabeled numbers and figure out what they're for, and I feel that this is a case of a tool being adopted without an understanding of what purpose the tool serves.</div>
+ 
+<p>The create-by-reacting way of thinking could be stated as: start with <i>something</i>, then adjust until it's right.*</p>
+
+<p>The programmer must be able to do her thinking out in the environment, not trapped in her head.  The environment must serve as an <i>external imagination</i>, where the programmer can be continuously reacting to a work-in-progress.</p>
+
+<p>To be clear, this does not relieve the programmer from thinking!  It simply makes those thoughts <i>immediately visible.</i>  I am happy to be composing this essay in a text editor, where my words become visible and editable as soon as I think of them, as opposed to working entirely internally like the orators and playwrights of the distant past.</p>
+
+<ul>
+<li>The environment must be designed to <b>get something on the screen as soon as possible</b>, so the programmer can start reacting.  This requires modeling the programmer's thought process, and designing a system that can pick up on the earliest possible seed of thought.</li>
+<li>The environment must <b>dump the parts bucket onto the floor</b>, allowing the programmer to continuously react to her raw material and spark new ideas.</li>
+</ul>
+
+</div> <!-- chapter -->
+
+
+<!--=========================================================================================================-->
+
+<div id="abstract" class="chapterHeader environment">
+    <h2>Create by abstracting</h2>
+</div>
+
+
+<div class="chapter environment">
+
+<p>Learning programming is learning abstraction.</p>
+
+<p>A computer program that is just a list of fixed instructions -- draw a rectangle here, then a triangle there -- is easy enough to write.  Easy to follow, easy to understand.</p>
+
+<p class="example"><img src="./Abstract1.png" width="640" height="164"></p>
+
+<p>It also makes <i>no sense at all</i>.  It would be much <i>easier</i> to simply draw that house by hand.  What is the point of learning to "code", if it's just a way of getting the computer to do things that are easier to do directly?</p>
+
+<p>Because code can be <i>generalized</i> beyond that specific case.  We can change the program so it draws the house anywhere we ask.  We can change the program to draw many houses, and change it again so that houses can have different heights.  Critically, we can draw all these different houses from a <i>single description</i>.</p>
+
+<p class="example"><img src="./Abstract2.png" width="640" height="164"></p>
+
+<p>The description still says "draw a rectangle here, then a triangle there", but the here and there have been <i>abstracted.</i>  Different parameters give us different heres and different theres.</p>
+
+<p>How does a programmer learn to write this abstract code?  How does she learn to write a single description that is generalized for many cases?</p>
+
+<p>She <i>doesn't.</i>  The learner should start by writing concrete code, and then <i>gradually change it</i> to introduce abstraction.  And the environment must provide the tools to perform this process, in such a way that the learner can <i>understand</i> the program at each stage.</p>
+
+
+<h3>Start constant, then vary</h3>
+
+<p>In the create-by-abstracting way of thinking, the programmer starts by creating a specific case, typically involving <i>constants.</i>  She then moves to the general case by turning those constants into <i>variables.</i>  Here's an example of how the environment can encourage this way of thinking, starting with the house from earlier.</p>
+
+<p class="example"><img src="./Abstract3.png" width="640" height="164"></p>
+
+<p>The programmer wants to move the house to a different location.  She can't move it by adjusting a single number in the code, because there are four different points which all need to change at the same time -- the rectangle's origin, and the triangle's three points.</p>
+
+<p>Here, the programmer selects one of the numbers, and <i>converts it into a variable.</i></p>
+
+<div class="example" data-left="90" data-no-marker="1" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract4.mp4" type="video/mp4">
+		<source src="Movies/Abstract4.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker" style="display: none;">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+She then <i>connects</i> the variable to another number, by dragging from one to the other.
+
+<div class="example" data-left="90" data-no-marker="1" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract5.mp4" type="video/mp4">
+		<source src="Movies/Abstract5.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker" style="display: none;">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+<p>There are two additional arguments to "triangle" which need to vary as well.  When she connects the variable, whose value is 80, to the constant 100, the environment offers a choice of four possible relationships between the numbers.</p>
+
+<div class="example" data-left="90" data-no-marker="1" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract6.mp4" type="video/mp4">
+		<source src="Movies/Abstract6.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker" style="display: none;">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+
+<p>The four expressions involve addition, subtraction, multiplication, and division respectively.  One of them will typically be either the correct relationship or a good starting point.</p>
+
+<p>Here is the entire process of introducing the variable.</p>
+
+<div class="example" data-left="90" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract7.mp4" type="video/mp4">
+		<source src="Movies/Abstract7.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+
+<h3>Start with one, then make many</h3>
+
+<p>In the example above, the house is now <i>abstracted</i> -- the code doesn't just draw one fixed house, but can draw a house anywhere.  This abstracted code can now be used to draw <i>many different houses.</i></p>
+
+In the following example, the programmer wants to draw a row of houses.  She selects the abstracted code, and <i>converts it into a loop.</i>
+
+<div class="example" data-left="90" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract8.mp4" type="video/mp4">
+		<source src="Movies/Abstract8.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+<p>The variable in the first line of the selection becomes an <i>induction variable</i>, and the programmer can then adjust its bounds.</p>
+
+<p>This is a process of starting with a specific case, and progressively generalizing:</p>
+
+<ul>
+<li>First, the programmer creates a house at a fixed location.  Here, she has interactive control over each <i>individual shape.</i></li>
+<li>She turns the house's location into a variable.  Now, she has interactive control over the variable, which affects <i>many shapes.</i></li>
+<li>She introduces a loop to <i>vary</i> that variable.  Now, she has interactive control over the bounds of the loop, which affects <i>many houses,</i> which affect many shapes.</li>
+</ul>
+
+<p>At each stage, the programmer has interactive control over the relevant parameters, but the parameters are at successively higher levels of abstraction.  That is, the programmer can still <i>create by reacting</i>, but she's <b>creating and reacting at higher levels</b>.</p>
+
+<p class="center">---</p>
+
+<p>Instead of drawing an evenly-spaced row of houses, the programmer now wants individual control over each of the houses.  Starting from the variable abstraction, she selects the code and <i>converts it into a function.</i></p>
+
+<div class="example" data-left="90" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract9.mp4" type="video/mp4">
+		<source src="Movies/Abstract9.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+<p>By duplicating the function call, she obtains several houses which can be controlled individually.</p>
+
+<p>Now, instead of identical houses, she wants to vary the heights of the houses.  She introduces another variable, and then converts it into <i>an additional argument to the function.</i></p>
+
+<div class="example" data-left="90" style="left: 0px;">
+	<video width="640" height="164" preload="">
+		<source src="Movies/Abstract10.mp4" type="video/mp4">
+		<source src="Movies/Abstract10.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 550px; height: 164px; top: 0px; left: 0px;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 548px; height: 162px; left: 90px;">
+        <div class="videoPlayButton " style="left: 236px; top: 43px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 90px;"></div>
+</div></div>
+
+<div class="sidenote">* In <a href="https://worrydream.com/LadderOfAbstraction/">Ladder of Abstraction</a> terminology, the programmer climbed two levels on the ladder of abstraction -- she controlled x, then abstracted over x, then controlled y, then abstracted over y.</div>
+
+<p>The process, again, consists of starting concrete, and progressively introducing abstraction:*</p>
+
+<ul>
+<li>The programmer creates a drawing of a house.</li>
+<li>She turns x into a variable, so she can control the house's position.</li>
+<li>She turns x into a function argument, so different houses can have different positions.</li>
+<li>She turns y into a variable, so she can control the house's height.</li>
+<li>She turns y into a function argument, so different houses can have different heights.</li>
+</ul>
+
+
+<h3>Summary — Create by abstracting</h3>
+
+<p>Start concrete, start grounded.  Start with one specific case, entirely understood.  Then gradually generalize, level by level, in such a way that the programmer still fully understands the program at each level of abstraction.</p>
+
+<p>Fully concrete code can be micromanaged -- the programmer has explicit control over every step of the execution.  Abstraction means giving up some of this control, and this can be scary for a learner.</p>
+
+<p>But the learner can work up to it -- introduce a variable, interactively control it, connect the variable to another value, interactively control it, turn the variable into a function argument, interactively control it.  <b>The learner always gets the experience of interactively controlling the lower-level details, understanding them, <i>developing trust in them,</i> before handing off that control to an abstraction and moving to a higher level of control.</b></p>
+
+<div class="sidenote">* The code transformations shown in the above examples have a superficial resemblance to "refactoring", which is supported by some environments.  However, the features have different intents.  Refactoring is about writing working but poorly-organized code, then cleaning it up.  Create-by-abstracting is about writing code for a specific case, then generalizing it.</div>
+
+<p>The environment must support this process.  A typical text editor only provides direct support for growing "outward" -- adding new lines of code.  The environment must also support growing "upward" -- abstracting over existing code.*</p>
+
+<ul>
+<li>The environment should encourage the learner to <b>start constant, then vary</b>, by providing meaningful ways of gradually and seamlessly transitioning constant expressions into variable expressions.</li>
+<li>The environment should encourage the learner to <b>start with one, then make many</b>, by providing ways of using those variable expressions at a higher level, such as function application or looping.</li>
+</ul>
+
+
+</div> <!-- chapter -->
+
+
+
+<!--=========================================================================================================-->
+
+<div id="language" class="chapterHeader language">
+    <h2>Language</h2>
+</div>
+
+<div class="chapter language">
+
+<p>A programming system has two parts.  The environment is installed on the computer, and the language is installed in the programmer's head.</p>
+
+<p style="width:648px;">The design of the language is just as critical to the programmer's way of thinking as the design of the environment.  In the best cases, they are co-designed and inseparable.  Many recent learning environments use JavaScript or Processing, and for the sake of comparison, the examples in this essay used them as well.  But neither is a well-designed language for learning.</p>
+ 
+<p style="width:660px;">Fortunately, there are giant shoulders to stand on here -- programming systems that were carefully and beautifully designed around <i>the way people think and learn</i>.  This section will briefly offer some design principles that have been distilled from these great systems of the past.</p>
+
+
+<h3>Great works</h3>
+
+<p>The canonical work on designing programming systems for learning, and perhaps the greatest book ever written on learning in general, is Seymour Papert's "Mindstorms".</p>
+
+<div class="sidenote">Mindstorms on <a href="https://www.amazon.com/dp/0465046746">Amazon</a><br>Mindstorms at <a href="http://www.powells.com/biblio/72-9780465046744-0">Powell's</a></div>
+
+<div class="example center"><a href="https://worrydream.com/refs/Papert_1980_-_Mindstorms,_1st_ed.pdf"><img src="./Language1.jpg" width="243" height="366"></a></div>
+
+<p>Designing a learning system without a solid understanding of the principles in this book is like designing a mechanical system without understanding "the lever".  Or "gravity".  If you are reading this essay (and I'm pretty sure you are!) then you <i>need</i> to read "Mindstorms".</p>
+
+<p>Seriously. I mean it.  If you are going to design anything whatsoever related to learning, then you literally <i>need</i> to read "Mindstorms".</p>
+
+<p><i>Please, read <a href="https://worrydream.com/refs/Papert_1980_-_Mindstorms,_1st_ed.pdf">"Mindstorms"</a>.</i></p>
+
+<p class="center">---</p>
+
+<p>This section will make reference to four seminal programming systems that were designed for learning, and I strongly recommend studying each of them.</p>
+
+<div class="sidenote" style="padding-top:7px;"><p>Studying historical software can be challenging.  It can be difficult to point to an accessible reference which explains a system's "heart".  Here are the best references I can offer:</p>
+
+<p><b>Logo</b>:  we are very fortunate to have Seymour Papert's <a href="https://www.amazon.com/dp/0465046746">Mindstorms</a> and <a href="https://www.amazon.com/dp/0465010636">The Children's Machine</a>.</p>
+<p><b>Smalltalk</b>: I recommend Alan Kay's <a href="https://worrydream.com/EarlyHistoryOfSmalltalk/">Early History of Smalltalk</a> and perhaps Dan Ingalls's <a href="https://worrydream.com/refs/Ingalls_1981_-_Design_Principles_Behind_Smalltalk.pdf">Design Principles Behind Smalltalk</a>.</p>
+<p><b>HyperCard</b>:  see this <a href="https://archive.org/details/CC501_hypercard">presentation by Bill Atkinson</a>.</p> 
+<p><b>Rocky's Boots</b> can be <a href="http://www.virtualapple.org/J_rockysboots.html">played online</a>, or see this <a href="http://ldt.stanford.edu/ldt1999/Students/kemery/esc/rockyDemoFrame.htm">brief explanation</a>, but neither is as enlightening as a good analysis would be.</p>
+</div>
+
+<div class="example"><img src="./Language2.png" width="640" height="490"></div>
+
+<p>To be clear, I'm not advocating <i>using</i> any of these systems, in either their historical or modern incarnations.  I'm advocating <i>understanding</i> them, and building on their insights.</p>
+
+
+<h3>Identity and metaphor</h3>
+
+<p>In <b>Logo</b>, the programmer draws pictures by directing the "turtle", an onscreen character which leaves a trail as it moves:</p>
+
+<div class="example center"><img src="./Language3.png" width="321" height="167"></div>
+
+<p>Watch just two minutes of this video -- the children, and the beardy guy talking:</p>
+
+<div class="example center"><iframe width="420" height="315" src="./BTd3N5Oj2jk.html" frameborder="0" allowfullscreen=""></iframe></div>
+
+<p>That's Seymour Papert explaining the Logo turtle.  The turtle serves a number of brilliant functions, but the most important is that the programmer can <i>identify</i> with it.  To figure out how to make the turtle perform an action, the programmer can ask how she would perform that action herself, if <i>she were the turtle</i>.</p>
+
+<p>For example, to figure out how to draw a circle, a learner will walk around in circles for a bit, and quickly derive a "circle procedure" of taking a step forward, turning a bit, taking a step forward, turning a bit.  After teaching it to herself, the learner can then teach it to the computer.*  <span class="sidenote">* Here, the learner has derived and implemented the <i>differential equation for a circle,</i> without knowing what a differential equation is.  To quote Papert, a Logo program is an "intuitive analog of the differential equation".</span> The turtle is the in-computer embodiment of the programmer herself, a "self", like the player-character in a video game, and thereby allows the learner to transfer her knowledge of her own body into knowledge of programming.</p>
+
+<p>Every programming language is made of metaphors, but some fit the mind better than others.  Standard imperative programming uses the metaphor of "assigning to variables", shuffling bits between little boxes.  Unlike the Logo turtle, this metaphor was not designed to resonate with how people learn and understand; it simply evolved as a thin layer over the metaphors used in the underlying machine architecture, such as "storing to memory".* <span class="sidenote">* Alan Kay in <a href="https://worrydream.com/EarlyHistoryOfSmalltalk/">The Early History of Smalltalk</a>:  <i>"Assignment statements -- even abstract ones -- express very low-level goals...  Human programmers aren't Turing machines -- and the less their programming systems require Turing machine techniques, the better."</i></span></p>
+
+<p><b>Smalltalk</b>, like Logo, also has a strong resonant metaphor, which is the <i>message</i>.  All computation in Smalltalk is represented by objects sending and responding to messages from other objects.  In order to program the behavior of an object, the programmer casts herself into the role of that object (to the extent of referring to the object as "self"!) and thinks of herself as <i>carrying on a conversation</i> with other objects.  This is a powerful metaphor, because role-playing and conversing are powerful innate human facilities.  As with Logo, tremendous time and thought went into the crafting and honing of Smalltalk's metaphors.</p>
+
+<p>In <b>HyperCard</b>, the program is represented as a stack of cards, with the programmer drawing objects onto each card.  Unlike a typical programming language, where an "object" is an abstract ethereal entity floating inside the computer, every object in HyperCard has a "physical presence" -- it has a location on a particular card, it can be seen, it can be interacted with.  Every object in HyperCard is a "real thing", and this is a powerful metaphor which allows programmers to apply their intuition and understanding of the physical world.</p>
+
+<p><b>Rocky's Boots</b> is structured as a video game, with a player-character that can be moved around directly.  The player not only can pick up and move objects, but also acts as a power source -- a <i>literally</i> powerful metaphor.  Everything is visible and tangible -- electricity is not some abstract voltage reading, but can be seen directly as orange fire, flowing through wires.  This beautiful metaphor makes it trivial to <i>follow the flow</i> and <i>see the state</i>.</p>
+
+<p>In <b>Processing</b>, by contrast, the programmer has no identity within the system.  There are no strong metaphors that allow the programmer to translate her experiences as a person into programming knowledge.  The programmer cannot solve a programming problem by performing it in the real world.</p>
+
+<p>Processing's core metaphor is the "painter's algorithm" -- the computer places a series of shapes on the screen, like drawing on paper.  Because this metaphor carries no computational power (you cannot <i>compute</i> by filling in pixels), all computation occurs outside the bounds of the metaphor.  In this example of a bouncing-ball animation --</p>
+
+<div class="example" data-no-marker="1" style="left: 0px;">
+	<video width="640" height="218" preload="">
+		<source src="Movies/Language5.mp4" type="video/mp4">
+		<source src="Movies/Language5.webm" type="video/webm">
+	</video>
+<div class="videoChrome" style="display: block; width: 640px; height: 218px; top: 0px; left: 0px;">
+    <div class="marker" style="display: none;">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay" style="width: 638px; height: 216px; left: 0px;">
+        <div class="videoPlayButton " style="left: 281px; top: 70px;"></div>
+    </div>
+    <div class="videoDarken" style="left: 0px;"></div>
+</div></div>
+
+<p>-- the simulated properties of the ball (position, velocity) are not associated with the picture of the ball onscreen.  They are computed and stored abstractly as "numbers" in "variables", and the ball is merely a shadow that is cast off by this ethereal internal representation.  The ball cannot be picked up and moved; it cannot be told how to interact with other objects.  It is not a "living thing", and the simulation cannot be <i>understood</i> or <i>thought about</i> in any way other than "numbers in variables".  This is a very weak way of thinking.* <span class="sidenote" style="margin-top:-35px;">* For examples of systems where every onscreen object is a living tangible thing, see <a href="http://www.squeakland.org/">Etoys</a> or <a href="http://handbook.selflanguage.org/current/morphic.html">Morphic</a>.</span></p>
+
+
+<h3>Decomposition</h3>
+
+<p>Modularity is the human mind's lever against complexity.  Breaking down a complex thing into understandable chunks is essential for understanding, perhaps <i>the essence</i> of understanding.</p>
+
+<p>A programming language must encourage the programmer to <i>decompose</i> -- to approach a complex problem by breaking it into simpler problems.  Papert refers to this as breaking down a program into "mind-size bites".</p>
+
+<p><b>Logo</b> uses the metaphor of "teaching the turtle a new word".  To draw a face consisting of four circles, we can teach the turtle a subprocedure for drawing a circle, and then apply that subprocedure four times.  Long and careful thought was given to the process by which a learner <i>discovers the need</i> for subprocedures, and then factors a large procedure into subprocedures.</p>
+
+<p><b>Smalltalk</b> is, in essence, a philosophy of decomposition in the form of a programming language.  This is Alan Kay inventing objects:</p>
+
+<p class="quote">Bob Barton [said] "The basic principle of recursive design is to make the parts have the same power as the whole."  For the first time I thought of the whole as the entire computer, and wondered why anyone would want to divide it up into weaker things called data structures and procedures.  Why not divide it up into little computers...  Why not thousands of them, each simulating a useful structure?</p>
+
+<p>Smalltalk's key insight was that a complex computer program could be decomposed into smaller <i>computers,</i> called "objects".  Programming in Smalltalk is almost entirely an exercise in decomposition -- breaking down thoughts into classes and messages.</p>
+
+<div class="sidenote"><a href="http://www.ece.cmu.edu/~koopman/forth/hopl.html">Forth</a> is another language whose extraordinary decomposability is valuable to study and understand.</div>
+
+<p>Almost every computer language provides some facility for decomposition, but some are better than others.  In his wonderful essay <a href="https://worrydream.com/refs/Hughes_1990_-_Why_Functional_Programming_Matters.pdf">Why Functional Programming Matters</a>, John Hughes argues that decomposition lies at the heart of the power of languages like Haskell:</p>
+
+<p class="quote">When writing a modular program to
+solve a problem, one first divides the problem into subproblems, then solves the
+subproblems, and finally combines the solutions. The ways in which one can
+divide up the original problem depend directly on the ways in which one can glue
+solutions together. Therefore, to increase one's ability to modularize a problem
+conceptually, one must provide new kinds of glue in the programming language.</p>
+
+<p class="quote">Functional languages provide two new, very important kinds of glue... This is the key to functional programming’s power -- it allows improved modularization.</p>
+
+<div class="sidenote">Khan Academy's tutorials do not mention decomposition or functions at all, and many example programs are written as one long list of instructions.</div>
+
+<p><b>Processing</b> allows for Logo-style decomposition into subprocedures, in the form of function definitions.  The more powerful Smalltalk-style decomposition, where submodules can be <i>thought about independently,</i> is not supported.  In Processing, drawing and input events are tied to single entry points -- top-level functions such as "draw" and "mouseDown".  The behavior of submodules must be tangled across these global functions.  Clean decomposition is not possible.</p>
+
+<p>Consider a programmer who has made a bouncing ball animation.  How does she go from one ball to two, to a hundred?  How does she make the balls bounce off one another?  How does she make balls draggable with the mouse?  In a genuine learning environment such as Etoys, this progression is natural and encouraged.  In Processing, each of these steps is a nightmare of needless complexity.</p>
+
+<p>A language that discourages decomposition is a language that cripples a programmer's most valuable way of thinking.</p>
+
+
+<h3>Recomposition</h3>
+
+<p>Creating is remixing.  To a large extent, new ideas are old ideas in new combinations.</p>
+
+<p>A programming language must encourage <i>recomposition</i> -- grabbing parts of other programs, assembling them together, modifying them, building on top of them.  This gives creators the initial material they need to create by reacting, instead of facing every new idea with a blank page.  It also allows creators to <i>learn from each other</i>, instead of deriving techniques and style in a vacuum.</p>
+
+<p><b>HyperCard</b> was designed for recomposition, and is perhaps still unsurpassed in that respect.  Bill Atkinson fully intended for creators to assemble a program by copying and pasting objects from other programs, and then gradually tweaking and customizing them.  Every program thus serves as a parts kit for creating new programs.  Because all source code, if any, is embedded in individual objects in the form of scripts, and because scripts use loose, relative references to other objects, groups of related objects can be transplanted much more easily and successfully than in other systems.* <span class="sidenote">* HyperCard is seen by some as "what the web should have been".  It's lamentable that a creator cannot, and probably can never, create a website by copying and pasting graphical objects from other websites.  This is not due to "technological limitations" -- it's a consequence of thoughtless system design.</span></p>
+
+<p>Many people revere HyperCard for initiating them into programming.  Any user can remix their software with copy and paste, thereby subtly transitioning from user to creator, and often eventually from creator to programmer.</p>
+
+<p><b>Processing</b>'s lack of modularity is a major barrier to recomposition.  The programmer cannot simply grab a friend's bouncing ball and place it alongside her own bouncing ball -- variables must be renamed or manually encapsulated; the "draw" and mouse functions must be woven together, and so on.  One can easily start from an existing Processing program and modify it, but the language does not encourage <i>combining two programs.</i></p>
+
+<p>Worse, Processing's dependence on global state hinders even the simplest forms of recomposition.  As an analogy, imagine you're writing an email.  You copy some red text from a website, paste it into your email, and <i>everything else in your email turns red</i>:</p>
+
+<div class="example" style="margin-left:-8px;"><img src="./Language6.png" width="900" height="167"></div>
+
+<p>This is <i>exactly</i> what can happen when copying and pasting lines of Processing code, because Processing's way of handling color is inherently leaky:</p>
+
+<div class="example" style="margin-top:30px;"><img src="./Language7.png" width="890" height="427"></div>
+
+<p>Experienced programmers might look at this example and consider this a programmer's error, because this is "just how code works."  But this error is <i>not</i> intrinsic to programming; it's a consequence of specific design decisions  -- mutable state, global variables, no encapsulation.</p>
+
+<p>Worse yet, Processing has global modes which <i>alter the meaning of function arguments.</i>  The following line of code sets a fill color.  Do you know what color it is?</p>
+
+<div class="example"><img src="./Language8.png" width="437" height="18"></div>
+
+<p>Trick question -- it's <i>impossible</i> to know what color it is, because the meaning of "255" depends on the global "color mode".  It could be <i>any</i> of these colors:</p>
+
+<div class="example center"><img src="./Language9.png" width="335" height="56"></div>
+
+<p>If two Processing programs specify their colors in different color modes, then combining the two programs is almost hopeless. </p>
+
+<p>Designing a system that supports recomposition demands long and careful thought, and design decisions that make programming more convenient for individuals may be detrimental to social creation.</p>
+
+
+<h3>Readability</h3>
+
+<p>A learner must be able to look at a line of code and know what it means. </p>
+
+<p><b>Syntax matters.</b>  Here are two statements in HyperCard's scripting language, and their equivalents in a more conventional syntax:</p>
+
+<div class="codetable" style="width:710px;">
+    <div class="codetableRow">
+        <span class="codetableHeader">HyperTalk:</span>
+        <span class="codetableCell">Write "hello" to file "greetings".</span>
+        <span class="codetableCell2">Drag from "0,0" to "100,100" with optionKey.</span>
+    </div>
+    <div class="codetableRow">
+        <span class="codetableHeader">C-like syntax:</span>
+        <span class="codetableCell">writeFile("hello", "greetings");</span>
+        <span class="codetableCell2">dragMouse(0, 0, 100, 100, OPTION_KEY);</span>
+    </div>
+</div>
+
+<div class="sidenote">See also <a href="http://inform7.com/">Inform 7</a>.  English-like languages like these are sometimes accused of being difficult to write (since the syntax is more restrictive than actual English), but that's a fault of the environment.  Programmers shouldn't be <i>typing</i> this stuff.</div>
+
+<p>HyperTalk happens to use an English-like syntax, but that's not the point here.  What matters is that every argument can be <i>understood in context</i>.  It's clear that "hello" is a string and "greetings" is a filename, and that "0,0" and "100,100" are start and end points.  In the conventional syntax, both are ambiguous.</p>
+
+<p>As another example, here's how a programmer might draw an ellipse in three languages:</p>
+
+<div class="codetable">
+    <div class="codetableRow">
+        <span class="codetableHeader">Smalltalk:</span>
+        <span class="codetableCell3">canvas drawEllipseCenteredAtX:50 y:50 width:100 height:100.</span>
+    </div>
+    <div class="codetableRow">
+        <span class="codetableHeader">Processing:</span>
+        <span class="codetableCell3">ellipse(50,50,100,100);</span>
+    </div>
+    <div class="codetableRow">
+        <span class="codetableHeader">x86 assembly:</span>
+        <span class="codetableCell3">push 100; push 100; push 50; push 50; call _ellipse</span>
+    </div>
+</div>
+
+<p>In Smalltalk, arguments&nbsp;have context. Processing's "ellipse" is exactly as cryptic as assembly language.  The reader must  look up or memorize every argument, a significant barrier to reading.</p>
+
+
+<p><b>Names matter.</b>  Below are four array methods from Apple's Cocoa framework, and the equivalent JavaScript methods:</p>
+
+<div class="codetable" style="width:770px;">
+    <div class="codetableHeading">
+        <span class="codetableHeadingCell4" style="width:137px;"></span>
+        <span class="codetableHeadingCell4" style="width:240px;">mutate array and return nothing</span>
+        <span class="codetableHeadingCell4" style="width:380px;">mutate nothing and return new array</span>
+    </div>
+    <div class="codetableRow">
+        <span class="codetableHeader">Cocoa:</span>
+        <span class="codetableCell4" style="width:70px;">addObject</span>
+        <span class="codetableCell4" style="width:140px;">addObjectsFromArray</span>
+        <span class="codetableCell4" style="width:140px;">arrayByAddingObject</span>
+        <span class="codetableCell4" style="width:190px;">arrayByAddingObjectsFromArray</span>
+    </div>
+    <div class="codetableRow">
+        <span class="codetableHeader">JavaScript:</span>
+        <span class="codetableCell4" style="width:70px;">push</span>
+        <span class="codetableCell4" style="width:140px;">splice</span>
+        <span class="codetableCell4" style="width:140px;">concat</span>
+        <span class="codetableCell4" style="width:190px;">concat</span>
+    </div>
+</div>
+
+<div class="sidenote">To see the amount of thought that is put into Cocoa naming, I highly recommend the Cocoa <a href="http://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html">coding guidelines</a>.</div>
+
+<p>Cocoa follows strong grammatical conventions which immediately convey the meanings of methods.  Verb phrases ("addObject") perform an action and return nothing.  Noun phrases ("arrayByAddingObject") return the noun so named, and generally do not have stateful effects unless the name suggests so.  Expected arguments are clearly indicated by the name, in Smalltalk style.  ("addObject" takes an object; "addObjectsFromArray" takes an array.)  Most Cocoa code can thus be read and at least vaguely understood without documentation.</p>
+
+<div class="sidenote">* Processing's "fill" and "stroke" read as verbs, although it's possible they were intended as shorthands to nouns ("fill color" and "stroke color").  In most other libraries (HTML canvas, Quartz, cairo), "fill" and "stroke" are unambiguously verbs, and act accordingly.</div>
+
+<p>By contrast, many of Processing's function names are grammatically ambiguous or misleading.  Many nouns, such as "ellipse" and "triangle",  perform actions.  Many verbs, such as "fill" and "stroke", do not.*  The programmer constructs a color using a noun ("color"), and constructs an image using a verb ("createImage").  This sort of linguistic sloppiness is inappropriate, especially in a system for learning.  A language must be parsed by people, not just compilers.</p>
+
+
+</div>
+
+
+<!--=========================================================================================================-->
+
+<div id="end" class="chapterHeader end">
+    <h2>Okay then!</h2>
+</div>
+
+<div class="chapter end">
+
+<p>The design principles presented in this essay can be used as a checklist to evaluate a programming system for learning.</p>
+
+<p>Does the <b>environment</b> allow the learner to...</p>
+<ul style="width:800px;">
+<li><b>read the vocabulary?</b> <i>-- Is meaning transparent?  Is meaning explained in context, by showing and telling?</i></li>
+<li><b>follow the flow?</b> <i>-- Is time visible and tangible? At all meaningful granularities?</i></li>
+<li><b>see the state?</b> <i>-- Does the environment show the data? Show comparisons?  Is hidden state eliminated?</i></li>
+<li><b>create by reacting?</b> <i>-- Is something on screen as soon as possible?  Is the parts bucket on the floor?</i></li>
+<li><b>create by abstracting?</b> <i>-- Can the programmer start concrete, then generalize?</i></li>
+</ul>
+
+<p>Does the <b>language</b> provide...</p>
+<ul style="width:800px;">
+<li><b>identity and metaphor?</b> <i>-- Is the computer's world connected to the programmer's world?</i></li>
+<li><b>decomposition?</b> <i>-- Can the programmer break down her thoughts into mind-sized pieces?</i></li>
+<li><b>recomposition?</b> <i>-- Can the programmer put diverse pieces together?</i></li>
+<li><b>readability?</b> <i>-- Is meaning transparent?</i></li>
+</ul>
+
+<div class="sidenote"><p style="margin-top:2px; margin-bottom:7px;">Some people will defend poorly-designed systems by pointing out all the creativity that they have enabled.  For example, if novices are creating lots of programs in the Khan Academy and Processing systems, doesn't that mean the systems are worthwhile and valuable?</p>
+<p style="margin-top:0px;">Not necessarily.  People are inherently creative, and some will manage to create in even the most hostile of environments.  That doesn't justify bad design.  Ian Bogost has a particularly <a href="http://www.bogost.com/writing/shit_crayons.shtml">memorable response</a> to that line of thinking.</p></div>
+
+<p>This essay suggested some features and references that address these questions, but the questions matter more than my answers.</p>
+
+
+<h3>These are not training wheels</h3>
+
+<p>These design principles were presented in the context of systems for learning, but they apply universally.  An experienced programmer may not need to know what an "if" statement means, but she does need to understand the runtime behavior of her program, and she needs to understand it while she's programming.</p>
+
+<p>A frequent question about the sort of techniques presented here is, <b>"How does this scale to real-world programming?"</b>  This is a reasonable question, but it's somewhat like asking how the internal combustion engine will benefit horses.  The question assumes the wrong kind of change.</p>
+
+<p>Here is a more useful attitude:  <b>Programming has to work like this.</b>  Programmers <i>must</i> be able to read the vocabulary, follow the flow, and see the state.  Programmers <i>have to</i> create by reacting and create by abstracting.  Assume that these are <i>requirements.</i>  Given these requirements, how do we <i>redesign programming?</i></p>
+
+<p>Here's an example. In many styles of programming today, when an application launches, it creates a large set of interconnected stateful objects.  To see the effect of a code change, the application must be "relaunched" -- that is, its entire world is destroyed, and rebuilt again from scratch.  How can we "create by reacting", continuously changing the code and seeing continuous effects in the flow and data, when there is no continuity between the application's state before and after the change?</p>
+
+<div class="sidenote">* In the Smalltalk model, for instance, state is persistent and code changes don't affect data.  In the Clojure model, code is "mostly functional", with a small amount of carefully-managed state.  Either model could be a starting point for a system where continuous code changes can be seen as continuous effects.  But there is no future in destroy-the-world programming.</div>
+
+<p>We can't.  That's the wrong question.  A better question is:  <i>How do we design a new programming model that does allow for continuous change?</i>  We already have clear hints.*</p>
+
+<p>Another example.  Most programs today manipulate abstract data structures and opaque objects, not pictures. How can we visualize the state of these programs?</p>
+
+<p>Again, wrong question.  A better attitude is to assert that we <i>have</i> to be able to understand the state of our programs.  We can then ask:  <i>How do we design data structures that can be visualized?</i>  Can we invent data structures that are <i>intended</i> to be visualized?  How do we move towards a culture where only visually-understandable data is considered sound?  Where opaque data is regarded in the same way that "goto" is today?*<span class="sidenote">* Forward reference:  Some work that I've done in automatic visualization of ad-hoc data structures will be published later this year, in collaboration with Viewpoints Research.</span></p>
+
+<p>In his influential essay <a href="https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf">No Silver Bullet</a>, Fred Brooks makes the case that software is inherently "invisible and unvisualizable", and points out the universal failure of so-called "visual programming" environments.  I don't fault Fred Brooks for this view -- the visual programming that he's thinking of indeed has little to offer.  But that's because it visualizes the wrong thing.</p>
+
+<p>Traditional visual environments visualize the code.  They visualize static structure.  But that's not what we need to understand.  We need to understand what the code is <i>doing.</i></p>
+
+<p>Visualize data, not code.  Dynamic behavior, not static structure.</p>
+
+<p style="width:700px;">Maybe we don't need a silver bullet.  We just need to take off our blindfolds to see where we're firing.</p>
+
+</div> <!-- chapter -->
+
+
+<!--=========================================================================================================-->
+
+<div id="backmatter" class="backmatter">
+
+    <div class="chapter end">
+
+<p>Much thanks to Star Simpson, Dan Amelang, Dave Cerf, Patrick Collison, Christina Cacioppo, and Oliver Steele for their feedback on this essay.</p>
+
+<p>This essay was an immune response, triggered by hearing too many times that Inventing on Principle was "about live coding", and seeing too many attempts to "teach programming" by adorning a JavaScript editor with badges and mascots.</p>
+
+<p>Please read <a href="https://worrydream.com/refs/Papert_1980_-_Mindstorms,_1st_ed.pdf">Mindstorms</a>. Okay?</p>
+
+    </div>
+</div>
+
+
+<!--=========================================================================================================-->
+
+<div class="videoChrome" style="display:none;">
+    <div class="marker">
+        <canvas class="markerProgressCanvas" width="24" height="24"></canvas>
+        <div class="markerProgressOverlay"></div>
+        <div class="markerPlayAgain">play<br>again</div>
+    </div>
+    <div class="videoOverlay">
+        <div class="videoPlayButton"></div>
+    </div>
+    <div class="videoDarken"></div>
+</div>
+
+
+<!--=========================================================================================================-->
+
+
+</body></html>

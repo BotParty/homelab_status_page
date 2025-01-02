@@ -1,0 +1,82 @@
+{
+  "games": [
+    {
+      "title": "Baldur's Gate 3",
+      "tags": [
+        "RPG",
+        "Character Customization",
+        "Choices Matter",
+        "Story Rich",
+        "Turn-Based Combat"
+      ],
+      "release_date": "2023-08-03",
+      "review_status": "Overwhelmingly Positive",
+      "review_count": 625765,
+      "price": {
+        "original": 59.99,
+        "discounted": 47.99,
+        "discount_percentage": 20
+      }
+    },
+    {
+      "title": "Vampire Survivors",
+      "tags": [
+        "Action Roguelike",
+        "Bullet Hell",
+        "Pixel Graphics",
+        "Roguelite",
+        "2D"
+      ],
+      "release_date": "2022-10-20",
+      "review_status": "Overwhelmingly Positive",
+      "review_count": 231614,
+      "price": {
+        "original": 4.99,
+        "discounted": 3.49,
+        "discount_percentage": 30
+      }
+    },
+    {
+      "title": "DAVE THE DIVER",
+      "tags": [
+        "Pixel Graphics",
+        "Casual",
+        "Management",
+        "Adventure",
+        "Relaxing"
+      ],
+      "release_date": "2023-06-28",
+      "review_status": "Overwhelmingly Positive",
+      "review_count": 108719,
+      "price": {
+        "original": 19.99,
+        "discounted": 13.39,
+        "discount_percentage": 33
+      }
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "tags": ["Magic", "Fantasy", "Open World", "Singleplayer", "Adventure"],
+      "release_date": "2023-02-10",
+      "review_status": "Very Positive",
+      "review_count": 213056,
+      "price": {
+        "original": 59.99,
+        "discounted": 14.99,
+        "discount_percentage": 75
+      }
+    },
+    {
+      "title": "ELDEN RING",
+      "tags": ["Souls-like", "Open World", "Dark Fantasy", "RPG", "Difficult"],
+      "release_date": "2022-02-24",
+      "review_status": "Very Positive",
+      "review_count": 727101,
+      "price": {
+        "original": 59.99,
+        "discounted": 35.99,
+        "discount_percentage": 40
+      }
+    }
+  ]
+}

@@ -1,0 +1,902 @@
+[
+  {
+    "title": "Stardew Valley",
+    "genre": "Farming Simulation / RPG",
+    "publisher": "ConcernedApe",
+    "date": "2016-02-26"
+  },
+  {
+    "title": "Animal Crossing: New Horizons",
+    "genre": "Life Simulation",
+    "publisher": "Nintendo",
+    "date": "2020-03-20"
+  },
+  {
+    "title": "Spiritfarer",
+    "genre": "Management Sim / Adventure",
+    "publisher": "Thunder Lotus Games",
+    "date": "2020-08-18"
+  },
+  {
+    "title": "Ni no Kuni: Wrath of the White Witch",
+    "genre": "JRPG",
+    "publisher": "Level-5 / Bandai Namco",
+    "date": "2011-11-17"
+  },
+  {
+    "title": "Okami",
+    "genre": "Action-Adventure",
+    "publisher": "Capcom",
+    "date": "2006-04-20"
+  },
+  {
+    "title": "Beyond Good & Evil",
+    "genre": "Action-Adventure",
+    "publisher": "Ubisoft",
+    "date": "2003-11-11"
+  },
+  {
+    "title": "Eastshade",
+    "genre": "Open-World Exploration",
+    "publisher": "Eastshade Studios",
+    "date": "2019-02-13"
+  },
+  {
+    "title": "Yonder: The Cloud Catcher Chronicles",
+    "genre": "Open-World Adventure",
+    "publisher": "Prideful Sloth",
+    "date": "2017-07-18"
+  },
+  {
+    "title": "My Time at Portia",
+    "genre": "Life Sim / Crafting RPG",
+    "publisher": "Team17",
+    "date": "2019-01-15"
+  },
+  {
+    "title": "Moonlighter",
+    "genre": "Action RPG / Shop Management",
+    "publisher": "11 bit studios",
+    "date": "2018-05-29"
+  },
+  {
+    "title": "Fez",
+    "genre": "Puzzle-Platformer",
+    "publisher": "Polytron Corporation",
+    "date": "2012-04-13"
+  },
+  {
+    "title": "Chicory: A Colorful Tale",
+    "genre": "Adventure / Puzzle",
+    "publisher": "Finji",
+    "date": "2021-06-10"
+  },
+  {
+    "title": "Slime Rancher",
+    "genre": "First-Person Farming Sim",
+    "publisher": "Monomi Park",
+    "date": "2017-08-01"
+  },
+  {
+    "title": "A Short Hike",
+    "genre": "Exploration Adventure",
+    "publisher": "Adamgryu",
+    "date": "2019-07-30"
+  },
+  {
+    "title": "Haven",
+    "genre": "Co-op Adventure / RPG",
+    "publisher": "The Game Bakers",
+    "date": "2020-12-03"
+  },
+  {
+    "title": "The Legend of Zelda: The Wind Waker",
+    "genre": "Action-Adventure",
+    "publisher": "Nintendo",
+    "date": "2002-12-13"
+  },
+  {
+    "title": "Tunche",
+    "genre": "Action Roguelite",
+    "publisher": "HypeTrain Digital",
+    "date": "2021-11-02"
+  },
+  {
+    "title": "Hollow Knight",
+    "genre": "Action-Adventure / Metroidvania",
+    "publisher": "Team Cherry",
+    "date": "2017-02-24"
+  },
+  {
+    "title": "Genshin Impact",
+    "genre": "Open-World Action RPG",
+    "publisher": "miHoYo",
+    "date": "2020-09-28"
+  },
+  {
+    "title": "Subnautica",
+    "genre": "Survival / Exploration",
+    "publisher": "Unknown Worlds Entertainment",
+    "date": "2018-01-23"
+  },
+  {
+    "title": "Katamari Damacy REROLL",
+    "genre": "Puzzle / Action",
+    "publisher": "Bandai Namco",
+    "date": "2018-12-07"
+  },
+  {
+    "title": "Terraria",
+    "genre": "2D Sandbox Adventure",
+    "publisher": "Re-Logic",
+    "date": "2011-05-16"
+  },
+  {
+    "title": "Minecraft",
+    "genre": "Sandbox / Survival",
+    "publisher": "Mojang Studios",
+    "date": "2011-11-18"
+  },
+  {
+    "title": "Journey",
+    "genre": "Adventure / Art Game",
+    "publisher": "Sony Computer Entertainment",
+    "date": "2012-03-13"
+  },
+  {
+    "title": "Ori and the Will of the Wisps",
+    "genre": "Platform-Adventure",
+    "publisher": "Xbox Game Studios",
+    "date": "2020-03-11"
+  },
+  {
+    "title": "Wandersong",
+    "genre": "Musical Adventure",
+    "publisher": "Humble Bundle",
+    "date": "2018-09-27"
+  },
+  {
+    "title": "Boyfriend Dungeon",
+    "genre": "Dating Sim / Dungeon Crawler",
+    "publisher": "Kitfox Games",
+    "date": "2021-08-11"
+  },
+  {
+    "title": "Cozy Grove",
+    "genre": "Life Sim / Exploration",
+    "publisher": "Spry Fox",
+    "date": "2021-04-08"
+  },
+  {
+    "title": "Astroneer",
+    "genre": "Space Sandbox / Exploration",
+    "publisher": "System Era Softworks",
+    "date": "2019-02-06"
+  },
+  {
+    "title": "Firewatch",
+    "genre": "Narrative Adventure",
+    "publisher": "Panic",
+    "date": "2016-02-09"
+  },
+  {
+    "title": "The Long Dark",
+    "genre": "Survival / Exploration",
+    "publisher": "Hinterland Studio",
+    "date": "2014-09-22"
+  },
+  {
+    "title": "Horizon Zero Dawn",
+    "genre": "Open-World Action RPG",
+    "publisher": "Sony Interactive Entertainment",
+    "date": "2017-02-28"
+  },
+  {
+    "title": "Kena: Bridge of Spirits",
+    "genre": "Action-Adventure",
+    "publisher": "Ember Lab",
+    "date": "2021-09-21"
+  },
+  {
+    "title": "Psychonauts 2",
+    "genre": "Action-Platformer",
+    "publisher": "Xbox Game Studios",
+    "date": "2021-08-25"
+  },
+  {
+    "title": "Paper Mario: The Origami King",
+    "genre": "Action-Adventure / RPG",
+    "publisher": "Nintendo",
+    "date": "2020-07-17"
+  },
+  {
+    "title": "Ghost of Tsushima",
+    "genre": "Action-Adventure / Open World",
+    "publisher": "Sony Interactive Entertainment",
+    "date": "2020-07-17"
+  },
+  {
+    "title": "Kingdom Hearts III",
+    "genre": "Action RPG",
+    "publisher": "Square Enix",
+    "date": "2019-01-29"
+  },
+  {
+    "title": "The Witcher 3: Wild Hunt",
+    "genre": "Open-World RPG",
+    "publisher": "CD Projekt",
+    "date": "2015-05-19"
+  },
+  {
+    "title": "Tchia",
+    "genre": "Open-World Adventure",
+    "publisher": "Awaceb",
+    "date": "2023-03-21"
+  },
+  {
+    "title": "Rime",
+    "genre": "Puzzle-Adventure",
+    "publisher": "Grey Box",
+    "date": "2017-05-26"
+  },
+  {
+    "title": "Journey to the Savage Planet",
+    "genre": "Action-Adventure / Exploration",
+    "publisher": "505 Games",
+    "date": "2020-01-28"
+  },
+  {
+    "title": "Sky: Children of the Light",
+    "genre": "Social Adventure",
+    "publisher": "thatgamecompany",
+    "date": "2019-07-18"
+  },
+  {
+    "title": "Knights and Bikes",
+    "genre": "Co-op Adventure",
+    "publisher": "Double Fine Presents",
+    "date": "2019-08-27"
+  },
+  {
+    "title": "Eastward",
+    "genre": "Action-Adventure / RPG",
+    "publisher": "Chucklefish",
+    "date": "2021-09-16"
+  },
+  {
+    "title": "Lil Gator Game",
+    "genre": "Exploration / Adventure",
+    "publisher": "Playtonic Friends",
+    "date": "2022-12-14"
+  },
+  {
+    "title": "Little Dragons Café",
+    "genre": "Simulation / Adventure",
+    "publisher": "Aksys Games",
+    "date": "2018-08-24"
+  },
+  {
+    "title": "Carto",
+    "genre": "Puzzle-Adventure",
+    "publisher": "Humble Games",
+    "date": "2020-10-27"
+  },
+  {
+    "title": "The Pathless",
+    "genre": "Action-Adventure",
+    "publisher": "Annapurna Interactive",
+    "date": "2020-11-12"
+  },
+  {
+    "title": "Röki",
+    "genre": "Adventure / Puzzle",
+    "publisher": "United Label",
+    "date": "2020-07-23"
+  },
+  {
+    "title": "No Man’s Sky",
+    "genre": "Open-World Space Exploration",
+    "publisher": "Hello Games",
+    "date": "2016-08-09"
+  },
+  {
+    "title": "Dragon Quest Builders 2",
+    "genre": "Action RPG / Building",
+    "publisher": "Square Enix",
+    "date": "2018-12-20"
+  },
+  {
+    "title": "Gris",
+    "genre": "Platform-Adventure / Art Game",
+    "publisher": "Devolver Digital",
+    "date": "2018-12-13"
+  },
+  {
+    "title": "Bug Fables: The Everlasting Sapling",
+    "genre": "RPG",
+    "publisher": "Dangen Entertainment",
+    "date": "2019-11-21"
+  },
+  {
+    "title": "Doraemon Story of Seasons",
+    "genre": "Farming Sim / Life Sim",
+    "publisher": "Bandai Namco",
+    "date": "2019-06-13"
+  },
+  {
+    "title": "Yakuza: Like a Dragon",
+    "genre": "JRPG / Action-Adventure",
+    "publisher": "Sega",
+    "date": "2020-01-16"
+  },
+  {
+    "title": "Grow: Song of the Evertree",
+    "genre": "Adventure / Simulation",
+    "publisher": "505 Games",
+    "date": "2021-11-16"
+  },
+  {
+    "title": "Sable",
+    "genre": "Open-World Exploration",
+    "publisher": "Raw Fury",
+    "date": "2021-09-23"
+  },
+  {
+    "title": "Immortals Fenyx Rising",
+    "genre": "Action-Adventure",
+    "publisher": "Ubisoft",
+    "date": "2020-12-03"
+  },
+  {
+    "title": "Abzû",
+    "genre": "Exploration / Art Game",
+    "publisher": "505 Games",
+    "date": "2016-08-02"
+  },
+  {
+    "title": "The Witness",
+    "genre": "Puzzle",
+    "publisher": "Thekla, Inc.",
+    "date": "2016-01-26"
+  },
+  {
+    "title": "Haven Park",
+    "genre": "Exploration / Management",
+    "publisher": "Fabien Weibel",
+    "date": "2021-08-05"
+  },
+  {
+    "title": "Ooblets",
+    "genre": "Farming / Collectathon",
+    "publisher": "Glumberland",
+    "date": "2022-09-01"
+  },
+  {
+    "title": "Night in the Woods",
+    "genre": "Narrative Adventure",
+    "publisher": "Finji",
+    "date": "2017-02-21"
+  },
+  {
+    "title": "Slime Rancher 2",
+    "genre": "Farming / Exploration",
+    "publisher": "Monomi Park",
+    "date": "2022-09-22"
+  },
+  {
+    "title": "Albion Online",
+    "genre": "Sandbox MMO",
+    "publisher": "Sandbox Interactive",
+    "date": "2017-07-17"
+  },
+  {
+    "title": "Littlewood",
+    "genre": "Town-Building / Life Sim",
+    "publisher": "SmashGames",
+    "date": "2019-08-02"
+  },
+  {
+    "title": "Coral Island",
+    "genre": "Farming Sim / Life Sim",
+    "publisher": "Humble Games",
+    "date": "2022-10-11 (Early Access)"
+  },
+  {
+    "title": "Fae Farm",
+    "genre": "Cozy Farming / Adventure",
+    "publisher": "Phoenix Labs",
+    "date": "2023-09-08"
+  },
+  {
+    "title": "Kynseed",
+    "genre": "Life Sim / RPG",
+    "publisher": "PixelCount Studios",
+    "date": "2022-12-06"
+  },
+  {
+    "title": "Garden Paws",
+    "genre": "Farming / Shop Sim",
+    "publisher": "Bitten Toast Games",
+    "date": "2018-12-18"
+  },
+  {
+    "title": "Untitled Goose Game",
+    "genre": "Stealth / Puzzle",
+    "publisher": "Panic",
+    "date": "2019-09-20"
+  },
+  {
+    "title": "It Takes Two",
+    "genre": "Co-op Adventure Platformer",
+    "publisher": "Electronic Arts",
+    "date": "2021-03-26"
+  },
+  {
+    "title": "Portal 2",
+    "genre": "Puzzle-Platformer",
+    "publisher": "Valve",
+    "date": "2011-04-19"
+  },
+  {
+    "title": "Rayman Legends",
+    "genre": "Platformer",
+    "publisher": "Ubisoft",
+    "date": "2013-08-29"
+  },
+  {
+    "title": "Overcooked! 2",
+    "genre": "Co-op Cooking / Party",
+    "publisher": "Team17",
+    "date": "2018-08-07"
+  },
+  {
+    "title": "Forager",
+    "genre": "2D Sandbox Adventure",
+    "publisher": "Humble Games",
+    "date": "2019-04-18"
+  },
+  {
+    "title": "Sun Haven",
+    "genre": "Farming Sim / Fantasy RPG",
+    "publisher": "Pixel Sprout Studios",
+    "date": "2023-03-10"
+  },
+  {
+    "title": "The Survivalists",
+    "genre": "Co-op Survival",
+    "publisher": "Team17",
+    "date": "2020-10-09"
+  },
+  {
+    "title": "Astral Chain",
+    "genre": "Action-Adventure",
+    "publisher": "Nintendo",
+    "date": "2019-08-30"
+  },
+  {
+    "title": "The Touryst",
+    "genre": "Puzzle-Adventure",
+    "publisher": "Shin'en Multimedia",
+    "date": "2019-11-21"
+  },
+  {
+    "title": "Concrete Genie",
+    "genre": "Action-Adventure",
+    "publisher": "Sony Interactive Entertainment",
+    "date": "2019-10-08"
+  },
+  {
+    "title": "A Hat in Time",
+    "genre": "3D Platformer",
+    "publisher": "Gears for Breakfast",
+    "date": "2017-10-05"
+  },
+  {
+    "title": "Chibi-Robo! Zip Lash",
+    "genre": "Platformer",
+    "publisher": "Nintendo",
+    "date": "2015-10-09"
+  },
+  {
+    "title": "Fantasy Life",
+    "genre": "Life Sim / RPG",
+    "publisher": "Level-5",
+    "date": "2012-12-27"
+  },
+  {
+    "title": "Little King’s Story",
+    "genre": "Simulation / Adventure",
+    "publisher": "Marvelous",
+    "date": "2009-06-23"
+  },
+  {
+    "title": "Wilmot’s Warehouse",
+    "genre": "Puzzle / Management",
+    "publisher": "Finji",
+    "date": "2019-08-29"
+  },
+  {
+    "title": "Yoku’s Island Express",
+    "genre": "Platformer / Pinball Adventure",
+    "publisher": "Team17",
+    "date": "2018-05-29"
+  },
+  {
+    "title": "Temtem",
+    "genre": "MMO Creature Collection",
+    "publisher": "Humble Games",
+    "date": "2020-01-21 (Early Access), 2022-09-06 full"
+  },
+  {
+    "title": "Kitaria Fables",
+    "genre": "Action-RPG / Farming",
+    "publisher": "PQube",
+    "date": "2021-09-02"
+  },
+  {
+    "title": "Sneaky Sasquatch",
+    "genre": "Stealth / Exploration",
+    "publisher": "RAC7",
+    "date": "2019-09-19"
+  },
+  {
+    "title": "Garden Story",
+    "genre": "Action-Adventure / RPG",
+    "publisher": "Rose City Games",
+    "date": "2021-08-11"
+  },
+  {
+    "title": "CrossCode",
+    "genre": "Action RPG",
+    "publisher": "Deck13 Spotlight",
+    "date": "2018-09-20"
+  },
+  {
+    "title": "Gorogoa",
+    "genre": "Puzzle",
+    "publisher": "Annapurna Interactive",
+    "date": "2017-12-14"
+  },
+  {
+    "title": "Ragnarok Online",
+    "genre": "MMORPG",
+    "publisher": "Gravity",
+    "date": "2002-08-01"
+  },
+  {
+    "title": "Spore",
+    "genre": "Life Sim / God Game",
+    "publisher": "Electronic Arts",
+    "date": "2008-09-07"
+  },
+  {
+    "title": "Mount & Blade II: Bannerlord",
+    "genre": "Sandbox RPG / Strategy",
+    "publisher": "TaleWorlds Entertainment",
+    "date": "2022-10-25 (full release)"
+  },
+  {
+    "title": "For Honor",
+    "genre": "Action / Fighting",
+    "publisher": "Ubisoft",
+    "date": "2017-02-14"
+  },
+  {
+    "title": "Sea of Thieves",
+    "genre": "Co-op Pirate Adventure",
+    "publisher": "Microsoft Studios",
+    "date": "2018-03-20"
+  },
+  {
+    "title": "Overland",
+    "genre": "Turn-Based Survival",
+    "publisher": "Finji",
+    "date": "2019-09-19"
+  },
+  {
+    "title": "Don’t Starve Together",
+    "genre": "Co-op Survival",
+    "publisher": "Klei Entertainment",
+    "date": "2016-04-21"
+  },
+  {
+    "title": "Grow Home",
+    "genre": "Climbing / Exploration",
+    "publisher": "Ubisoft",
+    "date": "2015-02-04"
+  },
+  {
+    "title": "Child of Light",
+    "genre": "RPG / Platformer",
+    "publisher": "Ubisoft",
+    "date": "2014-04-29"
+  },
+  {
+    "title": "Wuppo",
+    "genre": "Action-Adventure / Platformer",
+    "publisher": "SOEDESCO",
+    "date": "2016-09-29"
+  },
+  {
+    "title": "Yonder: The Cloud Catcher Chronicles",
+    "genre": "Open-World Adventure",
+    "publisher": "Prideful Sloth",
+    "date": "2017-07-18"
+  },
+  {
+    "title": "Kingdom Two Crowns",
+    "genre": "Co-op Strategy",
+    "publisher": "Raw Fury",
+    "date": "2018-12-11"
+  },
+  {
+    "title": "Spirit Hunter: Death Mark",
+    "genre": "Horror Adventure / Visual Novel",
+    "publisher": "Aksys Games",
+    "date": "2017-06-01 (JP)"
+  },
+  {
+    "title": "Beacon Pines",
+    "genre": "Adventure / Interactive Story",
+    "publisher": "Fellow Traveller",
+    "date": "2022-09-22"
+  },
+  {
+    "title": "Dorfromantik",
+    "genre": "Puzzle / City-Building",
+    "publisher": "Toukana Interactive",
+    "date": "2021-04-28 (Early Access), 2022-04-28 full"
+  },
+  {
+    "title": "Cave Story+",
+    "genre": "Metroidvania / Platformer",
+    "publisher": "Nicalis",
+    "date": "2011-11-22"
+  },
+  {
+    "title": "Alba: A Wildlife Adventure",
+    "genre": "Exploration / Adventure",
+    "publisher": "ustwo games",
+    "date": "2020-12-11"
+  },
+  {
+    "title": "Omno",
+    "genre": "Puzzle-Adventure",
+    "publisher": "Studio Inkyfox",
+    "date": "2021-07-29"
+  },
+  {
+    "title": "Tembo the Badass Elephant",
+    "genre": "Action-Platformer",
+    "publisher": "Sega",
+    "date": "2015-07-21"
+  },
+  {
+    "title": "The Red Lantern",
+    "genre": "Narrative Survival",
+    "publisher": "Timberline Studio",
+    "date": "2020-10-22"
+  },
+  {
+    "title": "Knock-Knock",
+    "genre": "Survival Horror / Puzzle",
+    "publisher": "Ice-Pick Lodge",
+    "date": "2013-09-04"
+  },
+  {
+    "title": "Calico",
+    "genre": "Simulation / Cozy",
+    "publisher": "Whitehorn Games",
+    "date": "2020-12-15"
+  },
+  {
+    "title": "Phogs!",
+    "genre": "Co-op Puzzle-Adventure",
+    "publisher": "Coatsink",
+    "date": "2020-12-03"
+  },
+  {
+    "title": "Haven (Fntastic)",
+    "genre": "Co-op Settlement Builder",
+    "publisher": "Fntastic",
+    "date": "TBA"
+  },
+  {
+    "title": "Sakuna: Of Rice and Ruin",
+    "genre": "Action / Farming Simulation",
+    "publisher": "Marvelous (XSEED)",
+    "date": "2020-11-10"
+  },
+  {
+    "title": "Astral Ascent",
+    "genre": "Action Roguelite",
+    "publisher": "Hibernian Workshop",
+    "date": "2022-04-12 (Early Access)"
+  },
+  {
+    "title": "Rime of the Frostmaiden (in Tabletop Simulator)",
+    "genre": "Tabletop RPG Adventure",
+    "publisher": "Wizards of the Coast (D&D)",
+    "date": "2020-09-15 (Book Release)"
+  },
+  {
+    "title": "Moon Hunters",
+    "genre": "Co-op Action RPG",
+    "publisher": "Kitfox Games",
+    "date": "2016-03-10"
+  },
+  {
+    "title": "Swords of Ditto",
+    "genre": "Co-op Action RPG / Roguelite",
+    "publisher": "Devolver Digital",
+    "date": "2018-04-24"
+  },
+  {
+    "title": "Little Big Planet 3",
+    "genre": "Platformer / Creation",
+    "publisher": "Sony Computer Entertainment",
+    "date": "2014-11-18"
+  },
+  {
+    "title": "Dreams (PS4)",
+    "genre": "Creation Sandbox",
+    "publisher": "Sony Interactive Entertainment",
+    "date": "2020-02-14"
+  },
+  {
+    "title": "The Legend of Zelda: Tears of the Kingdom",
+    "genre": "Open-World Action-Adventure",
+    "publisher": "Nintendo",
+    "date": "2023-05-12"
+  },
+  {
+    "title": "Gokinjo Boukentai",
+    "genre": "Life Adventure (Japan-only)",
+    "publisher": "Konami",
+    "date": "1996-01-26"
+  },
+  {
+    "title": "Little Inferno",
+    "genre": "Puzzle / Sandbox",
+    "publisher": "Tomorrow Corporation",
+    "date": "2012-11-18"
+  },
+  {
+    "title": "AER: Memories of Old",
+    "genre": "Exploration / Adventure",
+    "publisher": "Daedalic Entertainment",
+    "date": "2017-10-25"
+  },
+  {
+    "title": "Summer in Mara",
+    "genre": "Farming / Adventure",
+    "publisher": "Chibig",
+    "date": "2020-06-16"
+  },
+  {
+    "title": "Gato Roboto",
+    "genre": "Metroidvania",
+    "publisher": "Devolver Digital",
+    "date": "2019-05-30"
+  },
+  {
+    "title": "Toem",
+    "genre": "Photography Adventure",
+    "publisher": "Something We Made",
+    "date": "2021-09-17"
+  },
+  {
+    "title": "Viva Piñata",
+    "genre": "Garden Sim",
+    "publisher": "Microsoft Game Studios",
+    "date": "2006-11-09"
+  },
+  {
+    "title": "Niche – a genetics survival game",
+    "genre": "Strategy / Simulation",
+    "publisher": "Stray Fawn Studio",
+    "date": "2017-09-21"
+  },
+  {
+    "title": "Aground",
+    "genre": "Survival / Crafting",
+    "publisher": "Fancy Fish Games",
+    "date": "2021-01-27"
+  },
+  {
+    "title": "Rakuen",
+    "genre": "Story-Driven Adventure",
+    "publisher": "Laura Shigihara",
+    "date": "2017-05-10"
+  },
+  {
+    "title": "Everdell (Digital Board Game)",
+    "genre": "Strategy / Board Game",
+    "publisher": "Dire Wolf Digital",
+    "date": "2022-07-28 (Early Access)"
+  },
+  {
+    "title": "Book of Travels",
+    "genre": "TinyMMO / Exploration",
+    "publisher": "Might and Delight",
+    "date": "2021-10-11 (Early Access)"
+  },
+  {
+    "title": "Kind Words (lo fi chill beats)",
+    "genre": "Social / Letter Writing",
+    "publisher": "Popcannibal",
+    "date": "2019-09-12"
+  },
+  {
+    "title": "Unrailed!",
+    "genre": "Co-op Construction",
+    "publisher": "Daedalic Entertainment",
+    "date": "2020-09-23"
+  },
+  {
+    "title": "For the King",
+    "genre": "Strategy-RPG / Roguelike",
+    "publisher": "Iron Oak Games / Curve Games",
+    "date": "2017-02-28 (Early Access), 2018-04-19 full"
+  },
+  {
+    "title": "By the Light of the Fire",
+    "genre": "Narrative Exploration",
+    "publisher": "Unknown / Indie",
+    "date": "Unknown"
+  },
+  {
+    "title": "The Garden Path",
+    "genre": "Life Sim",
+    "publisher": "Carrotcake",
+    "date": "TBA (Early Access planned)"
+  },
+  {
+    "title": "Garden Galaxy",
+    "genre": "Cozy Sandbox",
+    "publisher": "Hobbes",
+    "date": "2022-12-13"
+  },
+  {
+    "title": "Zombilliards",
+    "genre": "Puzzle",
+    "publisher": "Unknown / Indie",
+    "date": "Unknown"
+  },
+  {
+    "title": "Dredge",
+    "genre": "Fishing / Adventure",
+    "publisher": "Team17",
+    "date": "2023-03-30"
+  },
+  {
+    "title": "Hoa",
+    "genre": "Puzzle-Platformer",
+    "publisher": "PM Studios",
+    "date": "2021-08-24"
+  },
+  {
+    "title": "Ranch Simulator",
+    "genre": "Co-op Simulation",
+    "publisher": "Excalibur Games",
+    "date": "2021-03-04 (Early Access)"
+  },
+  {
+    "title": "The Falconeer",
+    "genre": "Aerial Combat RPG",
+    "publisher": "Wired Productions",
+    "date": "2020-11-10"
+  },
+  {
+    "title": "V Rising",
+    "genre": "Multiplayer Survival",
+    "publisher": "Stunlock Studios",
+    "date": "2022-05-17 (Early Access)"
+  },
+  {
+    "title": "Doki Doki Literature Club!",
+    "genre": "Visual Novel / Psychological Horror",
+    "publisher": "Team Salvato",
+    "date": "2017-09-22"
+  }
+]

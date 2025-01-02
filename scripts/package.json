@@ -1,0 +1,22 @@
+{
+  "name": "scripts",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "wrangler": "^3.99.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@1password/sdk": "^0.1.5",
+    "@playwright/test": "^1.49.1",
+    "@supabase/supabase-js": "^2.47.10",
+    "openai": "^4.77.0",
+    "retell-sdk": "^4.11.0"
+  }
+}

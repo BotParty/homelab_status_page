@@ -1,0 +1,497 @@
+@font-face {
+    font-family: 'borisblackbloxxregular';
+    src: url('Fonts/borisblackbloxx-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'DroidSansMonoRegular';
+    src: url('Fonts/DroidSansMono-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+* { margin:0; padding:0; }
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* generic */
+
+body {
+    background: #ffffff;
+    font: normal 13px/1.65 "Verdana", "Helvetica", "Arial", sans-serif;
+	color: #555;
+    width: 100%;
+  	text-align: left;
+  	position: relative;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+/* header */
+
+.header {
+    position:relative;
+    top: 0px;
+    width: 100%;
+    height: 319px;
+    background-color: #3b195e;
+    background-image: url(Images/StylePageHeader.png);
+    background-repeat: repeat-x;
+    margin-bottom: 24px;
+}
+
+h1 {
+    position: absolute;
+    font: bold 84px/0.9 "borisblackbloxxregular", sans-serif;
+    width: 900px;
+    top: 60px;
+    left: 70px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+h4 {
+    position: absolute;
+    font: normal 18px/1.0 "Verdana", sans-serif;
+    text-align: left;
+    width: 900px;
+    top: 209px;
+    left: 70px;
+    color: rgba(255,255,255,0.4);
+}
+
+h5 {
+    position: absolute;
+    font: bold 10px/1.0 "Verdana", sans-serif;
+    width: 640px;
+    top: 265px;
+    left: 70px;
+    color: #fff;
+}
+
+.selflink {
+	color: #fff;
+	text-decoration: none;
+}
+
+.selflink:hover {
+    color: #fff;
+    text-decoration:underline;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+/* chapter header */
+
+h2 {
+    position: absolute;
+    font: bold 92px/0.9 "borisblackbloxxregular", sans-serif;
+    bottom:8px;
+    left:70px;
+    width:900px;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 0px 1px 1px rgba(0,0,0,0.5);
+}
+
+.chapterHeader {
+    position:relative;
+    width:100%;
+    height: 190px;
+    margin-top:100px;
+    margin-bottom:30px;
+    background-repeat: repeat-x;
+}
+
+.chapterHeader.environment {
+    background-color: #0086be;
+}
+
+.chapterHeader.language {
+    background-color: #2cbcc6;
+}
+
+.chapterHeader.end {
+    background-color: #555;
+}
+
+#vocabulary {
+    background-image: url('Images/VocabHeader.png');
+}
+
+#flow {
+    background-image: url('Images/FlowHeader.jpg');
+}
+
+#state {
+    background-image: url('Images/StateHeader.jpg');
+}
+
+#react {
+    background-image: url('Images/ReactHeader.jpg');
+}
+
+#abstract {
+    background-image: url('Images/AbstractHeader.jpg');
+}
+
+#language {
+    background-image: url('Images/LanguageHeader.jpg');
+}
+
+#end {
+    background-image: url('Images/EndHeader.jpg');
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+/* chapter */
+
+.chapter {
+    width: 640px;
+    margin-left: 70px;
+}
+
+h3 {
+    font: bold 21px/1.0 "Verdana", sans-serif;
+    background: #583799;
+    text-align: center;
+    width:100%;
+    color: #fff;
+    padding-top: 5px;
+    padding-bottom: 7px;
+    margin-top:40px;
+    margin-bottom:16px;
+}
+
+.environment h3 {
+    background-color: #008ebd;
+}
+
+.language h3 {
+    background-color: #00be94;
+}
+
+.end h3 {
+    background-color: #292929;
+}
+
+.sidenote {
+	position:absolute;
+	left:730px;
+	width:250px;
+	font-size:11px;
+	color:#999;
+	padding-top:2px;
+}
+
+span.sidenote {
+    display:inline-block;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+/* back matter */
+
+#backmatter {
+    position:relative;
+    width:100%;
+    margin-top:70px;
+    padding-top:10px;
+    padding-bottom:6px;
+    margin-bottom:0px;
+    background-color:#333;
+    background-image: url(Images/StylePageFooter.png);
+    background-repeat: repeat-x;
+}
+
+#backmatter .chapter {
+    font-size: 10px;
+    color: #777;
+    width: 410px;
+}
+
+#backmatter a { color: #888; border:none; }
+#backmatter a:hover   { color: #777; }
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+/* demos */
+
+.example {
+    position:relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.videoChrome {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    pointer-events: none;
+}
+
+.marker {
+    position:absolute;
+    top: 0px;
+    left:-70px;
+    width: 45px;
+    height: inherit;
+    background-color: #008ebd;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.markerProgressCanvas {
+    display:none;
+    position:absolute;
+    bottom: 8px;
+    left:9px;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+}
+
+.markerProgressOverlay {
+    display:none;
+    position:absolute;
+    bottom: 7px;
+    left: 9px;
+    width: 24px;
+    height: 25px;
+    background-image: url(Images/StyleVideoProgressPie.png);
+    pointer-events: none;
+}
+
+.markerPlayAgain {
+    display:none;
+    position:absolute;
+    font: bold 11px/1.0 "Helvetica Neue", "Arial", sans-serif;
+    text-align: center;
+    left: 0px;
+    width: inherit;
+    bottom: 8px;
+    pointer-events: none;
+    color: rgba(0,0,0,0.3);
+}
+
+.videoDarken {
+    position: absolute;
+    top:0px;
+    left:0px;
+    width: inherit;
+    height: inherit;
+    background-color: transparent;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.videoOverlay {
+    position: absolute;
+    top:0px;
+    left:0px;
+    border: 1px solid rgba(0,0,0,0.14);
+    pointer-events: none;
+
+    background-image: url(Images/StyleVideoOverlay.png);
+    background-repeat: no-repeat;
+    -moz-background-size: 100% 100%;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+
+.videoPlayButton {
+    position: absolute;
+    width: 78px;
+    height:79px;
+    background-image: url(Images/StyleVideoPlayButton.png);
+    pointer-events: none;
+}
+
+.videoPlayButton.verbose {
+    height: 90px;
+    background-image: url(Images/StyleVideoPlayButtonVerbose.png);
+}
+
+.videoClickToPlay {
+    width:inherit;
+    margin-left: auto;
+    margin-right: auto;
+    width: 140px;
+    height: 41px;
+    background-image: url(Images/StyleVideoClickToPlay.png);
+    pointer-events: none;
+}
+
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+/* content */
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.quote {
+    font-style: italic;
+    margin-left:40px;
+}
+
+.codetable {
+    width: 640px;
+    border-bottom: 1px solid #ddd;
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.codetableRow {
+    border-top: 1px solid #ddd;
+}
+
+.codetableHeader {
+    display: inline-block;
+    width: 120px;
+    font-style: italic;
+    text-align: right;
+    margin-right:10px;
+    color: #888;
+}
+
+.codetableHeading {
+    display:none;
+}
+
+.codetableHeadingCell4 {
+    display: inline-block;
+    width: 246px;
+    font: italic 10px/1.0 "Verdana", sans-serif;
+    color: #bbb;
+    text-align: center;
+}
+
+.codetableCell {
+    display: inline-block;
+    width: 246px;
+    font: normal 11px/1.0 "DroidSansMonoRegular", monospace;
+    color: #000;
+    padding-top:10px;
+    padding-bottom:6px;
+}
+
+.codetableCell2 {
+    display: inline-block;
+    width: 324px;
+    font: normal 11px/1.0 "DroidSansMonoRegular", monospace;
+    color: #000;
+    padding-top:10px;
+    padding-bottom:6px;
+}
+
+.codetableCell3 {
+    display: inline-block;
+    width: 500px;
+    font: normal 11px/1.0 "DroidSansMonoRegular", monospace;
+    color: #000;
+    padding-top:10px;
+    padding-bottom:6px;
+}
+
+.codetableCell4 {
+    display: inline-block;
+    width: 200px;
+    font: normal 11px/1.0 "DroidSansMonoRegular", monospace;
+    color: #000;
+    padding-top:10px;
+    padding-bottom:6px;
+}
+
+.codetableCell4 {
+    display: inline-block;
+    width: 200px;
+    font: normal 11px/1.0 "DroidSansMonoRegular", monospace;
+    color: #000;
+    padding-top:10px;
+    padding-bottom:6px;
+    padding-left:10px;
+    border-left: 1px solid #eee;
+}
+
+
+ul {
+    margin-left:30px
+}
+
+ol {
+    margin-left:30px
+}
+
+li {
+    margin-top:5px;
+}
+
+p {
+    margin-top:12px;
+    margin-bottom:12px;
+}
+
+strong {
+    font-weight:bold;
+	color: #f00;
+}
+
+b {
+    font-weight:bold;
+	color: #000;
+}
+
+img { border:none; }
+
+a { text-decoration:underline; color: #111; border:none; }
+a:hover   { text-decoration:underline; color: #3576a8; }
+
+.sidenote a {
+    color: #777;
+}
+
+.sidenote a:hover {
+    color: #3576a8;
+}
+
+b a {
+    color: #583799;
+    text-decoration:none;
+}
+
+b a:hover {
+    color: #3576a8;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* quotes */
+
+.quoteCaption {
+	font-size: 11px;
+	margin-top:20px;
+	margin-bottom:-10px;
+	color:#aaa;
+}
+
+.quoteCaption a {
+	color: #aaa;
+	font-style: italic;
+}
+
+.quoteCaption a:hover {
+	color: #933;
+}
+
+blockquote {
+	font-style:normal;
+	margin-left:20px;
+}

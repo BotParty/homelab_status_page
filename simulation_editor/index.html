@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>simulation tools</title>
+        <style>
+            canvas {
+                border: 1px solid lightblue;
+            }
+            html {
+                background: #333;
+                color: white;
+            }
+        </style>
+            <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    </head>
+    <body>
+
+        <div id="collision-log"></div>
+        <div id="container">    </div>
+        <canvas id="canvas"></canvas>
+        <div id="container"></div>
+        <div id="info">
+          
+            WASD to move, Space to jump, Shift to crouch<br />
+            <select id="collision-shape">
+                <option value="Capsule">Capsule</option>
+                <option value="Cylinder">Cylinder</option>
+                <option value="Box">Box</option>
+            </select>
+        </div>
+        <!-- <script type="module" src="src/script.js"></script> -->
+
+
+        <!-- <iframe width="100%" height="500" frameborder="0"
+        src="https://observablehq.com/embed/@esperanc/tone-js-instruments?cell=*"></iframe> -->
+        <script type="module" src="src/main.js"></script>
+
+
+
+        <button id="startButton">Start Visualization</button>
+        <div id="visualization"></div>
+
+
+
+        <button id="listenButton">Start Listening</button>
+<div>Last word: <span id="lastWord"></span></div>
+
+<div id="app"></div>
+
+    </body>
+</html>
+<!-- tree based encapsulation 4-7 things for robotics -->
