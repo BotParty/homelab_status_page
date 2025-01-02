@@ -5,5 +5,5 @@ channel = "stable-24_05"
 
 
 [deployment]
-run = ["bun", "run", "web-ui/my-app/src/index.ts"]
+run = ["bun", "run", "scripts/index.ts"]
 deploymentTarget = "cloudrun"

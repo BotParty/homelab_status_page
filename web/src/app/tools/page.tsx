@@ -18,6 +18,13 @@ export default function Tools() {
         <li>
           <a href="/tools/group_chat">group chat</a>
         </li>
+
+
+
+
+        <li>
+          <a href="/tools/tailscale">tailscale</a>
+        </li>
       </ul>
     </div>
   )

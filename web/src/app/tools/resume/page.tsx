@@ -170,7 +170,7 @@ export default function Resume() {
           </div>
           <ul className="list-disc list-outside ml-5 mt-2 text-sm text-gray-700 space-y-1">
             <li>Created responsive web apps for 2M+ small business owners</li>
-            <li>Supported BookFresh acquisition to expand Square's calendar services</li>
+            <li>Supported BookFresh acquisition to expand Square's calendar services <a className="text-blue-600 hover:underline" href="https://archive.is/5WG2G" target="_blank" rel="noopener noreferrer">https://archive.is/5WG2G</a></li>
           </ul>
         </div>
       </section>
