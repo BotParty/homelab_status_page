@@ -25,28 +25,17 @@ const inputState = {
   crouched: false
 };
 const clock = new Clock();
-// A reference to your specialized onExampleUpdate function, which we’ll assign in setupExample:
+
 const onExampleUpdateRef = { fn: null };
 initJolt().then(async (Jolt) => {
-  // 1) Graphics
-  // IMPORTANT: Await initialization of WebGPURenderer:
-  // This ensures that the renderer backend is ready before we start calling .render()
   await renderer.init();
-  // 2) Physics
   const { joltInterface, physicsSystem, bodyInterface } = initPhysics(Jolt);
-console.log('physicsSystem', physicsSystem)
   // 3) Collect dynamic objects in array
   const dynamicObjects = [];
-
   // 4) Set up your environment, spawn character, define onExampleUpdate
   setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExampleUpdateRef);
-
-  // 5) Listen for window resize
-  window.addEventListener('resize', () => onWindowResize(size, camera, renderer));
-
   // 6) Prepare user input
   handleUserInput(inputState);
-
   // 7) Provide a custom update function that calls the function from onExampleUpdateRef
   function onExampleUpdate(time, deltaTime) {
     // If setupExample assigned a function, call it
