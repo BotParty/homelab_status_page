@@ -69,7 +69,7 @@ export default function Example() {
   }
 
   return (
-    <div className="fixed top-4 right-4 z-50 w-96 rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
+    <div className="fixed top-4 left-4 z-50 w-96 rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
       <div className="flex items-start space-x-4">
         {/* <div className="shrink-0">
           <img
