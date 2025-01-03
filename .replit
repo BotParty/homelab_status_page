@@ -1,4 +1,4 @@
-entrypoint = "web-ui/my-app/src/index.ts"
+entrypoint = "scripts/index.ts"
 
 [nix]
 channel = "stable-24_05"
