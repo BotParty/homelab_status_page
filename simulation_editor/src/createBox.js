@@ -33,7 +33,7 @@ export function createBox(
   Jolt.destroy(creationSettings);
 
   // Add to scene (using addToScene to create the Three.js mesh)
-  addToScene(body, color, Jolt, bodyInterface);
+  addToScene(body, Jolt, bodyInterface);
 
   return body;
 } 

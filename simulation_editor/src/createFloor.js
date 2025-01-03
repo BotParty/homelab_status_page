@@ -19,7 +19,7 @@ export function createFloor(Jolt, bodyInterface, addToScene, size = 50) {
   const body = bodyInterface.CreateBody(creationSettings);
   Jolt.destroy(creationSettings);
 
-  const floor = addToScene(body, 0xff0000);
+  const floor = addToScene(body);
 
 
   console.log('floor', body)

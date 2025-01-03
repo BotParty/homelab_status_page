@@ -21,7 +21,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
 
   // 1) Basic floor
   createFloor(Jolt, bodyInterface, (body, color) => {
-    addToScene(body, color, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody);
+    addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody);
   }, 50);
 
   // 2) Simple walls
@@ -30,7 +30,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
   createBox(
     Jolt,
     bodyInterface,
-    (body, color) => addToScene(body, color, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody),
+    (body, color) => addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody),
     new Jolt.RVec3(-45, 1, 0),
     rotationIdentity,
     halfExtendWall,
@@ -41,7 +41,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
   createBox(
     Jolt,
     bodyInterface,
-    (body, color) => addToScene(body, color, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody),
+    (body, color) => addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody),
     new Jolt.RVec3(45, 1, 0),
     rotationIdentity,
     halfExtendWall,
@@ -56,7 +56,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
   const charBody = createBox(
     Jolt,
     bodyInterface,
-    (body, color) => addToScene(body, color, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody),
+    (body, color) => addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody),
     new Jolt.RVec3(0, 5, 0),
     rotationIdentity,
     halfExtentChar,
