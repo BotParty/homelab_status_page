@@ -1,14 +1,12 @@
 // lib/turso.js
-import { createClient } from '@libsql/client';
+import { createClient } from '@libsql/client'
 
-const dbUrl = process.env.TURSO_DB_URL;
-const dbToken = process.env.TURSO_DB_TOKEN;
+const url = process.env.TURSO_DB_URL
+const authToken = process.env.TURSO_DB_TOKEN
 
-if (!dbUrl || !dbToken) {
-  throw new Error('Missing TURSO_DB_URL or TURSO_DB_TOKEN in environment');
+export const db = createClient({ url, authToken })
+
+export async function getComments() {
+  const { rows } = await db.execute('SELECT * FROM comments ORDER BY created_at DESC')
+  return rows
 }
-
-export const db = createClient({
-  url: dbUrl,
-  authToken: dbToken
-});

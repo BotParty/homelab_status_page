@@ -19,7 +19,9 @@ export default function Tools() {
           <a href="/tools/group_chat">group chat</a>
         </li>
 
-
+        <li>
+          <a href="/tools/git_visualizer">git visualizer</a>
+        </li>
 
 
         <li>
