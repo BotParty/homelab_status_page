@@ -19,6 +19,7 @@ export function createBox(
   halfExtent,
   motionType,
   layer,
+  
 ) {
   const shape = new Jolt.BoxShape(halfExtent, 0.05, null);
   const creationSettings = new Jolt.BodyCreationSettings(

@@ -37,6 +37,7 @@
     "cn": "^0.1.1",
     "d3": "^7.9.0",
     "d379efd21ba6f1ea": "https://api.observablehq.com/d/d379efd21ba6f1ea@458.tgz?v=3",
+    "date-fns": "^4.1.0",
     "deck.gl": "^9.0.38",
     "fast-glob": "^3.2.11",
     "feed": "^4.2.2",
