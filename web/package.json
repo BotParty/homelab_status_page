@@ -38,6 +38,7 @@
     "deck.gl": "^9.0.38",
     "fast-glob": "^3.2.11",
     "feed": "^4.2.2",
+    "livekit-client": "^2.7.5",
     "livekit-server-sdk": "^2.9.4",
     "mapbox-gl": "^3.9.0",
     "next": "15.1.1",
