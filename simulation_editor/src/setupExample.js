@@ -28,8 +28,8 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
     bumpScale: 1
   } );
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load( 'textures/hardwood2_diffuse.jpg', function ( map ) {
-
+  textureLoader.load( 'textures/floor/hardwood2_diffuse.jpg', function ( map ) {
+console.log(map);
     map.wrapS = THREE.RepeatWrapping;
     map.wrapT = THREE.RepeatWrapping;
     map.anisotropy = 4;
@@ -39,7 +39,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
     floorMat.needsUpdate = true;
 
   } );
-  textureLoader.load( 'textures/hardwood2_bump.jpg', function ( map ) {
+  textureLoader.load( 'textures/floor/hardwood2_bump.jpg', function ( map ) {
 
     map.wrapS = THREE.RepeatWrapping;
     map.wrapT = THREE.RepeatWrapping;
@@ -49,7 +49,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
     floorMat.needsUpdate = true;
 
   } );
-  textureLoader.load( 'textures/hardwood2_roughness.jpg', function ( map ) {
+  textureLoader.load( 'textures/floor/hardwood2_roughness.jpg', function ( map ) {
 
     map.wrapS = THREE.RepeatWrapping;
     map.wrapT = THREE.RepeatWrapping;

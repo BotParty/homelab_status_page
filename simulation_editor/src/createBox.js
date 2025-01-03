@@ -34,6 +34,6 @@ export function createBox(
 
   // Add to scene (using addToScene to create the Three.js mesh)
   const shit = addToScene(body, Jolt, bodyInterface);
-  console.log('shit', shit)
+  //console.log('shit', shit)
   return body;
 } 

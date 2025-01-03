@@ -88,3 +88,6 @@ initJolt().then(async (Jolt) => {
 //lyricDetector()
 //new AudioVisualizer()
   //editScene()
+
+  import { renderHelmet } from './renderHelmet.js'
+  renderHelmet()
