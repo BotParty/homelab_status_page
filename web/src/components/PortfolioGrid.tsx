@@ -22,6 +22,8 @@ for (let i = 1; i < 102; i++) {
   });
 }
 
+d3.shuffle(processedFiles)
+
 export default function PortfolioGrid() {
   return (
     <div className="p-8 bg-[#1e2231]">
