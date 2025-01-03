@@ -32,6 +32,7 @@
     "@vercel/speed-insights": "^1.1.0",
     "autoprefixer": "^10.4.12",
     "cheerio": "^1.0.0-rc.12",
+    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cn": "^0.1.1",
     "d3": "^7.9.0",
