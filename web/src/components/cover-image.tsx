@@ -1,4 +1,4 @@
-export default function CoverImage({ title, src, slug }: Props) {
+export default function CoverImage() {
   return <div>CoverImage</div>;
 }
 
