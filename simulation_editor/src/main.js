@@ -30,36 +30,36 @@ const onExampleUpdateRef = { fn: null };
 
 
 initJolt().then(async (Jolt) => {
-  // await renderer.init();
-  // const { joltInterface, physicsSystem, bodyInterface } = initPhysics(Jolt);
+  await renderer.init();
+  const { joltInterface, physicsSystem, bodyInterface } = initPhysics(Jolt);
   // // 3) Collect dynamic objects in array
-  // const dynamicObjects = [];
+  const dynamicObjects = [];
   // // 4) Set up your environment, spawn character, define onExampleUpdate
-  // setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExampleUpdateRef);
+  setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExampleUpdateRef);
   // // 6) Prepare user input
   // handleUserInput(inputState);
   // // 7) Provide a custom update function that calls the function from onExampleUpdateRef
-  // function onExampleUpdate(time, deltaTime) {
-  //   // If setupExample assigned a function, call it
-  //   if (onExampleUpdateRef.fn) {
-  //     onExampleUpdateRef.fn(time, deltaTime, inputState);
-  //   }
-  // }
+  function onExampleUpdate(time, deltaTime) {
+    // If setupExample assigned a function, call it
+    if (onExampleUpdateRef.fn) {
+      onExampleUpdateRef.fn(time, deltaTime, inputState);
+    }
+  }
 
 
   // 8) Start render loop
-  // renderLoop(
-  //   clock,
-  //   onExampleUpdate,
-  //   renderer,
-  //   scene,
-  //   camera,
-  //   joltInterface,
-  //   dynamicObjects,
-  //   Jolt,
-  //   controls,
-  //   {}
-  // );
+  renderLoop(
+    clock,
+    onExampleUpdate,
+    renderer,
+    scene,
+    camera,
+    joltInterface,
+    dynamicObjects,
+    Jolt,
+    controls,
+    {}
+  );
 }); 
 
 
