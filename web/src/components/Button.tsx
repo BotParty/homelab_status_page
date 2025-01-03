@@ -10,9 +10,10 @@ const variantStyles = {
 
 type ButtonProps = {
   variant?: keyof typeof variantStyles
+  className?: string
 } & (
-  | (React.ComponentPropsWithoutRef<'button'> & { href?: undefined })
-  | React.ComponentPropsWithoutRef<typeof Link>
+  | (Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> & { href?: undefined })
+  | (Omit<React.ComponentPropsWithoutRef<typeof Link>, 'className'>)
 )
 
 export function Button({
@@ -27,8 +28,8 @@ export function Button({
   )
 
   return typeof props.href === 'undefined' ? (
-    <button className={className} {...props} />
+    <button className={className} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)} />
   ) : (
-    <Link className={className} {...props} />
+    <Link className={className} {...(props as React.ComponentPropsWithoutRef<typeof Link>)} />
   )
 }
