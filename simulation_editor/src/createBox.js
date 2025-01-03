@@ -19,7 +19,6 @@ export function createBox(
   halfExtent,
   motionType,
   layer,
-  color = 0xffffff
 ) {
   const shape = new Jolt.BoxShape(halfExtent, 0.05, null);
   const creationSettings = new Jolt.BodyCreationSettings(
@@ -33,7 +32,7 @@ export function createBox(
   Jolt.destroy(creationSettings);
 
   // Add to scene (using addToScene to create the Three.js mesh)
-  addToScene(body, Jolt, bodyInterface);
-
+  const shit = addToScene(body, Jolt, bodyInterface);
+  console.log('shit', shit)
   return body;
 } 

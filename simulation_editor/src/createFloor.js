@@ -22,7 +22,7 @@ export function createFloor(Jolt, bodyInterface, addToScene, size = 50) {
   const floor = addToScene(body);
 
 
-  console.log('floor', body)
+  //console.log('floor', floor)
 
 
 

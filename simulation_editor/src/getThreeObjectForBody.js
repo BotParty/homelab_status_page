@@ -10,7 +10,7 @@ import { getSoftBodyMesh } from './getSoftBodyMesh.js';
  * @return {THREE.Mesh} - The constructed mesh
  */
 export function getThreeObjectForBody(body, Jolt) {
-const material = new MeshPhongMaterial({ color: 0x00ff00 });
+  const material = new MeshPhongMaterial({ color: 0x00ff00 });
   const shape = body.GetShape();
   let threeObject;
   //console.log('getThreeObjectForBody', shape)
