@@ -10,6 +10,8 @@ const article = {
   title: "Dynamicland is the greatest invention of the century",
   date: "2025-01-03",
   slug: "dynamicland_2025",
+  author: "Adnan Wahab and rena kaufman",
+  description: "Dynamicland is the greatest invention of the century",
 }
 const children = <div>Hello</div> 
 
