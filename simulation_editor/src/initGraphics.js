@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { WebGPURenderer, PerspectiveCamera, Scene, DirectionalLight } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -26,6 +27,33 @@ export function initGraphics(canvas, container, size) {
   const controls = new OrbitControls(camera, container);
 
   container.appendChild(renderer.domElement);
+
+
+
+  const textureLoader = new THREE.TextureLoader();
+textureLoader.load( 'textures/hardwood2_diffuse.jpg', function ( map ) {
+
+  map.wrapS = THREE.RepeatWrapping;
+  map.wrapT = THREE.RepeatWrapping;
+  map.anisotropy = 16;
+  map.repeat.set( 4, 4 );
+  map.colorSpace = THREE.SRGBColorSpace;
+  groundMaterial.map = map;
+  groundMaterial.needsUpdate = true;
+
+} );
+
+
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+cubeTextureLoader.setPath( 'textures/cube/Park2/' );
+
+const cubeTexture = cubeTextureLoader.load( [
+  'posx.jpg', 'negx.jpg',
+  'posy.jpg', 'negy.jpg',
+  'posz.jpg', 'negz.jpg'
+] );
+
+scene.background = cubeTexture;
 
   return { renderer, scene, camera, controls };
 } 

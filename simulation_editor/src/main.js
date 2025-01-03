@@ -5,18 +5,29 @@ import { initPhysics } from './initPhysics.js';
 import { renderLoop } from './renderLoop.js';
 import { setupExample } from './setupExample.js';
 import { handleUserInput } from './handleUserInput.js';
-
 import initJolt from './utils/jolt-physics.wasm-compat.js';
-
-//import cool_lighting from './cool_lighting.js';
 import AudioVisualizer from './play_karaoke.js';
+import lyricDetector from './lyricDetector.js';
 
+const size = { width: 900, height: 500 };
+const container = document.getElementById('container');
+const canvas = document.querySelector('canvas');
+lyricDetector()
 new AudioVisualizer()
 
 
-import lyricDetector from './lyricDetector.js';
+import { loadGLTFModel } from './gltf-loader.js';
 
-lyricDetector()
+const { renderer, scene, camera, controls } = initGraphics(canvas, container, size);
+
+
+loadGLTFModel('/static/mini_home.gltf')
+    .then(gltf => {
+        scene.add(gltf.scene);
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
 // We'll track our input in an object that the example can look at
 const inputState = {
@@ -28,9 +39,7 @@ const inputState = {
   crouched: false
 };
 
-const size = { width: 900, height: 500 };
-const container = document.getElementById('container');
-const canvas = document.querySelector('canvas');
+
 const clock = new Clock();
 
 // A reference to your specialized onExampleUpdate function, which we’ll assign in setupExample:
@@ -38,7 +47,6 @@ const onExampleUpdateRef = { fn: null };
 
 initJolt().then(async (Jolt) => {
   // 1) Graphics
-  const { renderer, scene, camera, controls } = initGraphics(canvas, container, size);
 
   // IMPORTANT: Await initialization of WebGPURenderer:
   // This ensures that the renderer backend is ready before we start calling .render()
@@ -81,3 +89,6 @@ initJolt().then(async (Jolt) => {
     {}
   );
 }); 
+
+
+
