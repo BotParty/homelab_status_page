@@ -1,9 +1,17 @@
-
+'use client';
+import { ArticleLayout } from '../../../_components/ArticleLayout';
+import React, { useState } from 'react';
 import markdownStyles from "./markdown-styles.module.css";
-
 import TextEditor from '../../../components/texteditor'
 import { remark } from "remark";
 import html from "remark-html";
+
+const article = {
+  title: "Dynamicland is the greatest invention of the century",
+  date: "2025-01-03",
+  slug: "dynamicland_2025",
+}
+const children = <div>Hello</div> 
 
 async function markdownToHtml(markdown: string) {
   const result = await remark().use(html).process(markdown);
@@ -12,45 +20,19 @@ async function markdownToHtml(markdown: string) {
 
 const dynamicland_is_great = `
 image.png
-
 `
 
-
-// export default function Dynamicland2025() {
-//   return <div><TextEditor />
-  
-
-//   <h1>Dynamicland 2025</h1>
-//   <div>
-//     <p>
-//       {dynamicland_is_great}
-//     </p>
-//   </div>
-  
-//   </div>
-// }
-
-
-import React from 'react';
-
 export default function Blog() {
+  // 1. Use state to determine whether to show the editor
+  const [showEditor, setShowEditor] = useState(false);
+
   return (
     <div id="__next">
       <div className="min-h-screen">
         {/* Top bar */}
         <div className="border-b bg-accent-1 border-accent-2">
           <div className="container mx-auto px-5">
-          {/* <TextEditor /> */}
-            {/* <div className="py-2 text-center text-sm">
-              The source code for this blog is{' '}
-              <a
-                href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter"
-                className="underline hover:text-success duration-200 transition-colors"
-              >
-                available on GitHub
-              </a>
-              .
-            </div> */}
+            {/* optional top bar content */}
           </div>
         </div>
 
@@ -62,16 +44,6 @@ export default function Blog() {
               <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-tight md:pr-8">
                 Collaborative Thinking and Shared Reasoning
               </h1>
-              {/* <h4 className="text-center md:text-left text-lg mt-5 md:pl-8">
-                A statically generated blog example using{' '}
-                <a
-                  href="https://nextjs.org/"
-                  className="underline hover:text-success duration-200 transition-colors"
-                >
-                  Next.js
-                </a>{' '}
-                and Markdown.
-              </h4> */}
             </section>
 
             {/* Featured post */}
@@ -129,10 +101,7 @@ export default function Blog() {
               <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
                 <div>
                   <h3 className="mb-4 text-4xl lg:text-6xl leading-tight">
-                    <a
-                      className="hover:underline"
-                      href="/posts/dynamic-routing"
-                    >
+                    <a className="hover:underline" href="/posts/dynamic-routing">
                       Dynamicland is the greatest invention of the century
                     </a>
                   </h3>
@@ -142,49 +111,39 @@ export default function Blog() {
                 </div>
                 <div>
                   <p className="text-lg leading-relaxed mb-4">
-                 
+                    {/* Body */}
                   </p>
-
-               
                   <div
-        className={markdownStyles["markdown"]}
-        dangerouslySetInnerHTML={{ __html: dynamicland_is_great }}
-      />
-
+                    className={markdownStyles["markdown"]}
+                    dangerouslySetInnerHTML={{ __html: dynamicland_is_great }}
+                  />
 
                   <div className="flex items-center">
-                    {/* <img
-                      src="/assets/blog/authors/jj.jpeg"
-                      className="w-12 h-12 rounded-full mr-4"
-                      alt="JJ Kasper"
-                    /> */}
                     <div className="text-xl font-bold">By Adnan Wahab</div>
+
+                    <ArticleLayout article={article} children={children} />
                   </div>
                 </div>
               </div>
             </section>
-
-
           </div>
         </main>
 
         {/* Footer */}
-
-        
         <footer className="bg-accent-1 border-t border-accent-2">
-          <TextEditor />
           <div className="container mx-auto px-5">
             <div className="py-28 flex flex-col lg:flex-row items-center">
+              {/* 2. Use onClick to toggle our local "showEditor" state */}
               <h3 className="text-4xl lg:text-5xl font-bold tracking-tighter leading-tight text-center lg:text-left mb-10 lg:mb-0 lg:pr-4 lg:w-1/2">
-                Click here to edit this blog post
-              </h3>
-              <div className="flex flex-col lg:flex-row justify-center items-center lg:pl-4 lg:w-1/2">
-                {/* <a
-                  href="https://nextjs.org/docs/basic-features/pages"
-                  className="mx-3 bg-black hover:bg-white hover:text-black border border-black text-white font-bold py-3 px-12 lg:px-8 duration-200 transition-colors mb-6 lg:mb-0"
+                <button
+                  className="hover:underline"
+                  onClick={() => setShowEditor((prev) => !prev)}
                 >
-                  Read Documentation
-                </a> */}
+                  Click here to edit this blog post
+                </button>
+              </h3>
+
+              <div className="flex flex-col lg:flex-row justify-center items-center lg:pl-4 lg:w-1/2">
                 <a
                   href="https://github.com/adnanwahab/homelab"
                   className="mx-3 font-bold hover:underline"
@@ -193,6 +152,13 @@ export default function Blog() {
                 </a>
               </div>
             </div>
+
+            {/* 3. Conditionally show the TextEditor only if showEditor is true */}
+            {showEditor && (
+              <div className="pb-10">
+                <TextEditor />
+              </div>
+            )}
           </div>
         </footer>
       </div>
