@@ -18,6 +18,22 @@
 
 set -euo pipefail
 
+check_ip () {
+  # Using ifconfig.me
+curl ifconfig.me
+
+# Using ipinfo.io
+curl ipinfo.io/ip
+
+# Using icanhazip.com
+curl icanhazip.com
+
+# Using OpenDNS
+dig +short myip.opendns.com @resolver1.opendns.com
+ip addr show
+}
+
+
 ### HELPER FUNCTIONS ###
 
 info() {

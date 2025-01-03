@@ -2,6 +2,18 @@
 	email adnan.f.wahab@gmail.com
 }
 
+{
+	# Enable (or customize) admin endpoint on :2019
+	admin :2019
+
+	# Optional: Set global log level to debug
+	debug
+}
+
+:80 {
+	respond "Hello from Caddy with admin enabled!"
+}
+
 files.learn-math.org {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
