@@ -1,5 +1,14 @@
 
+import markdownStyles from "./markdown-styles.module.css";
+
 import TextEditor from '../../../components/texteditor'
+import { remark } from "remark";
+import html from "remark-html";
+
+async function markdownToHtml(markdown: string) {
+  const result = await remark().use(html).process(markdown);
+  return result.toString();
+}
 
 const dynamicland_is_great = `
 image.png
@@ -487,8 +496,16 @@ export default function Blog() {
                 </div>
                 <div>
                   <p className="text-lg leading-relaxed mb-4">
-                    {dynamicland_is_great}
+                 
                   </p>
+
+{/*                   
+                  <div
+        className={markdownStyles["markdown"]}
+        dangerouslySetInnerHTML={{ __html: await markdownToHtml(dynamicland_is_great) }}
+      /> */}
+
+
                   <div className="flex items-center">
                     {/* <img
                       src="/assets/blog/authors/jj.jpeg"

@@ -43,7 +43,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "^7.1.8",
+    "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
+    "remark-html": "^16.0.1",
     "resend": "^4.0.1",
     "three": "^0.171.0"
   },
