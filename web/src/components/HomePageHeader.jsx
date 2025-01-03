@@ -11,12 +11,12 @@ export default function Header() {
   
           <a href="mailto:adnan@llama-tools.com" className="hover:text-[#8b98e8]">email</a>
             <a href="https://github.com/adnanwahab" className="hover:text-[#8b98e8]">github</a>
-            <a href="https://x.com/dynabotdev" className="hover:text-[#8b98e8]">twitter</a>
+            <a href="https://x.com/adnan_wahab_" className="hover:text-[#8b98e8]">twitter</a>
             <a href="https://linkedin.com/in/adnanwahab" className="hover:text-[#8b98e8]">linkedin</a>
   
             <a href="/blog" className="hover:text-[#8b98e8]">blog</a>
-            <a href="/tools" className="hover:text-[#8b98e8]">tools</a>
-            <a href="/about" className="hover:text-[#8b98e8]">about</a>
+            {/* <a href="/tools" className="hover:text-[#8b98e8]">tools</a> */}
+            {/* <a href="/about" className="hover:text-[#8b98e8]">about</a> */}
   
           </div>
           <div className="text-sm text-gray-400">
