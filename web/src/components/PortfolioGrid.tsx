@@ -24,7 +24,7 @@ for (let i = 1; i < 102; i++) {
 
 //d3.shuffle(processedFiles)
 
-processedFiles.reverse()
+//processedFiles.reverse()
 
 export default function PortfolioGrid() {
   return (
