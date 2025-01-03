@@ -395,6 +395,7 @@ export default function Blog() {
         {/* Top bar */}
         <div className="border-b bg-accent-1 border-accent-2">
           <div className="container mx-auto px-5">
+          <TextEditor />
             {/* <div className="py-2 text-center text-sm">
               The source code for this blog is{' '}
               <a
