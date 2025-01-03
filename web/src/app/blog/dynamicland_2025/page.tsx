@@ -1,5 +1,5 @@
 'use client';
-import { ArticleLayout } from '../../../_components/ArticleLayout';
+import { ArticleLayout } from '../../../components/ArticleLayout';
 import React, { useState } from 'react';
 import markdownStyles from "./markdown-styles.module.css";
 import TextEditor from '../../../components/texteditor'
