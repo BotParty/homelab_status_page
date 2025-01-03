@@ -22,22 +22,22 @@ export function createFloor(Jolt, bodyInterface, addToScene, size = 50) {
   const floor = addToScene(body, 0xff0000);
 
 
-console.log(floor)
+  console.log('floor', body)
 
 
 
-  const textureLoader = new THREE.TextureLoader();
-textureLoader.load( '/hardwood2_diffuse.jpg', function ( map ) {
+//   const textureLoader = new THREE.TextureLoader();
+// textureLoader.load( '/hardwood2_diffuse.jpg', function ( map ) {
 
-  map.wrapS = THREE.RepeatWrapping;
-  map.wrapT = THREE.RepeatWrapping;
-  map.anisotropy = 16;
-  map.repeat.set( 4, 4 );
-  map.colorSpace = THREE.SRGBColorSpace;
-  groundMaterial.map = map;
-  groundMaterial.needsUpdate = true;
+//   map.wrapS = THREE.RepeatWrapping;
+//   map.wrapT = THREE.RepeatWrapping;
+//   map.anisotropy = 16;
+//   map.repeat.set( 4, 4 );
+//   map.colorSpace = THREE.SRGBColorSpace;
+//   groundMaterial.map = map;
+//   groundMaterial.needsUpdate = true;
 
-} );
+// } );
 
 
 
