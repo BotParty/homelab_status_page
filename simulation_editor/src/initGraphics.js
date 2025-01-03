@@ -11,6 +11,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
  */
 export function initGraphics(canvas, container, size) {
   const renderer = new WebGPURenderer({ canvas });
+  renderer.shadowMap.enabled = true;
+  renderer.toneMapping = THREE.ReinhardToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
   renderer.setClearColor(0xff00ff);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(size.width, size.height);
