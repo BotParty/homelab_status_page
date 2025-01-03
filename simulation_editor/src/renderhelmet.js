@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+//import { OrbitControls } from 'three/addons/jsm/controls/OrbitControls.js'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 import { gsap } from 'gsap'
 
 /**
@@ -198,13 +198,13 @@ camera.position.set(4, 1, - 4)
 scene.add(camera)
 
 // Controls
-const controls = new OrbitControls(camera, canvas)
-controls.enableDamping = true
+//const controls = new OrbitControls(camera, canvas)
+//controls.enableDamping = true
 
 /**
  * Renderer
  */
-const renderer = new THREE.WebGLRenderer({
+const renderer = new THREE.WebGPURenderer({
     canvas: canvas,
     antialias: true
 })
@@ -221,7 +221,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 const tick = () =>
 {
     // Update controls
-    controls.update()
+    //controls.update()
 
     // Update points only when the scene is ready
     if(sceneReady)
