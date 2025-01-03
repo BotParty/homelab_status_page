@@ -9,7 +9,7 @@ import { getSoftBodyMesh } from './getSoftBodyMesh.js';
  * @param {Object} Jolt - The Jolt WASM/JS object
  * @return {THREE.Mesh} - The constructed mesh
  */
-export function getThreeObjectForBody(body, Jolt) {
+export function getThreeObjectForBody(body, Jolt, optionalMaterial = null) {
   const shape = body.GetShape();
   let threeObject;
   //console.log('getThreeObjectForBody', shape)
@@ -23,7 +23,7 @@ export function getThreeObjectForBody(body, Jolt) {
       const sizeX = halfExtent.GetX() * 2;
       const sizeY = halfExtent.GetY() * 2;
       const sizeZ = halfExtent.GetZ() * 2;
-      const material = new MeshPhongMaterial({ color: 0x00ff00 });
+      const material = optionalMaterial || new MeshPhongMaterial({ color: 0x00ff00 });
       threeObject = new Mesh(new BoxGeometry(sizeX, sizeY, sizeZ), material);
       break;
     }

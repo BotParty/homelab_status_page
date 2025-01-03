@@ -9,9 +9,9 @@
  * @param {Array} dynamicObjects - Array to which we'll push the new mesh
  * @param {Function} getThreeObjectForBody - A function to build a mesh from the shape
  */
-export function addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody) {
-  bodyInterface.AddBody(body.GetID(), Jolt.EActivation_Activate);
-  const threeObject = getThreeObjectForBody(body, Jolt);
+export function addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody, material) {
+  bodyInterface.AddBody(body.GetID(), Jolt.EActivation_Activate,);
+  const threeObject = getThreeObjectForBody(body, Jolt, material);
   threeObject.userData.body = body;
   scene.add(threeObject);
   dynamicObjects.push(threeObject);
