@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 *
 {
     margin: 0;
@@ -113,3 +115,4 @@ body
     0% { background-position: 0% center; }
     100% { background-position: 200% center; }
   } 
+

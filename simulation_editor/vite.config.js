@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import topLevelAwait from "vite-plugin-top-level-await";
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig ({
 	resolve: {
@@ -13,9 +14,12 @@ export default defineConfig ({
     topLevelAwait({
   		promiseExportName: "__tla",
       promiseImportName: i => `__tla_${i}`
-    })
+    }),
+	tailwindcss()
+
   ],
   server: {
   	port: 5173,
   }
 });
+

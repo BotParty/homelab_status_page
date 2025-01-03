@@ -1,12 +1,6 @@
 {
 	email adnan.f.wahab@gmail.com
-}
-
-{
-	# Enable (or customize) admin endpoint on :2019
 	admin :2019
-
-	# Optional: Set global log level to debug
 	debug
 }
 

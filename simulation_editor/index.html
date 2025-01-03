@@ -6,21 +6,22 @@
         <title>simulation tools</title>
         <style>
             canvas {
-                border: 1px solid lightblue;
+                border: 1px solid #333;
             }
-            html {
-                background: #333;
-                color: white;
-            }
+
         </style>
             <script src="https://d3js.org/d3.v7.min.js"></script>
+            <script type="module" src="src/main.js"></script>
 
     </head>
-    <body>
-
+    <body class="bg-linear-to-r/srgb from-indigo-500 to-teal-400">
+<h1>Mark Chatkhan + Mark Rev Musical Karaoke Game</h1>
+    <canvas id="canvas"></canvas>
+<div class="grid grid-cols-2">
+    <div class="bg-white overflow-y-scroll scheme-light">
         <div id="collision-log"></div>
         <div id="container">    </div>
-        <canvas id="canvas"></canvas>
+    
         <div id="container"></div>
         <div id="info">
           
@@ -36,7 +37,6 @@
 
         <!-- <iframe width="100%" height="500" frameborder="0"
         src="https://observablehq.com/embed/@esperanc/tone-js-instruments?cell=*"></iframe> -->
-        <script type="module" src="src/main.js"></script>
 
 
 
@@ -49,7 +49,11 @@
 <div>Last word: <span id="lastWord"></span></div>
 
 <div id="app"></div>
-
+</div>
+<div class="bg-slate-800 overflow-y-scroll scheme-dark">
+    hi
+ </div>
+</div>
     </body>
 </html>
 <!-- tree based encapsulation 4-7 things for robotics -->
