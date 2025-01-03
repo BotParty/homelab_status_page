@@ -43,6 +43,7 @@
     "react-dom": "^19.0.0",
     "react-map-gl": "^7.1.8",
     "remark-gfm": "^4.0.0",
+    "resend": "^4.0.1",
     "three": "^0.171.0"
   },
   "devDependencies": {
