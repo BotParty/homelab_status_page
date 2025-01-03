@@ -36,7 +36,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
     halfExtendWall,
     Jolt.EMotionType_Static,
     LAYER_NON_MOVING,
-    0x7f7f7f
+
   );
   createBox(
     Jolt,
@@ -47,7 +47,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
     halfExtendWall,
     Jolt.EMotionType_Static,
     LAYER_NON_MOVING,
-    0x7f7f7f
+
   );
 
   // 3) Simple character
@@ -62,7 +62,7 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
     halfExtentChar,
     Jolt.EMotionType_Dynamic,
     LAYER_MOVING,
-    0xffaa00
+
   );
 
   // 4) A reference to the update function:

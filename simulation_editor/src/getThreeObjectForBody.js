@@ -10,7 +10,6 @@ import { getSoftBodyMesh } from './getSoftBodyMesh.js';
  * @return {THREE.Mesh} - The constructed mesh
  */
 export function getThreeObjectForBody(body, Jolt) {
-  const material = new MeshPhongMaterial({ color: 0x00ff00 });
   const shape = body.GetShape();
   let threeObject;
   //console.log('getThreeObjectForBody', shape)
@@ -24,12 +23,15 @@ export function getThreeObjectForBody(body, Jolt) {
       const sizeX = halfExtent.GetX() * 2;
       const sizeY = halfExtent.GetY() * 2;
       const sizeZ = halfExtent.GetZ() * 2;
+      const material = new MeshPhongMaterial({ color: 0x00ff00 });
       threeObject = new Mesh(new BoxGeometry(sizeX, sizeY, sizeZ), material);
       break;
     }
     case Jolt.EShapeSubType_Sphere: {
       const sphereShape = Jolt.castObject(shape, Jolt.SphereShape);
       const radius = sphereShape.GetRadius();
+      const material = new MeshPhongMaterial({ color: 0x00ff00 });
+
       threeObject = new Mesh(new SphereGeometry(radius, 32, 32), material);
       break;
     }
@@ -37,6 +39,8 @@ export function getThreeObjectForBody(body, Jolt) {
       const capsuleShape = Jolt.castObject(shape, Jolt.CapsuleShape);
       const capRadius = capsuleShape.GetRadius();
       const capHeight = capsuleShape.GetHalfHeightOfCylinder() * 2;
+      const material = new MeshPhongMaterial({ color: 0x00ff00 });
+
       threeObject = new Mesh(new CapsuleGeometry(capRadius, capHeight, 20, 10), material);
       break;
     }
@@ -44,15 +48,13 @@ export function getThreeObjectForBody(body, Jolt) {
       const cylinderShape = Jolt.castObject(shape, Jolt.CylinderShape);
       const cRadius = cylinderShape.GetRadius();
       const cHeight = cylinderShape.GetHalfHeight() * 2;
+      const material = new MeshPhongMaterial({ color: 0x00ff00 });
+
       threeObject = new Mesh(new CylinderGeometry(cRadius, cRadius, cHeight, 20, 1), material);
       break;
     }
     default: {
-      if (body.GetBodyType() === Jolt.EBodyType_SoftBody) {
-        threeObject = getSoftBodyMesh(body, material, Jolt);
-      } else {
-        threeObject = new Mesh(createMeshForShape(shape, Jolt), material);
-      }
+      console.log('should not happen')
     }
   }
 
