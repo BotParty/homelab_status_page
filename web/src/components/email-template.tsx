@@ -12,11 +12,15 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
       <h1 className="text-3xl font-bold text-gray-800 mb-4">
         Welcome, {firstName}!
       </h1>
-      <img src="https://github.com/adnanwahab/homelab/blob/main/web/public/personal/friends.jpg?raw=true" alt="Michael Pollan" className="w-1/2 mx-auto" />
-      <img src="https://github.com/adnanwahab/homelab/blob/main/web/public/personal/1320.jpeg?raw=true" alt="Michael Pollan" className="w-1/2 mx-auto" />
+      <img width="900" height="500" src="https://github.com/adnanwahab/homelab/blob/main/web/public/personal/friends.jpg?raw=true" alt="Michael Pollan" className="w-1/2 mx-auto" />
 
       <p className="text-gray-600 leading-relaxed">
         This is a living blogpost that will updated daily for the next 70 years - https://reflect.site/g/awahab/legal/fddf4a0353d6408f80d4576d4ecb83b5
+
+      </p>
+
+      <p className="text-gray-600 leading-relaxed">
+        adnanwahab.com/blog
 
       </p>
 
@@ -39,6 +43,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
 <li>We live in a society where cute  girls like rena think they can get away with anything.</li>
 
 
+<img width="900" height="500" src="https://github.com/adnanwahab/homelab/blob/main/web/public/personal/1320.jpeg?raw=true" alt="Michael Pollan" className="w-1/2 mx-auto" />
 
 
 
