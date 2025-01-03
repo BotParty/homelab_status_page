@@ -35,6 +35,8 @@ export function getSoftBodyMesh(body, material, Jolt) {
   geometry.setIndex(new BufferAttribute(faces, 1));
   material.side = 2; // double side
 
+  material.map = texture;
+
   const threeObject = new Mesh(geometry, material);
 
   threeObject.userData.updateVertex = () => {

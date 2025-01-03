@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /**
  * Creates a static floor BoxShape body and adds it to the scene (with color).
  * @param {Object} Jolt - Jolt object
@@ -18,6 +19,28 @@ export function createFloor(Jolt, bodyInterface, addToScene, size = 50) {
   const body = bodyInterface.CreateBody(creationSettings);
   Jolt.destroy(creationSettings);
 
-  addToScene(body, 0xc7c7c7);
+  const floor = addToScene(body, 0xff0000);
+
+
+console.log(floor)
+
+
+
+  const textureLoader = new THREE.TextureLoader();
+textureLoader.load( '/hardwood2_diffuse.jpg', function ( map ) {
+
+  map.wrapS = THREE.RepeatWrapping;
+  map.wrapT = THREE.RepeatWrapping;
+  map.anisotropy = 16;
+  map.repeat.set( 4, 4 );
+  map.colorSpace = THREE.SRGBColorSpace;
+  groundMaterial.map = map;
+  groundMaterial.needsUpdate = true;
+
+} );
+
+
+
+
   return body;
 } 

@@ -13,6 +13,8 @@ export function getThreeObjectForBody(body, color, Jolt) {
   const material = new MeshPhongMaterial({ color });
   const shape = body.GetShape();
   let threeObject;
+  console.log('getThreeObjectForBody', shape)
+  
 
   switch (shape.GetSubType()) {
     case Jolt.EShapeSubType_Box: {

@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { updatePhysics } from './updatePhysics.js';
 
 /**
@@ -71,4 +72,14 @@ export function renderLoop(
 
   // Render
   renderer.render(scene, camera);
+
+
+
+
+  // scene.children[0].material = new THREE.MeshBasicMaterial({
+  //   map: new THREE.TextureLoader().load('textures/hardwood2_diffuse.jpg')
+  // });
+  
+  //.map.image.src = 'textures/hardwood2_diffuse.jpg';
+
 } 

@@ -15,4 +15,5 @@ export function addToScene(body, color, Jolt, bodyInterface, scene, dynamicObjec
   threeObject.userData.body = body;
   scene.add(threeObject);
   dynamicObjects.push(threeObject);
+  return threeObject
 } 
