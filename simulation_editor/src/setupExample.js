@@ -2,7 +2,7 @@ import { createFloor } from './createFloor.js';
 import { createBox } from './createBox.js';
 import { addToScene } from './addToScene.js';
 import { getThreeObjectForBody } from './getThreeObjectForBody.js';
-
+import * as THREE from 'three';
 /**
  * Sets up your environment and character logic. Creates floors, walls, 
  * a simple “character” body, etc. Also provides the onExampleUpdate() function 
@@ -19,9 +19,50 @@ export function setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExamp
   const LAYER_NON_MOVING = 0;
   const LAYER_MOVING = 1;
 
+
+  const floorMat = new THREE.MeshStandardMaterial( {
+    roughness: 0.8,
+    color: 0xffffff,
+    metalness: 0.2,
+    bumpScale: 1
+  } );
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.load( 'textures/hardwood2_diffuse.jpg', function ( map ) {
+
+    map.wrapS = THREE.RepeatWrapping;
+    map.wrapT = THREE.RepeatWrapping;
+    map.anisotropy = 4;
+    map.repeat.set( 10, 24 );
+    map.colorSpace = THREE.SRGBColorSpace;
+    floorMat.map = map;
+    floorMat.needsUpdate = true;
+
+  } );
+  textureLoader.load( 'textures/hardwood2_bump.jpg', function ( map ) {
+
+    map.wrapS = THREE.RepeatWrapping;
+    map.wrapT = THREE.RepeatWrapping;
+    map.anisotropy = 4;
+    map.repeat.set( 10, 24 );
+    floorMat.bumpMap = map;
+    floorMat.needsUpdate = true;
+
+  } );
+  textureLoader.load( 'textures/hardwood2_roughness.jpg', function ( map ) {
+
+    map.wrapS = THREE.RepeatWrapping;
+    map.wrapT = THREE.RepeatWrapping;
+    map.anisotropy = 4;
+    map.repeat.set( 10, 24 );
+    floorMat.roughnessMap = map;
+    floorMat.needsUpdate = true;
+
+  } );
+
+
   // 1) Basic floor
   createFloor(Jolt, bodyInterface, (body) => {
-    addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody);
+    addToScene(body, Jolt, bodyInterface, scene, dynamicObjects, getThreeObjectForBody, floorMat);
   }, 50);
 
   // 2) Simple walls
