@@ -1,11 +1,6 @@
 import type { NextConfig } from "next";
 import createMDX from '@next/mdx';
 
-const withMDX = createMDX({
-  options: {
-    extension: /\.mdx?$/,
-  },
-});
 
 const nextConfig: NextConfig = {
   // Configure pageExtensions to include md and mdx
@@ -13,4 +8,4 @@ const nextConfig: NextConfig = {
 };
 
 // Merge MDX config with Next.js config
-export default withMDX(nextConfig);
+export default nextConfig
