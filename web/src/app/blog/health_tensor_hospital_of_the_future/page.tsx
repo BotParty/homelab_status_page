@@ -56,7 +56,7 @@ export default function Blog() {
             {/* Hero section */}
             <section className="flex-col md:flex-row flex items-center md:justify-between mt-16 mb-16 md:mb-12">
               <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-tight md:pr-8">
-                Collaborative Thinking and Shared Reasoning
+                {article.title}
               </h1>
             </section>
 
@@ -66,7 +66,7 @@ export default function Blog() {
                 <div className="sm:mx-0">
                   <a
                     aria-label="Dynamic Routing and Static Generation"
-                    href="/posts/dynamic-routing"
+                    href="/blog/health_tensor_hospital_of_the_future"
                   >
                     <div
                       style={{
