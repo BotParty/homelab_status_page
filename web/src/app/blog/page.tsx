@@ -23,9 +23,9 @@ export default function BlogPage() {
                    Dynamicland is a collaborative thinking space for shared reasoning
                   </a>
                 </h2>
-                {/* <p className="text-gray-400 mb-3">
-                  Most companies try to stay ahead of the curve when it comes to visual design, but for Planetaria we needed to create a brand that would still inspire us 100 years from now when humanity has spread across our entire solar system.
-                </p> */}
+                <p className="text-gray-400 mb-3">
+                  Dynamicland is a collaborative thinking space for shared reasoning that assists all human beings in making intractable problems tractable.
+                </p>
                 <a href="/blog/dynamicland_2025" className="text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center">
                   Read article
                   <span className="ml-1">→</span>
@@ -44,10 +44,10 @@ export default function BlogPage() {
                     Health Tensor is the Hospital of the Future
                   </a>
                 </h2>
-                {/* <p className="text-gray-400 mb-3">
-                  When you're building a website for a company as ambitious as Planetaria, you need to make an impression. I wanted people to visit our website and see animations that looked more realistic than reality itself.
-                </p> */}
-                <a href="/blog/rtings_for_robotics" className="text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center">
+                <p className="text-gray-400 mb-3">
+                  Health Tensor is the hospital of the future - assisting physicians to solve complex problems.
+                </p>
+                <a href="/blog/health_tensor_hospital_of_the_future" className="text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center">
                   Read article
                   <span className="ml-1">→</span>
                 </a>
