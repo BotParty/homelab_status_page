@@ -25,7 +25,7 @@ const getAllKV = async () => {
 const html = `
 <html>
   <body>
-    <h1>Hello World 2025</h1>
+    <h1>Hello World 2025 jan 4</h1>
 
 
     <h2>Supabase Data</h2>
