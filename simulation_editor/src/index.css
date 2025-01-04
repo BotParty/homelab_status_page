@@ -10,11 +10,11 @@ html,
 body
 {
 
-    background-color: beige;
+    background-color: #333;
     /* overflow: hidden; */
 }
 
-.webgl
+/* .webgl
 {
     position: fixed;
     top: 0;
@@ -115,4 +115,4 @@ body
     0% { background-position: 0% center; }
     100% { background-position: 200% center; }
   } 
-
+ */

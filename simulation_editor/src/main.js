@@ -11,6 +11,7 @@ import AudioVisualizer from './utils/play_karaoke.js';
 import lyricDetector from './utils/lyricDetector.js';
 import * as THREE from 'three';
 
+
 const size = { width: 900, height: 500 };
 const container = document.getElementById('container');
 const canvas = document.querySelector('canvas');
