@@ -7,7 +7,7 @@ import { remark } from "remark";
 import html from "remark-html";
 
 
-import content from './content.mdx'
+import content from './content.md'
 
 const article = {
   title: "Dynamicland is the greatest invention of the century",

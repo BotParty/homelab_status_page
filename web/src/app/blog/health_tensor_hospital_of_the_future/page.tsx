@@ -7,7 +7,7 @@ import { remark } from "remark";
 import html from "remark-html";
 
 
-import content from './content.mdx'
+import content from './content.md'
 
 const article = {
   title: "Health Tensor is the hospital of the future",
