@@ -31,6 +31,7 @@
     "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.1.0",
     "autoprefixer": "^10.4.12",
+    "babel-loader": "^9.2.1",
     "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
