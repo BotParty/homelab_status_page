@@ -14,7 +14,7 @@ const completed = 10
 const files: FileItem[] = []
 const processedFiles: FileItem[] = [];
 
-for (let i = 1; i < 102; i++) {
+for (let i = 10; i < 102; i++) {
   processedFiles.push({
     title: ``,
     size: '',
