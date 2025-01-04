@@ -95,8 +95,17 @@ export default function SpiralArt() {
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       scene.traverse((obj) => {
-        if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) obj.material.dispose();
+        // Check if object is a Mesh or Line (which have geometry and material)
+        if (obj instanceof THREE.Mesh || obj instanceof THREE.Line) {
+          if (obj.geometry) obj.geometry.dispose();
+          if (obj.material) {
+            if (Array.isArray(obj.material)) {
+              obj.material.forEach(material => material.dispose());
+            } else {
+              obj.material.dispose();
+            }
+          }
+        }
       });
     };
   }, []);
