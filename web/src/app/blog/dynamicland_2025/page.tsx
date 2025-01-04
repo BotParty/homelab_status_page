@@ -367,8 +367,7 @@ https://www.youtube.com/watch?v=_gXiVOmaVSo
     "https://bookshop.org/book/9780804738712",
     "https://worrydream.com/refs/Piumarta_2010_-_Points_of_View.pdf",
     "https://bookshop.org/book/9781849901154"
-
-'
+`
 
 const article = {
   title: "Dynamicland is the greatest invention of the century",
