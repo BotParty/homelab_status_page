@@ -1,4 +1,4 @@
-'use client';
+
 import { ArticleLayout } from '../../../components/ArticleLayout';
 import React, { useState, useEffect } from 'react';
 import markdownStyles from "./markdown-styles.module.css";
