@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { WebGPURenderer, PerspectiveCamera, Scene, DirectionalLight } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-
+console.log(THREE);
 
 
 // import postprocessing from './postprocessing.js';

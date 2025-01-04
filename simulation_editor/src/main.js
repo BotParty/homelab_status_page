@@ -8,7 +8,7 @@ import { setupExample } from './setupExample.js';
 import { handleUserInput } from './utils/handleUserInput.js';
 import initJolt from './utils/jolt-physics.wasm-compat.js';
 import AudioVisualizer from './utils/play_karaoke.js';
-import lyricDetector from './utils/lyricDetector.js';
+//import lyricDetector from './utils/lyricDetector.js';
 import * as THREE from 'three';
 import editScene from './utils/edit_scene.js';
 new AudioVisualizer()
