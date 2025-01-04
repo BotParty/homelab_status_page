@@ -8,6 +8,7 @@ import { gsap } from 'gsap'
  */
 
 function renderHelmet() {
+    return
 const loadingBarElement = document.querySelector('.loading-bar')
 
 let sceneReady = false

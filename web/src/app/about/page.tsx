@@ -22,11 +22,7 @@ export default function About() {
 
       {/* Optional: Add a contact/resume button */}
       <div className="mt-12">
-        {/* <Button
-          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
-          Get in Touch
-        </Button> */}
+        my phone number is 713-677-3668
       </div>
     </div>
   )

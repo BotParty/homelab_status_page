@@ -28,11 +28,11 @@ export default function Header() {
             <a href="/robotics-odyssey" className="hover:text-[#8b98e8] underline">Self-teaching Robotics info-course</a>
           </div>
         </div>
-        {/* <img
+        <img
           src="/personal/friends.jpg"
           alt="Profile"
           className="w-32 h-32 rounded-lg"
-        /> */}
+        />
       </div>
     )
   }
