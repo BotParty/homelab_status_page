@@ -5,10 +5,7 @@ import markdownStyles from "./markdown-styles.module.css";
 import TextEditor from '../../../components/texteditor'
 import { remark } from "remark";
 import html from "remark-html";
-export const metadata = {
-  title: 'Dynamicland 2025',
-  description: 'The future of computing and human collaboration'
-}
+
 
 
 const content = `
