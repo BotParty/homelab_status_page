@@ -46,7 +46,7 @@ const html = `
   </body>
 </html>
 `;
-
+  
 async function display_supabase_data() {
   return new Response(JSON.stringify({ data: await getAllKV() }), {
     headers: {
