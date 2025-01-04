@@ -2,6 +2,10 @@ import * as THREE from 'three';
 import { WebGPURenderer, PerspectiveCamera, Scene, DirectionalLight } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+
+
+
+// import postprocessing from './postprocessing.js';
 /**
  * Initializes renderer, camera, scene, and controls.
  * @param {HTMLCanvasElement} canvas - The canvas to render on.
@@ -11,6 +15,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
  */
 export function initGraphics(canvas, container, size) {
   const renderer = new WebGPURenderer({ canvas });
+  window.three = THREE;
   renderer.shadowMap.enabled = true;
   renderer.toneMapping = THREE.ReinhardToneMapping;
   renderer.toneMappingExposure = 1.0;

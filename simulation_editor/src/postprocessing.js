@@ -5,7 +5,7 @@ import * as TSL from 'three/tsl';
 import Transpiler from 'three/addons/transpiler/Transpiler.js';
 import ShaderToyDecoder from 'three/addons/transpiler/ShaderToyDecoder.js';
 import TSLEncoder from 'three/addons/transpiler/TSLEncoder.js';
-import { pixelationPass } from 'three/addons/tsl/display/PixelationPassNode.js';
+//import { pixelationPass } from 'three/addons/tsl/display/PixelationPassNode.js';
 
 
 		const shader1 = `
@@ -230,10 +230,6 @@ import { pixelationPass } from 'three/addons/tsl/display/PixelationPassNode.js';
 				shaderToy2Node.parse( example2Code );
 
 				
-
-				camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
-				scene = new THREE.Scene();
-
 				const geometry = new THREE.PlaneGeometry( 2, 2 );
 
 				const material = new THREE.MeshBasicNodeMaterial();
@@ -244,14 +240,11 @@ import { pixelationPass } from 'three/addons/tsl/display/PixelationPassNode.js';
 
 				
 
-				//renderer = new THREE.WebGPURenderer( { antialias: true } );
 				renderer.setPixelRatio( dpr );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.setAnimationLoop( animate );
 				renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-				//document.body.appendChild( renderer.domElement );
 
-				//window.addEventListener( 'resize', onWindowResize );
 
 			}
 
