@@ -1,10 +1,13 @@
 'use client';
 import { ArticleLayout } from '../../../components/ArticleLayout';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import markdownStyles from "./markdown-styles.module.css";
 import TextEditor from '../../../components/texteditor'
 import { remark } from "remark";
 import html from "remark-html";
+
+
+import content from './content.mdx'
 
 const article = {
   title: "Dynamicland is the greatest invention of the century",
@@ -13,7 +16,6 @@ const article = {
   author: "Adnan Wahab and rena kaufman",
   description: "Dynamicland is the greatest invention of the century",
 }
-const children = <div>Hello</div> 
 
 async function markdownToHtml(markdown: string) {
   const result = await remark().use(html).process(markdown);
@@ -27,6 +29,16 @@ image.png
 export default function Blog() {
   // 1. Use state to determine whether to show the editor
   const [showEditor, setShowEditor] = useState(false);
+  const [htmlContent, setHtmlContent] = useState('');
+  const [processedContent, setProcessedContent] = useState('');
+
+  // Add useEffect to load and process markdown
+  useEffect(() => {
+    // Process the imported content
+    markdownToHtml(content)
+      .then(result => setProcessedContent(result))
+      .catch(console.error);
+  }, []);
 
   return (
     <div id="__next">
@@ -101,29 +113,20 @@ export default function Blog() {
 
               {/* Post info */}
               <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
-                <div>
-                  <h3 className="mb-4 text-4xl lg:text-6xl leading-tight">
-                    <a className="hover:underline" href="/posts/dynamic-routing">
-                      Dynamicland is the greatest invention of the century
-                    </a>
-                  </h3>
-                  <div className="mb-4 md:mb-0 text-lg">
-                    <time dateTime="2025-01-03T05:35:07.322Z">January 3, 2025</time>
-                  </div>
-                </div>
+     
                 <div>
                   <p className="text-lg leading-relaxed mb-4">
                     {/* Body */}
                   </p>
                   <div
                     className={markdownStyles["markdown"]}
-                    dangerouslySetInnerHTML={{ __html: dynamicland_is_great }}
+                    dangerouslySetInnerHTML={{ __html: processedContent }}
                   />
 
                   <div className="flex items-center">
                     <div className="text-xl font-bold">By Adnan Wahab</div>
 
-                    <ArticleLayout article={article} children={children} />
+                    <ArticleLayout article={article} children={processedContent} />
                   </div>
                 </div>
               </div>

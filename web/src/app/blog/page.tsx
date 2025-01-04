@@ -35,7 +35,7 @@ export default function BlogPage() {
           </article>
   
           {/* Blog Post 2 */}
-          <article className="group hidden">
+          <article className="group">
             <div className="flex items-baseline gap-6">
               <time className="text-gray-500 shrink-0">September 2, 2022</time>
               <div>
