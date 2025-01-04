@@ -41,7 +41,7 @@
     "three": "^0.171.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.42.1",
+    "babel-loader": "^9.2.1",
     "@types/d3": "^7.4.3",
     "@types/node": "^20",
     "@types/react": "^19",
