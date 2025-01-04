@@ -1,4 +1,13 @@
 
+import * as THREE from 'three/webgpu';
+import * as TSL from 'three/tsl';
+
+import Transpiler from 'three/addons/transpiler/Transpiler.js';
+import ShaderToyDecoder from 'three/addons/transpiler/ShaderToyDecoder.js';
+import TSLEncoder from 'three/addons/transpiler/TSLEncoder.js';
+import { pixelationPass } from 'three/addons/tsl/display/PixelationPassNode.js';
+
+
 		const shader1 = `
 
 			// https://www.shadertoy.com/view/Mt2SzR
@@ -143,12 +152,7 @@
 `
 
 
-			import * as THREE from 'three/webgpu';
-			import * as TSL from 'three/tsl';
-
-			import Transpiler from 'three/addons/transpiler/Transpiler.js';
-			import ShaderToyDecoder from 'three/addons/transpiler/ShaderToyDecoder.js';
-			import TSLEncoder from 'three/addons/transpiler/TSLEncoder.js';
+		
 
 			class ShaderToyNode extends THREE.Node {
 
@@ -209,15 +213,15 @@
 
 			}
 
-			let renderer, camera, scene;
+
 			const dpr = window.devicePixelRatio;
 
-			init();
+		
 
-			function init() {
+			function postprocessing(renderer, camera, scene) {
 
-				const example1Code = document.getElementById( 'example1' ).textContent;
-				const example2Code = document.getElementById( 'example2' ).textContent;
+				const example1Code = shader1;
+				const example2Code = shader2;
 
 				const shaderToy1Node = new ShaderToyNode();
 				shaderToy1Node.parse( example1Code );
@@ -225,7 +229,7 @@
 				const shaderToy2Node = new ShaderToyNode();
 				shaderToy2Node.parse( example2Code );
 
-				//
+				
 
 				camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 				scene = new THREE.Scene();
@@ -238,30 +242,17 @@
 				const quad = new THREE.Mesh( geometry, material );
 				scene.add( quad );
 
-				//
+				
 
-				renderer = new THREE.WebGPURenderer( { antialias: true } );
+				//renderer = new THREE.WebGPURenderer( { antialias: true } );
 				renderer.setPixelRatio( dpr );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.setAnimationLoop( animate );
 				renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-				document.body.appendChild( renderer.domElement );
+				//document.body.appendChild( renderer.domElement );
 
-				window.addEventListener( 'resize', onWindowResize );
-
-			}
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				//window.addEventListener( 'resize', onWindowResize );
 
 			}
 
-			function animate() {
-
-				renderer.render( scene, camera );
-
-			}
+export default postprocessing;

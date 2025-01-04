@@ -37,7 +37,7 @@ const html = `
 
     <button>Execuute playwright script</button>
     <script>
-    document.querySelector('button').addEventListener('click', () => {
+    document.querySelector('button').addEventListener('click', () =>   {
       fetch('/playwright').then(res => res.text())
       .then((text) => console.log(text))
     
