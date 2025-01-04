@@ -12,13 +12,16 @@ import AudioVisualizer from './utils/play_karaoke.js';
 import * as THREE from 'three';
 import editScene from './utils/edit_scene.js';
 new AudioVisualizer()
-
+//import tsl from 'three/tsl'
+import { setupLighting } from './lighting.js';
 
 
 const size = { width: 900, height: 500 };
 const container = document.getElementById('container');
 const canvas = document.querySelector('canvas');
 const { renderer, scene, camera, controls } = initGraphics(canvas, container, size);
+
+setupLighting(scene);
 
 const inputState = {
   forwardPressed: false,
