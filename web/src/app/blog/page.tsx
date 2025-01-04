@@ -40,8 +40,8 @@ export default function BlogPage() {
               <time className="text-gray-500 shrink-0">September 2, 2022</time>
               <div>
                 <h2 className="text-xl font-semibold mb-3">
-                  <a href="/blog/rtings_for_robotics" className="hover:text-emerald-400 transition-colors">
-                    RTings for robotics
+                  <a href="/blog/health_tensor_hospital_of_the_future" className="hover:text-emerald-400 transition-colors">
+                    Health Tensor is the Hospital of the Future
                   </a>
                 </h2>
                 {/* <p className="text-gray-400 mb-3">
