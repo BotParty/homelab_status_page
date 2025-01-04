@@ -10,6 +10,8 @@ import initJolt from './utils/jolt-physics.wasm-compat.js';
 import AudioVisualizer from './utils/play_karaoke.js';
 import lyricDetector from './utils/lyricDetector.js';
 import * as THREE from 'three';
+import editScene from './utils/edit_scene.js';
+new AudioVisualizer()
 
 
 const size = { width: 900, height: 500 };
@@ -37,8 +39,9 @@ initJolt().then(async (Jolt) => {
   const dynamicObjects = [];
   // // 4) Set up your environment, spawn character, define onExampleUpdate
   setupExample(Jolt, bodyInterface, scene, dynamicObjects, onExampleUpdateRef);
+  //editScene(scene);
   // // 6) Prepare user input
-  // handleUserInput(inputState);
+  handleUserInput(inputState);
   // // 7) Provide a custom update function that calls the function from onExampleUpdateRef
   function onExampleUpdate(time, deltaTime) {
     // If setupExample assigned a function, call it

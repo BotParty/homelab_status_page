@@ -75,3 +75,5 @@ const editScene = _.once(function(){
     // Keep a reference to scene on the window object
     window.scene = scene;
   });
+
+  export default editScene;
