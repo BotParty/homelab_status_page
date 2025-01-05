@@ -1,7 +1,6 @@
 # Gamekit for Dynamicland - realtime scientific art creation - colloborative thinking space
 ## Twitch plays robot - 2025 innate.bot / nanosaur.ai / hello-robot.com
 ## Dynamicland will improve scientifc thinking by 100x in the next 10 years
-
 ## Rendering Three.js + unity webgpu
 ## raytracing webGPU - add to all browsers - rustSDK - reference implementation
 ## jetson Container + Jetson Inference
