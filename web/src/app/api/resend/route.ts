@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     
     const { data, error } = await resend.emails.send({
       from: 'daily_reminder_2025@michael-pollan.app',
-      to: body.to || ["eggnog.wahab@gmail.com"], // Use data from request or fallback
+      to: body.to , // Use data from request or fallback
       subject: body.subject, 
       html: body.html,
     });
