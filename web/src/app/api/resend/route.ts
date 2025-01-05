@@ -37,4 +37,42 @@ export async function POST(request: Request) {
   }
 }
 
+export async function GET(request: Request) {
+  try {
+    // Handle OPTIONS request (preflight)
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers });
+    }
+
+    // Get query parameters from URL
+    const url = new URL(request.url);
+    const to = url.searchParams.get('to');
+    const subject = url.searchParams.get('subject');
+    const html = url.searchParams.get('html');
+
+    // Validate required parameters
+    if (!to || !subject || !html) {
+      return Response.json(
+        { error: 'Missing required parameters' },
+        { status: 400, headers }
+      );
+    }
+
+    const { data, error } = await resend.emails.send({
+      from: 'daily_reminder_2025@michael-pollan.app',
+      to,
+      subject,
+      html,
+    });
+
+    if (error) {
+      return Response.json({ error }, { status: 500, headers });
+    }
+
+    return Response.json({ data }, { headers });
+  } catch (error) {
+    return Response.json({ error }, { status: 500, headers });
+  }
+}
+
 
