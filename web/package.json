@@ -31,6 +31,7 @@
     "livekit-server-sdk": "^2.9.4",
     "mapbox-gl": "^3.9.0",
     "next": "15.1.1",
+    "nextjs-cors": "^2.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "^7.1.8",

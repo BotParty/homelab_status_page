@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import nextCors from 'nextjs-cors';
 
 const resend = new Resend("re_VisebMXb_GgPww5wnbMNGUdibTYx8HtcX");
 const headers = {
@@ -10,13 +11,14 @@ const headers = {
 
 
 export async function POST(request: Request) {
-  try {
-    // Add CORS headers
+
+    await nextCors(req, res, {
+      // Options
+      methods: ['GET', 'POST', 'OPTIONS'],
+      origin: '*',
+      optionsSuccessStatus: 200, // For legacy browser support
+    });
   
-    // Handle OPTIONS request (preflight)
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers });
-    }
 
     const body = await request.json();
     
@@ -27,14 +29,9 @@ export async function POST(request: Request) {
       html: body.html,
     });
 
-    if (error) {
-      return Response.json({ error }, { status: 500, headers });
-    }
 
     return Response.json({ data }, { headers });
-  } catch (error) {
-    return Response.json({ error }, { status: 500, headers });
-  }
+
 }
 
 export async function GET(request: Request) {
