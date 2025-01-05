@@ -13,7 +13,7 @@ export default function SimulationEditor() {
       }}
     >
       <iframe
-        src="https://musicgame2026.netlify.app"
+        src="https://musicgame2026.netlify.app/"
         width="100%"
         height="100%"
         style={{
