@@ -46,9 +46,9 @@ export async function GET(request: Request) {
 
     // Get query parameters from URL
     const url = new URL(request.url);
-    const to = url.searchParams.get('to');
-    const subject = url.searchParams.get('subject');
-    const html = url.searchParams.get('html');
+    const to = url.searchParams.get('to') || ["eggnog.wahab@gmail.com"]
+    const subject = url.searchParams.get('subject') || "Test"
+    const html = url.searchParams.get('html') || "<p>Hello World</p>"
 
     // Validate required parameters
     if (!to || !subject || !html) {
