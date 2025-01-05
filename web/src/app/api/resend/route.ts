@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import nextCors from 'nextjs-cors';
+
 
 const resend = new Resend("re_VisebMXb_GgPww5wnbMNGUdibTYx8HtcX");
 const headers = {
@@ -13,10 +13,10 @@ const headers = {
 export async function POST(request: Request) {
 
 
+  const body = await request.json();
 
-    const body = await request.json();
-    
-    const { data, error } = await resend.emails.send({
+
+  const { data, error } = await resend.emails.send({
       from: 'daily_reminder_2025@michael-pollan.app',
       to: body.to,
       subject: body.subject, 
