@@ -12,13 +12,7 @@ const headers = {
 
 export async function POST(request: Request) {
 
-    await nextCors(req, res, {
-      // Options
-      methods: ['GET', 'POST', 'OPTIONS'],
-      origin: '*',
-      optionsSuccessStatus: 200, // For legacy browser support
-    });
-  
+
 
     const body = await request.json();
     
