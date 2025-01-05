@@ -8,8 +8,6 @@
     "build": "vite build",
     "deploy": "vite build && npx wrangler pages deploy dist",
     "server_start": "bun run server.js --watch",
-    "playwright_snapshot_musicgame2025.netlify.app": "npx playwright screenshot https://musicgame2025.netlify.app foo.png",
-    "tailscale_server_5173": "sudo tailscale serve  5173",
     "publish": "npm run build && ntl deploy --prod"
   },
   "devDependencies": {

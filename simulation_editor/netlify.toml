@@ -1,5 +1,5 @@
 [build]
-base = "/simulation_editor/"
+base = "/simulation_editor/src"
 publish = "dist"
 command = "npm run build"
 
