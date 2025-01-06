@@ -4,7 +4,7 @@ export default function BlogPage() {
         {/* Header */}
         <header className="mb-16">
           <h1 className="text-5xl font-bold leading-tight mb-6">
-            Writing on the future of robotics, computer graphics, and infrastructure.
+            Writing on computer graphics,machine learning, and infrastructure.
           </h1>
           {/* <p className="text-gray-400 text-lg">
             All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order.
@@ -35,7 +35,7 @@ export default function BlogPage() {
           </article>
   
           {/* Blog Post 2 */}
-          <article className="group">
+          <article className="group hidden">
             <div className="flex items-baseline gap-6">
               <time className="text-gray-500 shrink-0">September 2, 2022</time>
               <div>
