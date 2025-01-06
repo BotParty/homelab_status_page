@@ -2,9 +2,10 @@
 import { serve } from "bun";
 import { createClient } from "@supabase/supabase-js";
 
-
+import { Resend } from 'resend';
 
 import execSimplePlaywright from './simple-playwright-agent'
+const resend = new Resend("re_VisebMXb_GgPww5wnbMNGUdibTYx8HtcX");
 
 const supabaseUrl =
   process.env.SUPABASE_URL || "https://ewkxvbgbzikwwudriebh.supabase.co";
@@ -22,7 +23,7 @@ const getAllKV = async () => {
     .join("");
 };
 
-const html = `
+const bun_server_ui = `
 <html>
   <body>
     <h1>Hello World 2025 jan 4</h1>
@@ -35,14 +36,15 @@ const html = `
 
 
 
-    <button>Execuute playwright script</button>
+    <button id="playwright">Execuute playwright script</button>
     <script>
-    document.querySelector('button').addEventListener('click', () =>   {
+    document.querySelector('#playwright').addEventListener('click', () => {
       fetch('/playwright').then(res => res.text())
       .then((text) => console.log(text))
     
     })
     </script>
+
   </body>
 </html>
 `;
@@ -68,8 +70,7 @@ serve({
       });
     }
 
-
-    return new Response(html, {
+    return new Response(bun_server_ui, {
       headers: {
         "Content-Type": "text/html",
       },

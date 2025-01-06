@@ -40,18 +40,7 @@ export function initGraphics(canvas, container, size) {
 
 
 
-  const textureLoader = new THREE.TextureLoader();
-textureLoader.load( 'textures/hardwood2_diffuse.jpg', function ( map ) {
 
-  map.wrapS = THREE.RepeatWrapping;
-  map.wrapT = THREE.RepeatWrapping;
-  map.anisotropy = 16;
-  map.repeat.set( 4, 4 );
-  map.colorSpace = THREE.SRGBColorSpace;
-  groundMaterial.map = map;
-  groundMaterial.needsUpdate = true;
-
-} );
 
 
 const cubeTextureLoader = new THREE.CubeTextureLoader();

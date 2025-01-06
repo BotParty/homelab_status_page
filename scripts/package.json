@@ -16,7 +16,9 @@
     "@1password/sdk": "^0.1.5",
     "@playwright/test": "^1.49.1",
     "@supabase/supabase-js": "^2.47.10",
+    "htl": "^0.3.1",
     "openai": "^4.77.0",
+    "resend": "^4.0.1",
     "retell-sdk": "^4.11.0"
   }
 }
