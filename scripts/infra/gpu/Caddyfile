@@ -1,52 +1,14 @@
 {
 	email adnan.f.wahab@gmail.com
-	admin :2019
+	admin localhost:2019
 	debug
-}
-
-:80 {
-	respond "Hello from Caddy with admin enabled!"
-}
-
-files.learn-math.org {
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1
-	}
-	root * /home/adnan/derp/support_bret
-	file_server browse
-	header Access-Control-Allow-Origin *
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type"
-}
-
-jupyter.learn-math.org {
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1
-	}
-	reverse_proxy localhost:8888
-	header Access-Control-Allow-Origin *
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type"
+	acme_ca https://acme.zerossl.com/v2/DV90
+	acme_dns cloudflare "NkMrF1e_xtqtSAEDvVPOXPVUa_VwxhBeNeKBVzxB"
 }
 
 learn-math.org {
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1
-	}
-
 	route /status_page {
 		respond "status page"
-	}
-
-	route /files {
-		root * /home/adnan/homelab
-		file_server browse
-		header Access-Control-Allow-Origin *
-		header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-		header Access-Control-Allow-Headers "Content-Type"
 	}
 
 	route /* {
@@ -62,6 +24,21 @@ learn-math.org {
 		}
 	}
 
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+}
+
+files.learn-math.org {
+	root * /home/adnan/derp/support_bret
+	file_server browse
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type"
+}
+
+jupyter.learn-math.org {
+	reverse_proxy localhost:8888
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
