@@ -1,11 +1,7 @@
-// server.js
+
 import { serve } from "bun";
 import { createClient } from "@supabase/supabase-js";
 
-import { Resend } from 'resend';
-
-import execSimplePlaywright from './simple-playwright-agent'
-const resend = new Resend("re_VisebMXb_GgPww5wnbMNGUdibTYx8HtcX");
 
 const supabaseUrl =
   process.env.SUPABASE_URL || "https://ewkxvbgbzikwwudriebh.supabase.co";
@@ -37,38 +33,19 @@ const bun_server_ui = `
 
 
     <button id="playwright">Execuute playwright script</button>
-    <script>
-    document.querySelector('#playwright').addEventListener('click', () => {
-      fetch('/playwright').then(res => res.text())
-      .then((text) => console.log(text))
-    
-    })
-    </script>
+
 
   </body>
 </html>
 `;
   
-async function display_supabase_data() {
-  return new Response(JSON.stringify({ data: await getAllKV() }), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-}
+
 
 serve({
   port: 8000,
   async fetch(req) {
     const url = new URL(req.url);
-    if (url.pathname === "/playwright") { 
-      const data = await execSimplePlaywright()
-      return new Response(JSON.stringify(data), {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
+
 
     return new Response(bun_server_ui, {
       headers: {

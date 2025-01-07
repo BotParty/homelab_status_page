@@ -2,14 +2,24 @@ import fs from 'fs';
 import { firefox, type BrowserContext } from 'playwright';
 import ollama from 'ollama';
 
+// async function connectToExistingBrowser() {
+//   // Launch Firefox in debugging mode (Firefox doesn't support CDP like Chrome)
+//   const browserContext = await firefox.launch({
+//     headless: false,
+//     args: ['--remote-debugging-port=9222']
+//   });
+//   return browserContext;
+// }
+
+import { chromium } from 'playwright';
+
 async function connectToExistingBrowser() {
-  // Launch Firefox in debugging mode (Firefox doesn't support CDP like Chrome)
-  const browserContext = await firefox.launch({
-    headless: false,
-    args: ['--remote-debugging-port=9222']
-  });
-  return browserContext;
+  // Connect to existing Chrome instance running with remote debugging
+  const browserContext = await chromium.connectOverCDP('http://localhost:9222');
+  const context = browserContext.contexts()[0]; // Get the default context
+  return context;
 }
+
 
 async function navigateToLinkedIn(context: BrowserContext) {
   // Create a new page in the existing browser context
@@ -107,11 +117,7 @@ async function analyzeLoginPageWithLlama(html: string) {
     model: 'llama3.2',
     messages: [{
       role: 'user',
-      content: `Analyze this LinkedIn login page HTML and return JSON with these selectors:
-      - emailSignInButton: selector for "Sign in with email" button
-      - emailInput: selector for email input field
-      - passwordInput: selector for password input field
-      - submitButton: selector for final sign in button
+      content: `analyze this html string and then generate the playwright selectors and code to login and navigate to the next page.
       HTML: ${html}`
     }]
   });
@@ -125,6 +131,7 @@ async function loginToLinkedIn(page: Page) {
   
   // Get page HTML and analyze with llama
   const html = await page.content();
+  console.log('html', html)
   const selectors = await analyzeLoginPageWithLlama(html);
   console.log('selectors', selectors)
   // Click "Sign in with email" if present
