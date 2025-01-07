@@ -9,6 +9,14 @@
 # 7. bun.sh + deno2 for webGPU + jupyter to observablehq integration
 # https://playwright.dev/docs/api/class-playwright
 
+setup_virtualization(){
+    sudo apt update
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager
+sudo usermod -aG libvirt $USER
+virt-manager
+
+} 
+
 
 setup_webserver() {
     go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
