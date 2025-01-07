@@ -19,6 +19,7 @@ virt-manager
 
 
 setup_webserver() {
+    curl -fsSL https://ollama.com/install.sh | sh
     go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 
     # Build Caddy with the porkbun module

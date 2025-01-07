@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --watch index.ts",
-        "test": "bun test",
+    "test": "bun test",
     "test:watch": "bun test --watch"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@supabase/supabase-js": "^2.47.10",
     "htl": "^0.3.1",
     "livekit-server-sdk": "^2.9.5",
+    "ollama": "^0.5.11",
     "openai": "^4.77.0",
     "resend": "^4.0.1",
     "retell-sdk": "^4.11.0"
