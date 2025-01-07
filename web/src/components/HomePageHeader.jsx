@@ -18,7 +18,7 @@ export default function Header() {
             {process.env.NODE_ENV === 'development' && (
               <a href="/tools" className="hover:text-[#8b98e8]">tools</a>
             )}
-            <a href="/about" className="hover:text-[#8b98e8]">about</a>
+            {/* <a href="/about" className="hover:text-[#8b98e8]">about</a> */}
   
           </div>
           <div className="text-sm text-gray-400">
