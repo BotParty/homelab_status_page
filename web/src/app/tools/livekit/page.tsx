@@ -39,7 +39,7 @@ export default function Page() {
   return (
     <LiveKitRoom
       video={false}
-      audio={true}
+      audio={false}
       token={token}
       screen={true}
       serverUrl={"wss://omnissiah-university-kmuz0plz.livekit.cloud"}
