@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { firefox, type BrowserContext } from 'playwright';
 import ollama from 'ollama';
 
@@ -16,6 +17,7 @@ async function navigateToLinkedIn(context: BrowserContext) {
   
   // Navigate to LinkedIn
   await page.goto('https://www.linkedin.com');
+
   
   // Basic wait to ensure page loads
   await page.waitForLoadState('networkidle');
@@ -23,9 +25,7 @@ async function navigateToLinkedIn(context: BrowserContext) {
   return page;
 }
 
-// import { firefox, type BrowserContext, type Page } from 'playwright';
-// import ollama from 'ollama';
-// import * as fs from 'fs/promises';
+
 
 interface EmployeeProfile {
   name: string;
@@ -102,13 +102,64 @@ async function scrapeWaymoEmployees(page: Page) {
   }
 }
 
+async function analyzeLoginPageWithLlama(html: string) {
+  const response = await ollama.chat({
+    model: 'llama3.2',
+    messages: [{
+      role: 'user',
+      content: `Analyze this LinkedIn login page HTML and return JSON with these selectors:
+      - emailSignInButton: selector for "Sign in with email" button
+      - emailInput: selector for email input field
+      - passwordInput: selector for password input field
+      - submitButton: selector for final sign in button
+      HTML: ${html}`
+    }]
+  });
+  
+  return response.message.content
+}
+
+async function loginToLinkedIn(page: Page) {
+  // Wait for initial page load
+  await page.waitForLoadState('networkidle');
+  
+  // Get page HTML and analyze with llama
+  const html = await page.content();
+  const selectors = await analyzeLoginPageWithLlama(html);
+  console.log('selectors', selectors)
+  // Click "Sign in with email" if present
+  try {
+    await page.click(selectors.emailSignInButton);
+    await page.waitForTimeout(1000); // Small delay for transition
+  } catch (e) {
+    console.log('No email sign-in button found, proceeding with direct login');
+  }
+
+  // Fill in credentials
+  await page.fill(selectors.emailInput, 'mail@adnanwahab.com');
+  await page.fill(selectors.passwordInput, 'sicp.123');
+  
+  // Click submit and wait for navigation
+  await page.click(selectors.submitButton);
+  await page.waitForNavigation({ waitUntil: 'networkidle' });
+  
+  // Verify login was successful
+  const currentUrl = page.url();
+  if (!currentUrl.includes('feed')) {
+    throw new Error('Login appears to have failed');
+  }
+}
+
 async function main() {
   try {
     const context = await connectToExistingBrowser();
     const page = await navigateToLinkedIn(context);
     
-    // Make sure you're logged in first (manual step)
-    await page.waitForTimeout(5000); // Give time to log in if needed
+    // Add login step before proceeding
+    await loginToLinkedIn(page);
+    
+    // Remove manual login wait since we now handle it programmatically
+    // await page.waitForTimeout(5000);
     
     await scrapeWaymoEmployees(page);
     
@@ -118,7 +169,7 @@ async function main() {
   }
 }
 
-main();
+main().catch(console.error);
 
 
 //google-chrome --remote-debugging-port=9222
