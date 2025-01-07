@@ -45,7 +45,7 @@ export default function Page() {
       serverUrl={"wss://omnissiah-university-kmuz0plz.livekit.cloud"}
       // Use the default LiveKit theme for nice styles.
       data-lk-theme="default"
-      style={{ height: '100dvh' }}
+      style={{ height: '50vh' }}
     >
       {/* Your custom component with basic video conferencing functionality. */}
       <MyVideoConference />
@@ -53,7 +53,7 @@ export default function Page() {
       <RoomAudioRenderer />
       {/* Controls for the user to start/stop audio, video, and screen
       share tracks and to leave the room. */}
-      {/* <ControlBar /> */}
+      <ControlBar />
     </LiveKitRoom>
   );
 }
