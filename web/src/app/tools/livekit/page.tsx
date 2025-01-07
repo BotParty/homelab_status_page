@@ -17,7 +17,7 @@ import { Track } from 'livekit-client';
 export default function Page() {
   // TODO: get user input for room and name
   const room = 'quickstart-room';
-  const name = 'quickstart-user';
+  const name = 'quickstart-user' + Math.random().toString(36).substring(2, 15);
   const [token, setToken] = useState('');
 
   useEffect(() => {
