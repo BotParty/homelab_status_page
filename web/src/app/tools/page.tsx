@@ -3,9 +3,9 @@ export default function Tools() {
     <div>
       Tools
       <ul>
-        <li>
+        {/* <li>
           <a href="/tools/supabase">discord</a>
-        </li>
+        </li> */}
 
         <li>
           <a href="/tools/supabase">supabase</a>
@@ -15,18 +15,18 @@ export default function Tools() {
           <a href="/tools/livekit">livekit</a>
         </li>
 
-        <li>
+        {/* <li>
           <a href="/tools/group_chat">group chat</a>
-        </li>
+        </li> */}
 
-        <li>
+        {/* <li>
           <a href="/tools/git_visualizer">git visualizer</a>
-        </li>
+        </li> */}
 
 
-        <li>
+        {/* <li>
           <a href="/tools/tailscale">tailscale</a>
-        </li>
+        </li> */}
       </ul>
     </div>
   )

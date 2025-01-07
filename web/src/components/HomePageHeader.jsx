@@ -15,11 +15,8 @@ export default function Header() {
             <a href="https://linkedin.com/in/adnanwahab" className="hover:text-[#8b98e8]">linkedin</a>
   
             <a href="/blog" className="hover:text-[#8b98e8]">blog</a>
-            {process.env.NODE_ENV === 'development' && (
               <a href="/tools" className="hover:text-[#8b98e8]">tools</a>
-            )}
-            {/* <a href="/about" className="hover:text-[#8b98e8]">about</a> */}
-  
+     
           </div>
           <div className="text-sm text-gray-400">
             <a href="/simulation_game" className="hover:text-[#8b98e8] underline">Play interactive music physics game</a>

@@ -38,9 +38,10 @@ export default function Page() {
 
   return (
     <LiveKitRoom
-      video={true}
+      video={false}
       audio={true}
       token={token}
+      screen={true}
       serverUrl={"wss://omnissiah-university-kmuz0plz.livekit.cloud"}
       // Use the default LiveKit theme for nice styles.
       data-lk-theme="default"
@@ -52,7 +53,7 @@ export default function Page() {
       <RoomAudioRenderer />
       {/* Controls for the user to start/stop audio, video, and screen
       share tracks and to leave the room. */}
-      <ControlBar />
+      {/* <ControlBar /> */}
     </LiveKitRoom>
   );
 }
