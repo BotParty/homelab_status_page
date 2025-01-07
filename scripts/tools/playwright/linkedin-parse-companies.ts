@@ -1,8 +1,11 @@
-import { chromium, type BrowserContext } from 'playwright';
+import { firefox, type BrowserContext } from 'playwright';
 
 async function connectToExistingBrowser() {
-  // Connect to the existing Chrome instance
-  const browserContext = await chromium.connectOverCDP('http://localhost:9222');
+  // Launch Firefox in debugging mode (Firefox doesn't support CDP like Chrome)
+  const browserContext = await firefox.launch({
+    headless: false,
+    args: ['--remote-debugging-port=9222']
+  });
   return browserContext;
 }
 
@@ -41,7 +44,3 @@ main();
 //google-chrome --remote-debugging-port=9222
 
 
-google-chrome \
---remote-debugging-port=9222 \
---user-data-dir=/tmp/chrome-profile \
---disable-web-security
