@@ -1,4 +1,7 @@
 # Gamekit for Dynamicland - realtime scientific art creation - colloborative thinking space
+
+https://spectrum.ieee.org/xerox-parc --- find 25 from parc - pay homage
+
 ## Twitch plays robot - 2025 innate.bot / nanosaur.ai / hello-robot.com
 ## Dynamicland will improve scientifc thinking by 100x in the next 10 years
 ## Rendering Three.js + unity webgpu
@@ -44,3 +47,4 @@ games, maps, demos, 50 three.js demos / games, d3
 blog/ - 7 articles - dynamicland
 https://github.com/tldraw/tldraw
 docker run -it ghcr.io/observablehq/framework-runtime
+cloudflared tunnel create caddy-tunnel

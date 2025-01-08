@@ -1,45 +1,99 @@
 {
+	# Global Options
 	email adnan.f.wahab@gmail.com
 	admin localhost:2019
 	debug
-	acme_ca https://acme.zerossl.com/v2/DV90
-	acme_dns cloudflare "NkMrF1e_xtqtSAEDvVPOXPVUa_VwxhBeNeKBVzxB"
+
+	# If you want to use ZeroSSL's ACME endpoint:
+	#acme_ca https://acme.zerossl.com/v2/DV90
+
+	# Use Cloudflare DNS for certificate challenges.
+	# Replace with your real API token.
+	#acme_dns cloudflare "NkMrF1e_xtqtSAEDvVPOXPVUa_VwxhBeNeKBVzxB"
+	acme_dns porkbun {
+		api_key pk1_62468de2630bc187d931b5fbe492804aeef44fb1b4bd76a6a0c329aa1f7cc3b0
+		api_secret_key sk1_0a7503fccd9fa51c59cfdef8e316271ab9b29934e532e25bf62446c9f6b54f24
+	}
+	# Tailscale configuration
+	# (caddy-tailscale plugin)
+	tailscale {
+		# Your Tailscale auth key
+		auth_key tskey-auth-kcLGhDDaXi11CNTRL-PYfniXrHQpdh5EGeFFBJodBReXa8mZoD
+
+		# If you're using Tailscale's default control server, omit this or keep blank
+		#control_url
+
+		# Whether the node is ephemeral or not
+		ephemeral false
+
+		# Where to store Tailscale state
+		# e.g. /var/lib/tailscale or /home/adnan/tailscale
+		#state_dir /home/adnan/tailscale_state
+
+		# Enable Tailscale Web UI
+		webui true
+
+		# (Optionally) customize node-specific overrides
+		# learnmath-node {
+		#    auth_key <if different>
+		#    hostname learn-math-tsnode
+		#    ephemeral false
+		#    state_dir /home/adnan/tailscale_state/learnmath-node
+		#    webui true
+		# }
+	}
 }
 
-learn-math.org {
+# ------------------------------------------------------------------
+#  Public Domain: learn-math.org
+# ------------------------------------------------------------------
+cooperative-robotics.com {
+	# Simple status page
 	route /status_page {
 		respond "status page"
 	}
 
+	# Reverse proxy to your local app (bun, echo.go, etc.)
 	route /* {
 		reverse_proxy localhost:8000
 	}
 
-	# Add logging for this site
+	# Logging
 	log {
-		output file /home/adnan/derp/log/caddy/hashirama.blog.log {
+		output file /home/adnan/derp/log/caddy/learn-math.org.log {
 			roll_size 10MiB
 			roll_keep 5
 			roll_gzip
 		}
 	}
 
-	header Access-Control-Allow-Origin *
+	# CORS Headers
+	header Access-Control-Allow-Origin "*"
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
 }
 
-files.learn-math.org {
+# ------------------------------------------------------------------
+#  File Server: files.learn-math.org
+# ------------------------------------------------------------------
+files.cooperative-robotics.com {
 	root * /home/adnan/derp/support_bret
 	file_server browse
-	header Access-Control-Allow-Origin *
+
+	# CORS Headers
+	header Access-Control-Allow-Origin "*"
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
 }
 
-jupyter.learn-math.org {
+# ------------------------------------------------------------------
+#  Public JupyterLab: jupyter.learn-math.org
+# ------------------------------------------------------------------
+jupyter.cooperative-robotics.com {
 	reverse_proxy localhost:8888
-	header Access-Control-Allow-Origin *
+
+	# CORS Headers
+	header Access-Control-Allow-Origin "*"
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
 }

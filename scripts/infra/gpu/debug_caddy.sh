@@ -1,0 +1,1 @@
+journalctl -u caddy -f --no-pager

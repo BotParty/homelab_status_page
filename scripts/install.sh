@@ -23,8 +23,16 @@ setup_webserver() {
     go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 
     # Build Caddy with the porkbun module
-    xcaddy build \
-        --with github.com/caddy-dns/porkbun
+    # xcaddy build \
+    #     --with github.com/caddy-dns/porkbun
+    mkdir ~/caddy-build
+    cd ~/caddy-build
+    go mod init caddy-build
+
+     xcaddy build v2.8.4   --with github.com/caddy-dns/cloudflare   --with github.com/caddy-dns/porkbun   --with github.com/tailscale/caddy-tailscale
+     sudo mv ./caddy /usr/local/bin/caddy
+    sudo chmod +x /usr/local/bin/caddy
+
 }
 
 setup_agent_deps() {
