@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { firefox, type BrowserContext } from 'playwright';
 import ollama from 'ollama';
+<<<<<<< HEAD
 
 // async function connectToExistingBrowser() {
 //   // Launch Firefox in debugging mode (Firefox doesn't support CDP like Chrome)
@@ -12,6 +13,8 @@ import ollama from 'ollama';
 // }
 
 import { chromium } from 'playwright';
+=======
+>>>>>>> 068df34 (simplify)
 
 async function connectToExistingBrowser() {
   // Connect to existing Chrome instance running with remote debugging
@@ -165,12 +168,21 @@ async function main() {
     // Add login step before proceeding
     await loginToLinkedIn(page);
     
+<<<<<<< HEAD
     // Remove manual login wait since we now handle it programmatically
     // await page.waitForTimeout(5000);
     
     await scrapeWaymoEmployees(page);
     
     await page.screenshot({ path: 'screenshot.png' });
+=======
+    // Don't close the browser since we're using an existing instance
+    // Just close the page when done
+    //await page.close();
+    await page.screenshot({ path: 'screenshot.png' });
+
+
+>>>>>>> 068df34 (simplify)
   } catch (error) {
     console.error('Error:', error);
   }
