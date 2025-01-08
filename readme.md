@@ -10,7 +10,9 @@ https://spectrum.ieee.org/xerox-parc --- find 25 from parc - pay homage
 
 
 
-# observablehq - all manufaucturating plants from 2025 - 713-677-3667-3669
+# observablehq - all manufaucturating plants from 2025 - 713-677-3669
+
+perception, prediction, simulation, planning, control
 https://v2.tauri.app/distribute/
 1. Anomaly detection - observe abnormal activity
 2. Capacity planning - extrapolate non-linear trends
