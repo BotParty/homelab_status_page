@@ -7,6 +7,10 @@ https://spectrum.ieee.org/xerox-parc --- find 25 from parc - pay homage
 ## Rendering Three.js + unity webgpu
 ## raytracing webGPU - add to all browsers - rustSDK - reference implementation
 ## jetson Container + Jetson Inference
+
+
+
+# observablehq - all manufaucturating plants from 2025 - 713-677-3667-3669
 https://v2.tauri.app/distribute/
 1. Anomaly detection - observe abnormal activity
 2. Capacity planning - extrapolate non-linear trends
