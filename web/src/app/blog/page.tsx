@@ -10,7 +10,7 @@ export default function BlogPage() {
             All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order.
           </p> */}
         </header>
-  
+
         {/* Blog Posts List */}
         <div className="space-y-16">
           {/* Blog Post 1 */}
@@ -33,7 +33,7 @@ export default function BlogPage() {
               </div>
             </div>
           </article>
-  
+
           {/* Blog Post 2 */}
           <article className="group hidden">
             <div className="flex items-baseline gap-6">
@@ -54,9 +54,9 @@ export default function BlogPage() {
               </div>
             </div>
           </article>
-  
+
           {/* Blog Post 3 */}
-          {/* <article className="group">
+          <article className="group">
             <div className="flex items-baseline gap-6">
               <time className="text-gray-500 shrink-0">July 14, 2022</time>
               <div>
@@ -74,7 +74,7 @@ export default function BlogPage() {
                 </a>
               </div>
             </div>
-          </article> */}
+          </article>
         </div>
       </div>
     );
