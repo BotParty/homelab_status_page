@@ -1,18 +1,12 @@
 # Gamekit for Dynamicland - realtime scientific art creation - colloborative thinking space
-
-https://spectrum.ieee.org/xerox-parc --- find 25 from parc - pay homage
-
+https://spectrum.ieee.org/xerox-parc 
 ## Twitch plays robot - 2025 innate.bot / nanosaur.ai / hello-robot.com
 ## Dynamicland will improve scientifc thinking by 100x in the next 10 years
 ## Rendering Three.js + unity webgpu
 ## raytracing webGPU - add to all browsers - rustSDK - reference implementation
 ## jetson Container + Jetson Inference
-
-
-
 # observablehq - all manufaucturating plants from 2025 - 713-677-3669
-
-perception, prediction, simulation, planning, control
+perception, prediction, simulation, planning
 https://v2.tauri.app/distribute/
 1. Anomaly detection - observe abnormal activity
 2. Capacity planning - extrapolate non-linear trends
@@ -24,7 +18,7 @@ data = golang
 notebooks = uv
 scripts  = bun.sh
 web = next.js
-# learn-math.org - gamekit for dynamicland + botparty.org music game
+# cooperative-robotics.com - gamekit for dynamicland + botparty.org music game
 ## 20% more scientific advancement over next 5-20 years
 ## tell story of dynamicland.org
 1. https://dynamicland.org/2024/The_communal_science_lab.pdf html+webgl

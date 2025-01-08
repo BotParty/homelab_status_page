@@ -30,6 +30,7 @@ setup_webserver() {
     go mod init caddy-build
 
      xcaddy build v2.8.4   --with github.com/caddy-dns/cloudflare   --with github.com/caddy-dns/porkbun   --with github.com/tailscale/caddy-tailscale
+     
      sudo mv ./caddy /usr/local/bin/caddy
     sudo chmod +x /usr/local/bin/caddy
 
