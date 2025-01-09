@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { firefox, type BrowserContext } from 'playwright';
 import ollama from 'ollama';
-<<<<<<< HEAD
+
 
 // async function connectToExistingBrowser() {
 //   // Launch Firefox in debugging mode (Firefox doesn't support CDP like Chrome)
@@ -13,8 +13,7 @@ import ollama from 'ollama';
 // }
 
 import { chromium } from 'playwright';
-=======
->>>>>>> 068df34 (simplify)
+
 
 async function connectToExistingBrowser() {
   // Connect to existing Chrome instance running with remote debugging
@@ -27,14 +26,14 @@ async function connectToExistingBrowser() {
 async function navigateToLinkedIn(context: BrowserContext) {
   // Create a new page in the existing browser context
   const page = await context.newPage();
-  
+
   // Navigate to LinkedIn
   await page.goto('https://www.linkedin.com');
 
-  
+
   // Basic wait to ensure page loads
   await page.waitForLoadState('networkidle');
-  
+
   return page;
 }
 
@@ -81,10 +80,10 @@ async function scrapeWaymoEmployees(page: Page) {
   await page.waitForLoadState('networkidle');
 
   const employees: EmployeeProfile[] = [];
-  
+
   // Find and loop through employee profiles
   const profileCards = await page.$$('[data-test-id="employee-card"]');
-  
+
   for (const card of profileCards) {
     try {
       const profileUrl = await card.$eval('a', (el) => el.href);
@@ -108,7 +107,7 @@ async function scrapeWaymoEmployees(page: Page) {
 
       // Save progress after each profile
       await fs.writeFile('waymo-employees.json', JSON.stringify(employees, null, 2));
-      
+
     } catch (error) {
       console.error('Error processing profile:', error);
     }
@@ -124,14 +123,14 @@ async function analyzeLoginPageWithLlama(html: string) {
       HTML: ${html}`
     }]
   });
-  
+
   return response.message.content
 }
 
 async function loginToLinkedIn(page: Page) {
   // Wait for initial page load
   await page.waitForLoadState('networkidle');
-  
+
   // Get page HTML and analyze with llama
   const html = await page.content();
   console.log('html', html)
@@ -148,11 +147,11 @@ async function loginToLinkedIn(page: Page) {
   // Fill in credentials
   await page.fill(selectors.emailInput, 'mail@adnanwahab.com');
   await page.fill(selectors.passwordInput, 'sicp.123');
-  
+
   // Click submit and wait for navigation
   await page.click(selectors.submitButton);
   await page.waitForNavigation({ waitUntil: 'networkidle' });
-  
+
   // Verify login was successful
   const currentUrl = page.url();
   if (!currentUrl.includes('feed')) {
@@ -164,16 +163,16 @@ async function main() {
   try {
     const context = await connectToExistingBrowser();
     const page = await navigateToLinkedIn(context);
-    
+
     // Add login step before proceeding
     await loginToLinkedIn(page);
-    
+
 <<<<<<< HEAD
     // Remove manual login wait since we now handle it programmatically
     // await page.waitForTimeout(5000);
-    
+
     await scrapeWaymoEmployees(page);
-    
+
     await page.screenshot({ path: 'screenshot.png' });
 =======
     // Don't close the browser since we're using an existing instance
@@ -192,5 +191,3 @@ main().catch(console.error);
 
 
 //google-chrome --remote-debugging-port=9222
-
-

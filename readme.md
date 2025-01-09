@@ -27,7 +27,6 @@ web = next.js
 https://5-million-devs.netlify.com/
 # communal science lab = 100x more science
 # 2025 - every pool in new york + scottsdale
-
 # Dynamicland Gameit for innate.bot = DERP - Dynamicland environmental Robotics Policy
 # 1. docker setup - nvidia docker runtie
 # 2. jetson containers - 2 orin devkits + 1 jetson nano

@@ -77,7 +77,7 @@ cooperative-robotics.com {
 #  File Server: files.learn-math.org
 # ------------------------------------------------------------------
 files.cooperative-robotics.com {
-	root * /home/adnan/derp/support_bret
+	root * /home/adnan/derp
 	file_server browse
 
 	# CORS Headers
