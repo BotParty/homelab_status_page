@@ -39,6 +39,7 @@
     "remark-gfm": "^4.0.0",
     "remark-html": "^16.0.1",
     "resend": "^4.0.1",
+    "soundcloud-audio": "^1.4.0",
     "three": "^0.171.0"
   },
   "devDependencies": {

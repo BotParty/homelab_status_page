@@ -1,7 +1,20 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import SoundCloudAudio from 'soundcloud-audio';
+
+const songs = [
+  "Dirtwire - Pyrochrome - 01 Cantaloupe.mp3",
+  "Dirtwire - Pyrochrome - 02 The Howl.mp3",
+  "Dirtwire - Pyrochrome - 03 Heavy in this World.mp3",
+  "Dirtwire - Pyrochrome - 04 Obokano.mp3",
+  "Dirtwire - Pyrochrome - 05 Snoozlebug.mp3",
+  "Dirtwire - Pyrochrome - 06 Strange Creek.mp3",
+  "Dirtwire - Pyrochrome - 07 Hey There Papa.mp3",
+  "Dirtwire - Pyrochrome - 08 Hirajoshi.mp3",
+  "Dirtwire - Pyrochrome - 09 Above the Clouds.mp3"
+];
+
+
 
 export default function MusicVisualizer() {
   const containerRef = useRef(null);
@@ -13,13 +26,40 @@ export default function MusicVisualizer() {
   const analyserRef = useRef(null);
   const sourceRef = useRef(null);
   const frequencyDataRef = useRef(null);
-  const scRef = useRef(null);
+  const audioRef = useRef(null);
+  const [songs, setSongs] = useState([]);
+  const [currentSong, setCurrentSong] = useState(null);
 
   const NUM_BARS = 64;
 
   useEffect(() => {
-    scRef.current = new SoundCloudAudio('adnan_wahab');
+    setSongs([
+      '/dirtwire/Dirtwire - Pyrochrome - 01 Cantaloupe.mp3',
+      '/dirtwire/Dirtwire - Pyrochrome - 02 The Howl.mp3',
+      '/dirtwire/Dirtwire - Pyrochrome - 06 Strange Creek.mp3',
+      '/dirtwire/Dirtwire - Pyrochrome - 07 Hey There Papa.mp3'
+    ]);
   }, []);
+
+  const handleSongSelect = (songPath) => {
+    setCurrentSong(songPath);
+
+    if (sourceRef.current) {
+      sourceRef.current.disconnect();
+    }
+
+    audioContextRef.current = audioContextRef.current || new (window.AudioContext || window.webkitAudioContext)();
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    analyserRef.current.fftSize = 128;
+
+    if (audioRef.current) {
+      sourceRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
+      sourceRef.current.connect(analyserRef.current);
+      analyserRef.current.connect(audioContextRef.current.destination);
+    }
+
+    frequencyDataRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
+  };
 
   useEffect(() => {
     // Initialize Three.js
@@ -109,101 +149,58 @@ export default function MusicVisualizer() {
     };
   }, []);
 
-  const handleAudioFile = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    if (sourceRef.current) {
-      sourceRef.current.disconnect();
-    }
-
-    audioContextRef.current = audioContextRef.current || new (window.AudioContext || window.webkitAudioContext)();
-    analyserRef.current = audioContextRef.current.createAnalyser();
-    analyserRef.current.fftSize = 128;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      audioContextRef.current.decodeAudioData(e.target.result, (buffer) => {
-        sourceRef.current = audioContextRef.current.createBufferSource();
-        sourceRef.current.buffer = buffer;
-        sourceRef.current.connect(analyserRef.current);
-        analyserRef.current.connect(audioContextRef.current.destination);
-        sourceRef.current.start(0);
-      });
-    };
-    reader.readAsArrayBuffer(file);
-
-    frequencyDataRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
-  };
-
-  const handleSoundCloudURL = (event) => {
-    event.preventDefault();
-    const url = event.target.url.value;
-
-    if (sourceRef.current) {
-      sourceRef.current.disconnect();
-    }
-
-    audioContextRef.current = audioContextRef.current || new (window.AudioContext || window.webkitAudioContext)();
-    analyserRef.current = audioContextRef.current.createAnalyser();
-    analyserRef.current.fftSize = 128;
-
-    scRef.current.resolve(url, (track) => {
-      scRef.current.play();
-      
-      // Connect Soundcloud player to analyzer
-      sourceRef.current = audioContextRef.current.createMediaElementSource(scRef.current._audio);
-      sourceRef.current.connect(analyserRef.current);
-      analyserRef.current.connect(audioContextRef.current.destination);
-    });
-
-    frequencyDataRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
-  };
-
   return (
     <div style={{ margin: 0, overflow: 'hidden' }}>
-      <form 
-        onSubmit={handleSoundCloudURL}
-        style={{
-          position: 'absolute',
-          top: '50px',
-          left: '10px',
-          zIndex: 999,
-        }}
-      >
-        <input
-          type="text"
-          name="url"
-          placeholder="Enter SoundCloud URL"
-          style={{
-            fontSize: '16px',
-            padding: '5px',
-            width: '300px',
-          }}
-        />
-        <button 
-          type="submit"
-          style={{
-            fontSize: '16px',
-            marginLeft: '5px',
-          }}
-        >
-          Play
-        </button>
-      </form>
-
-      <input
-        type="file"
-        accept="audio/*"
-        onChange={handleAudioFile}
+      <div 
         style={{
           position: 'absolute',
           top: '10px',
           left: '10px',
           zIndex: 999,
-          fontSize: '16px',
+          color: 'white',
+          background: 'rgba(0,0,0,0.7)',
+          padding: '10px',
+          maxHeight: '80vh',
+          overflowY: 'auto'
+        }}
+      >
+        <h3>Dirtwire Songs</h3>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {songs.map((song, index) => (
+            <li key={index}>
+              <button 
+                onClick={() => handleSongSelect(song)}
+                style={{
+                  fontSize: '16px',
+                  margin: '5px 0',
+                  padding: '5px 10px',
+                  background: currentSong === song ? '#444' : '#222',
+                  color: 'white',
+                  border: 'none',
+                  cursor: 'pointer',
+                  width: '100%',
+                  textAlign: 'left'
+                }}
+              >
+                {song.split('/').pop().replace('.mp3', '')}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <audio
+        ref={audioRef}
+        src={currentSong}
+        controls
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '20px',
+          zIndex: 999
         }}
       />
+      
       <div ref={containerRef} />
     </div>
   );
