@@ -55,26 +55,7 @@ export default function BlogPage() {
             </div>
           </article>
 
-          {/* Blog Post 3 */}
-          <article className="group">
-            <div className="flex items-baseline gap-6">
-              <time className="text-gray-500 shrink-0">July 14, 2022</time>
-              <div>
-                <h2 className="text-xl font-semibold mb-3">
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
-                    Rewriting the cosmOS kernel in Rust
-                  </a>
-                </h2>
-                <p className="text-gray-400 mb-3">
-                  When we released the first version of cosmOS last year, it was written in Go. Go is a wonderful programming language, but it's been a while since I've seen an article on the front page of Hacker News about rewriting some important tool in Go and I see articles on there about rewriting things in Rust every single week.
-                </p>
-                <a href="#" className="text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center">
-                  Read article
-                  <span className="ml-1">→</span>
-                </a>
-              </div>
-            </div>
-          </article>
+
         </div>
       </div>
     );
