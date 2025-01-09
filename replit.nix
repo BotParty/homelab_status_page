@@ -1,6 +1,6 @@
 { pkgs }: {
   deps = [
     pkgs.bun,
-    pkgs.python
+    pkgs.uv
   ];
 }
