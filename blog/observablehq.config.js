@@ -6,15 +6,64 @@ export default {
   // The pages and sections in the sidebar. If you don’t specify this option,
   // all pages will be listed in alphabetical order. Listing pages explicitly
   // lets you organize them into sections and have unlisted pages.
-  // pages: [
-  //   {
-  //     name: "Examples",
-  //     pages: [
-  //       {name: "Dashboard", path: "/example-dashboard"},
-  //       {name: "Report", path: "/example-report"}
-  //     ]
-  //   }
-  // ],
+  pages: [
+    {
+      name: "Modern  C++",
+      pages: [
+        {name: "Dashboard", path: "/example-dashboard"},
+        {name: "Report", path: "/example-report"}
+      ]
+    },
+    {
+      name: "Geospatial HD Mapping",
+      pages: [
+        {name: "Dashboard", path: "/maps/open-street-maps"},
+        {name: "Report", path: "/maps/"}
+      ]
+    },
+    {
+      name: "Simulation with Unreal Engine",
+      pages: [
+        {name: "Dashboard", path: "/simulation/reinforcement-learning"},
+        {name: "Report", path: "/simulation/reinforcement-learning"}
+      ]
+    },
+    {
+      name: "Computer Vision",
+      pages: [
+        {name: "Dashboard", path: "/perception/object-detection"},
+        {name: "Report", path: "/perception/scene-understanding"},
+        {name: "Report", path: "/perception/semantic-segmentation"},
+
+      ]
+    },
+    {
+      name: "Devops",
+      pages: [
+        {name: "Dashboard", path: "/devops/terraform"},
+        {name: "Report", path: "/devops/docker"},
+        {name: "Report", path: "/devops/shell-scripting"},
+      ]
+    },
+
+    {
+      name: "Robotics",
+      pages: [
+        {name: "Dashboard", path: "/robotics/robot-control"},
+        {name: "Report", path: "/robotics/robot-control"}
+      ]
+    },
+
+    {
+      name: "Data Visualization",
+      pages: [
+        {name: "Dashboard", path: "/data-vis/capacity-planning"},
+        {name: "Report", path: "/data-vis/anomaly-detection"},
+        {name: "Report", path: "/data-vis/systems-design"},
+        {name: "Report", path: "/data-vis/crisis-diagnosis"},
+      ]
+    }
+  ],
 
   // Content to add to the head of the page, e.g. for a favicon:
   head: '<link rel="icon" href="observable.png" type="image/png" sizes="32x32">',
