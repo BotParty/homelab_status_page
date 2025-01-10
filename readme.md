@@ -38,10 +38,12 @@ https://5-million-devs.netlify.com/
 # 8. three.js webGPU + jolt-physics + tauri or react native.
 # 9. unity + zed 2i sdk
 ports
+3000 - vercel
 5173 - sim-editor
 8000 - scripts api - uv bun ollama
-8001 fly.io
-3000 vercel
+8080 - python fastapi - gpu
+8888 uv jupyter notebook
+
 games, maps, demos, 50 three.js demos / games, d3
 blog/ - 7 articles - dynamicland
 https://github.com/tldraw/tldraw
