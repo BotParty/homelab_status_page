@@ -1,1 +1,1 @@
-/data-vis/systems-design
+/data-vis/systems-design<a href="https://github.com/BotParty/homelab_status_page/blob/main/data-vis/systems-design">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/data-vis/systems-design">click here to edit this document</a>

@@ -1,1 +1,3 @@
-/maps/open-street-maps
+/maps/open-street-maps<a href="https://github.com/BotParty/homelab_status_page/blob/main/[maps/open-street-maps.md](maps/open-street-maps.md)"></a>
+<a href="https://github.com/BotParty/homelab_status_page/blob/main/[maps/open-street-maps.md](maps/open-street-maps.md)">click here to edit</a>
+<a href="https://github.com/BotParty/homelab_status_page/blob/main/maps/open-street-maps">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/maps/open-street-maps">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/maps/open-street-maps">click here to edit this document</a>

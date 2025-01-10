@@ -1,1 +1,1 @@
-/perception/semantic-segmentation
+/perception/semantic-segmentation<a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/semantic-segmentation">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/semantic-segmentation">click here to edit this document</a>

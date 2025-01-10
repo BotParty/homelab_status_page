@@ -22,4 +22,4 @@ Dynamicland makes intractctbble problems solvable.
 # 200 Mental Models
 
 # References
-1. https://en.wikipedia.org/wiki/Lead%E2%80%93crime_hypothesis
+1. https://en.wikipedia.org/wiki/Lead%E2%80%93crime_hypothesis<a href="https://github.com/BotParty/homelab_status_page/blob/main/neuroscience/free-will">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/neuroscience/free-will">click here to edit this document</a>

@@ -1,1 +1,1 @@
-/data-vis/crisis-diagnosis
+/data-vis/crisis-diagnosis<a href="https://github.com/BotParty/homelab_status_page/blob/main/data-vis/crisis-diagnosis">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/data-vis/crisis-diagnosis">click here to edit this document</a>

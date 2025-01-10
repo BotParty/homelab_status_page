@@ -1,1 +1,1 @@
-/embedded/zig
+/embedded/zig<a href="https://github.com/BotParty/homelab_status_page/blob/main/embedded/zig">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/embedded/zig">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/embedded/zig">click here to edit this document</a>

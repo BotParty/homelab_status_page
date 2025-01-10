@@ -1,1 +1,1 @@
-/perception/vision-transformers
+/perception/vision-transformers<a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/vision-transformers">click here to edit this document</a>

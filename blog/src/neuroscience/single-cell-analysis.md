@@ -1,1 +1,1 @@
-/neuroscience/single-cell-analysis
+/neuroscience/single-cell-analysis<a href="https://github.com/BotParty/homelab_status_page/blob/main/neuroscience/single-cell-analysis">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/neuroscience/single-cell-analysis">click here to edit this document</a>

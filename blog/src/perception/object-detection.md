@@ -1,1 +1,1 @@
-/perception/object-detection
+/perception/object-detection<a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/object-detection">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/object-detection">click here to edit this document</a>

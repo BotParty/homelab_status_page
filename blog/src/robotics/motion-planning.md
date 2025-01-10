@@ -1,1 +1,1 @@
-/robotics/motion-planning
+/robotics/motion-planning<a href="https://github.com/BotParty/homelab_status_page/blob/main/robotics/motion-planning">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/robotics/motion-planning">click here to edit this document</a>

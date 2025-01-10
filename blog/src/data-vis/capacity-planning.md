@@ -1,1 +1,1 @@
-/data-vis/capacity-planning
+/data-vis/capacity-planning<a href="https://github.com/BotParty/homelab_status_page/blob/main/data-vis/capacity-planning">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/data-vis/capacity-planning">click here to edit this document</a>

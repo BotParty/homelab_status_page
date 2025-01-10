@@ -1,1 +1,1 @@
-/math/linear-algebra
+/math/linear-algebra<a href="https://github.com/BotParty/homelab_status_page/blob/main/math/linear-algebra">click here to edit this document</a>

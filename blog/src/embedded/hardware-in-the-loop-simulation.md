@@ -1,1 +1,1 @@
-/embedded/hardware-in-the-loop-simulation
+/embedded/hardware-in-the-loop-simulation<a href="https://github.com/BotParty/homelab_status_page/blob/main/embedded/hardware-in-the-loop-simulation">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/embedded/hardware-in-the-loop-simulation">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/embedded/hardware-in-the-loop-simulation">click here to edit this document</a>

@@ -1,1 +1,1 @@
-/devops/terraform
+/devops/terraform<a href="https://github.com/BotParty/homelab_status_page/blob/main/devops/terraform">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/devops/terraform">click here to edit this document</a>

@@ -1,1 +1,1 @@
-/algorithms/map-reduce
+/algorithms/map-reduce<a href="https://github.com/BotParty/homelab_status_page/blob/main/algorithms/map-reduce">click here to edit this document</a>

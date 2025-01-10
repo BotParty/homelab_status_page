@@ -1,1 +1,1 @@
-/hardware/soldering-pcb-3d-printing
+/hardware/soldering-pcb-3d-printing<a href="https://github.com/BotParty/homelab_status_page/blob/main/hardware/soldering-pcb-3d-printing">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/hardware/soldering-pcb-3d-printing">click here to edit this document</a>

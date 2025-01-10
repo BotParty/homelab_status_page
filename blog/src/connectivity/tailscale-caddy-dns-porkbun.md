@@ -1,1 +1,1 @@
-/connectivity/tailscale-caddy-dns-porkbun
+/connectivity/tailscale-caddy-dns-porkbun<a href="https://github.com/BotParty/homelab_status_page/blob/main/connectivity/tailscale-caddy-dns-porkbun">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/connectivity/tailscale-caddy-dns-porkbun">click here to edit this document</a>

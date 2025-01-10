@@ -1,1 +1,1 @@
-/python/uv_jupyter_testing
+/python/uv_jupyter_testing<a href="https://github.com/BotParty/homelab_status_page/blob/main/python/uv_jupyter_testing">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/python/uv_jupyter_testing">click here to edit this document</a>

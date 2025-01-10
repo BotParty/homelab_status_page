@@ -1,1 +1,1 @@
-/perception/scene-understanding
+/perception/scene-understanding<a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/scene-understanding">click here to edit this document</a><a href="https://github.com/BotParty/homelab_status_page/blob/main/perception/scene-understanding">click here to edit this document</a>
