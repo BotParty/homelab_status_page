@@ -50,3 +50,10 @@ blog/ - 7 articles - dynamicland
 https://github.com/tldraw/tldraw
 docker run -it ghcr.io/observablehq/framework-runtime
 cloudflared tunnel create caddy-tunnel
+6TB storage 
+   - waymo vis 1tb
+   - music - 500gb 
+   - books - 500gb
+   - map data - 500gb
+   
+https://github.com/boto/boto3

@@ -20,6 +20,7 @@
     "@supabase/supabase-js": "^2.47.12",
     "htl": "^0.3.1",
     "livekit-server-sdk": "^2.9.7",
+    "octokit": "^4.1.0",
     "ollama": "^0.5.11",
     "openai": "^4.78.0",
     "resend": "^4.0.1",
