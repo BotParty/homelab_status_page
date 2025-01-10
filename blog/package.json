@@ -9,6 +9,7 @@
     "observable": "observable"
   },
   "dependencies": {
+    "@codemirror/view": "^6.36.2",
     "@observablehq/framework": "^1.13.0",
     "d3-dsv": "^3.0.1",
     "d3-time-format": "^4.1.0"

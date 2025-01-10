@@ -1,116 +1,195 @@
 ---
-toc: false
+theme: light
 ---
 
+# CodeMirror
 
-<iframe src="https://replit.com/@nyc-map/WelltodoDarkgreyDatalogs?embed=true" width="600" height="400"></iframe>
+Here’s a basic editor powered by CodeMirror. Its value is exposed as `input`, and then the result of `eval`’ing `input` is shown below. Try editing the code and then running it with Shift-Enter or by clicking the Run button.
+
+```js echo
+const input = view(Editor({value: "1 + 2"}));
+```
+
+```js echo
+eval(input)
+```
+
+The editor is implemented in a component:
+
+```js echo
+import {Editor} from "./components/Editor.js";
+```
+
+The implementation looks like this:
+
+```js run=false
+import {javascript} from "npm:@codemirror/lang-javascript";
+import {EditorView, keymap} from "npm:@codemirror/view";
+import {button} from "npm:@observablehq/inputs";
+import {basicSetup} from "npm:codemirror";
+
+export function Editor({
+  value = "",
+  style = "font-size: 14px;"
+} = {}) {
+  const parent = document.createElement("div");
+  parent.style = style;
+  parent.value = value;
+
+  const run = () => {
+    parent.value = String(editor.state.doc);
+    parent.dispatchEvent(new InputEvent("input", {bubbles: true}));
+  };
+
+  const editor = new EditorView({
+    parent,
+    doc: value,
+    extensions: [
+      basicSetup,
+      javascript(),
+      keymap.of([
+        {key: "Shift-Enter", preventDefault: true, run},
+        {key: "Mod-s", preventDefault: true, run}
+      ])
+    ]
+  });
+
+  parent.addEventListener("input", (event) => event.isTrusted && event.stopImmediatePropagation());
+  parent.appendChild(button([["Run", run]]));
+
+  return parent;
+}
+```
 
 
 
-<div class="hero">
-  <h1>blog</h1>
-  <h2>Welcome to your new app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
-  <a href="https://observablehq.com/framework/getting-started">Get started<span style="display: inline-block; margin-left: 0.25rem;">↗︎</span></a>
-</div>
+viewof proposeEdit = {
+  // Create a wrapper element (a form with a text area and button)
+  const wrapper = html`<form style="margin: 1em 0;">
+    <label style="display: block; margin-bottom: 0.5em;">
+      Proposed changes:
+      <textarea
+        name="proposal"
+        rows="5"
+        style="width: 100%; font-family: sans-serif; margin-top: 0.5em;"
+        placeholder="Describe your proposed edits..."
+      ></textarea>
+    </label>
+    <button type="submit" style="padding: 0.5em 1em; cursor: pointer;">
+      Propose Edit
+    </button>
+  </form>`;
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 504px;">
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "Your awesomeness over time 🚀",
-      subtitle: "Up and to the right!",
-      width,
-      y: {grid: true, label: "Awesomeness"},
-      marks: [
-        Plot.ruleY([0]),
-        Plot.lineY(aapl, {x: "Date", y: "Close", tip: true})
-      ]
-    }))
-  }</div>
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "How big are penguins, anyway? 🐧",
-      width,
-      grid: true,
-      x: {label: "Body mass (g)"},
-      y: {label: "Flipper length (mm)"},
-      color: {legend: true},
-      marks: [
-        Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-        Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-      ]
-    }))
-  }</div>
-</div>
+  // On form submission
+  wrapper.onsubmit = async (event) => {
+    event.preventDefault();
 
----
+    // Get user input from the text area
+    const proposedChanges = wrapper.proposal.value.trim();
+    if (!proposedChanges) {
+      alert("Please enter some text describing your proposed edit.");
+      return;
+    }
 
-## Next steps
+    // “Currently viewed page” (works in many environments, including Observable)
+    const currentPage = location.href;
 
-Here are some ideas of things you could try…
+    // 1) Create a Gist on GitHub to store the proposed edits
+    const gistPayload = {
+      description: `Proposed edits from Observable: ${currentPage}`,
+      public: false,
+      files: {
+        "proposal.md": {
+          content: `**Page:** ${currentPage}\n\n**Proposal:**\n\n${proposedChanges}`
+        },
+      },
+    };
 
-<div class="grid grid-cols-4">
-  <div class="card">
-    Chart your own data using <a href="https://observablehq.com/framework/lib/plot"><code>Plot</code></a> and <a href="https://observablehq.com/framework/files"><code>FileAttachment</code></a>. Make it responsive using <a href="https://observablehq.com/framework/javascript#resize(render)"><code>resize</code></a>.
-  </div>
-  <div class="card">
-    Create a <a href="https://observablehq.com/framework/project-structure">new page</a> by adding a Markdown file (<code>whatever.md</code>) to the <code>src</code> folder.
-  </div>
-  <div class="card">
-    Add a drop-down menu using <a href="https://observablehq.com/framework/inputs/select"><code>Inputs.select</code></a> and use it to filter the data shown in a chart.
-  </div>
-  <div class="card">
-    Write a <a href="https://observablehq.com/framework/loaders">data loader</a> that queries a local database or API, generating a data snapshot on build.
-  </div>
-  <div class="card">
-    Import a <a href="https://observablehq.com/framework/imports">recommended library</a> from npm, such as <a href="https://observablehq.com/framework/lib/leaflet">Leaflet</a>, <a href="https://observablehq.com/framework/lib/dot">GraphViz</a>, <a href="https://observablehq.com/framework/lib/tex">TeX</a>, or <a href="https://observablehq.com/framework/lib/duckdb">DuckDB</a>.
-  </div>
-  <div class="card">
-    Ask for help, or share your work or ideas, on our <a href="https://github.com/observablehq/framework/discussions">GitHub discussions</a>.
-  </div>
-  <div class="card">
-    Visit <a href="https://github.com/observablehq/framework">Framework on GitHub</a> and give us a star. Or file an issue if you’ve found a bug!
-  </div>
-</div>
+    let gistUrl;
+    try {
+      const gistResponse = await fetch(GIST_ENDPOINT, {
+        method: "POST",
+        headers: GITHUB_HEADERS,
+        body: JSON.stringify(gistPayload),
+      });
+      if (!gistResponse.ok) {
+        const error = await gistResponse.json();
+        throw new Error(error.message || "Failed to create Gist.");
+      }
+      const gistData = await gistResponse.json();
+      gistUrl = gistData.html_url;
+    } catch (err) {
+      alert(`Error creating Gist: ${err.message}`);
+      return;
+    }
 
-<style>
+    // 2) Store metadata in Supabase (optional)
+    //    Suppose we have a table named "edits" with columns:
+    //      - id: primary key
+    //      - page_url: text
+    //      - proposal: text
+    //      - gist_url: text
+    const { data, error } = await supabase.from("edits").insert([
+      {
+        page_url: currentPage,
+        proposal: proposedChanges,
+        gist_url: gistUrl,
+      },
+    ]);
 
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
-  text-wrap: balance;
-  text-align: center;
+    if (error) {
+      console.error("Error inserting into Supabase:", error);
+      alert("Error saving proposal in Supabase.");
+      return;
+    }
+
+    alert(`Proposal submitted!\nView gist: ${gistUrl}`);
+    // Clear the text area
+    wrapper.proposal.value = "";
+  };
+
+  return wrapper;
 }
 
-.hero h1 {
-  margin: 1rem 0;
-  padding: 1rem 0;
-  max-width: none;
-  font-size: 14vw;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(30deg, var(--theme-foreground-focus), currentColor);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
 
-.hero h2 {
-  margin: 0;
-  max-width: 34em;
-  font-size: 20px;
-  font-style: initial;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--theme-foreground-muted);
-}
 
-@media (min-width: 640px) {
-  .hero h1 {
-    font-size: 90px;
-  }
-}
+allProposals = (await supabase
+  .from("edits")
+  .select("*")
+  .order("id", { ascending: false })).data
 
-</style>
+
+
+md`# All Proposals
+
+Below is a list of recent proposals from the "edits" table in Supabase.
+`
+
+html`
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="text-align: left; border-bottom: 1px solid #ccc;">
+        <th style="padding: 0.5em;">ID</th>
+        <th style="padding: 0.5em;">Page URL</th>
+        <th style="padding: 0.5em;">Proposal</th>
+        <th style="padding: 0.5em;">Gist</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${allProposals?.map(
+        (edit) => html`
+          <tr style="border-bottom: 1px solid #ccc;">
+            <td style="padding: 0.5em;">${edit.id}</td>
+            <td style="padding: 0.5em; max-width: 200px; overflow: hidden;">
+              <a href="${edit.page_url}" target="_blank">${edit.page_url}</a>
+            </td>
+            <td style="padding: 0.5em;">${edit.proposal}</td>
+            <td style="padding: 0.5em;">
+              <a href="${edit.gist_url}" target="_blank">View Gist</a>
+            </td>
+          </tr>
+        `
+      )}
+    </tbody>
+  </table>
+`

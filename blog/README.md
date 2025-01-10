@@ -1,4 +1,5 @@
-# blog
+# robotics-odyssey = a living document - edited by 8 billion scientist artist wizards 2026
+https://roboticsuniversity.observablehq.cloud/dynamicbotnotebook/ -
 
 This is an [Observable Framework](https://observablehq.com/framework/) app. To install the required dependencies, run:
 

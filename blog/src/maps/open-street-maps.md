@@ -1,0 +1,1 @@
+/maps/open-street-maps
