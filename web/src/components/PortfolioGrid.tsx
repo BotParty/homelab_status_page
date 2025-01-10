@@ -14,6 +14,12 @@ const completed = 10
 const files: FileItem[] = []
 const processedFiles: FileItem[] = [];
 
+// processedFiles.push({
+//   title: `Map`,
+//   size: '',
+//   source: `/vis/map.png`,
+// });
+
 for (let i = 10; i < 102; i++) {
   processedFiles.push({
     title: ``,
