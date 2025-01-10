@@ -18,14 +18,14 @@ export default function Header() {
               {/* <a href="/tools" className="hover:text-[#8b98e8]">tools</a> */}
      
           </div>
-          <div className="text-sm text-gray-400">
+          {/* <div className="text-sm text-gray-400">
             <a href="/simulation_game" className="hover:text-[#8b98e8] underline">Play interactive music physics game</a>
-          </div>
+          </div> */}
   
   
-          <div className="text-sm text-gray-400">
+          {/* <div className="text-sm text-gray-400">
             <a href="/robotics-odyssey" className="hover:text-[#8b98e8] underline">Self-teaching Robotics info-course</a>
-          </div>
+          </div> */}
         </div>
         <img
           src="/personal/friends.jpg"
