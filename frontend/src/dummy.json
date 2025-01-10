@@ -1,0 +1,12 @@
+[
+    {"date": "2024-12-01", "spend": 120.50, "impressions": 1200, "clicks": 300, "conversions": 50},
+    {"date": "2024-12-02", "spend": 98.75, "impressions": 950, "clicks": 280, "conversions": 45},
+    {"date": "2024-12-03", "spend": 130.20, "impressions": 1500, "clicks": 400, "conversions": 60},
+    {"date": "2024-12-04", "spend": 115.00, "impressions": 1100, "clicks": 320, "conversions": 48},
+    {"date": "2024-12-05", "spend": 105.60, "impressions": 1000, "clicks": 310, "conversions": 52},
+    {"date": "2024-12-06", "spend": 125.30, "impressions": 1350, "clicks": 360, "conversions": 55},
+    {"date": "2024-12-07", "spend": 110.45, "impressions": 980, "clicks": 250, "conversions": 40},
+    {"date": "2024-12-08", "spend": 95.20, "impressions": 870, "clicks": 220, "conversions": 38},
+    {"date": "2024-12-09", "spend": 140.70, "impressions": 1600, "clicks": 450, "conversions": 70},
+    {"date": "2024-12-10", "spend": 135.80, "impressions": 1450, "clicks": 420, "conversions": 65}
+]
