@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@1password/sdk": "^0.1.6",
+    "@clickhouse/client": "^1.10.0",
     "@playwright/test": "^1.49.1",
     "@supabase/supabase-js": "^2.47.12",
     "htl": "^0.3.1",
