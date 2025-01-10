@@ -14,7 +14,7 @@ export default function Header() {
             <a href="https://x.com/adnan_wahab_" className="hover:text-[#8b98e8]">twitter</a>
             <a href="https://linkedin.com/in/adnanwahab" className="hover:text-[#8b98e8]">linkedin</a>
   
-            <a href="/blog" className="hover:text-[#8b98e8]">blog</a> */}
+            <a href="/blog" className="hover:text-[#8b98e8]">blog</a>
           <a href="/tools" className="hover:text-[#8b98e8]">tools</a>
      
           </div>
