@@ -1,3 +1,4 @@
+# Robotics-Odyssey - 100% information course about robotics - semi-autonomous-vehicles to robot surgery 2026
 # Gamekit for Dynamicland - realtime scientific art creation - colloborative thinking space
 https://spectrum.ieee.org/xerox-parc 
 ## Twitch plays robot - 2025 innate.bot / nanosaur.ai / hello-robot.com
