@@ -9,20 +9,20 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "wrangler": "^3.99.0"
+    "wrangler": "^3.101.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@1password/sdk": "^0.1.5",
+    "@1password/sdk": "^0.1.6",
     "@playwright/test": "^1.49.1",
-    "@supabase/supabase-js": "^2.47.10",
+    "@supabase/supabase-js": "^2.47.12",
     "htl": "^0.3.1",
-    "livekit-server-sdk": "^2.9.5",
+    "livekit-server-sdk": "^2.9.7",
     "ollama": "^0.5.11",
-    "openai": "^4.77.0",
+    "openai": "^4.78.0",
     "resend": "^4.0.1",
-    "retell-sdk": "^4.11.0"
+    "retell-sdk": "^4.12.0"
   }
 }
