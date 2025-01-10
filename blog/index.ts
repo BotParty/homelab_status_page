@@ -5,7 +5,7 @@ fs.readdirSync("src").forEach((folder) => {
     const dir = `src/${folder}`;
     fs.readdirSync(`${dir}`).forEach((file) => {
       fs.appendFileSync(
-        `${dir}/file.md`,
+        `${dir}/${file}.md`,
         `https://github.com/BotParty/homelab_status_page/blob/main/[${folder}/${file}](${folder}/${file})\n`,
       );
     });
