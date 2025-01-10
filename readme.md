@@ -1,4 +1,6 @@
 # Robotics-Odyssey - 100% information course about robotics - semi-autonomous-vehicles to robot surgery 2026
+# ![Medical Bot](/web/public/med_bot.webp) Matsu Gravas Nightingale - Medical_Bot - $10,000 nurse - hello-robot.com = 20,000
+
 # Gamekit for Dynamicland - realtime scientific art creation - colloborative thinking space
 https://spectrum.ieee.org/xerox-parc 
 ## Twitch plays robot - 2025 innate.bot / nanosaur.ai / hello-robot.com

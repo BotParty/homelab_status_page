@@ -47,7 +47,7 @@
 # ------------------------------------------------------------------
 #  Public Domain: learn-math.org
 # ------------------------------------------------------------------
-cooperative-robotics.com {
+cgi-tools.dev {
 	# Simple status page
 	route /status_page {
 		respond "status page"
@@ -76,7 +76,7 @@ cooperative-robotics.com {
 # ------------------------------------------------------------------
 #  File Server: files.learn-math.org
 # ------------------------------------------------------------------
-files.cooperative-robotics.com {
+files.cgi-tools.dev {
 	root * /home/adnan/derp
 	file_server browse
 
@@ -89,11 +89,15 @@ files.cooperative-robotics.com {
 # ------------------------------------------------------------------
 #  Public JupyterLab: jupyter.learn-math.org
 # ------------------------------------------------------------------
-jupyter.cooperative-robotics.com {
+jupyter.cgi-tools.dev {
 	reverse_proxy localhost:8888
 
 	# CORS Headers
 	header Access-Control-Allow-Origin "*"
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type"
+}
+
+cooperative-robotics.com {
+	reverse_proxy localhost:8080
 }
